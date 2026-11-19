@@ -6,7 +6,7 @@ An open-data dashboard for **Kannapolis, North Carolina**, built by a resident f
 
 It's **one self-contained HTML file** built by a small Python script. No Node, no venv, nothing to install.
 
-[![The dashboard's home screen: widget tiles for meetings, news, City Council, City staff, events, residents, budget, debt and gauges, with a dock of widget icons along the bottom](docs/dashboard.png)](https://bradspry.github.io/kannapolis-dashboard/)
+[![The dashboard's home screen: widget tiles for paying a utility bill, the Cannon Ballers schedule, police and fire (with 911 buttons), news, meetings, weather, City Council, events, City staff, residents, budget, debt, gauges and land use, with a dock of widget icons along the bottom](docs/dashboard.jpg)](https://bradspry.github.io/kannapolis-dashboard/)
 
 ## Quick start
 
