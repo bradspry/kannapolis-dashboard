@@ -1,0 +1,218 @@
+{
+  "title": "City of Kannapolis organizational chart (2026)",
+  "source": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Administration/Documents/Kannapolis%202026%20Organizational%20Restructuring_pdf%20(Real%20Estate%20Flyer)%20(3).png?ver=KPxbJgZQ_avWU5oc4CTq3Q%3d%3d",
+  "notes": [
+    "Solid lines are direct supervision; dashed lines are limited oversight or shared supervision.",
+    "Rider Transit is jointly overseen with the City of Concord."
+  ],
+  "people": [
+    {
+      "id": "council",
+      "title": "Mayor & City Council",
+      "name": "Represent the citizens of Kannapolis",
+      "reports_to": null
+    },
+    {
+      "id": "melton",
+      "title": "City Manager",
+      "name": "Wilmer Melton",
+      "phone": "704-920-4231",
+      "reports_to": "council",
+      "email": "wmelton@kannapolisnc.gov",
+      "email_source": "https://www.kannapolisnc.gov/Government-Departments/Administration/Staff-Directory"
+    },
+    {
+      "id": "kelly",
+      "title": "City Attorney",
+      "name": "Andrew Kelly",
+      "phone": "704-920-4370",
+      "reports_to": "council",
+      "dotted_to": "melton",
+      "email": "akelly@kannapolisnc.gov",
+      "email_source": "https://www.kannapolisnc.gov/Government-Departments/Administration/Staff-Directory"
+    },
+    {
+      "id": "scaggs",
+      "title": "City Clerk",
+      "name": "Pam Scaggs",
+      "phone": "704-920-4303",
+      "reports_to": "melton",
+      "dotted_to": "council",
+      "email": "pscaggs@kannapolisnc.gov",
+      "email_source": "https://www.kannapolisnc.gov/Government-Departments/Administration/Staff-Directory"
+    },
+    {
+      "id": "winecoff",
+      "title": "Fire Chief",
+      "name": "Tracy Winecoff",
+      "phone": "704-920-4260",
+      "reports_to": "melton",
+      "group": "Public safety",
+      "email": "twinecoff@kannapolisnc.gov",
+      "email_source": "https://kannapolisnc.gov/Government-Departments/Administration/Executive-Team"
+    },
+    {
+      "id": "hill",
+      "title": "Police Chief",
+      "name": "Chris Hill",
+      "phone": "704-920-4050",
+      "reports_to": "melton",
+      "group": "Public safety",
+      "email": "chill@kannapolisnc.gov",
+      "email_source": "https://kannapolisnc.gov/Government-Departments/Police/Staff-Directory"
+    },
+    {
+      "id": "esmith",
+      "title": "Deputy City Manager",
+      "name": "Eddie Smith",
+      "phone": "704-920-4308",
+      "reports_to": "melton",
+      "group": "Leadership",
+      "email": "resmith@kannapolisnc.gov",
+      "email_source": "https://www.kannapolisnc.gov/Government-Departments/Administration/Staff-Directory"
+    },
+    {
+      "id": "kjones",
+      "title": "Assistant City Manager",
+      "name": "Kristin Jones",
+      "phone": "704-920-4372",
+      "reports_to": "melton",
+      "group": "Leadership",
+      "email": "kjones@kannapolisnc.gov",
+      "email_source": "https://www.kannapolisnc.gov/Government-Departments/Administration/Staff-Directory"
+    },
+    {
+      "id": "acm_vacant",
+      "title": "Assistant City Manager",
+      "name": null,
+      "vacant": true,
+      "reports_to": "melton",
+      "group": "Leadership"
+    },
+    {
+      "id": "keller",
+      "title": "Communications",
+      "name": "Annette Privette Keller",
+      "phone": "704-920-4311",
+      "reports_to": "esmith",
+      "email": "aprivettekeller@kannapolisnc.gov",
+      "email_source": "https://www.kannapolisnc.gov/Government-Departments/Administration/Staff-Directory"
+    },
+    {
+      "id": "wong",
+      "title": "Economic & Community Development",
+      "name": "Irene Wong",
+      "phone": "704-920-4326",
+      "reports_to": "esmith",
+      "email": "iwong@kannapolisnc.gov",
+      "email_source": "https://kannapolisnc.gov/Government-Departments/Administration/Executive-Team"
+    },
+    {
+      "id": "hassenfritz",
+      "title": "Engineering",
+      "name": "Beth Hassenfritz",
+      "phone": "704-920-4235",
+      "reports_to": "esmith",
+      "email": "bhassenfritz@kannapolisnc.gov",
+      "email_source": "https://kannapolisnc.gov/Government-Departments/Administration/Executive-Team"
+    },
+    {
+      "id": "mills",
+      "title": "Parks & Recreation",
+      "name": "Gary Mills",
+      "phone": "704-920-4340",
+      "reports_to": "esmith",
+      "email": "gmills@kannapolisnc.gov",
+      "email_source": "https://kannapolisnc.gov/Government-Departments/Administration/Executive-Team"
+    },
+    {
+      "id": "rsmith",
+      "title": "Planning",
+      "name": "Richard Smith",
+      "phone": "704-920-4325",
+      "reports_to": "esmith",
+      "email": "rsmith@kannapolisnc.gov",
+      "email_source": "https://kannapolisnc.gov/Government-Departments/Administration/Executive-Team"
+    },
+    {
+      "id": "rattler",
+      "title": "Transportation & Environmental Services",
+      "name": "Michael Rattler",
+      "phone": "704-920-4234",
+      "reports_to": "esmith",
+      "email": "mrattler@kannapolisnc.gov",
+      "email_source": "https://kannapolisnc.gov/Government-Departments/Administration/Executive-Team"
+    },
+    {
+      "id": "anderson",
+      "title": "Water Resources",
+      "name": "Alex Anderson",
+      "phone": "704-920-4252",
+      "reports_to": "esmith",
+      "email": "aanderson@kannapolisnc.gov",
+      "email_source": "https://kannapolisnc.gov/Government-Departments/Administration/Executive-Team"
+    },
+    {
+      "id": "weslowski",
+      "title": "Rider Transit",
+      "name": "L.J. Weslowski",
+      "phone": "704-920-5878",
+      "reports_to": "esmith",
+      "dotted": true,
+      "note": "Shared with the City of Concord"
+    },
+    {
+      "id": "burgess",
+      "title": "Budget & Strategy",
+      "name": "Suzanne Burgess",
+      "phone": "704-920-4313",
+      "reports_to": "kjones"
+    },
+    {
+      "id": "johnson",
+      "title": "Customer Service",
+      "name": "Jenny Johnson",
+      "phone": "704-920-4385",
+      "reports_to": "kjones",
+      "email": "jjohnson@kannapolisnc.gov",
+      "email_source": "https://kannapolisnc.gov/Government-Departments/Administration/Executive-Team"
+    },
+    {
+      "id": "blakeney",
+      "title": "Facilities Maintenance",
+      "name": "Jerome Blakeney",
+      "phone": "704-920-4334",
+      "reports_to": "kjones",
+      "email": "jblakeney@kannapolisnc.gov",
+      "email_source": "https://kannapolisnc.gov/Government-Departments/Administration/Executive-Team"
+    },
+    {
+      "id": "roberts",
+      "title": "Finance",
+      "name": "Brian Roberts",
+      "phone": "704-920-4306",
+      "reports_to": "kjones",
+      "email": "broberts@kannapolisnc.gov",
+      "email_source": "https://kannapolisnc.gov/Government-Departments/Administration/Executive-Team"
+    },
+    {
+      "id": "james",
+      "title": "Human Resources",
+      "name": "Heather James",
+      "phone": "704-920-4322",
+      "reports_to": "kjones",
+      "email": "hjames@kannapolisnc.gov",
+      "email_source": "https://kannapolisnc.gov/Government-Departments/Administration/Executive-Team"
+    },
+    {
+      "id": "eury",
+      "title": "Information Technology",
+      "name": "Tony Eury",
+      "phone": "704-920-4220",
+      "reports_to": "kjones",
+      "email": "teury@kannapolisnc.gov",
+      "email_source": "https://kannapolisnc.gov/Government-Departments/Administration/Executive-Team"
+    }
+  ],
+  "email_note": "Emails as published on the City's staff directory pages. Not every director's address is published; use the phone number for those."
+}

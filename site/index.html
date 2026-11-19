@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kannapolis Citizen-built Dashboard</title>
+  <meta name="description" content="An open-data look at Kannapolis, NC: who lives here, how the city is growing, how land is zoned, and how the city budget and debt work." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect x='4' y='14' width='6' height='14' rx='1' fill='%232a78d6'/><rect x='13' y='8' width='6' height='20' rx='1' fill='%232a78d6'/><rect x='22' y='4' width='6' height='24' rx='1' fill='%232a78d6'/></svg>" />
+</head>
+<body>
+  <a class="skip" href="#home">Skip to widgets</a>
+  <header class="topbar">
+    <div class="wrap topbar-row">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <div>
+          <h1>Kannapolis Citizen-built Dashboard</h1>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <button id="edit-toggle" class="pill-btn" type="button" aria-pressed="false" title="Hide or restore widgets">
+          <span class="label">Edit</span>
+        </button>
+        <button id="theme-toggle" class="pill-btn" type="button" aria-label="Switch color theme">
+          <span aria-hidden="true">◐</span><span class="theme-label">Theme</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+    <div id="edit-bar" class="edit-bar" hidden>
+      <p class="edit-hint">Drag widgets to rearrange (on a phone, drag the <span aria-hidden="true">⠿</span> handle). Use “–” to hide one.</p>
+      <div class="edit-actions">
+        <button id="reset-layout" class="pill-btn" type="button">Reset layout</button>
+        <button id="save-default" class="pill-btn primary" type="button" hidden>Save as default home page</button>
+      </div>
+      <p id="edit-status" class="edit-status" role="status" aria-live="polite"></p>
+    </div>
+    <div id="home" class="home-grid" aria-label="Widgets"></div>
+    <div id="hidden-tray" class="hidden-tray" hidden></div>
+  </main>
+
+  <!-- Full widgets. Each <section> moves into the window when its widget is opened. -->
+  <div id="store" hidden>
+    <section id="people" aria-labelledby="people-h">
+      <header class="section-head">
+        <h2 id="people-h">People</h2>
+        <p class="section-sub" id="people-sub">American Community Survey 5-year estimates</p>
+      </header>
+      <div class="grid">
+        <figure class="card span-2" id="pop-growth"></figure>
+        <figure class="card span-2" id="compare"></figure>
+        <figure class="card" id="age"></figure>
+        <figure class="card" id="race"></figure>
+        <figure class="card" id="commute"></figure>
+        <figure class="card" id="census-trend" hidden></figure>
+      </div>
+    </section>
+
+    <section id="growth" aria-labelledby="growth-h">
+      <header class="section-head">
+        <h2 id="growth-h">Growth &amp; property</h2>
+        <p class="section-sub">Cabarrus County parcel records &amp; city-limit history</p>
+      </header>
+      <div class="grid">
+        <figure class="card span-2" id="annex"></figure>
+        <figure class="card" id="area-chart"></figure>
+        <figure class="card" id="value-history"></figure>
+        <figure class="card span-2" id="value-map"></figure>
+        <figure class="card span-2" id="neighborhoods"></figure>
+      </div>
+    </section>
+
+    <section id="land" aria-labelledby="land-h">
+      <header class="section-head">
+        <h2 id="land-h">Land use &amp; zoning</h2>
+        <p class="section-sub">What the City's zoning map allows, by acres</p>
+      </header>
+      <div class="grid">
+        <figure class="card span-2" id="zoning"></figure>
+      </div>
+    </section>
+
+    <section id="budget" aria-labelledby="budget-h">
+      <header class="section-head">
+        <h2 id="budget-h">Budget &amp; debt</h2>
+        <p class="section-sub">Adopted budgets and the audited annual financial report</p>
+      </header>
+      <div class="grid">
+        <figure class="card" id="tax-calc"></figure>
+        <figure class="card" id="revenue"></figure>
+        <figure class="card span-2" id="spending"></figure>
+        <figure class="card" id="gf-growth"></figure>
+        <figure class="card" id="funds"></figure>
+        <figure class="card" id="tax-rate"></figure>
+        <figure class="card" id="tax-base"></figure>
+        <figure class="card span-2" id="debt"></figure>
+      </div>
+    </section>
+
+    <section id="debt-service" aria-labelledby="debt-service-h">
+      <header class="section-head">
+        <h2 id="debt-service-h">Debt service</h2>
+        <p class="section-sub">Every loan payment in the City's adopted FY 2026–27 budget</p>
+      </header>
+      <div id="ds-tiles" class="tiles"></div>
+      <div class="grid" style="margin-top:16px">
+        <figure class="card span-2" id="ds-payments"></figure>
+        <figure class="card" id="ds-payoff"></figure>
+        <figure class="card" id="ds-policy"></figure>
+      </div>
+    </section>
+
+    <section id="news" aria-labelledby="news-h">
+      <header class="section-head">
+        <h2 id="news-h">City news</h2>
+        <p class="section-sub">Official announcements from the City of Kannapolis</p>
+      </header>
+      <div class="card" id="news-body"></div>
+    </section>
+
+    <section id="events" aria-labelledby="events-h">
+      <header class="section-head">
+        <h2 id="events-h">Upcoming events</h2>
+        <p class="section-sub">The City's official events calendar, with repeating events merged</p>
+      </header>
+      <div class="card" id="events-body"></div>
+    </section>
+
+    <section id="meetings" aria-labelledby="meetings-h">
+      <header class="section-head">
+        <h2 id="meetings-h">Public meetings</h2>
+        <p class="section-sub">City Council, Planning &amp; Zoning, and boards — with agendas</p>
+      </header>
+      <div class="card" id="meetings-body"></div>
+    </section>
+
+    <section id="council" aria-labelledby="council-h">
+      <header class="section-head">
+        <h2 id="council-h">Contact your City Council</h2>
+        <p class="section-sub">Questions about what you see here? Ask the people who decide.</p>
+      </header>
+      <div id="council-body"></div>
+    </section>
+
+    <section id="org" aria-labelledby="org-h">
+      <header class="section-head">
+        <h2 id="org-h">Who runs the City</h2>
+        <p class="section-sub">City departments and who leads them</p>
+      </header>
+      <div class="card" id="org-body"></div>
+    </section>
+
+    <section id="about" aria-labelledby="about-h">
+      <header class="section-head">
+        <h2 id="about-h">About the data</h2>
+      </header>
+      <div class="card prose" id="about-body"></div>
+    </section>
+  </div>
+
+  <dialog id="window" class="os-window" aria-labelledby="win-title">
+    <div class="win-panel">
+      <div class="win-bar">
+        <span class="win-icon"></span>
+        <div class="win-heading">
+          <h2 class="win-title" id="win-title"></h2>
+          <p class="win-sub"></p>
+        </div>
+        <button class="win-close" type="button" aria-label="Close window">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <div class="win-body"></div>
+    </div>
+  </dialog>
+
+  <nav id="dock" class="dock" aria-label="Open a widget"></nav>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>An independent, community-built dashboard using public data. Not an official City of Kannapolis publication. <a href="https://github.com/bradspry/kannapolis-dashboard">Source code</a> (GPL-3.0).
+        <span id="updated"></span></p>
+    </div>
+  </footer>
+  <div id="tooltip" class="tooltip" role="status" hidden></div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

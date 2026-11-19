@@ -1,0 +1,294 @@
+// Home-screen tiles: one glanceable summary per widget. Each returns content for os.js to wrap.
+import { h } from "./ui.js";
+import { tokens } from "./theme.js";
+import { gauge } from "./gauge.js";
+import { chip } from "./os.js";
+import { fy, num, pct, usd, usdCompact } from "./format.js";
+import { upcomingEvents, whenLabel, fmtTime } from "./sections/events.js";
+
+const NS = "http://www.w3.org/2000/svg";
+const svgEl = (tag, attrs = {}) => {
+  const el = document.createElementNS(NS, tag);
+  for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+  return el;
+};
+
+/** Tiny area sparkline. Stretches to its box. */
+function sparkline(values, color) {
+  const W = 200, H = 56, pad = 4;
+  const min = Math.min(...values), max = Math.max(...values), span = max - min || 1;
+  const pts = values.map((v, i) => [pad + ((W - 2 * pad) * i) / (values.length - 1), H - pad - ((H - 2 * pad) * (v - min)) / span]);
+  const line = pts.map(([x, y], i) => `${i ? "L" : "M"}${x.toFixed(1)},${y.toFixed(1)}`).join("");
+  const svg = svgEl("svg", { viewBox: `0 0 ${W} ${H}`, preserveAspectRatio: "none", class: "spark", "aria-hidden": "true" });
+  const id = `sg${Math.random().toString(36).slice(2, 8)}`;
+  const grad = svgEl("linearGradient", { id, x1: 0, y1: 0, x2: 0, y2: 1 });
+  grad.append(svgEl("stop", { offset: "0", "stop-color": color, "stop-opacity": ".35" }), svgEl("stop", { offset: "1", "stop-color": color, "stop-opacity": "0" }));
+  const defs = svgEl("defs"); defs.append(grad);
+  const [lx, ly] = pts.at(-1);
+  svg.append(defs,
+    svgEl("path", { d: `${line}L${lx},${H}L${pad},${H}Z`, fill: `url(#${id})` }),
+    svgEl("path", { d: line, fill: "none", stroke: color, "stroke-width": 2, "vector-effect": "non-scaling-stroke", "stroke-linejoin": "round" }),
+    // End dot as a zero-length round-capped stroke, so it stays round when the sparkline stretches.
+    svgEl("path", { d: `M${lx},${ly}h0`, stroke: color, "stroke-width": 8, "stroke-linecap": "round", "vector-effect": "non-scaling-stroke" }));
+  return svg;
+}
+
+/** Donut ring with 2px surface gaps between segments. */
+function donut(parts, size = 92, stroke = 12) {
+  const r = (size - stroke) / 2, c = 2 * Math.PI * r, total = parts.reduce((s, p) => s + p.value, 0);
+  const svg = svgEl("svg", { viewBox: `0 0 ${size} ${size}`, class: "donut", "aria-hidden": "true" });
+  let off = 0;
+  for (const p of parts) {
+    const len = (c * p.value) / total;
+    svg.append(svgEl("circle", { cx: size / 2, cy: size / 2, r, fill: "none", stroke: p.color, "stroke-width": stroke,
+      "stroke-dasharray": `${Math.max(0, len - 2)} ${c}`, "stroke-dashoffset": -off, transform: `rotate(-90 ${size / 2} ${size / 2})` }));
+    off += len;
+  }
+  return svg;
+}
+
+const head = (iconName, color, title) => h("div", { class: "tile-head" }, chip(iconName, color), h("span", { class: "tile-title" }, title));
+const big = (value, unit) => h("div", { class: "tile-big" }, value, unit ? h("small", {}, unit) : null);
+const parseLocal = (s) => { const [d, t = "00:00"] = s.split("T"); const [y, m, dd] = d.split("-").map(Number); const [hh, mm] = t.split(":").map(Number); return new Date(y, m - 1, dd, hh, mm); };
+
+// Sizes: s = 1×1, m = 2×1, l = 2×2, xl = 4×2. Each build(size) shows more as the tile grows.
+const isBig = (size) => size === "l" || size === "xl";
+const facts = (rows, cls = "") => h("dl", { class: `facts ${cls}` }, rows.filter(Boolean).flatMap(([k, v]) => [h("dt", {}, k), h("dd", {}, v)]));
+const shortDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+
+export function tileDefs(data, COLORS) {
+  const { census, budget, property, zoning, council, org, meetings, news, events } = data;
+  const t = tokens();
+  const geo = census.geographies;
+  const k = geo.Kannapolis, nc = geo["North Carolina"], cab = geo["Cabarrus County"], us = geo["United States"];
+  const debt = budget.debt_history.at(-1), debt0 = budget.debt_history[0];
+  const rate = budget.tax_rate_history.at(-1);
+  const ds = budget.debt_service_fy2027 || [];
+  const dsTot = (i) => i.principal + i.interest + i.other;
+  const gfDs = ds.filter((i) => i.fund === "General Fund").reduce((s, i) => s + dsTot(i), 0);
+  const gfSpend = budget.funds_fy2027.find((f) => f.fund === "General Fund")?.amount;
+  const pct0 = (v) => `${Math.round(v)}%`;
+
+  // Gauge tiles: dial alone when small; dial + facts when bigger.
+  const gaugeTile = (def, g, extra) => ({
+    ...def, kind: "gauge", size: def.size || "s",
+    build: (size) => {
+      // Small: the NC marker key (if any) replaces the caption; otherwise a short caption.
+      const dial = gauge({ ...g, id: `${def.id}-${size}`, context: size === "s" && !g.marker ? (g.short || g.context) : null });
+      if (size === "s") return dial;
+      return h("div", { class: `gauge-tile gt-${size}` },
+        h("div", { class: "gt-dial" }, dial),
+        h("div", { class: "gt-info" },
+          head("gauge", COLORS.gauge, def.label),
+          h("p", { class: "tile-meta" }, g.context),
+          facts(isBig(size) ? extra : extra.slice(0, 2))));
+    },
+  });
+
+  const parseM = () => {
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    return meetings.meetings.map((m) => ({ ...m, _d: parseLocal(m.start) })).filter((m) => m._d >= today && !m.canceled).sort((a, b) => a._d - b._d);
+  };
+
+  return [
+    gaugeTile({ id: "g-debt-limit", opens: "budget", label: "Legal debt limit used" },
+      { label: "Legal debt limit used", value: (100 * debt.net_debt_applicable) / debt.debt_limit, max: 100, format: (v) => pct(v), tickFormat: pct0,
+        context: `${usdCompact(debt.net_debt_applicable)} of ${usdCompact(debt.debt_limit)} allowed by state law` },
+      [["Debt counted toward limit", usd(debt.net_debt_applicable)], ["State limit (8% of value)", usd(debt.debt_limit)], ["Room left", usd(debt.legal_debt_margin)], ["As of", `June 30, ${debt.fiscal_year}`]]),
+    gfDs && gfSpend && gaugeTile({ id: "g-debt-policy", opens: "debt-service", label: "Taxes going to debt" },
+      { label: "Taxes going to debt", value: (100 * gfDs) / gfSpend, max: 20, zones: [{ from: 15, to: 20 }], format: (v) => pct(v), tickFormat: pct0,
+        context: "Red: over the City's 15% policy cap" },
+      [["General Fund debt payments", usd(gfDs)], ["General Fund spending", usd(gfSpend)], ["City policy cap", "15%"], ["Budget year", "FY27"]]),
+    {
+      id: "people", opens: "people", size: "m", label: "Residents",
+      build: (size) => {
+        const pops = budget.debt_history.map((d) => d.population);
+        const growth = (100 * (debt.population - debt0.population)) / debt0.population;
+        const number = h("div", {}, big(num(debt.population)), h("div", { class: "tile-delta up" }, `▲ ${pct(growth, 0)} since ${debt0.fiscal_year}`));
+        if (size === "s") return h("div", { class: "tile-body" }, head("people", COLORS.people, "Residents"), number, h("div", { class: "tile-spark sm" }, sparkline(pops, COLORS.people)));
+        const stats = [["Median household income", `${usd(k.median_household_income)}`, `NC ${usd(nc.median_household_income)}`],
+          ["Median home value", usd(k.median_home_value), `NC ${usd(nc.median_home_value)}`],
+          ["Median age", String(k.median_age), `NC ${nc.median_age}`],
+          ["Below poverty line", pct(k.poverty_rate), `NC ${pct(nc.poverty_rate)}`],
+          ["Bachelor's degree or higher", pct(k.bachelors_plus_pct), `NC ${pct(nc.bachelors_plus_pct)}`],
+          ["Median rent", usd(k.median_gross_rent), `NC ${usd(nc.median_gross_rent)}`]];
+        if (size === "m") return h("div", { class: "tile-body" }, head("people", COLORS.people, "Residents"),
+          h("div", { class: "tile-split" }, h("div", {}, number, h("div", { class: "tile-meta" }, `Median income ${usdCompact(k.median_household_income)} · NC ${usdCompact(nc.median_household_income)}`)),
+            h("div", { class: "tile-spark" }, sparkline(pops, COLORS.people))));
+        return h("div", { class: "tile-body" }, head("people", COLORS.people, "Residents"),
+          h("div", { class: `tile-split ${size === "xl" ? "wide" : ""}` }, number, h("div", { class: "tile-spark" }, sparkline(pops, COLORS.people))),
+          h("ul", { class: `stat-rows ${size === "xl" ? "cols-2" : ""}` }, stats.slice(0, size === "xl" ? 6 : 4).map(([a, b, c]) =>
+            h("li", {}, h("span", {}, a), h("b", {}, b), h("small", {}, c)))),
+          h("div", { class: "tile-meta" }, `${census.release} · population from City audit (${debt.fiscal_year})`));
+      },
+    },
+    meetings && {
+      id: "meetings", opens: "meetings", size: "l", label: "Next meetings",
+      build: (size) => {
+        const up = parseM(), next = up[0];
+        const nextBlock = next ? h("div", { class: "next-mtg" },
+          h("div", { class: "date-block" }, h("span", {}, next._d.toLocaleDateString("en-US", { month: "short" })), h("b", {}, next._d.getDate())),
+          h("div", {},
+            h("div", { class: "next-title" }, next.title),
+            h("div", { class: "tile-meta" }, `${next._d.toLocaleDateString("en-US", { weekday: size === "s" ? "short" : "long" })} · ${next._d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}`),
+            h("span", { class: `pill ${next.agenda ? "ok" : ""}` }, next.agenda ? "Agenda posted" : size === "s" ? "No agenda yet" : "Agenda not posted yet"))) : h("p", { class: "tile-meta" }, "No upcoming meetings posted.");
+        const list = (n) => up.length > 1 ? [h("div", { class: "mini-head" }, "Coming up"),
+          h("ul", { class: `mini-list ${size === "xl" ? "cols-2" : ""}` }, up.slice(1, 1 + n).map((m) => h("li", {}, h("span", { class: "mini-date" }, shortDate(m._d)), h("span", {}, m.title))))] : [];
+        if (size === "m") return h("div", { class: "tile-body" }, head("meetings", COLORS.meetings, "Public meetings"),
+          h("div", { class: "tile-split top" }, nextBlock, h("div", {}, ...list(2))));
+        return h("div", { class: "tile-body" }, head("meetings", COLORS.meetings, "Public meetings"), nextBlock, ...(size === "s" ? [] : list(size === "xl" ? 8 : 5)));
+      },
+    },
+    events?.events?.length && {
+      id: "events", opens: "events", size: "m", label: "Upcoming events",
+      build: (size) => {
+        const up = upcomingEvents(events);
+        const n = { s: 1, m: 2, l: 5, xl: 8 }[size];
+        const row = (e) => {
+          const series = e.count > 1;
+          const when = whenLabel(e);
+          return h("li", { class: "ev-mini" },
+            h("span", { class: `ev-chip${series && e._onNow ? " now" : ""}` },
+              series && e._onNow ? "On now" : shortDate(e._next)),
+            h("div", {},
+              h("div", { class: "ev-mini-title" }, e.title),
+              h("div", { class: "tile-meta" }, series ? `${e.recurrence.split(",")[0]} to ${shortDate(e._dates.at(-1))} · ${fmtTime(e.time)}`
+                : [when, fmtTime(e.time), size !== "m" ? e.location : null].filter(Boolean).join(" · "))));
+        };
+        return h("div", { class: "tile-body" }, head("events", COLORS.events, "Upcoming events"),
+          up.length ? h("ul", { class: `ev-mini-list ${size === "s" ? "solo" : ""} ${size === "xl" ? "cols-2" : ""}` }, up.slice(0, n).map(row))
+            : h("p", { class: "tile-meta" }, "Nothing on the City calendar right now."));
+      },
+    },
+    gaugeTile({ id: "g-tax-rate", opens: "budget", label: "City tax rate" },
+      { label: "City tax rate", value: rate.rate_per_100 * 100, max: 150, format: (v) => `${v.toFixed(2)}¢`, tickFormat: (v) => (v ? "$1.50" : "0¢"),
+        context: `per $100 of value (${fy(rate.fiscal_year)}) · dial ends at the state max`, short: `per $100 · state max $1.50` },
+      [["On a $300,000 home", `${usd(3000 * rate.rate_per_100)} a year`], ["State maximum", "$1.50 per $100"], ["Taxable value (est.)", usdCompact(rate.assessed_value)], ["Change from last year", (() => { const prev = budget.tax_rate_history.at(-2)?.rate_per_100; return prev == null ? "—" : prev === rate.rate_per_100 ? "No change" : `from ${(prev * 100).toFixed(2)}¢`; })()]]),
+    gaugeTile({ id: "g-owners", opens: "people", label: "Homeowners" },
+      { label: "Homeowners", value: k.owner_occupied_pct, max: 100, format: (v) => pct(v), tickFormat: pct0,
+        marker: { value: nc.owner_occupied_pct, label: `NC ${pct(nc.owner_occupied_pct)}` }, context: "Share of occupied homes lived in by their owner" },
+      [["Kannapolis", pct(k.owner_occupied_pct)], ["Cabarrus County", pct(cab.owner_occupied_pct)], ["North Carolina", pct(nc.owner_occupied_pct)], ["United States", pct(us.owner_occupied_pct)]]),
+    {
+      id: "budget", opens: "budget", size: "m", label: "City budget",
+      build: (size) => {
+        const funds = [...budget.funds_fy2027].sort((a, b) => b.amount - a.amount);
+        const top = funds.slice(0, 3), rest = funds.slice(3).reduce((s, f) => s + f.amount, 0);
+        const parts = [...top.map((f, i) => ({ label: f.fund.replace(" Fund", ""), value: f.amount, color: t.series[i] })), { label: "Other funds", value: rest, color: t.mutedFill }];
+        const sum = parts.reduce((s, p) => s + p.value, 0);
+        const bar = h("div", { class: "mini-bar", "aria-hidden": "true" }, parts.map((p) => h("span", { style: { flex: `${p.value} 1 0`, background: p.color } })));
+        const body = [head("budget", COLORS.budget, "FY27 budget"), big(usdCompact(budget.headline.total_budget_fy2027))];
+        if (size === "s") return h("div", { class: "tile-body" }, ...body, h("div", { class: "tile-meta" }, `${num(budget.headline.full_time_positions_fy2027)} full-time jobs`), bar);
+        if (size === "m") return h("div", { class: "tile-body" }, ...body, bar,
+          h("ul", { class: "mini-legend" }, parts.map((p) => h("li", {}, h("i", { style: { background: p.color } }), `${p.label} ${pct((100 * p.value) / sum, 0)}`))));
+        const max = funds[0].amount;
+        return h("div", { class: "tile-body" }, ...body, h("div", { class: "tile-meta" }, `All funds, adopted · ${num(budget.headline.full_time_positions_fy2027)} full-time jobs`),
+          h("ul", { class: `fund-bars ${size === "xl" ? "cols-2" : ""}` }, funds.map((f) => h("li", {},
+            h("div", { class: "fb-label" }, h("span", {}, f.fund), h("b", {}, usdCompact(f.amount))),
+            h("div", { class: "fb-track" }, h("span", { style: { width: `${(100 * f.amount) / max}%` } }))))));
+      },
+    },
+    ds.length && {
+      id: "debt-service", opens: "debt-service", size: "s", label: "Debt service",
+      build: (size) => {
+        const sum = (key) => ds.reduce((s, i) => s + i[key], 0);
+        const tot = ds.reduce((s, i) => s + dsTot(i), 0);
+        const parts = [{ label: "Principal", v: sum("principal"), c: t.series[0] }, { label: "Interest", v: sum("interest"), c: t.series[1] }, { label: "Issuance & new debt", v: sum("other"), c: t.series[2] }];
+        const bar = h("div", { class: "mini-bar", "aria-hidden": "true" }, parts.map((p) => h("span", { style: { flex: `${p.v} 1 0`, background: p.c } })));
+        const legend = (n) => h("ul", { class: "mini-legend" }, parts.slice(0, n).map((p) => h("li", {}, h("i", { style: { background: p.c } }), `${p.label} ${usdCompact(p.v)}`)));
+        const body = [head("debt", COLORS.debt, "Debt payments"), big(usdCompact(tot)), h("div", { class: "tile-meta" }, `this year · ${usd(debt.debt_per_capita)} debt per resident`)];
+        if (size === "s") return h("div", { class: "tile-body" }, ...body, bar, legend(2));
+        if (size === "m") return h("div", { class: "tile-body" }, ...body, bar, legend(3));
+        const topPay = ds.filter((i) => dsTot(i) > 0).sort((a, b) => dsTot(b) - dsTot(a)).slice(0, size === "xl" ? 8 : 5);
+        return h("div", { class: "tile-body" }, ...body, bar, legend(3),
+          h("div", { class: "mini-head" }, "Biggest payments"),
+          h("ul", { class: `mini-list money ${size === "xl" ? "cols-2" : ""}` }, topPay.map((i) => h("li", {}, h("span", {}, i.project), h("b", {}, usdCompact(dsTot(i)))))));
+      },
+    },
+    news?.items?.length && {
+      id: "news", opens: "news", size: "l", label: "City news",
+      build: (size) => {
+        const n = { s: 1, m: 2, l: 5, xl: 6 }[size];
+        const items = news.items.slice(0, n);
+        return h("div", { class: "tile-body" }, head("news", COLORS.news, "City news"),
+          h("ul", { class: `news-mini ${size === "s" ? "solo" : ""} ${size === "xl" ? "cols-2" : ""}` }, items.map((it) => h("li", {},
+            h("span", { class: "mini-date" }, it.date ? shortDate(new Date(`${it.date}T12:00`)) : ""),
+            h("div", {}, h("span", { class: "news-mini-title" }, it.title),
+              size === "xl" && it.snippet ? h("p", { class: "news-mini-snippet" }, it.snippet) : null)))));
+      },
+    },
+    {
+      id: "growth", opens: "growth", size: "m", label: "Taxable property",
+      build: (size) => {
+        const rows = budget.tax_rate_history.filter((r) => r.assessed_value);
+        const first = rows[0], last = rows.at(-1);
+        const number = h("div", {}, big(usdCompact(last.assessed_value)), h("div", { class: "tile-delta up" }, `▲ ${Math.round((last.assessed_value / first.assessed_value) * 10) / 10}× since ${fy(first.fiscal_year)}`));
+        const spark = h("div", { class: `tile-spark ${size === "s" ? "sm" : ""}` }, sparkline(rows.map((r) => r.assessed_value), COLORS.growth));
+        if (size === "s") return h("div", { class: "tile-body" }, head("growth", COLORS.growth, "Taxable property"), number, spark);
+        if (size === "m") return h("div", { class: "tile-body" }, head("growth", COLORS.growth, "Taxable property"),
+          h("div", { class: "tile-split" }, h("div", {}, number, h("div", { class: "tile-meta" }, property?.current ? `${property.current.area_sqmi.toFixed(0)} sq mi in Cabarrus County` : "Assessed value, whole city")), spark));
+        const c = property?.current;
+        return h("div", { class: "tile-body" }, head("growth", COLORS.growth, "Taxable property"),
+          h("div", { class: "tile-split" }, number, spark),
+          c ? facts([["Land area (Cabarrus part)", `${c.area_sqmi.toFixed(1)} sq mi`], ["Tax parcels", num(c.parcels)], ["Median parcel value", usd(c.median_value)],
+            ["Vacant parcels", `${num(c.vacant_parcels)} (${pct((100 * c.vacant_parcels) / c.parcels, 0)})`],
+            size === "xl" && ["Buildings' share of value", pct((100 * c.building_value) / c.total_value, 0)], size === "xl" && ["County appraised value", usdCompact(c.total_value)]], size === "xl" ? "cols-2" : "") : null);
+      },
+    },
+    zoning && {
+      id: "land", opens: "land", size: "s", label: "Land use",
+      build: (size) => {
+        const cats = [...zoning.categories].sort((a, b) => b.acres - a.acres);
+        const n = size === "s" ? 3 : size === "m" ? 3 : 6;
+        const parts = [...cats.slice(0, n).map((c, i) => ({ ...c, value: c.acres, color: t.series[i] })),
+          { category: "Other", value: cats.slice(n).reduce((s, c) => s + c.acres, 0), pct: cats.slice(n).reduce((s, c) => s + c.pct, 0), color: t.mutedFill }].filter((p) => p.value > 0);
+        const ring = h("div", { class: "ring-wrap" }, donut(parts, isBig(size) ? 150 : 104, isBig(size) ? 16 : 12),
+          h("div", { class: "ring-label" }, h("b", {}, pct(cats[0].pct, 0)), h("span", {}, cats[0].category)));
+        if (size === "s") return h("div", { class: "tile-body" }, head("land", COLORS.land, "Land use"), ring);
+        const leg = h("ul", { class: "ring-legend" }, parts.map((p) => h("li", {}, h("i", { style: { background: p.color } }), h("span", {}, p.category), h("b", {}, pct(p.pct, 0)))));
+        return h("div", { class: "tile-body" }, head("land", COLORS.land, "Land use"),
+          h("div", { class: "tile-split ring-split" }, ring, leg),
+          isBig(size) ? h("div", { class: "tile-meta" }, `${num(zoning.total_acres)} zoned acres · Cabarrus County part of the city`) : null);
+      },
+    },
+    council && {
+      id: "council", opens: "council", size: "m", label: "City Council",
+      build: (size) => {
+        const avatar = (m) => (m.photo ? h("img", { src: m.photo, alt: "" }) : h("span", { class: "avatar-fallback" }, m.name[0]));
+        const mayor = council.members.find((m) => m.role === "Mayor");
+        const email = h("a", { class: "tile-action", href: `mailto:${council.group_email}` }, size === "s" ? "Email all" : "Email all of Council");
+        if (!isBig(size)) return h("div", { class: "tile-body" }, head("council", COLORS.council, size === "s" ? "City Council" : "Your City Council"),
+          h("div", { class: "avatars" }, council.members.slice(0, size === "s" ? 4 : 7).map(avatar)),
+          h("div", { class: "tile-meta" }, size === "s" ? `${council.members.length} members` : `${council.members.length} members · Mayor ${mayor?.name || ""}`), email);
+        return h("div", { class: "tile-body" }, head("council", COLORS.council, "Your City Council"),
+          h("ul", { class: `people-list ${size === "xl" ? "cols-2" : ""}` }, council.members.map((m) => h("li", {}, avatar(m),
+            h("div", {}, h("b", {}, m.name), h("span", {}, m.role)),
+            m.email ? h("a", { href: `mailto:${m.email}`, class: "mail-link", "aria-label": `Email ${m.name}` }, "✉") : null))),
+          email);
+      },
+    },
+    org && {
+      id: "org", opens: "org", size: "s", label: "City staff",
+      build: (size) => {
+        const ppl = org.people.filter((p) => p.id !== "council" && !p.vacant);
+        const mgr = ppl.find((p) => p.title === "City Manager");
+        const person = (p) => h("div", { class: "person" }, p.photo ? h("img", { src: p.photo, alt: "" }) : null, h("div", {}, h("b", {}, p.name), h("span", {}, p.title)));
+        if (size === "s") return h("div", { class: "tile-body" }, head("org", COLORS.org, "Who runs the City"), mgr ? person(mgr) : null, h("div", { class: "tile-meta" }, `${ppl.length} leaders and departments`));
+        const n = { m: 4, l: 10, xl: 15 }[size];
+        const list = ppl.slice(0, n);
+        return h("div", { class: "tile-body" }, head("org", COLORS.org, "Who runs the City"),
+          h("ul", { class: `people-list cols-2 ${size === "xl" ? "cols-3" : ""}` }, list.map((p) => h("li", {},
+            p.photo ? h("img", { src: p.photo, alt: "" }) : h("span", { class: "avatar-fallback" }, p.name[0]),
+            h("div", {}, h("b", {}, p.name), h("span", {}, p.title))))),
+          h("div", { class: "tile-meta" }, `${ppl.length} leaders in all`));
+      },
+    },
+    {
+      id: "about", opens: "about", size: "s", label: "About the data",
+      build: (size) => h("div", { class: "tile-body" },
+        head("about", COLORS.about, "About the data"),
+        h("p", { class: "tile-meta" }, "Census, Cabarrus County GIS, City budgets, audits, meetings and news. Every number cites its source."),
+        size !== "s" ? h("ul", { class: "mini-legend about-src" }, ["U.S. Census ACS", "Cabarrus County GIS", "FY27 budget & ordinance", "2025 audit", "CivicClerk meetings", "City news", "NC State Board of Elections"].slice(0, isBig(size) ? 7 : 4).map((x) => h("li", {}, x))) : null,
+        h("div", { class: "tile-meta" }, `Refreshed ${budget.generated || ""}`)),
+    },
+  ].filter(Boolean);
+}

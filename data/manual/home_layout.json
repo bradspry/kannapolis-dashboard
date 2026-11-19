@@ -1,0 +1,28 @@
+{
+  "order": [
+    "meetings",
+    "news",
+    "council",
+    "org",
+    "people",
+    "budget",
+    "debt-service",
+    "g-tax-rate",
+    "growth",
+    "g-debt-policy",
+    "land",
+    "g-owners",
+    "g-debt-limit",
+    "about"
+  ],
+  "hidden": [],
+  "sizes": {
+    "meetings": "m",
+    "news": "m",
+    "council": "m",
+    "org": "m",
+    "debt-service": "l",
+    "people": "l",
+    "about": "m"
+  }
+}

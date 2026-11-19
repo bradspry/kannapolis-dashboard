@@ -1,0 +1,46 @@
+name: Refresh data
+
+on:
+  schedule:
+    - cron: "0 9 * * 1" # Mondays 09:00 UTC: everything
+    - cron: "30 10 * * *" # daily 10:30 UTC: meetings, news, events (time-sensitive)
+  workflow_dispatch:
+    inputs:
+      steps:
+        description: "Steps to run (space-separated: budget census council meetings news events org zoning property). Blank = all."
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-data
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run ETL
+        env:
+          CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
+          KDASH_CONTACT: ${{ secrets.KDASH_CONTACT }}
+        run: python etl/run_all.py ${{ github.event.schedule == '30 10 * * *' && 'meetings news events' || github.event.inputs.steps }}
+      - name: Commit changed data
+        if: always()
+        run: |
+          git config user.name "kdash-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/generated
+          if git diff --cached --quiet; then
+            echo "No data changes."
+          else
+            git commit -m "Refresh open data ($(date -u +%Y-%m-%d))"
+            git push
+          fi
