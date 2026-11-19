@@ -42,13 +42,23 @@ function saveHidden() {
 }
 const isDefaultLayout = () => !readLocal();
 
-/** Tile defs in the saved order; tiles new since the save keep their default position. */
+/** Tile defs in the saved order; widgets added since the save go at the bottom. */
 function ordered(defs) {
   if (!order) return defs;
   const idx = new Map(order.map((id, i) => [id, i]));
-  const out = defs.filter((d) => idx.has(d.id)).sort((a, b) => idx.get(a.id) - idx.get(b.id));
-  defs.forEach((d, i) => { if (!idx.has(d.id)) out.splice(Math.min(i, out.length), 0, d); });
-  return out;
+  return [...defs.filter((d) => idx.has(d.id)).sort((a, b) => idx.get(a.id) - idx.get(b.id)),
+    ...defs.filter((d) => !idx.has(d.id))];
+}
+
+/** Restore a hidden widget at the bottom of the home screen. */
+function restore(id, name) {
+  hidden.delete(id);
+  order = [...ordered(currentDefs).map((d) => d.id).filter((x) => x !== id), id];
+  saveHidden();
+  renderHome();
+  const el = document.querySelector(`[data-tile="${id}"]`);
+  el?.scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "center" });
+  announce(`${name} added at the bottom.`);
 }
 let currentDefs = [];
 /** Called after a drag: visible tiles' new order. Hidden tiles keep their slots. */
@@ -119,7 +129,7 @@ export function renderHome() {
   tray.replaceChildren(
     h("span", { class: "tray-label" }, "Hidden widgets"),
     ...off.map((t) => h("button", { class: "tray-chip", type: "button",
-      onclick: () => { hidden.delete(t.id); saveHidden(); renderHome(); } },
+      onclick: () => restore(t.id, t.label || windows.get(t.opens)?.title || t.id) },
       icon("plus", 14), t.label || windows.get(t.opens)?.title || t.id)));
 }
 
@@ -127,6 +137,7 @@ export function renderHome() {
 function addSpacer() {
   const id = `space-${Date.now().toString(36)}`;
   spacers.push(id);
+  if (order) order.push(id);
   saveHidden();
   renderHome();
   const el = document.querySelector(`[data-tile="${id}"]`);
