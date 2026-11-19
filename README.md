@@ -55,6 +55,8 @@ It prints the address to open on your phone (for example `http://192.168.1.20:51
 
 | Widget | Source | Updated |
 |---|---|---|
+| Kannapolis Police | [KPD web page](https://www.kannapolisnc.gov/KPD): 911 and non-emergency numbers, online services, notices; serious-crime counts from KPD's quarterly crime reports (PDFs) | **By hand**: `data/manual/kpd.json`, `kpd_part1_crimes.csv`, `kpd_quarterly.csv` (checked against each report's total) |
+| Kannapolis Fire Department | [KFD web pages](https://www.kannapolisnc.gov/kfd): 911 and KFD numbers, free resident programs, after-a-fire forms, the five stations (mapped with the Census geocoder; nearest-station finder runs on the device) | **By hand**: `data/manual/kfd.json` |
 | Weather | [National Weather Service](https://www.weather.gov/) API: forecast, hourly, alerts, and observations from Concord Regional Airport | **Live** in the browser every 15 min (daily backup copy) |
 | Gauges | Derived from the budget, audit and Census data below | Automatic |
 | People | U.S. Census ACS 5-year via [Census Reporter](https://censusreporter.org/profiles/16000US3735200-kannapolis-nc/) | Automatic |

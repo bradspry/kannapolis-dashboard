@@ -1,0 +1,21 @@
+quarter,metric,value,unit,source,source_url
+2026-Q1,total_reports,198,reports,kpd_q1_2026 p.4,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/Quarterly%20Reports/2026%20First%20Quarter%20Report.pdf#page=4
+2026-Q1,Cleared by arrest,48,pct_case_status,kpd_q1_2026 p.4,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/Quarterly%20Reports/2026%20First%20Quarter%20Report.pdf#page=4
+2026-Q1,Inactive,26,pct_case_status,kpd_q1_2026 p.4,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/Quarterly%20Reports/2026%20First%20Quarter%20Report.pdf#page=4
+2026-Q1,Open,18,pct_case_status,kpd_q1_2026 p.4,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/Quarterly%20Reports/2026%20First%20Quarter%20Report.pdf#page=4
+2026-Q1,Exceptionally cleared,4,pct_case_status,kpd_q1_2026 p.4,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/Quarterly%20Reports/2026%20First%20Quarter%20Report.pdf#page=4
+2026-Q1,Unfounded,4,pct_case_status,kpd_q1_2026 p.4,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/Quarterly%20Reports/2026%20First%20Quarter%20Report.pdf#page=4
+2026-Q1,K1,47,pct_of_reports_by_district,kpd_q1_2026 p.4,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/Quarterly%20Reports/2026%20First%20Quarter%20Report.pdf#page=4
+2026-Q1,K3,20,pct_of_reports_by_district,kpd_q1_2026 p.4,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/Quarterly%20Reports/2026%20First%20Quarter%20Report.pdf#page=4
+2026-Q1,K4,19,pct_of_reports_by_district,kpd_q1_2026 p.4,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/Quarterly%20Reports/2026%20First%20Quarter%20Report.pdf#page=4
+2026-Q1,K2,12,pct_of_reports_by_district,kpd_q1_2026 p.4,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/Quarterly%20Reports/2026%20First%20Quarter%20Report.pdf#page=4
+2026-Q2,total_reports,213,reports,kpd_q2_2026 p.4,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/2026%20Second%20Quarter%20Crime%20Report.pdf#page=4
+2026-Q2,Cleared by arrest,47,pct_case_status,kpd_q2_2026 p.4,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/2026%20Second%20Quarter%20Crime%20Report.pdf#page=4
+2026-Q2,Inactive,26,pct_case_status,kpd_q2_2026 p.4,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/2026%20Second%20Quarter%20Crime%20Report.pdf#page=4
+2026-Q2,Open,21,pct_case_status,kpd_q2_2026 p.4,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/2026%20Second%20Quarter%20Crime%20Report.pdf#page=4
+2026-Q2,Exceptionally cleared,4,pct_case_status,kpd_q2_2026 p.4,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/2026%20Second%20Quarter%20Crime%20Report.pdf#page=4
+2026-Q2,Unfounded,3,pct_case_status,kpd_q2_2026 p.4,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/2026%20Second%20Quarter%20Crime%20Report.pdf#page=4
+2026-Q2,K1,40,pct_of_reports_by_district,kpd_q2_2026 p.4,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/2026%20Second%20Quarter%20Crime%20Report.pdf#page=4
+2026-Q2,K3,23,pct_of_reports_by_district,kpd_q2_2026 p.4,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/2026%20Second%20Quarter%20Crime%20Report.pdf#page=4
+2026-Q2,K4,21,pct_of_reports_by_district,kpd_q2_2026 p.4,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/2026%20Second%20Quarter%20Crime%20Report.pdf#page=4
+2026-Q2,K2,14,pct_of_reports_by_district,kpd_q2_2026 p.4,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/2026%20Second%20Quarter%20Crime%20Report.pdf#page=4

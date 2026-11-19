@@ -17,6 +17,7 @@ export function datasets(D) {
     ["Land use & zoning", "land", D.zoning, "Weekly", 9],
     ["Budget, debt & debt service", "budget", D.budget, "By hand, each budget year", null],
     ["City Council", "council", D.council, "By hand", null],
+    ["Police statistics", "police", D.police, "By hand, each quarterly report", null],
     ["City staff", "org", D.org, "By hand", null],
   ];
   const today = new Date(); today.setHours(0, 0, 0, 0);

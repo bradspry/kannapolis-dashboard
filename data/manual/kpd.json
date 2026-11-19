@@ -1,0 +1,116 @@
+{
+  "name": "Kannapolis Police Department",
+  "page": "https://www.kannapolisnc.gov/KPD",
+  "address": "401 Laureate Way, Kannapolis, NC 28081",
+  "phones": [
+    {
+      "label": "Emergency",
+      "number": "911",
+      "kind": "emergency",
+      "note": "Police, fire or medical emergency, or a crime in progress"
+    },
+    {
+      "label": "Non-emergency",
+      "number": "704-920-4000",
+      "kind": "main",
+      "note": "KPD main line, for police help that isn't an emergency"
+    },
+    {
+      "label": "Records",
+      "number": "704-920-4129",
+      "kind": "records",
+      "email": "KPD_records@kannapolisnc.gov",
+      "note": "Incident report copies (first page is public record)"
+    }
+  ],
+  "services": [
+    {
+      "title": "Report a non-emergency incident online",
+      "url": "https://kannapolisnc.policetocitizen.com/ReportIncident",
+      "group": "Online"
+    },
+    {
+      "title": "Map of recent police events",
+      "url": "https://kannapolisnc.policetocitizen.com/EventMap",
+      "group": "Online"
+    },
+    {
+      "title": "Recent calls for service",
+      "url": "https://kannapolisnc.policetocitizen.com/CADCalls",
+      "group": "Online"
+    },
+    {
+      "title": "Commend an officer",
+      "url": "https://kannapolisnc.policetocitizen.com/OfficerCommendation",
+      "group": "Online"
+    },
+    {
+      "title": "Book a Records appointment",
+      "url": "https://kannapolispolicedepartment.setmore.com/",
+      "group": "Online"
+    },
+    {
+      "title": "Public records request (form)",
+      "url": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/KPD219%20-%20Public%20Records%20Request.pdf",
+      "group": "Forms & guides"
+    },
+    {
+      "title": "How to file a complaint",
+      "url": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/KPD169%20-%20Complaint%20Processing%20P.pdf",
+      "group": "Forms & guides"
+    },
+    {
+      "title": "Cómo presentar una queja (español)",
+      "url": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/KPD169%20A-%20Complaint%20Processing%20Spanish.pdf",
+      "group": "Forms & guides"
+    },
+    {
+      "title": "Victim & witness guide",
+      "url": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/2025%20Victim%20Witness%20Service%20Guide-English.pdf",
+      "group": "Forms & guides"
+    },
+    {
+      "title": "Guía para víctimas y testigos (español)",
+      "url": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/2025%20Victim%20Witness%20Service%20Guide-Spanish.pdf",
+      "group": "Forms & guides"
+    },
+    {
+      "title": "Police FAQ",
+      "url": "https://www.kannapolisnc.gov/Government-Departments/Police/Frequently-Asked-Questions",
+      "group": "Forms & guides"
+    },
+    {
+      "title": "Sector map",
+      "url": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/Sector%20Map%202023_05_10.pdf",
+      "group": "Reports & maps"
+    },
+    {
+      "title": "2025 annual report",
+      "url": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Images/2025%20KPD%20ANNUAL%20REPORT%20FINAL.pdf",
+      "group": "Reports & maps"
+    },
+    {
+      "title": "2026 second quarter crime report",
+      "url": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/2026%20Second%20Quarter%20Crime%20Report.pdf",
+      "group": "Reports & maps"
+    },
+    {
+      "title": "2026 first quarter crime report",
+      "url": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/Quarterly%20Reports/2026%20First%20Quarter%20Report.pdf",
+      "group": "Reports & maps"
+    }
+  ],
+  "notices": [
+    {
+      "title": "Comment on KPD's state accreditation",
+      "until": "2026-12-02",
+      "text": "KPD will be assessed by the NC Law Enforcement Accreditation program on December 3, 2026. Residents may send comments through December 2.",
+      "action": {
+        "label": "Email NCaccred@ncdoj.gov",
+        "url": "mailto:NCaccred@ncdoj.gov?subject=Kannapolis%20Police%20Department"
+      },
+      "source": "https://www.kannapolisnc.gov/KPD"
+    }
+  ],
+  "source": "https://www.kannapolisnc.gov/KPD"
+}

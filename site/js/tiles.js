@@ -8,6 +8,8 @@ import { upcomingEvents, whenLabel, fmtTime } from "./sections/events.js";
 import { datasets, ago, fmtDate, byPublisher, formatCounts, statusDot } from "./sections/about.js";
 import { weather, wxIcon } from "./weather.js";
 import { alertBanner } from "./sections/weather.js";
+import { callButtons, activeNotices, noticeCard, crimeRows, quarterLabel } from "./sections/police.js";
+import { freeList, stationList } from "./sections/fire.js";
 
 const NS = "http://www.w3.org/2000/svg";
 const svgEl = (tag, attrs = {}) => {
@@ -65,7 +67,7 @@ const contactLinks = (p) => [
 const shortDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
 export function tileDefs(data, COLORS) {
-  const { census, budget, property, zoning, council, org, meetings, news, events } = data;
+  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire } = data;
   const t = tokens();
   const geo = census.geographies;
   const k = geo.Kannapolis, nc = geo["North Carolina"], cab = geo["Cabarrus County"], us = geo["United States"];
@@ -129,6 +131,48 @@ export function tileDefs(data, COLORS) {
         if (size === "m") return h("div", { class: "tile-body" }, ...top, h("div", { class: "tile-split wx-m" }, now, hours(5)));
         if (size === "l") return h("div", { class: "tile-body" }, ...top, now, hours(6), days(4));
         return h("div", { class: "tile-body" }, ...top, h("div", { class: "tile-split wx-xl" }, h("div", {}, now, hours(8)), days(7)));
+      },
+    },
+    police && {
+      id: "police", opens: "police", size: "m", label: "Kannapolis Police",
+      build: (size) => {
+        const last = police.quarters.at(-1);
+        const notice = activeNotices(police)[0];
+        const headline = h("div", { class: "kpd-headline" },
+          h("b", {}, String(last.total_reports)), h("span", {}, ` serious crimes reported ${quarterLabel(last.quarter)} · ${last.status["Cleared by arrest"]}% cleared by arrest`));
+        const quick = h("div", { class: "kpd-quick" },
+          police.services.filter((s) => /Report a non-emergency|Map of recent/.test(s.title)).map((s) =>
+            h("a", { href: s.url, target: "_blank", rel: "noopener" }, /Report/.test(s.title) ? "Report online ↗" : "Event map ↗")));
+        const top = [head("police", COLORS.police, "Kannapolis Police")];
+        if (size === "s") return h("div", { class: "tile-body" }, ...top, callButtons(police, { compact: true }));
+        if (size === "m") return h("div", { class: "tile-body" }, ...top,
+          h("div", { class: "tile-split kpd-m" }, callButtons(police, { compact: true }),
+            h("div", {}, headline, crimeRows(police, { limit: 3, quarters: [last.quarter] }))));
+        if (size === "l") return h("div", { class: "tile-body" }, ...top, callButtons(police, { compact: true }),
+          notice ? noticeCard(notice, { compact: true }) : null, headline, crimeRows(police, { limit: notice ? 4 : 6, quarters: [last.quarter] }), quick);
+        return h("div", { class: "tile-body" }, ...top,
+          h("div", { class: "tile-split kpd-xl" },
+            h("div", {}, callButtons(police), notice ? noticeCard(notice, { compact: true }) : null, quick),
+            h("div", {}, headline,
+              h("ul", { class: "mini-legend" }, police.quarters.map((q, i) => h("li", {}, h("i", { style: { background: t.series[i % 2] } }), quarterLabel(q.quarter)))),
+              crimeRows(police, { limit: 7 }))));
+      },
+    },
+    fire && {
+      id: "fire", opens: "fire", size: "m", label: "Kannapolis Fire Department",
+      build: (size) => {
+        const top = [head("fire", COLORS.fire, "Kannapolis Fire Dept.")];
+        const freeHead = h("div", { class: "mini-head" }, "Free for residents");
+        if (size === "s") return h("div", { class: "tile-body" }, ...top, callButtons(fire, { compact: true }));
+        if (size === "m") return h("div", { class: "tile-body" }, ...top,
+          h("div", { class: "tile-split kpd-m" }, callButtons(fire, { compact: true }), h("div", { class: "kfd-m-free" }, freeHead, freeList(fire, 3))));
+        if (size === "l") return h("div", { class: "tile-body" }, ...top, callButtons(fire, { compact: true }),
+          freeHead, freeList(fire, 2), h("div", { class: "mini-head kfd-st-head" }, "Fire stations"), stationList(fire, { compact: true }));
+        return h("div", { class: "tile-body" }, ...top,
+          h("div", { class: "tile-split kpd-xl" },
+            h("div", {}, callButtons(fire), freeHead, freeList(fire, 4)),
+            h("div", {}, h("div", { class: "mini-head" }, "Fire stations"), stationList(fire, { compact: true }),
+              h("p", { class: "tile-meta" }, "ISO Class 1: the best fire-protection rating possible"))));
       },
     },
     gaugeTile({ id: "g-debt-limit", opens: "budget", label: "Legal debt limit used" },

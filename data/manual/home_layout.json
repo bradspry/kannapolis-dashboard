@@ -1,5 +1,7 @@
 {
   "order": [
+    "police",
+    "fire",
     "news",
     "meetings",
     "weather",

@@ -1068,3 +1068,125 @@ body.editing .spacer-label { display: block; font-size: 13px; color: var(--text-
 :root[data-palette="fall"] .tile-w { border-color: color-mix(in oklab, var(--icon-1) 38%, var(--border)); }
 :root[data-palette="fall"] .bm-red { stroke: #E8D5AE; }
 :root[data-palette="fall"] .ev-date, :root[data-palette="fall"] .date-block { border-color: color-mix(in oklab, var(--accent) 45%, transparent); background: color-mix(in oklab, var(--accent) 12%, var(--surface-1)); }
+
+/* ---------- Kannapolis Police ---------- */
+.kpd { display: flex; flex-direction: column; gap: 14px; }
+.kpd-calls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.kpd-call {
+  position: relative; z-index: 2; display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 16px;
+  text-decoration: none; color: var(--text-primary); background: var(--surface-1); border: 1px solid var(--border);
+}
+.kpd-call:hover { border-color: var(--accent); }
+.kpd-call b { display: block; font-size: 20px; line-height: 1.15; font-variant-numeric: tabular-nums; }
+.kpd-call small { display: block; font-size: 12.5px; color: var(--text-secondary); line-height: 1.3; margin-top: 2px; }
+.kpd-call-icon { font-size: 24px; line-height: 1; flex: none; }
+/* status color for the emergency line, always with its "Call 911" label */
+.kpd-call.emergency { background: color-mix(in oklab, var(--bad-text) 16%, var(--surface-1)); border-color: color-mix(in oklab, var(--bad-text) 55%, transparent); }
+.kpd-call.emergency b { color: var(--bad-text); }
+.kpd-calls.compact { gap: 8px; }
+.kpd-calls.compact .kpd-call { padding: 9px 11px; gap: 9px; border-radius: 13px; }
+.kpd-calls.compact .kpd-call b { font-size: 16px; }
+.kpd-calls.compact .kpd-call small { font-size: 11.5px; }
+.kpd-calls.compact .kpd-call-icon { font-size: 19px; }
+.size-s .kpd-calls.compact, .kpd-m .kpd-calls.compact { grid-template-columns: minmax(0, 1fr); }
+.kpd-contact { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 8px 24px; font-size: 14px; }
+.kpd-contact .muted { color: var(--text-muted); font-size: 13px; margin: 4px 0 0; }
+.kpd-notice {
+  position: relative; z-index: 2; padding: 12px 14px; border-radius: 14px; font-size: 14px;
+  background: color-mix(in oklab, var(--accent) 10%, var(--surface-1)); border: 1px solid color-mix(in oklab, var(--accent) 40%, transparent);
+}
+.kpd-notice b { margin-right: 8px; }
+.kpd-due { font-size: 12px; font-weight: 600; color: var(--accent-ink); }
+.kpd-notice p { margin: 6px 0 8px; color: var(--text-secondary); }
+.kpd-notice-action { font-weight: 600; }
+.kpd-notice.compact { padding: 8px 10px; font-size: 13px; }
+.kpd-notice.compact .kpd-notice-action { display: block; margin-top: 2px; font-size: 12.5px; }
+.kpd-services { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.kpd-services h4 { margin: 0 0 6px; font-size: 14px; color: var(--text-secondary); }
+.kpd-services ul { list-style: none; margin: 0; padding: 0; }
+.kpd-services li { padding: 7px 0; border-top: 1px solid var(--grid); font-size: 14px; }
+.kpd-services li:first-child { border-top: 0; }
+.kpd-crimes { list-style: none; margin: 4px 0 0; padding: 0; }
+.kpd-crimes li { display: grid; grid-template-columns: minmax(110px, 160px) minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 4px 0; font-size: 13.5px; }
+.kpd-crime-name { color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kpd-crime-bars { display: grid; gap: 2px; }
+.kpd-bar { display: block; height: 7px; min-width: 2px; border-radius: 0 4px 4px 0; }
+.kpd-crime-vals { font-variant-numeric: tabular-nums; font-weight: 600; font-size: 13px; text-align: right; }
+.kpd-glossary { font-size: 12.5px; margin-top: 12px; grid-template-columns: auto minmax(0, 1fr); }
+.kpd-glossary dd { text-align: left; font-weight: 400; color: var(--text-secondary); }
+.kpd-districts { list-style: none; margin: 0; padding: 0; }
+.kpd-districts li { display: grid; grid-template-columns: 76px minmax(0, 1fr) 42px; align-items: center; gap: 10px; padding: 6px 0; font-size: 14px; }
+.kpd-districts b { text-align: right; font-variant-numeric: tabular-nums; }
+.kpd-chief { display: flex; align-items: center; gap: 12px; }
+.kpd-chief img { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; }
+.kpd-chief b { display: block; }
+.kpd-chief span { font-size: 13px; color: var(--text-muted); }
+.kpd-headline { font-size: 13px; color: var(--text-secondary); line-height: 1.35; }
+.kpd-headline b { font-size: 22px; color: var(--text-primary); margin-right: 2px; }
+.kpd-quick { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: auto; font-size: 13px; font-weight: 600; }
+.kpd-quick a { position: relative; z-index: 2; }
+.kpd-m { align-items: start; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); }
+.kpd-m .kpd-crimes li { grid-template-columns: minmax(70px, 110px) minmax(0, 1fr) auto; padding: 2px 0; font-size: 12.5px; }
+.kpd-xl { align-items: start; gap: 24px; }
+.kpd-xl > div:first-child { display: flex; flex-direction: column; gap: 10px; }
+@media (max-width: 720px) {
+  .kpd-calls { grid-template-columns: minmax(0, 1fr); }
+  .kpd-m { grid-template-columns: minmax(0, 1fr); }
+  .kpd-m .kpd-headline, .kpd-m .kpd-crimes { display: none; }
+}
+@media (max-width: 720px) {
+  .size-s .kpd-calls.compact .kpd-call { padding: 7px 9px; }
+  .size-s .kpd-calls.compact .kpd-call b { font-size: 15px; }
+  .size-l .kpd-crimes li:nth-child(n+4) { display: none; }
+  .size-l .kpd-notice.compact { display: none; }
+}
+@media (max-width: 720px) { .size-s .kpd-calls.compact .kpd-call small { display: none; } }
+
+/* ---------- Kannapolis Fire ---------- */
+.kfd-free { list-style: none; margin: 4px 0 0; padding: 0; }
+.kfd-free li { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; padding: 5px 0; border-top: 1px solid var(--grid); font-size: 13px; }
+.kfd-free li:first-child { border-top: 0; }
+.kfd-free a { position: relative; z-index: 2; white-space: nowrap; font-weight: 600; font-size: 12.5px; }
+.kfd-free-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; }
+.kfd-free-card { display: flex; flex-direction: column; gap: 4px; padding: 14px 16px; }
+.kfd-free-card p { margin: 0; font-size: 13.5px; color: var(--text-secondary); flex: 1; }
+.kfd-act { font-weight: 600; font-size: 14px; margin-top: 6px; }
+.kfd-stations { list-style: none; margin: 10px 0 0; padding: 0; }
+.kfd-stations li { display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px solid var(--grid); }
+.kfd-stations li:first-child { border-top: 0; }
+.kfd-stations b { display: block; font-size: 14px; }
+.kfd-stations small { display: block; font-size: 12.5px; color: var(--text-muted); }
+.kfd-stations a { font-size: 13px; font-weight: 600; }
+.kfd-stations.compact { margin-top: 2px; }
+.kfd-stations.compact li { padding: 3px 0; gap: 8px; grid-template-columns: 22px minmax(0, 1fr); }
+.kfd-stations.compact b { font-size: 12.5px; display: inline; margin-right: 6px; }
+.kfd-stations.compact small { display: inline; }
+.kfd-num, .kfd-marker {
+  display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--icon-2); color: #fff; font-size: 12px; font-weight: 700;
+}
+.kfd-marker { width: 26px; height: 26px; font-size: 13px; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0, 0, 0, .4); cursor: pointer; }
+.kfd-stations-wrap { display: grid; grid-template-columns: minmax(280px, 1fr) minmax(0, 1.4fr); gap: 14px; align-items: stretch; }
+.kfd-stations-wrap .card { min-width: 0; }
+.kfd-map { height: 100%; min-height: 340px; }
+.kfd-nearest-out { margin: 8px 0 0; font-size: 14px; }
+.kfd-nearest-out:empty { display: none; }
+.kfd-about { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 20px; }
+.kfd-iso { display: flex; gap: 14px; align-items: flex-start; }
+.kfd-iso p { margin: 4px 0 0; font-size: 13.5px; color: var(--text-secondary); }
+.kfd-iso-badge { flex: none; display: grid; place-items: center; width: 64px; height: 64px; border-radius: 16px; background: var(--icon-2); color: #fff; font-weight: 800; font-size: 16px; }
+.kfd-facts { list-style: none; margin: 0; padding: 0; font-size: 14px; }
+.kfd-facts li { padding: 5px 0; border-top: 1px solid var(--grid); color: var(--text-secondary); }
+.kfd-facts li:first-child { border-top: 0; }
+.kfd-facts b { color: var(--text-primary); }
+.kfd-permits summary { cursor: pointer; font-weight: 600; }
+.kfd-permits ul { list-style: none; margin: 10px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 6px 20px; font-size: 14px; }
+@media (max-width: 860px) { .kfd-stations-wrap, .kfd-about { grid-template-columns: minmax(0, 1fr); } .kfd-map { min-height: 280px; } }
+.kfd-m-free .mini-head { margin-top: 0; }
+.kfd-m-free .kfd-free li { padding: 3px 0; }
+@media (max-width: 720px) {
+  .kfd-m-free { display: none; }
+  .size-l .kfd-stations, .size-l .kfd-st-head { display: none; }
+}
+.size-l .kfd-stations.compact li { padding: 2px 0; }
+.size-l .kfd-free li { padding: 4px 0; }
