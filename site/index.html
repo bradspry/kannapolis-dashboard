@@ -3,6 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark light" />
+  <!-- Apply the theme before first paint (dark unless the visitor chose light). -->
+  <script>try { document.documentElement.dataset.theme = localStorage.getItem("kdash-theme") || "dark"; } catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
   <title>Kannapolis Citizen-built Dashboard</title>
   <meta name="description" content="An open-data look at Kannapolis, NC: who lives here, how the city is growing, how land is zoned, and how the city budget and debt work." />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='6' fill='%232a78d6'/><path d='M5.07 18 A8 8 0 1 1 18.93 18' fill='none' stroke='white' stroke-opacity='.55' stroke-width='2' stroke-linecap='round'/><path d='M19.88 12.61 A8 8 0 0 1 18.93 18' fill='none' stroke='%23ff8a80' stroke-width='2' stroke-linecap='round'/><path d='M11.3 14 L15.6 8.6 L12.7 14.9 Z' fill='white'/><circle cx='12' cy='14' r='1.7' fill='white'/></svg>" />

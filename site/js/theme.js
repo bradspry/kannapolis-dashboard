@@ -59,8 +59,8 @@ function initPalette() {
 
 export function initTheme() {
   initPalette();
-  const saved = stored();
-  if (saved) document.documentElement.dataset.theme = saved;
+  // Dark is the default; the toggle's choice (light or dark) is remembered per browser.
+  document.documentElement.dataset.theme = stored() || "dark";
   const btn = document.getElementById("theme-toggle");
   const label = btn.querySelector(".theme-label");
   const sync = () => { label.textContent = isDark() ? "Light" : "Dark"; };
