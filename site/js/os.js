@@ -277,6 +277,7 @@ function syncEditBar() {
   bar.hidden = !document.body.classList.contains("editing");
   document.getElementById("reset-layout").disabled = isDefaultLayout();
   document.getElementById("save-default").hidden = !canSaveDefault;
+  document.getElementById("edit-local-note").hidden = canSaveDefault;
 }
 async function detectSaving() {
   if (!location.protocol.startsWith("http")) return;

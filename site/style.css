@@ -81,6 +81,7 @@
 
 /* ---------- base ---------- */
 * { box-sizing: border-box; }
+[hidden] { display: none !important; } /* components set display; hidden must still hide */
 body {
   margin: 0;
   background: var(--page);
