@@ -11,6 +11,8 @@ import { alertBanner } from "./sections/weather.js";
 import { callButtons, activeNotices, noticeCard, crimeRows, quarterLabel } from "./sections/police.js";
 import { freeList, stationList } from "./sections/fire.js";
 import { payButtons, feeLine } from "./sections/utility.js";
+import { parkButtons, seasonStatus, holidayStatus } from "./sections/parks.js";
+import { gemLineup, whenText as gemWhen, poster as gemPoster, rating as gemRating, ticketsButton } from "./sections/gem.js";
 import { prepGames, nextHome, homeStands, standLabel, nextGameCard, fmtDay as bbDay, fmtTime as bbTime } from "./sections/baseball.js";
 
 const NS = "http://www.w3.org/2000/svg";
@@ -69,7 +71,7 @@ const contactLinks = (p) => [
 const shortDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
 export function tileDefs(data, COLORS) {
-  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility } = data;
+  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem } = data;
   const t = tokens();
   const geo = census.geographies;
   const k = geo.Kannapolis, nc = geo["North Carolina"], cab = geo["Cabarrus County"], us = geo["United States"];
@@ -175,6 +177,48 @@ export function tileDefs(data, COLORS) {
             h("div", {}, callButtons(fire), freeHead, freeList(fire, 4)),
             h("div", {}, h("div", { class: "mini-head" }, "Fire stations"), stationList(fire, { compact: true }),
               h("p", { class: "tile-meta" }, "ISO Class 1: the best fire-protection rating possible"))));
+      },
+    },
+    gem && {
+      id: "gem", opens: "gem", size: "m", label: "The Gem Theatre",
+      build: (size) => {
+        const { now, next } = gemLineup(gem);
+        const top = [head("film", COLORS.gem, "The Gem Theatre")];
+        const nowBlock = (ps) => now ? h("div", { class: "gem-tile-now" }, gemPoster(now, ps),
+          h("div", {}, h("div", { class: "bb-next-label" }, "Now showing"), h("div", { class: "gem-tile-title" }, now.title, " ", gemRating(now)),
+            h("div", { class: "tile-meta" }, gemWhen(now)))) : h("p", { class: "tile-meta" }, "See the ticket page for what's showing.");
+        const nextList = (n) => h("ul", { class: "mini-list" }, next.slice(0, n).map((f) =>
+          h("li", {}, h("span", { class: "mini-date" }, new Date(`${f.start}T12:00`).toLocaleDateString("en-US", { month: "short", day: "numeric" })), h("span", {}, `${f.title}${f.rating ? ` (${f.rating})` : ""}`))));
+        if (size === "s") return h("div", { class: "tile-body" }, ...top, nowBlock("sm"));
+        if (size === "m") return h("div", { class: "tile-body" }, ...top,
+          h("div", { class: "tile-split top" }, nowBlock("sm"), h("div", {}, h("div", { class: "mini-head bb-mh" }, "Coming soon"), nextList(2), ticketsButton(gem, "Tickets"))));
+        if (size === "l") return h("div", { class: "tile-body" }, ...top, nowBlock("md"),
+          h("div", { class: "mini-head" }, "Coming soon"), nextList(3), ticketsButton(gem));
+        return h("div", { class: "tile-body" }, ...top,
+          h("div", { class: "gem-strip" }, [now, ...next].filter(Boolean).slice(0, 4).map((f, i) => h("div", { class: "gem-strip-item" }, gemPoster(f, "md"),
+            h("b", {}, f.title), h("small", {}, i === 0 && f === now ? "Now showing" : gemWhen(f))))), ticketsButton(gem));
+      },
+    },
+    parks && {
+      id: "parks", opens: "parks", size: "m", label: "Parks & Recreation",
+      build: (size) => {
+        const hol = holidayStatus(parks.holiday);
+        const holLine = hol ? h("p", { class: "pk-hol-line" }, h("span", { "aria-hidden": "true" }, "🎄 "), h("b", {}, "Celebration of Lights: "), hol.label) : null;
+        const top = [head("tree", COLORS.parks, "Parks & Recreation"), holLine];
+        const parkRows = (n) => h("ul", { class: "ub-mini pk-mini" }, parks.parks.slice(0, n).map((p) =>
+          h("li", {}, h("b", {}, p.name), h("span", {}, p.tags.slice(0, 3).join(" · ")))));
+        const seasonal = h("ul", { class: "ub-mini pk-mini" }, parks.seasonal.map((s) => { const st = seasonStatus(s); return h("li", {}, h("b", {}, s.what.replace("Village Park ", "")), h("span", {}, st.label)); }));
+        const counts = h("p", { class: "tile-meta pk-counts" }, `${parks.parks.length} parks · ${parks.greenways.length} greenways · weather hotline ${parks.weather_hotline}`);
+        if (size === "s") return h("div", { class: "tile-body" }, ...top, parkButtons(parks, { compact: true, primaryOnly: !!hol }));
+        if (size === "m") return h("div", { class: "tile-body" }, top[0],
+          h("div", { class: "tile-split top ub-m" }, parkButtons(parks, { compact: true }),
+            h("div", {}, hol ? holLine : h("div", { class: "mini-head bb-mh" }, "Popular parks"), parkRows(hol ? 2 : 3))), hol ? null : counts);
+        if (size === "l") return h("div", { class: "tile-body" }, ...top, parkButtons(parks, { compact: true }),
+          h("div", { class: "mini-head" }, "Parks"), parkRows(5), counts);
+        return h("div", { class: "tile-body" }, ...top,
+          h("div", { class: "tile-split top" },
+            h("div", {}, parkButtons(parks), h("div", { class: "mini-head" }, "Village Park, seasonal"), seasonal, counts),
+            h("div", {}, h("div", { class: "mini-head bb-mh" }, "Parks"), parkRows(7))));
       },
     },
     utility && {

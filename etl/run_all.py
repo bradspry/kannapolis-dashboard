@@ -12,9 +12,11 @@ import build_census
 import build_council
 import build_events
 import build_fire
+import build_gem
 import build_meetings
 import build_news
 import build_org
+import build_parks
 import build_police
 import build_property
 import build_site
@@ -29,6 +31,7 @@ STEPS = [
     ("council", build_council.main),
     ("meetings", build_meetings.main),
     ("events", build_events.main),
+    ("gem", build_gem.main),
     ("weather", build_weather.main),
     ("news", build_news.main),
     ("org", build_org.main),
@@ -36,6 +39,7 @@ STEPS = [
     ("fire", build_fire.main),
     ("baseball", build_baseball.main),
     ("utility", build_utility.main),
+    ("parks", build_parks.main),
     ("zoning", build_zoning.main),
     ("property", build_property.main),  # slowest: ~26k parcels + ~18 yearly snapshots
     ("site", build_site.main),  # always last: bundles everything into dist/index.html

@@ -1,0 +1,47 @@
+{
+  "name": "The Gem Theatre",
+  "tagline": "Kannapolis's historic downtown movie theater",
+  "address": "111 Laureate Way, Kannapolis, NC 28081",
+  "site": "https://gem-theatre.com",
+  "tickets_url": "https://app.formovietickets.com/index.html?id=gemtheatre",
+  "tickets_page": "https://gem-theatre.com/Tickets",
+  "phones": {
+    "movie_info": "704-932-5111",
+    "office": "704-932-5126"
+  },
+  "email": "gem@kannapolisnc.gov",
+  "prices": [
+    {
+      "who": "Adults",
+      "price": "$5"
+    },
+    {
+      "who": "Kids 2–12",
+      "price": "$4"
+    },
+    {
+      "who": "Seniors 55+",
+      "price": "$4"
+    },
+    {
+      "who": "Summer matinees",
+      "price": "$2"
+    }
+  ],
+  "online_fee": "$1 per ticket for online advance tickets",
+  "good_to_know": [
+    "Kids under 2 sitting on an adult's lap don't need a ticket.",
+    "Children 15 and under must be with an adult (18+) at all times.",
+    "R-rated films: guests 16 and under need a guardian 21+ for the whole show. Bring ID.",
+    "Online ticket? Bring the card you paid with, or the confirmation on your phone or printed.",
+    "Movies and times can change: check the ticket page or call 704-932-5111."
+  ],
+  "accessibility": "Wheelchair access and infrared assistive listening devices are available. Ask at least 24 hours ahead: 704-932-5126 or gem@kannapolisnc.gov.",
+  "parking": "Free public parking downtown (Laureate Way, West Avenue, City Hall and nearby lots); drop-off and pick-up at the Gem on Laureate Way. A free West Avenue Express shuttle runs 5–10 p.m. Friday–Sunday, April–December.",
+  "parking_url": "https://gem-theatre.com/Parking",
+  "support": {
+    "text": "Sponsor a marquee sidewalk brick or a seat in the auditorium.",
+    "url": "https://www.kannapolisnc.gov/Community/The-Gem-Theatre"
+  },
+  "info_source": "https://gem-theatre.com/Movies/Ticket-Information"
+}

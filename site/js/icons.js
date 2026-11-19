@@ -23,6 +23,8 @@ const PATHS = {
   baseball: '<circle cx="12" cy="12" r="9"/><path d="M7.5 4.2c1.6 2.2 1.6 13.4 0 15.6M16.5 4.2c-1.6 2.2-1.6 13.4 0 15.6"/><path d="M6.2 8h2.4M6.2 12h2.6M6.2 16h2.4M15.4 8h2.4M15.2 12h2.6M15.4 16h2.4"/>',
   bill: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3z"/><path d="M12 7.5c-1.4 1.8-2.2 3-2.2 4a2.2 2.2 0 0 0 4.4 0c0-1-.8-2.2-2.2-4z"/><path d="M9 16h6"/>',
   toTop: '<path d="M5 4h14"/><path d="M12 20V9"/><path d="m7 13 5-5 5 5"/>',
+  tree: '<path d="M12 3l5 7h-3l4 6H6l4-6H7l5-7z"/><path d="M12 16v5"/>',
+  film: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 5v14M17 5v14M3 9h4M3 15h4M17 9h4M17 15h4"/>',
   grip: '<circle cx="9" cy="6" r="1.4"/><circle cx="15" cy="6" r="1.4"/><circle cx="9" cy="12" r="1.4"/><circle cx="15" cy="12" r="1.4"/><circle cx="9" cy="18" r="1.4"/><circle cx="15" cy="18" r="1.4"/>',
   mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
 };

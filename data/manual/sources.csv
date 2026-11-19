@@ -21,7 +21,7 @@ kpd_page,Kannapolis Police Department web page,City of Kannapolis,Web page,https
 kpd_q1_2026,2026 First Quarter Crime Report (Kannapolis Police),City of Kannapolis,PDF,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/Quarterly%20Reports/2026%20First%20Quarter%20Report.pdf,"Police crime statistics, Jan–Mar 2026 (p. 4)",police
 kpd_q2_2026,2026 Second Quarter Crime Report (Kannapolis Police),City of Kannapolis,PDF,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/2026%20Second%20Quarter%20Crime%20Report.pdf,"Police crime statistics, Apr–Jun 2026 (p. 4)",police
 kfd_page,"Kannapolis Fire Department web pages (overview, operations, community risk reduction, staff directory)",City of Kannapolis,Web page,https://www.kannapolisnc.gov/kfd,"Fire contacts, free programs, stations, forms",fire
-census_geocoder,U.S. Census Bureau Geocoder,U.S. Census Bureau,JSON API,https://geocoding.geo.census.gov/,Map locations of the five fire stations,fire
+census_geocoder,U.S. Census Bureau Geocoder,U.S. Census Bureau,JSON API,https://geocoding.geo.census.gov/,Map locations of the five fire stations,fire parks
 cannonballers_2027,2027 Kannapolis Cannon Ballers Schedule,Kannapolis Cannon Ballers (Minor League Baseball),PDF,https://img.mlbstatic.com/milb-images/image/upload/milb/kljjd0xd8n8fto71x49u.pdf,Cannon Ballers 2027 schedule,baseball
 utility_billing,"Customer Service & Utility Billing (how to pay, fees, payment terms)",City of Kannapolis,Web page,https://www.kannapolisnc.gov/customer-service,Pay Utility Bill,utility
 census_api,Census Data API: ACS 5-year detailed tables (used for income trends when a key is configured),U.S. Census Bureau,JSON API,https://www.census.gov/data/developers/data-sets/acs-5year.html,People (income over time),people
@@ -33,4 +33,17 @@ kfd_crr,"Fire Community Risk Reduction Services (programs, Fire Marshal)",City o
 kfd_cpr,Fire CPR Initiative (free classes),City of Kannapolis,Web page,https://www.kannapolisnc.gov/cpr,Free CPR classes,fire
 kfd_programs,Fire Educational Program Request,City of Kannapolis,Web page,https://www.kannapolisnc.gov/Government-Departments/Fire/Educational-Program-Request,"Smoke alarms, visits, safety programs",fire
 kfd_staff_directory,Fire Department Staff Directory,City of Kannapolis,Web page,https://www.kannapolisnc.gov/Government-Departments/Fire/Staff-Directory,Fire Marshal and department contacts,fire
-openfreemap,OpenFreeMap basemap tiles (map data © OpenStreetMap contributors),OpenFreeMap / OpenStreetMap,Map tiles,https://openfreemap.org/,Background maps,growth land fire
+openfreemap,OpenFreeMap basemap tiles (map data © OpenStreetMap contributors),OpenFreeMap / OpenStreetMap,Map tiles,https://openfreemap.org/,Background maps,growth land fire parks
+parks_page,"Parks & Recreation (parks, shelters, volunteering, accreditation)",City of Kannapolis,Web page,https://www.kannapolisnc.gov/parksandrec,Parks & Recreation,parks
+parks_list,"Parks: every park's address, hours and amenities",City of Kannapolis,Web page,https://www.kannapolisnc.gov/Government-Departments/Parks-Recreation/Parks,Park finder,parks
+parks_greenways,Greenways,City of Kannapolis,Web page,https://www.kannapolisnc.gov/Government-Departments/Parks-Recreation/Greenways,Greenways and parking,parks
+parks_athletics,"Athletics and Youth Soccer (fees, scholarships, weather hotline)",City of Kannapolis,Web page,https://www.kannapolisnc.gov/Government-Departments/Parks-Recreation/Athletics,Youth sports,parks
+parks_fields,Athletic Fields,City of Kannapolis,Web page,https://www.kannapolisnc.gov/Government-Departments/Parks-Recreation/Athletic-Fields,"Field rentals, school fields",parks
+parks_rules,Parks Rules & Ordinances,City of Kannapolis,Web page,https://www.kannapolisnc.gov/Government-Departments/Parks-Recreation/Rules-and-Ordinances,Park rules,parks
+gis_facilities,County Facilities (location of Vietnam Veterans Park),Cabarrus County GIS,ArcGIS REST,https://location.cabarruscounty.us/arcgisservices/rest/services/OpenData/County_Facilities/MapServer/0,Park map location,parks
+christmas_page,"A Kannapolis Christmas (Celebration of Lights, parade, holiday events)",City of Kannapolis,Web page,https://www.kannapolisnc.gov/christmas,"Holiday events, carousel & train holiday season",parks
+gem_tickets,The Gem Theatre: Tickets (now showing and coming soon),The Gem Theatre (City of Kannapolis),Web page,https://gem-theatre.com/Tickets,"What's showing, dates, posters",gem
+gem_info,"The Gem Theatre: Ticket Information (prices, policies, accessibility)",The Gem Theatre (City of Kannapolis),Web page,https://gem-theatre.com/Movies/Ticket-Information,Prices and policies,gem
+gem_parking,The Gem Theatre: Public Parking,The Gem Theatre (City of Kannapolis),Web page,https://gem-theatre.com/Parking,Parking and shuttle,gem
+gem_now,The Gem Theatre: Now Playing (fallback listing source),The Gem Theatre (City of Kannapolis),Web page,https://gem-theatre.com/Movies/Now-Playing,Gem listings if the Tickets page changes,gem
+gem_soon,The Gem Theatre: Coming Soon (fallback listing source),The Gem Theatre (City of Kannapolis),Web page,https://gem-theatre.com/Movies/Coming-Soon,Gem listings if the Tickets page changes,gem

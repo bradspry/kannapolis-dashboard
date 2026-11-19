@@ -1,8 +1,10 @@
 {
   "order": [
+    "gem",
+    "parks",
     "utility",
-    "baseball",
     "police",
+    "baseball",
     "fire",
     "news",
     "meetings",
@@ -38,7 +40,8 @@
     "g-tax-rate": "m",
     "g-owners": "m",
     "baseball": "m",
-    "utility": "m"
+    "utility": "m",
+    "parks": "m"
   },
   "spacers": []
 }

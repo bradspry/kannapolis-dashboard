@@ -59,6 +59,8 @@ It prints the address to open on your phone (for example `http://192.168.1.20:51
 | Kannapolis Fire Department | [KFD web pages](https://www.kannapolisnc.gov/kfd): 911 and KFD numbers, free resident programs, after-a-fire forms, the five stations (mapped with the Census geocoder; nearest-station finder runs on the device) | **By hand**: `data/manual/kfd.json` |
 | Kannapolis Cannon Ballers | Team's [2027 schedule](https://img.mlbstatic.com/milb-images/image/upload/milb/kljjd0xd8n8fto71x49u.pdf) (image PDF): next home game, home stands, month calendars, add-to-calendar | **By hand**: `data/manual/cannonballers_2027.csv` (checked: 132 games, 66 home) |
 | Pay Utility Bill | City [Customer Service & Utility Billing](https://www.kannapolisnc.gov/customer-service): every way to pay, card-fee and due-date calculators (on device), help | **By hand**: `data/manual/utility_billing.json` |
+| Parks & Recreation | City [Parks & Recreation](https://www.kannapolisnc.gov/parksandrec) pages: park finder by amenity with map and on-device nearest park, shelters, sports sign-up, greenways, seasonal attractions, rules | **By hand**: `data/manual/parks.json` (map locations: Census geocoder, Cabarrus County GIS) |
+| The Gem Theatre | [gem-theatre.com](https://gem-theatre.com/Tickets) ticket page (scraped; adapted from kannapolis-movies): now showing, coming soon, special screenings, prices, policies | Automatic, daily |
 | Weather | [National Weather Service](https://www.weather.gov/) API: forecast, hourly, alerts, and observations from Concord Regional Airport | **Live** in the browser every 15 min (daily backup copy) |
 | Gauges | Derived from the budget, audit and Census data below | Automatic |
 | People | U.S. Census ACS 5-year via [Census Reporter](https://censusreporter.org/profiles/16000US3735200-kannapolis-nc/) | Automatic |
@@ -113,6 +115,19 @@ Every hand-entered number in `data/manual/*.csv` has a `source` citation and a `
 | [Fire Educational Program Request](https://www.kannapolisnc.gov/Government-Departments/Fire/Educational-Program-Request) | City of Kannapolis | Web page | Smoke alarms, visits, safety programs |
 | [Fire Department Staff Directory](https://www.kannapolisnc.gov/Government-Departments/Fire/Staff-Directory) | City of Kannapolis | Web page | Fire Marshal and department contacts |
 | [OpenFreeMap basemap tiles (map data © OpenStreetMap contributors)](https://openfreemap.org/) | OpenFreeMap / OpenStreetMap | Map tiles | Background maps |
+| [Parks & Recreation (parks, shelters, volunteering, accreditation)](https://www.kannapolisnc.gov/parksandrec) | City of Kannapolis | Web page | Parks & Recreation |
+| [Parks: every park's address, hours and amenities](https://www.kannapolisnc.gov/Government-Departments/Parks-Recreation/Parks) | City of Kannapolis | Web page | Park finder |
+| [Greenways](https://www.kannapolisnc.gov/Government-Departments/Parks-Recreation/Greenways) | City of Kannapolis | Web page | Greenways and parking |
+| [Athletics and Youth Soccer (fees, scholarships, weather hotline)](https://www.kannapolisnc.gov/Government-Departments/Parks-Recreation/Athletics) | City of Kannapolis | Web page | Youth sports |
+| [Athletic Fields](https://www.kannapolisnc.gov/Government-Departments/Parks-Recreation/Athletic-Fields) | City of Kannapolis | Web page | Field rentals, school fields |
+| [Parks Rules & Ordinances](https://www.kannapolisnc.gov/Government-Departments/Parks-Recreation/Rules-and-Ordinances) | City of Kannapolis | Web page | Park rules |
+| [County Facilities (location of Vietnam Veterans Park)](https://location.cabarruscounty.us/arcgisservices/rest/services/OpenData/County_Facilities/MapServer/0) | Cabarrus County GIS | ArcGIS REST | Park map location |
+| [A Kannapolis Christmas (Celebration of Lights, parade, holiday events)](https://www.kannapolisnc.gov/christmas) | City of Kannapolis | Web page | Holiday events, carousel & train holiday season |
+| [The Gem Theatre: Tickets (now showing and coming soon)](https://gem-theatre.com/Tickets) | The Gem Theatre (City of Kannapolis) | Web page | What's showing, dates, posters |
+| [The Gem Theatre: Ticket Information (prices, policies, accessibility)](https://gem-theatre.com/Movies/Ticket-Information) | The Gem Theatre (City of Kannapolis) | Web page | Prices and policies |
+| [The Gem Theatre: Public Parking](https://gem-theatre.com/Parking) | The Gem Theatre (City of Kannapolis) | Web page | Parking and shuttle |
+| [The Gem Theatre: Now Playing (fallback listing source)](https://gem-theatre.com/Movies/Now-Playing) | The Gem Theatre (City of Kannapolis) | Web page | Gem listings if the Tickets page changes |
+| [The Gem Theatre: Coming Soon (fallback listing source)](https://gem-theatre.com/Movies/Coming-Soon) | The Gem Theatre (City of Kannapolis) | Web page | Gem listings if the Tickets page changes |
 
 The news and meetings harvesters are adapted from [kspider](https://github.com/bradspry/kannapolis-news-wire).
 

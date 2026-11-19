@@ -1310,3 +1310,91 @@ body.editing .tile-w:first-child .tile-top { opacity: .4; }
 /* every window ends with its sources */
 .sources-foot { margin: 16px 0 0; padding-top: 12px; border-top: 1px solid var(--grid); font-size: 12.5px; line-height: 1.6; color: var(--text-muted); }
 .sources-foot b { color: var(--text-secondary); }
+
+/* ---------- Parks & Recreation ---------- */
+.pk-top { margin-bottom: 4px; }
+.pk-top .kfd-map { min-height: 300px; }
+.pk-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
+.pk-park { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; }
+.pk-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.pk-head h4 { margin: 0; font-size: 16px; }
+.pk-size { font-size: 12px; color: var(--text-muted); white-space: nowrap; }
+.pk-meta { font-size: 13px; color: var(--text-secondary); }
+.pk-tags { list-style: none; margin: 2px 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px; }
+.pk-tags li { font-size: 11.5px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--border); color: var(--text-secondary); background: var(--page); }
+.pk-tags li.hit { border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.pk-park p { margin: 0; font-size: 13.5px; color: var(--text-secondary); flex: 1; }
+.pk-links { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13.5px; font-weight: 600; margin-top: 4px; }
+.pk-marker { font-size: 20px; line-height: 1; cursor: pointer; filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .5)); transition: opacity .15s; }
+.pk-marker.dim { opacity: .25; }
+/* open/closed status: shown with a symbol and words, not color alone */
+.pk-status { font-size: 12.5px; font-weight: 600; color: var(--text-muted); }
+.pk-status.open { color: var(--good-text); }
+.pk-inline-links { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0; font-size: 14px; font-weight: 600; }
+.pk-rules { margin: 8px 0 10px; padding-left: 18px; font-size: 14px; color: var(--text-secondary); }
+.pk-rules li { margin: 4px 0; }
+.pk-mini li { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); }
+.pk-mini b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 720px) {
+  .size-m .pk-counts { display: none; }
+  .size-m .fmt-counts li:nth-child(n+4) { display: none; }
+  .size-l .fresh-mini li:nth-child(n+5) { display: none; }
+}
+.pk-find { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-bottom: 12px; }
+.pk-find .kfd-nearest-out { flex-basis: 100%; margin: 0; }
+.pk-top .kfd-map { height: 340px; min-height: 0; }
+
+/* holiday feature (shown only in season) */
+.pk-holiday { display: flex; flex-direction: column; gap: 10px; border-color: color-mix(in oklab, var(--icon-6) 45%, var(--border)); background: linear-gradient(160deg, color-mix(in oklab, var(--icon-6) 10%, var(--surface-1)), var(--surface-1) 60%); }
+.pk-holiday > p { margin: 0; font-size: 14.5px; }
+.pk-hol-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.pk-hol-head h3 { margin: 0; }
+.pk-hol-head .sub { margin: 2px 0 0; }
+.pk-hol-head .pk-status { margin-left: auto; }
+.pk-hol-icon { font-size: 34px; line-height: 1; }
+.pk-status.big { font-size: 15px; }
+.pk-holiday .pk-links { align-items: center; gap: 8px 18px; }
+.pk-hol-events { list-style: none; margin: 4px 0 0; padding: 0; }
+.pk-hol-events li { display: grid; grid-template-columns: 120px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 7px 0; border-top: 1px solid var(--grid); font-size: 14px; }
+.pk-hol-events li:first-child { border-top: 0; }
+.pk-hol-events small { display: block; font-size: 12.5px; color: var(--text-muted); }
+.pk-hol-events a { font-weight: 600; font-size: 13.5px; white-space: nowrap; }
+.pk-hol-line { position: relative; z-index: 2; margin: 2px 0 0; font-size: 12.5px; color: var(--text-secondary); }
+@media (max-width: 720px) { .pk-hol-events li { grid-template-columns: minmax(0, 1fr) auto; } .pk-hol-events .mini-date { grid-column: 1 / -1; } }
+@media (max-width: 720px) {
+  .size-l .pk-mini li:nth-child(n+4) { display: none; }
+  .size-s .pk-hol-line b { display: none; }
+}
+
+/* ---------- The Gem Theatre ---------- */
+.gem-poster { display: block; object-fit: cover; border-radius: 10px; background: var(--page); border: 1px solid var(--border); flex: none; }
+.gem-poster.lg { width: 180px; aspect-ratio: 2 / 3; }
+.gem-poster.md { width: 92px; aspect-ratio: 2 / 3; }
+.gem-poster.sm { width: 58px; aspect-ratio: 2 / 3; border-radius: 7px; }
+.gem-poster.none { display: grid; place-items: center; font-size: 26px; }
+.gem-hero { display: flex; gap: 20px; align-items: flex-start; }
+.gem-hero h3 { margin: 2px 0 4px; font-size: 22px; }
+.gem-hero p { margin: 8px 0 0; font-size: 14.5px; color: var(--text-secondary); max-width: 720px; }
+.gem-hero-text { min-width: 0; }
+.gem-rating { display: inline-block; font-size: 12px; font-weight: 700; padding: 1px 7px; border-radius: 5px; border: 1.5px solid currentColor; vertical-align: 2px; color: var(--text-secondary); }
+.gem-when { font-size: 13.5px; color: var(--accent-ink); font-weight: 600; margin-top: 2px; }
+/* caution note: icon + "Please note" label, not color alone */
+.gem-warn { padding: 8px 10px; border-radius: 10px; background: color-mix(in oklab, var(--series-4) 14%, var(--surface-1)); border: 1px solid color-mix(in oklab, var(--series-4) 45%, transparent); font-size: 13.5px !important; }
+.gem-actions { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin-top: 14px; font-weight: 600; font-size: 14px; }
+.gem-tix { position: relative; z-index: 2; align-self: flex-start; }
+.gem-next { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 12px; }
+.gem-card { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; }
+.gem-card p { margin: 6px 0 0; font-size: 13.5px; color: var(--text-secondary); }
+.gem-prices { list-style: none; margin: 8px 0; padding: 0; }
+.gem-prices li { display: flex; justify-content: space-between; padding: 6px 0; border-top: 1px solid var(--grid); font-size: 15px; }
+.gem-prices li:first-child { border-top: 0; }
+.gem-p { margin: 6px 0 0; font-size: 14px; color: var(--text-secondary); }
+.gem-tile-now { display: flex; gap: 10px; align-items: flex-start; margin-top: 2px; }
+.gem-tile-title { font-weight: 650; font-size: 14.5px; line-height: 1.25; margin: 1px 0 2px; }
+.gem-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; flex: 1; min-height: 0; }
+.gem-strip-item { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.gem-strip-item b { font-size: 13px; line-height: 1.2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gem-strip-item small { font-size: 11.5px; color: var(--text-muted); }
+.gem-strip .gem-poster.md { width: 100%; max-height: 220px; }
+@media (max-width: 720px) { .gem-hero { flex-direction: column; } .gem-poster.lg { width: 140px; } .gem-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 720px) { .size-s .gem-tile-now .gem-poster { display: none; } }
