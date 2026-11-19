@@ -1,22 +1,29 @@
 {
   "order": [
-    "meetings",
     "news",
+    "g-debt-limit",
+    "meetings",
+    "weather",
     "council",
-    "org",
     "events",
+    "org",
     "people",
     "budget",
-    "debt-service",
     "g-tax-rate",
+    "debt-service",
     "growth",
     "g-debt-policy",
-    "land",
     "g-owners",
-    "g-debt-limit",
+    "land",
     "about"
   ],
-  "hidden": [],
+  "hidden": [
+    "g-tax-rate",
+    "g-debt-limit",
+    "g-debt-policy",
+    "g-owners",
+    "land"
+  ],
   "sizes": {
     "meetings": "m",
     "news": "m",
@@ -24,7 +31,11 @@
     "org": "m",
     "debt-service": "l",
     "people": "m",
-    "about": "l",
-    "growth": "s"
-  }
+    "about": "xl",
+    "growth": "m",
+    "events": "l",
+    "land": "m",
+    "weather": "m"
+  },
+  "spacers": []
 }

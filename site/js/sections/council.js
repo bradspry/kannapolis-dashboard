@@ -1,4 +1,4 @@
-import { h } from "../ui.js";
+import { h, contactButtons } from "../ui.js";
 
 const initials = (name) => name.split(/\s+/).filter((w) => /^[A-Z]/.test(w) && !w.endsWith(".")).map((w) => w[0]).join("").slice(0, 2)
   || name[0];
@@ -46,7 +46,8 @@ export function renderCouncil(council) {
         avatar(m),
         h("div", {},
           h("div", { class: "member-name" }, m.name),
-          h("div", { class: "member-role" }, m.role))),
+          h("div", { class: "member-role" }, m.role)),
+        contactButtons(m)),
       h("div", { class: "member-links" },
         h("span", { class: "email-line" },
           h("a", { href: `mailto:${m.email}`, "aria-label": `Email ${m.name}` }, m.email),

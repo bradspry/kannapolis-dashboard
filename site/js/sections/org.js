@@ -1,4 +1,4 @@
-import { h } from "../ui.js";
+import { h, contactButtons } from "../ui.js";
 
 const initials = (name) => (name || "").split(/\s+/).filter((w) => /^[A-Z]/.test(w)).map((w) => w[0]).join("").slice(0, 2);
 
@@ -29,7 +29,8 @@ function personCard(p, size = "lg", extra = null) {
       p.note ? h("div", { class: "org-note" }, p.note) : null,
       extra,
       emailLink(p),
-      phoneLink(p)));
+      phoneLink(p),
+      p.vacant ? null : contactButtons(p, `${p.name}, ${p.title}`)));
 }
 
 const relation = (label) => h("span", { class: "org-rel" }, label);

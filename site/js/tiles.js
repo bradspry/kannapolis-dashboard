@@ -6,6 +6,8 @@ import { chip } from "./os.js";
 import { fy, num, pct, usd, usdCompact } from "./format.js";
 import { upcomingEvents, whenLabel, fmtTime } from "./sections/events.js";
 import { datasets, ago, fmtDate, byPublisher, formatCounts, statusDot } from "./sections/about.js";
+import { weather, wxIcon } from "./weather.js";
+import { alertBanner } from "./sections/weather.js";
 
 const NS = "http://www.w3.org/2000/svg";
 const svgEl = (tag, attrs = {}) => {
@@ -55,6 +57,11 @@ const parseLocal = (s) => { const [d, t = "00:00"] = s.split("T"); const [y, m, 
 // Sizes: s = 1×1, m = 2×1, l = 2×2, xl = 4×2. Each build(size) shows more as the tile grows.
 const isBig = (size) => size === "l" || size === "xl";
 const facts = (rows, cls = "") => h("dl", { class: `facts ${cls}` }, rows.filter(Boolean).flatMap(([k, v]) => [h("dt", {}, k), h("dd", {}, v)]));
+/** ☎ and ✉ links for a person; omitted when the number or address isn't published. */
+const contactLinks = (p) => [
+  p.phone ? h("a", { class: "mail-link", href: `tel:${p.phone.replace(/[^0-9+]/g, "")}`, "aria-label": `Call ${p.name}, ${p.phone}` }, "☎") : null,
+  p.email ? h("a", { class: "mail-link", href: `mailto:${p.email}`, "aria-label": `Email ${p.name}` }, "✉") : null,
+];
 const shortDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
 export function tileDefs(data, COLORS) {
@@ -91,7 +98,39 @@ export function tileDefs(data, COLORS) {
     return meetings.meetings.map((m) => ({ ...m, _d: parseLocal(m.start) })).filter((m) => m._d >= today && !m.canceled).sort((a, b) => a._d - b._d);
   };
 
+  const hourLabel = (d) => d.toLocaleTimeString("en-US", { hour: "numeric" });
   return [
+    data.weatherMeta && {
+      id: "weather", opens: "weather", size: "s", label: "Weather",
+      build: (size) => {
+        const w = weather();
+        if (!w?.current) return null;
+        const c = w.current, today = w.days[0];
+        const hilo = today ? [today.hi != null ? `H ${today.hi}°` : null, today.lo != null ? `L ${today.lo}°` : null].filter(Boolean).join(" · ") : "";
+        const now = h("div", { class: "wx-now" },
+          h("span", { class: "wx-now-icon", "aria-hidden": "true" }, wxIcon(c.text, c.isDay)),
+          h("div", {}, h("div", { class: "wx-now-temp" }, `${c.temp}°`), h("div", { class: "wx-now-text" }, c.text), h("div", { class: "tile-meta" }, hilo)));
+        const hours = (n) => h("ul", { class: "wx-hours" }, w.hourly.slice(1, n + 1).map((x) => h("li", {},
+          h("span", {}, hourLabel(x.time)), h("i", { "aria-hidden": "true" }, wxIcon(x.text, x.isDay)), h("b", {}, `${x.temp}°`),
+          h("small", {}, x.pop >= 10 ? `${x.pop}%` : ""))));
+        const all = w.days.flatMap((d) => [d.hi, d.lo]).filter((v) => v != null);
+        const lo = Math.min(...all), span = Math.max(...all) - lo || 1;
+        const days = (n) => h("ul", { class: "wx-days" }, w.days.slice(0, n).map((d) => {
+          const p = d.day || d.night, l = d.lo ?? d.hi, u = d.hi ?? d.lo;
+          return h("li", {},
+            h("span", {}, /^(tonight|overnight)$/i.test(d.name) ? "Tonight" : /^(today|this afternoon)$/i.test(d.name) ? "Today" : d.name.slice(0, 3)),
+            h("i", { "aria-hidden": "true" }, wxIcon(p.text, !!d.day)),
+            h("small", {}, d.lo != null ? `${d.lo}°` : ""),
+            h("span", { class: "wx-range" }, h("i", { style: { left: `${(100 * (l - lo)) / span}%`, width: `${Math.max(6, (100 * (u - l)) / span)}%` } })),
+            h("b", {}, d.hi != null ? `${d.hi}°` : ""));
+        }));
+        const top = [head("weather", COLORS.weather, "Kannapolis weather"), alertBanner(w.alerts, { compact: true })];
+        if (size === "s") return h("div", { class: "tile-body" }, ...top, now);
+        if (size === "m") return h("div", { class: "tile-body" }, ...top, h("div", { class: "tile-split wx-m" }, now, hours(5)));
+        if (size === "l") return h("div", { class: "tile-body" }, ...top, now, hours(6), days(4));
+        return h("div", { class: "tile-body" }, ...top, h("div", { class: "tile-split wx-xl" }, h("div", {}, now, hours(8)), days(7)));
+      },
+    },
     gaugeTile({ id: "g-debt-limit", opens: "budget", label: "Legal debt limit used" },
       { label: "Legal debt limit used", value: (100 * debt.net_debt_applicable) / debt.debt_limit, max: 100, format: (v) => pct(v), tickFormat: pct0,
         context: `${usdCompact(debt.net_debt_applicable)} of ${usdCompact(debt.debt_limit)} allowed by state law` },
@@ -106,7 +145,7 @@ export function tileDefs(data, COLORS) {
         const pops = budget.debt_history.map((d) => d.population);
         const growth = (100 * (debt.population - debt0.population)) / debt0.population;
         const number = h("div", {}, big(num(debt.population)), h("div", { class: "tile-delta up" }, `▲ ${pct(growth, 0)} since ${debt0.fiscal_year}`));
-        if (size === "s") return h("div", { class: "tile-body" }, head("people", COLORS.people, "Residents"), number, h("div", { class: "tile-spark sm" }, sparkline(pops, COLORS.people)));
+        if (size === "s") return h("div", { class: "tile-body" }, head("people", COLORS.people, "Residents"), number, h("div", { class: "tile-spark sm" }, sparkline(pops, t.series[0])));
         const stats = [["Median household income", `${usd(k.median_household_income)}`, `NC ${usd(nc.median_household_income)}`],
           ["Median home value", usd(k.median_home_value), `NC ${usd(nc.median_home_value)}`],
           ["Median age", String(k.median_age), `NC ${nc.median_age}`],
@@ -115,9 +154,9 @@ export function tileDefs(data, COLORS) {
           ["Median rent", usd(k.median_gross_rent), `NC ${usd(nc.median_gross_rent)}`]];
         if (size === "m") return h("div", { class: "tile-body" }, head("people", COLORS.people, "Residents"),
           h("div", { class: "tile-split" }, h("div", {}, number, h("div", { class: "tile-meta" }, `Median income ${usdCompact(k.median_household_income)} · NC ${usdCompact(nc.median_household_income)}`)),
-            h("div", { class: "tile-spark" }, sparkline(pops, COLORS.people))));
+            h("div", { class: "tile-spark" }, sparkline(pops, t.series[0]))));
         return h("div", { class: "tile-body" }, head("people", COLORS.people, "Residents"),
-          h("div", { class: `tile-split ${size === "xl" ? "wide" : ""}` }, number, h("div", { class: "tile-spark" }, sparkline(pops, COLORS.people))),
+          h("div", { class: `tile-split ${size === "xl" ? "wide" : ""}` }, number, h("div", { class: "tile-spark" }, sparkline(pops, t.series[0]))),
           h("ul", { class: `stat-rows ${size === "xl" ? "cols-2" : ""}` }, stats.slice(0, size === "xl" ? 6 : 4).map(([a, b, c]) =>
             h("li", {}, h("span", {}, a), h("b", {}, b), h("small", {}, c)))),
           h("div", { class: "tile-meta" }, `${census.release} · population from City audit (${debt.fiscal_year})`));
@@ -223,7 +262,7 @@ export function tileDefs(data, COLORS) {
         const rows = budget.tax_rate_history.filter((r) => r.assessed_value);
         const first = rows[0], last = rows.at(-1);
         const number = h("div", {}, big(usdCompact(last.assessed_value)), h("div", { class: "tile-delta up" }, `▲ ${Math.round((last.assessed_value / first.assessed_value) * 10) / 10}× since ${fy(first.fiscal_year)}`));
-        const spark = h("div", { class: `tile-spark ${size === "s" ? "sm" : ""}` }, sparkline(rows.map((r) => r.assessed_value), COLORS.growth));
+        const spark = h("div", { class: `tile-spark ${size === "s" ? "sm" : ""}` }, sparkline(rows.map((r) => r.assessed_value), t.series[2]));
         if (size === "s") return h("div", { class: "tile-body" }, head("growth", COLORS.growth, "Taxable property"), number, spark);
         if (size === "m") return h("div", { class: "tile-body" }, head("growth", COLORS.growth, "Taxable property"),
           h("div", { class: "tile-split" }, h("div", {}, number, h("div", { class: "tile-meta" }, property?.current ? `${property.current.area_sqmi.toFixed(0)} sq mi in Cabarrus County` : "Assessed value, whole city")), spark));
@@ -277,14 +316,11 @@ export function tileDefs(data, COLORS) {
                     h("div", { class: "council-next-when" }, `${next._d.toLocaleDateString("en-US", { weekday: "long" })} · ${next._d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}`),
                     h("span", { class: `pill ${next.agenda ? "ok" : ""}` }, next.agenda ? "Agenda posted" : "No agenda yet"))) : null,
                 h("ul", { class: "council-leaders" }, leaders.map((m) => h("li", {}, avatar(m),
-                  h("div", {}, h("b", {}, m.name), h("span", {}, m.role)),
-                  m.phone ? h("a", { class: "mail-link", href: `tel:${m.phone.replace(/[^0-9+]/g, "")}`, "aria-label": `Call ${m.name}, ${m.phone}` }, "☎") : null,
-                  m.email ? h("a", { class: "mail-link", href: `mailto:${m.email}`, "aria-label": `Email ${m.name}` }, "✉") : null))))));
+                  h("div", {}, h("b", {}, m.name), h("span", {}, m.role)), ...contactLinks(m)))))));
         }
         return h("div", { class: "tile-body" }, head("council", COLORS.council, "Your City Council"),
-          h("ul", { class: `people-list ${size === "xl" ? "cols-2" : ""}` }, council.members.map((m) => h("li", {}, avatar(m),
-            h("div", {}, h("b", {}, m.name), h("span", {}, m.role)),
-            m.email ? h("a", { href: `mailto:${m.email}`, class: "mail-link", "aria-label": `Email ${m.name}` }, "✉") : null))),
+          h("ul", { class: "people-list cols-2 council-list" }, council.members.map((m) => h("li", {}, avatar(m),
+            h("div", {}, h("b", {}, m.name), h("span", {}, m.role)), h("span", { class: "contact-links" }, contactLinks(m))))),
           email);
       },
     },
@@ -298,9 +334,10 @@ export function tileDefs(data, COLORS) {
         const n = { m: 4, l: 10, xl: 15 }[size];
         const list = ppl.slice(0, n);
         return h("div", { class: "tile-body" }, head("org", COLORS.org, "Who runs the City"),
-          h("ul", { class: `people-list cols-2 ${size === "xl" ? "cols-3" : ""}` }, list.map((p) => h("li", {},
+          h("ul", { class: `people-list cols-2 org-list ${size === "xl" ? "cols-3" : ""}` }, list.map((p) => h("li", {},
             p.photo ? h("img", { src: p.photo, alt: "" }) : h("span", { class: "avatar-fallback" }, p.name[0]),
-            h("div", {}, h("b", {}, p.name), h("span", {}, p.title))))),
+            h("div", {}, h("b", {}, p.name), h("span", {}, p.title)),
+            h("span", { class: "contact-links" }, contactLinks(p))))),
           h("div", { class: "tile-meta" }, `${ppl.length} leaders in all`));
       },
     },

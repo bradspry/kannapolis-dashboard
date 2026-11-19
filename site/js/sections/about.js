@@ -8,6 +8,7 @@ const DAY_MS = 86400000;
 /** Each dataset, when it was last fetched, and how often it should refresh. */
 export function datasets(D) {
   const list = [
+    ["Weather", "weather", D.weatherMeta, "Live in your browser; backup copy daily", 2],
     ["Public meetings", "meetings", D.meetings, "Daily", 2],
     ["City news", "news", D.news, "Daily", 2],
     ["Upcoming events", "events", D.events, "Daily", 2],

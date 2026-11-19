@@ -15,6 +15,7 @@ import build_news
 import build_org
 import build_property
 import build_site
+import build_weather
 import build_zoning
 from common import log
 
@@ -24,6 +25,7 @@ STEPS = [
     ("council", build_council.main),
     ("meetings", build_meetings.main),
     ("events", build_events.main),
+    ("weather", build_weather.main),
     ("news", build_news.main),
     ("org", build_org.main),
     ("zoning", build_zoning.main),

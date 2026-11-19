@@ -15,8 +15,8 @@ open dist/index.html            # or double-click it
 ```
 
 - `python3 etl/run_all.py site`: rebuild the page only (instant, no downloads)
-- `python3 etl/run_all.py meetings news events site`: refresh the time-sensitive widgets, then rebuild
-- Steps: `budget census council meetings events news org zoning property site` (`property` takes 5–30 min; the county GIS server is slow)
+- `python3 etl/run_all.py meetings news events weather site`: refresh the time-sensitive widgets, then rebuild
+- Steps: `budget census council meetings events weather news org zoning property site` (`property` takes 5–30 min; the county GIS server is slow)
 
 **Requirements:** Python 3.10+ for the data steps (standard library only). Building and serving also work on macOS's built-in Python 3.9.
 
@@ -35,6 +35,7 @@ The home screen is a grid of widget tiles. **Tap a tile, or an icon in the dock,
 - **Resize** tiles: S, M, L, XL. Bigger sizes show more detail; XL shows as L on phones.
 - **Rearrange** tiles by dragging. On a phone, drag the ⠿ handle; with a keyboard, focus the handle and use the arrow keys.
 - **Hide or restore** tiles.
+- **Add blank space**: an invisible tile, resizable and draggable like the others, for leaving gaps in the layout. Its “–” deletes it.
 
 Your layout is saved in your browser. While `./serve.sh` is running, **Save as default home page** writes it to `data/manual/home_layout.json`, the home page for every visitor once committed. **Reset layout** returns to the default.
 
@@ -52,6 +53,7 @@ It prints the address to open on your phone (for example `http://192.168.1.20:51
 
 | Widget | Source | Updated |
 |---|---|---|
+| Weather | [National Weather Service](https://www.weather.gov/) API: forecast, hourly, alerts, and observations from Concord Regional Airport | **Live** in the browser every 15 min (daily backup copy) |
 | Gauges | Derived from the budget, audit and Census data below | Automatic |
 | People | U.S. Census ACS 5-year via [Census Reporter](https://censusreporter.org/profiles/16000US3735200-kannapolis-nc/) | Automatic |
 | Growth & property | [Cabarrus County GIS open data](https://location.cabarruscounty.us/arcgisservices/rest/services/OpenData) (current and yearly snapshots) | Automatic |
@@ -87,6 +89,7 @@ Every hand-entered number in `data/manual/*.csv` has a `source` citation and a `
 | [Municipal Districts (city limits)](https://location.cabarruscounty.us/arcgisservices/rest/services/OpenData/MunicipalDistrict/MapServer/0) | Cabarrus County GIS | ArcGIS REST | City boundary and area |
 | [Zoning by Municipalities: Kannapolis Zoning](https://location.cabarruscounty.us/arcgisservices/rest/services/OpenData/Zoning_By_Municipalities/MapServer/3) | Cabarrus County GIS | ArcGIS REST | Land use & zoning |
 | [Election results: City of Kannapolis Parks and Recreation Bonds Referendum, Nov 3, 2026 (No 10,134 / Yes 7,534; 17 of 17 precincts)](https://er.ncsbe.gov/contest_details.html?election_dt=11/03/2026&county_id=0&contest_id=800012) | NC State Board of Elections | Web page | Debt service note on the parks bond |
+| [National Weather Service forecast, hourly forecast, alerts and observations for Kannapolis (api.weather.gov)](https://forecast.weather.gov/MapClick.php?lat=35.4874&lon=-80.6217) | National Weather Service | JSON API | Weather (live in the browser) |
 
 The news and meetings harvesters are adapted from [kspider](https://github.com/bradspry/kannapolis-news-wire).
 

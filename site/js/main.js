@@ -3,7 +3,9 @@
 // dashboard is a single file that works offline-from-disk, on any web host, or over Wi-Fi.
 import { initTheme, onThemeChange, tokens } from "./theme.js";
 import { h } from "./ui.js";
-import { initOS, defineWindow, defineTiles, renderHome, invalidate, openFromHash } from "./os.js";
+import { initOS, defineWindow, defineTiles, renderHome, invalidate, openFromHash, refreshWindow } from "./os.js";
+import { startWeather, onWeather, weather } from "./weather.js";
+import { renderWeather } from "./sections/weather.js";
 import { tileDefs } from "./tiles.js";
 import { renderPeople } from "./sections/people.js";
 import { renderGrowth } from "./sections/growth.js";
@@ -26,9 +28,10 @@ function load(name, { optional = false } = {}) {
 
 
 // Icon-chip color per widget (identity only; follows the categorical order).
+// Icon colors are CSS variables (--icon-N), so the fall palette can restyle icons without touching charts.
 function colors() {
-  const s = tokens().series;
-  return { people: s[0], growth: s[2], land: s[5], budget: s[6], debt: s[1], news: s[4], meetings: s[3], events: s[7], council: s[0], org: s[2], about: tokens().mutedFill, gauge: tokens().accent };
+  const v = (n) => `var(--icon-${n})`;
+  return { people: v(1), growth: v(3), land: v(6), budget: v(7), debt: v(2), news: v(5), meetings: v(4), events: v(8), weather: v(1), council: v(1), org: v(3), about: "var(--muted-fill)", gauge: "var(--accent)" };
 }
 
 function main() {
@@ -40,22 +43,28 @@ function main() {
     zoning: load("zoning.json", { optional: true }), zoningGeo: load("zoning.geojson", { optional: true }),
     council: load("council.json", { optional: true }), org: load("org.json", { optional: true }),
     meetings: load("meetings.json", { optional: true }), news: load("news.json", { optional: true }),
-    events: load("events.json", { optional: true }),
+    events: load("events.json", { optional: true }), weatherMeta: load("weather.json", { optional: true }),
   };
   const sub = (id) => document.querySelector(`#${id} .section-sub`)?.textContent.trim() || "";
   const win = (id, def) => document.getElementById(id) && defineWindow(id, { ...def, sub: def.sub ?? sub(id) });
-  win("people", { title: "People", icon: "people", color: "var(--series-1)", render: () => renderPeople(D.census, D.budget) });
-  win("growth", { title: "Growth & property", short: "Growth", icon: "growth", color: "var(--series-3)", render: () => renderGrowth(D.property, D.boundaries, D.grid) });
-  if (D.zoning && D.zoningGeo) win("land", { title: "Land use & zoning", short: "Land use", icon: "land", color: "var(--series-6)", render: () => renderLand(D.zoning, D.zoningGeo) });
-  win("budget", { title: "Budget & debt", short: "Budget", icon: "budget", color: "var(--series-7)", render: () => renderBudget(D.budget) });
-  if (D.budget.debt_service_fy2027) win("debt-service", { title: "Debt service", short: "Debt", icon: "debt", color: "var(--series-2)", render: () => renderDebtService(D.budget) });
-  if (D.news) win("news", { title: "City news", short: "News", icon: "news", color: "var(--series-5)", render: () => renderNews(D.news) });
-  if (D.events) win("events", { title: "Upcoming events", short: "Events", icon: "events", color: "var(--series-8)", render: () => renderEvents(D.events) });
-  if (D.meetings) win("meetings", { title: "Public meetings", short: "Meetings", icon: "meetings", color: "var(--series-4)", render: () => renderMeetings(D.meetings) });
-  if (D.council) win("council", { title: "City Council", short: "Council", icon: "council", color: "var(--series-1)", render: () => renderCouncil(D.council) });
-  if (D.org) win("org", { title: "Who runs the City", short: "Staff", icon: "org", color: "var(--series-3)", render: () => renderOrg(D.org) });
+  win("people", { title: "People", icon: "people", color: "var(--icon-1)", render: () => renderPeople(D.census, D.budget) });
+  win("growth", { title: "Growth & property", short: "Growth", icon: "growth", color: "var(--icon-3)", render: () => renderGrowth(D.property, D.boundaries, D.grid) });
+  if (D.zoning && D.zoningGeo) win("land", { title: "Land use & zoning", short: "Land use", icon: "land", color: "var(--icon-6)", render: () => renderLand(D.zoning, D.zoningGeo) });
+  win("budget", { title: "Budget & debt", short: "Budget", icon: "budget", color: "var(--icon-7)", render: () => renderBudget(D.budget) });
+  if (D.budget.debt_service_fy2027) win("debt-service", { title: "Debt service", short: "Debt", icon: "debt", color: "var(--icon-2)", render: () => renderDebtService(D.budget) });
+  if (D.news) win("news", { title: "City news", short: "News", icon: "news", color: "var(--icon-5)", render: () => renderNews(D.news) });
+  if (D.weatherMeta) win("weather", { title: "Weather", icon: "weather", color: "var(--icon-1)", render: () => renderWeather(weather()) });
+  if (D.events) win("events", { title: "Upcoming events", short: "Events", icon: "events", color: "var(--icon-8)", render: () => renderEvents(D.events) });
+  if (D.meetings) win("meetings", { title: "Public meetings", short: "Meetings", icon: "meetings", color: "var(--icon-4)", render: () => renderMeetings(D.meetings) });
+  if (D.council) win("council", { title: "City Council", short: "Council", icon: "council", color: "var(--icon-1)", render: () => renderCouncil(D.council) });
+  if (D.org) win("org", { title: "Who runs the City", short: "Staff", icon: "org", color: "var(--icon-3)", render: () => renderOrg(D.org) });
   win("about", { title: "About the data", short: "About", icon: "about", color: "var(--muted-fill)", render: () => renderAbout(D) });
 
+  startWeather(D.weatherMeta);
+  onWeather(() => {
+    if (!document.body.classList.contains("is-dragging")) renderHome();
+    refreshWindow("weather");
+  });
   initOS({ defaultLayout: load("home_layout.json", { optional: true }) });
   defineTiles(() => tileDefs(D, colors()));
   renderHome();

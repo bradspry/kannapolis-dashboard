@@ -5,14 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Kannapolis Citizen-built Dashboard</title>
   <meta name="description" content="An open-data look at Kannapolis, NC: who lives here, how the city is growing, how land is zoned, and how the city budget and debt work." />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect x='4' y='14' width='6' height='14' rx='1' fill='%232a78d6'/><rect x='13' y='8' width='6' height='20' rx='1' fill='%232a78d6'/><rect x='22' y='4' width='6' height='24' rx='1' fill='%232a78d6'/></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='6' fill='%232a78d6'/><path d='M5.07 18 A8 8 0 1 1 18.93 18' fill='none' stroke='white' stroke-opacity='.55' stroke-width='2' stroke-linecap='round'/><path d='M19.88 12.61 A8 8 0 0 1 18.93 18' fill='none' stroke='%23ff8a80' stroke-width='2' stroke-linecap='round'/><path d='M11.3 14 L15.6 8.6 L12.7 14.9 Z' fill='white'/><circle cx='12' cy='14' r='1.7' fill='white'/></svg>" />
 </head>
 <body>
   <a class="skip" href="#home">Skip to widgets</a>
   <header class="topbar">
     <div class="wrap topbar-row">
       <div class="brand">
-        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="34" height="34">
+            <path class="bm-arc" d="M5.07 18 A8 8 0 1 1 18.93 18" />
+            <path class="bm-red" d="M19.88 12.61 A8 8 0 0 1 18.93 18" />
+            <g class="bm-ticks"><path d="M12 6.4v1.4M6.6 8.6l1 1M17.4 8.6l-1 1M4.4 14h1.4M18.2 14h1.4" /></g>
+            <g class="bm-needle"><path d="M11.3 14 L12 7.2 L12.7 14 Z" /></g>
+            <circle class="bm-hub" cx="12" cy="14" r="1.7" />
+          </svg>
+        </span>
         <div>
           <h1>Kannapolis Citizen-built Dashboard</h1>
         </div>
@@ -20,6 +28,9 @@
       <div class="topbar-actions">
         <button id="edit-toggle" class="pill-btn" type="button" aria-pressed="false" title="Hide or restore widgets">
           <span class="label">Edit</span>
+        </button>
+        <button id="palette-toggle" class="pill-btn" type="button" aria-pressed="false" title="Fall colors: Moss &amp; Rust" aria-label="Fall color palette (Moss and Rust)">
+          <span aria-hidden="true">🍂</span>
         </button>
         <button id="theme-toggle" class="pill-btn" type="button" aria-label="Switch color theme">
           <span aria-hidden="true">◐</span><span class="theme-label">Theme</span>
@@ -32,6 +43,7 @@
     <div id="edit-bar" class="edit-bar" hidden>
       <p class="edit-hint">Drag widgets to rearrange (on a phone, drag the <span aria-hidden="true">⠿</span> handle). Use “–” to hide one.</p>
       <div class="edit-actions">
+        <button id="add-spacer" class="pill-btn" type="button">+ Blank space</button>
         <button id="reset-layout" class="pill-btn" type="button">Reset layout</button>
         <button id="save-default" class="pill-btn primary" type="button" hidden>Save as default home page</button>
       </div>
@@ -118,6 +130,14 @@
         <p class="section-sub">Official announcements from the City of Kannapolis</p>
       </header>
       <div class="card" id="news-body"></div>
+    </section>
+
+    <section id="weather" aria-labelledby="weather-h">
+      <header class="section-head">
+        <h2 id="weather-h">Weather</h2>
+        <p class="section-sub">Kannapolis forecast and alerts from the National Weather Service</p>
+      </header>
+      <div id="weather-body"></div>
     </section>
 
     <section id="events" aria-labelledby="events-h">

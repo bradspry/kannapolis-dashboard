@@ -26,7 +26,7 @@ TILE_ID = re.compile(r"^[a-z0-9-]{1,40}$")
 
 
 def clean_layout(body: bytes) -> dict:
-    """Accept only {"order": [ids], "hidden": [ids], "sizes": {id: s|m|l|xl}}; nothing else reaches disk."""
+    """Accept only {"order": [ids], "hidden": [ids], "sizes": {id: s|m|l|xl}, "spacers": [ids]}; nothing else reaches disk."""
     d = json.loads(body)
     out = {}
     for key in ("order", "hidden"):
@@ -39,6 +39,11 @@ def clean_layout(body: bytes) -> dict:
             isinstance(k, str) and TILE_ID.match(k) and v in ("s", "m", "l", "xl") for k, v in sizes.items()):
         raise ValueError("bad sizes")
     out["sizes"] = sizes
+    spacers = d.get("spacers", [])
+    if not isinstance(spacers, list) or len(spacers) > 50 or not all(
+            isinstance(i, str) and re.match(r"^space-[a-z0-9]{1,20}$", i) for i in spacers):
+        raise ValueError("bad spacers")
+    out["spacers"] = list(dict.fromkeys(spacers))
     return out
 
 

@@ -10,6 +10,7 @@ const OLD_HIDDEN_KEY = "kdash-hidden-widgets";
 let hidden = new Set();
 let order = null;                         // full tile order, or null = default
 let sizes = {};                           // tile id -> "s" | "m" | "l" | "xl"
+let spacers = [];                         // ids of blank-space tiles ("space-…")
 export const SIZES = [["s", "Small"], ["m", "Medium"], ["l", "Large"], ["xl", "Extra large"]];
 let siteDefault = null;                   // embedded data/manual/home_layout.json
 const windows = new Map();   // id -> { title, sub, icon, color, render }
@@ -28,11 +29,14 @@ function readLocal() {
     return old ? { order: null, hidden: old } : null;
   } catch { return null; }
 }
-function applyLayout(l) { order = l?.order || null; hidden = new Set(l?.hidden || []); sizes = { ...(l?.sizes || {}) }; }
+function applyLayout(l) {
+  order = l?.order || null; hidden = new Set(l?.hidden || []); sizes = { ...(l?.sizes || {}) };
+  spacers = (l?.spacers || []).filter((id) => /^space-[a-z0-9]{1,20}$/.test(id));
+}
 function loadHidden() { applyLayout(readLocal() || siteDefault); }
 function saveHidden() {
   try {
-    localStorage.setItem(KEY, JSON.stringify({ order, hidden: [...hidden], sizes }));
+    localStorage.setItem(KEY, JSON.stringify({ order, hidden: [...hidden], sizes, spacers }));
     localStorage.removeItem(OLD_HIDDEN_KEY);
   } catch { /* private mode: lasts for this visit */ }
 }
@@ -74,7 +78,8 @@ export function renderHome() {
   const home = document.getElementById("home");
   const tray = document.getElementById("hidden-tray");
   const tiles = [];
-  currentDefs = typeof tileDefs === "function" ? tileDefs() : tileDefs;
+  currentDefs = [...(typeof tileDefs === "function" ? tileDefs() : tileDefs),
+    ...spacers.map((id) => ({ id, spacer: true, size: "s", label: "Blank space", build: () => h("span", { class: "spacer-label" }, "Blank space") }))];
   const defs = ordered(currentDefs);
   for (const t of defs) {
     if (hidden.has(t.id)) continue;
@@ -85,8 +90,8 @@ export function renderHome() {
     if (!content) continue;
     const w = windows.get(t.opens);
     const name = t.label || w?.title || t.id;
-    const tile = h("article", { class: `tile-w size-${size}${t.kind ? ` kind-${t.kind}` : ""}`, "data-tile": t.id, "data-opens": t.opens, "data-size": size },
-      h("button", { class: "tile-open", type: "button", "aria-haspopup": "dialog",
+    const tile = h("article", { class: `tile-w size-${size}${t.kind ? ` kind-${t.kind}` : ""}${t.spacer ? " spacer" : ""}`, "data-tile": t.id, "data-opens": t.opens, "data-size": size },
+      t.spacer ? null : h("button", { class: "tile-open", type: "button", "aria-haspopup": "dialog",
         "aria-label": `Open ${w?.title || t.opens}${t.label ? `: ${t.label}` : ""}`,
         onclick: (e) => openWindow(t.opens, e.currentTarget.closest(".tile-w")) }),
       content,
@@ -103,12 +108,12 @@ export function renderHome() {
       h("div", { class: "size-picker", role: "group", "aria-label": `Size of the ${name} widget` },
         SIZES.map(([k, label]) => h("button", { type: "button", class: `size-opt opt-${k}`, "aria-pressed": String(k === size), title: label,
           "aria-label": `${label}`, onclick: () => setSize(t.id, k, name) }, k.toUpperCase()))),
-      h("button", { class: "tile-remove", type: "button", "aria-label": `Hide the ${t.label || w?.title} widget`,
-        onclick: () => { hidden.add(t.id); saveHidden(); renderHome(); } }, icon("minus", 14)));
+      h("button", { class: "tile-remove", type: "button", "aria-label": t.spacer ? "Delete this blank space" : `Hide the ${t.label || w?.title} widget`,
+        onclick: () => (t.spacer ? removeSpacer(t.id) : (hidden.add(t.id), saveHidden(), renderHome())) }, icon("minus", 14)));
     tiles.push(tile);
   }
   home.replaceChildren(...tiles);
-  const off = defs.filter((t) => hidden.has(t.id));
+  const off = defs.filter((t) => hidden.has(t.id) && !t.spacer);
   tray.hidden = !off.length || !document.body.classList.contains("editing");
   syncEditBar();
   tray.replaceChildren(
@@ -116,6 +121,26 @@ export function renderHome() {
     ...off.map((t) => h("button", { class: "tray-chip", type: "button",
       onclick: () => { hidden.delete(t.id); saveHidden(); renderHome(); } },
       icon("plus", 14), t.label || windows.get(t.opens)?.title || t.id)));
+}
+
+/** Blank space: an invisible, resizable tile for shaping the layout (Edit mode only). */
+function addSpacer() {
+  const id = `space-${Date.now().toString(36)}`;
+  spacers.push(id);
+  saveHidden();
+  renderHome();
+  const el = document.querySelector(`[data-tile="${id}"]`);
+  el?.scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "center" });
+  el?.querySelector(".tile-grip")?.focus({ preventScroll: true });
+  announce("Blank space added at the end. Drag it where you want a gap.");
+}
+function removeSpacer(id) {
+  spacers = spacers.filter((s) => s !== id);
+  delete sizes[id];
+  if (order) order = order.filter((x) => x !== id);
+  saveHidden();
+  renderHome();
+  announce("Blank space deleted.");
 }
 
 /** Change a tile's size; other tiles glide to their new places. */
@@ -219,6 +244,12 @@ export function closeWindow({ animate = true, pop = true } = {}) {
   animate ? zoom(openerTile, true).then(finish) : finish();
 }
 
+/** New data for one window: redraw it if open, otherwise on next open. */
+export function refreshWindow(id) {
+  rendered.delete(id);
+  if (openId === id) renderWindow(id);
+}
+
 /** Theme or width changed: redraw the home screen and the open window; others redraw on next open. */
 export function invalidate() {
   rendered.clear();
@@ -245,7 +276,7 @@ async function detectSaving() {
   syncEditBar();
 }
 async function saveDefault() {
-  const layout = { order: ordered(currentDefs).map((d) => d.id), hidden: [...hidden], sizes };
+  const layout = { order: ordered(currentDefs).map((d) => d.id), hidden: [...hidden], sizes, spacers };
   announce("Saving…");
   try {
     const r = await fetch("/api/layout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(layout) });
@@ -291,6 +322,7 @@ export function initOS({ defaultLayout = null } = {}) {
     announce("Layout reset to the default home page.");
   });
   document.getElementById("save-default").addEventListener("click", saveDefault);
+  document.getElementById("add-spacer").addEventListener("click", addSpacer);
   enableDrag(document.getElementById("home"), {
     active: () => document.body.classList.contains("editing"),
     onDrop: (ids) => { commitOrder(ids); announce("Layout saved on this device."); },

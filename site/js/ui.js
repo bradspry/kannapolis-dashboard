@@ -135,3 +135,12 @@ export function plotBase(width, extra = {}) {
     ...extra,
   };
 }
+
+/** Round ☎ call and ✉ email buttons for a person (only for published numbers/addresses). */
+export function contactButtons(p, who = p.name) {
+  const btns = [
+    p.phone ? h("a", { class: "contact-btn", href: `tel:${p.phone.replace(/[^0-9+]/g, "")}`, title: `Call ${p.phone}`, "aria-label": `Call ${who}, ${p.phone}` }, "☎") : null,
+    p.email ? h("a", { class: "contact-btn", href: `mailto:${p.email}`, title: `Email ${p.email}`, "aria-label": `Email ${who}` }, "✉") : null,
+  ].filter(Boolean);
+  return btns.length ? h("span", { class: "contact-btns" }, btns) : null;
+}
