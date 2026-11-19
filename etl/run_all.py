@@ -6,6 +6,7 @@ import sys
 import time
 import traceback
 
+import build_baseball
 import build_budget
 import build_census
 import build_council
@@ -17,6 +18,7 @@ import build_org
 import build_police
 import build_property
 import build_site
+import build_utility
 import build_weather
 import build_zoning
 from common import log
@@ -32,6 +34,8 @@ STEPS = [
     ("org", build_org.main),
     ("police", build_police.main),
     ("fire", build_fire.main),
+    ("baseball", build_baseball.main),
+    ("utility", build_utility.main),
     ("zoning", build_zoning.main),
     ("property", build_property.main),  # slowest: ~26k parcels + ~18 yearly snapshots
     ("site", build_site.main),  # always last: bundles everything into dist/index.html

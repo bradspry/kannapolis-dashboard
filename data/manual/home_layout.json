@@ -1,5 +1,7 @@
 {
   "order": [
+    "utility",
+    "baseball",
     "police",
     "fire",
     "news",
@@ -34,7 +36,9 @@
     "weather": "m",
     "g-debt-limit": "s",
     "g-tax-rate": "m",
-    "g-owners": "m"
+    "g-owners": "m",
+    "baseball": "m",
+    "utility": "m"
   },
   "spacers": []
 }

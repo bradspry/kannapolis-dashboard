@@ -39,7 +39,8 @@ def debt_service() -> list[dict]:
 
 
 def main() -> None:
-    sources = {r["id"]: {k: r[k] for k in ("title", "publisher", "format", "url", "used_for")} for r in rows("sources.csv")}
+    sources = {r["id"]: {**{k: r[k] for k in ("title", "publisher", "format", "url", "used_for")},
+                         "widgets": r["widgets"].split()} for r in rows("sources.csv")}
     # Every hand-entered row must cite a known source and link to it.
     for name in ("general_fund_by_function.csv", "general_fund_revenue.csv", "funds_fy2027.csv",
                  "tax_rate_history.csv", "debt_history.csv", "debt_service_fy2027.csv"):

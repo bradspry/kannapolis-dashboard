@@ -1,0 +1,117 @@
+{
+  "name": "City of Kannapolis Customer Service & Utility Billing",
+  "page": "https://www.kannapolisnc.gov/customer-service",
+  "services": "Water & sewer, stormwater, garbage & recycling, billed once a month",
+  "portal": "https://billpay.kannapolisnc.gov/app/login.jsp",
+  "portal_tip": "First time on the new portal (launched Dec 2025)? Existing customers keep their account number, username and email: choose “Forgot password” to set a new password. Autopay carried over automatically.",
+  "phones": {
+    "pay_by_phone": "704-920-4400",
+    "main": "704-920-4444"
+  },
+  "email": "custserve@kannapolisnc.gov",
+  "ways": [
+    {
+      "how": "Online",
+      "detail": "Pay, set up autopay, see usage and payment alerts",
+      "action": {
+        "label": "Pay online",
+        "url": "https://billpay.kannapolisnc.gov/app/login.jsp"
+      }
+    },
+    {
+      "how": "By phone",
+      "detail": "Automated line: 704-920-4400, or 704-920-4444 and choose option 1",
+      "action": {
+        "label": "Call 704-920-4400",
+        "url": "tel:7049204400"
+      }
+    },
+    {
+      "how": "Drive-up kiosk",
+      "detail": "City Hall parking lot, 401 Laureate Way. Takes cash.",
+      "action": {
+        "label": "How to use the kiosk (video)",
+        "url": "https://www.youtube.com/watch?v=cwnPOJe3zVo"
+      }
+    },
+    {
+      "how": "In person",
+      "detail": "Customer Service Center inside City Hall, 401 Laureate Way",
+      "action": null
+    },
+    {
+      "how": "Dropbox",
+      "detail": "City Hall parking lot: checks only",
+      "action": null
+    },
+    {
+      "how": "By mail",
+      "detail": "City of Kannapolis, PO Box 604072, Charlotte, NC 28260-4072",
+      "action": null
+    }
+  ],
+  "card_fee": {
+    "rate": 0.0295,
+    "minimum": 2.95,
+    "effective": "2026-08-25",
+    "free_option": "Paying from a bank account (ACH/EFT) has no fee."
+  },
+  "terms": {
+    "past_due_day": 25,
+    "late_fee_day": 26,
+    "late_fee_rate": 0.1,
+    "late_fee_max": 10,
+    "disconnect_day": 45,
+    "text": "All utility bills are due on receipt. Not receiving a bill doesn't excuse a late payment."
+  },
+  "help": [
+    {
+      "title": "Behind on your bill?",
+      "text": "Customer Service will set up a payment plan with you. Email your full name, phone number and account number to schedule a call.",
+      "action": {
+        "label": "Email Customer Service",
+        "url": "mailto:custserve@kannapolisnc.gov?subject=Payment%20plan"
+      }
+    },
+    {
+      "title": "High bill or a leak?",
+      "text": "Check for leaks, then ask for a leak adjustment or a meter reread by calling 704-920-4444.",
+      "action": {
+        "label": "Leak-check tips (PDF)",
+        "url": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Customer%20Service/Documents/Tips-Checking-for-Leaks.pdf"
+      }
+    },
+    {
+      "title": "Start, stop or move service",
+      "text": "Apply for new water/sewer service in the portal; call 704-920-4444 to close an account or for water/sewer taps.",
+      "action": {
+        "label": "New service application",
+        "url": "https://billpay.kannapolisnc.gov/app/login.jsp"
+      }
+    },
+    {
+      "title": "Adjustment or credit request",
+      "text": "For pool fills, leaks and other billing adjustments.",
+      "action": {
+        "label": "Adjustment form (PDF)",
+        "url": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Customer%20Service/Documents/Utility%20Bill%20Adjustment%20Form.pdf"
+      }
+    },
+    {
+      "title": "Landlords and property managers",
+      "text": "Approved landlord/management company form.",
+      "action": {
+        "label": "Landlord form",
+        "url": "https://www.kannapolisnc.gov/Government-Departments/Customer-Service-Utility-Billing/Approved-Landlord-Management-Company-Form"
+      }
+    }
+  ],
+  "director": {
+    "name": "Jenny Johnson",
+    "title": "Director of Customer Service",
+    "email": "jmjohnson@kannapolisnc.gov",
+    "phone": "704-920-4444"
+  },
+  "fees_page": "https://www.kannapolisnc.gov/Government-Departments/Finance",
+  "source": "https://www.kannapolisnc.gov/customer-service"
+}

@@ -1,0 +1,24 @@
+{
+  "team": "Kannapolis Cannon Ballers",
+  "season": 2027,
+  "league": "Carolina League (Single-A)",
+  "ballpark": "Atrium Health Ballpark, downtown Kannapolis",
+  "website": "https://www.kcballers.com",
+  "phone": "704-932-3267",
+  "email": "tickets@kcballers.com",
+  "teams": {
+    "AUG": "Augusta GreenJackets",
+    "CHS": "Charleston RiverDogs",
+    "COL": "Columbia Fireflies",
+    "DEL": "Delmarva Shorebirds",
+    "FAY": "Fayetteville Woodpeckers",
+    "FBG": "Fredericksburg Nationals",
+    "HC": "Hill City Howlers",
+    "HIC": "Hickory Crawdads",
+    "MB": "Myrtle Beach Pelicans",
+    "SAL": "Salem RidgeYaks",
+    "WIL": "Wilson Warbirds"
+  },
+  "schedule_pdf": "https://img.mlbstatic.com/milb-images/image/upload/milb/kljjd0xd8n8fto71x49u.pdf",
+  "note": "Times are local. Schedules can change; check kcballers.com before you go."
+}

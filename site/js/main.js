@@ -3,11 +3,13 @@
 // dashboard is a single file that works offline-from-disk, on any web host, or over Wi-Fi.
 import { initTheme, onThemeChange, tokens } from "./theme.js";
 import { h } from "./ui.js";
-import { initOS, defineWindow, defineTiles, renderHome, invalidate, openFromHash, refreshWindow } from "./os.js";
+import { initOS, defineWindow, defineTiles, renderHome, invalidate, openFromHash, refreshWindow, setSources } from "./os.js";
 import { startWeather, onWeather, weather } from "./weather.js";
 import { renderWeather } from "./sections/weather.js";
 import { renderPolice } from "./sections/police.js";
 import { renderFire } from "./sections/fire.js";
+import { renderBaseball } from "./sections/baseball.js";
+import { renderUtility } from "./sections/utility.js";
 import { tileDefs } from "./tiles.js";
 import { renderPeople } from "./sections/people.js";
 import { renderGrowth } from "./sections/growth.js";
@@ -33,7 +35,7 @@ function load(name, { optional = false } = {}) {
 // Icon colors are CSS variables (--icon-N), so the fall palette can restyle icons without touching charts.
 function colors() {
   const v = (n) => `var(--icon-${n})`;
-  return { people: v(1), growth: v(3), land: v(6), budget: v(7), debt: v(2), news: v(5), meetings: v(4), events: v(8), weather: v(1), police: v(1), fire: v(2), council: v(1), org: v(3), about: "var(--muted-fill)", gauge: "var(--accent)" };
+  return { people: v(1), growth: v(3), land: v(6), budget: v(7), debt: v(2), news: v(5), meetings: v(4), events: v(8), weather: v(1), police: v(1), fire: v(2), baseball: v(6), utility: v(3), council: v(1), org: v(3), about: "var(--muted-fill)", gauge: "var(--accent)" };
 }
 
 function main() {
@@ -47,6 +49,7 @@ function main() {
     meetings: load("meetings.json", { optional: true }), news: load("news.json", { optional: true }),
     events: load("events.json", { optional: true }), weatherMeta: load("weather.json", { optional: true }),
     police: load("police.json", { optional: true }), fire: load("fire.json", { optional: true }),
+    baseball: load("baseball.json", { optional: true }), utility: load("utility.json", { optional: true }),
   };
   const sub = (id) => document.querySelector(`#${id} .section-sub`)?.textContent.trim() || "";
   const win = (id, def) => document.getElementById(id) && defineWindow(id, { ...def, sub: def.sub ?? sub(id) });
@@ -58,6 +61,8 @@ function main() {
   if (D.news) win("news", { title: "City news", short: "News", icon: "news", color: "var(--icon-5)", render: () => renderNews(D.news) });
   if (D.police) win("police", { title: "Kannapolis Police", short: "Police", icon: "police", color: "var(--icon-1)", render: () => renderPolice(D.police, D.org) });
   if (D.fire) win("fire", { title: "Kannapolis Fire Department", short: "Fire", icon: "fire", color: "var(--icon-2)", render: () => renderFire(D.fire, D.org) });
+  if (D.baseball) win("baseball", { title: "Kannapolis Cannon Ballers", short: "Ballers", icon: "baseball", color: "var(--icon-6)", render: () => renderBaseball(D.baseball) });
+  if (D.utility) win("utility", { title: "Pay Utility Bill", short: "Pay bill", icon: "bill", color: "var(--icon-3)", render: () => renderUtility(D.utility) });
   if (D.weatherMeta) win("weather", { title: "Weather", icon: "weather", color: "var(--icon-1)", render: () => renderWeather(weather()) });
   if (D.events) win("events", { title: "Upcoming events", short: "Events", icon: "events", color: "var(--icon-8)", render: () => renderEvents(D.events) });
   if (D.meetings) win("meetings", { title: "Public meetings", short: "Meetings", icon: "meetings", color: "var(--icon-4)", render: () => renderMeetings(D.meetings) });
@@ -65,6 +70,7 @@ function main() {
   if (D.org) win("org", { title: "Who runs the City", short: "Staff", icon: "org", color: "var(--icon-3)", render: () => renderOrg(D.org) });
   win("about", { title: "About the data", short: "About", icon: "about", color: "var(--muted-fill)", render: () => renderAbout(D) });
 
+  setSources(D.budget.sources);
   startWeather(D.weatherMeta);
   onWeather(() => {
     if (!document.body.classList.contains("is-dragging")) renderHome();

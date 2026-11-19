@@ -57,6 +57,8 @@ It prints the address to open on your phone (for example `http://192.168.1.20:51
 |---|---|---|
 | Kannapolis Police | [KPD web page](https://www.kannapolisnc.gov/KPD): 911 and non-emergency numbers, online services, notices; serious-crime counts from KPD's quarterly crime reports (PDFs) | **By hand**: `data/manual/kpd.json`, `kpd_part1_crimes.csv`, `kpd_quarterly.csv` (checked against each report's total) |
 | Kannapolis Fire Department | [KFD web pages](https://www.kannapolisnc.gov/kfd): 911 and KFD numbers, free resident programs, after-a-fire forms, the five stations (mapped with the Census geocoder; nearest-station finder runs on the device) | **By hand**: `data/manual/kfd.json` |
+| Kannapolis Cannon Ballers | Team's [2027 schedule](https://img.mlbstatic.com/milb-images/image/upload/milb/kljjd0xd8n8fto71x49u.pdf) (image PDF): next home game, home stands, month calendars, add-to-calendar | **By hand**: `data/manual/cannonballers_2027.csv` (checked: 132 games, 66 home) |
+| Pay Utility Bill | City [Customer Service & Utility Billing](https://www.kannapolisnc.gov/customer-service): every way to pay, card-fee and due-date calculators (on device), help | **By hand**: `data/manual/utility_billing.json` |
 | Weather | [National Weather Service](https://www.weather.gov/) API: forecast, hourly, alerts, and observations from Concord Regional Airport | **Live** in the browser every 15 min (daily backup copy) |
 | Gauges | Derived from the budget, audit and Census data below | Automatic |
 | People | U.S. Census ACS 5-year via [Census Reporter](https://censusreporter.org/profiles/16000US3735200-kannapolis-nc/) | Automatic |
@@ -72,7 +74,7 @@ It prints the address to open on your phone (for example `http://192.168.1.20:51
 
 ### Official sources
 
-Every hand-entered number in `data/manual/*.csv` has a `source` citation and a `source_url` that opens the official PDF at the cited page (for example `…FY%2027%20Adopted%20Budget.pdf#page=114`). The build fails if a row's citation is missing. The full registry is [`data/manual/sources.csv`](data/manual/sources.csv):
+Every hand-entered number in `data/manual/*.csv` has a `source` citation and a `source_url` that opens the official PDF at the cited page (for example `…FY%2027%20Adopted%20Budget.pdf#page=114`). The build fails if a row's citation is missing. The full registry is [`data/manual/sources.csv`](data/manual/sources.csv); its `widgets` column ties each source to the widgets it feeds, and every widget window ends with an automatic **Sources** line built from it:
 
 | Source | Publisher | Format | Used for |
 |---|---|---|---|
@@ -94,6 +96,23 @@ Every hand-entered number in `data/manual/*.csv` has a `source` citation and a `
 | [Zoning by Municipalities: Kannapolis Zoning](https://location.cabarruscounty.us/arcgisservices/rest/services/OpenData/Zoning_By_Municipalities/MapServer/3) | Cabarrus County GIS | ArcGIS REST | Land use & zoning |
 | [Election results: City of Kannapolis Parks and Recreation Bonds Referendum, Nov 3, 2026 (No 10,134 / Yes 7,534; 17 of 17 precincts)](https://er.ncsbe.gov/contest_details.html?election_dt=11/03/2026&county_id=0&contest_id=800012) | NC State Board of Elections | Web page | Debt service note on the parks bond |
 | [National Weather Service forecast, hourly forecast, alerts and observations for Kannapolis (api.weather.gov)](https://forecast.weather.gov/MapClick.php?lat=35.4874&lon=-80.6217) | National Weather Service | JSON API | Weather (live in the browser) |
+| [Kannapolis Police Department web page](https://www.kannapolisnc.gov/KPD) | City of Kannapolis | Web page | Police contacts, services, accreditation notice |
+| [2026 First Quarter Crime Report (Kannapolis Police)](https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/Quarterly%20Reports/2026%20First%20Quarter%20Report.pdf) | City of Kannapolis | PDF | Police crime statistics, Jan–Mar 2026 (p. 4) |
+| [2026 Second Quarter Crime Report (Kannapolis Police)](https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Police/Documents/2026%20Second%20Quarter%20Crime%20Report.pdf) | City of Kannapolis | PDF | Police crime statistics, Apr–Jun 2026 (p. 4) |
+| [Kannapolis Fire Department web pages (overview, operations, community risk reduction, staff directory)](https://www.kannapolisnc.gov/kfd) | City of Kannapolis | Web page | Fire contacts, free programs, stations, forms |
+| [U.S. Census Bureau Geocoder](https://geocoding.geo.census.gov/) | U.S. Census Bureau | JSON API | Map locations of the five fire stations |
+| [2027 Kannapolis Cannon Ballers Schedule](https://img.mlbstatic.com/milb-images/image/upload/milb/kljjd0xd8n8fto71x49u.pdf) | Kannapolis Cannon Ballers (Minor League Baseball) | PDF | Cannon Ballers 2027 schedule |
+| [Customer Service & Utility Billing (how to pay, fees, payment terms)](https://www.kannapolisnc.gov/customer-service) | City of Kannapolis | Web page | Pay Utility Bill |
+| [Census Data API: ACS 5-year detailed tables (used for income trends when a key is configured)](https://www.census.gov/data/developers/data-sets/acs-5year.html) | U.S. Census Bureau | JSON API | People (income over time) |
+| [Executive Team](https://www.kannapolisnc.gov/Government-Departments/Administration/Executive-Team) | City of Kannapolis | Web page | Who runs the City (emails) |
+| [Police Department Staff Directory](https://www.kannapolisnc.gov/Government-Departments/Police/Staff-Directory) | City of Kannapolis | Web page | Who runs the City (police emails) |
+| [Kannapolis Police to Citizen portal (online reports, event map, calls for service, commendations)](https://kannapolisnc.policetocitizen.com/Home) | Kannapolis Police Department | Web page | Kannapolis Police (online services) |
+| [Fire Operations and Support Services (station addresses)](https://www.kannapolisnc.gov/Government-Departments/Fire/Operations-and-Support-Services) | City of Kannapolis | Web page | Fire stations |
+| [Fire Community Risk Reduction Services (programs, Fire Marshal)](https://www.kannapolisnc.gov/Government-Departments/Fire/Community-Risk-Reduction-Services) | City of Kannapolis | Web page | Fire free programs, fire code concerns |
+| [Fire CPR Initiative (free classes)](https://www.kannapolisnc.gov/cpr) | City of Kannapolis | Web page | Free CPR classes |
+| [Fire Educational Program Request](https://www.kannapolisnc.gov/Government-Departments/Fire/Educational-Program-Request) | City of Kannapolis | Web page | Smoke alarms, visits, safety programs |
+| [Fire Department Staff Directory](https://www.kannapolisnc.gov/Government-Departments/Fire/Staff-Directory) | City of Kannapolis | Web page | Fire Marshal and department contacts |
+| [OpenFreeMap basemap tiles (map data © OpenStreetMap contributors)](https://openfreemap.org/) | OpenFreeMap / OpenStreetMap | Map tiles | Background maps |
 
 The news and meetings harvesters are adapted from [kspider](https://github.com/bradspry/kannapolis-news-wire).
 

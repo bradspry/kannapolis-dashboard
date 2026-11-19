@@ -105,6 +105,16 @@ export function renderHome() {
         "aria-label": `Open ${w?.title || t.opens}${t.label ? `: ${t.label}` : ""}`,
         onclick: (e) => openWindow(t.opens, e.currentTarget.closest(".tile-w")) }),
       content,
+      h("button", { class: "tile-top", type: "button", title: "Move to top", "aria-label": `Move the ${t.label || w?.title} widget to the top`,
+        onclick: (e) => {
+          const el = e.currentTarget.closest(".tile-w");
+          if (el === el.parentElement.firstElementChild) { announce(`${t.label || w?.title} is already at the top.`); return; }
+          moveBy(el, -999, (ids) => {
+            commitOrder(ids);
+            announce(`${t.label || w?.title} moved to the top.`);
+            window.scrollTo({ top: 0, behavior: reducedMotion() ? "auto" : "smooth" });
+          });
+        } }, icon("toTop", 16)),
       h("button", { class: "tile-grip", type: "button", "aria-label": `Move the ${t.label || w?.title} widget. Use arrow keys, or drag.`,
         onkeydown: (e) => {
           const step = { ArrowLeft: -1, ArrowUp: -1, ArrowRight: 1, ArrowDown: 1 }[e.key];
@@ -191,12 +201,30 @@ function syncDock() {
 }
 
 // ---------- windows ----------
+let sourceRegistry = {};
+/** The official source registry (data/manual/sources.csv); each entry lists the widgets it feeds. */
+export function setSources(sources) { sourceRegistry = sources || {}; }
+
+/** Every window ends with a "Sources" line built from the registry, so nothing goes uncited. */
+function sourcesFooter(id) {
+  const list = Object.values(sourceRegistry).filter((s) => (s.widgets || []).includes(id));
+  if (!list.length) return null;
+  return h("p", { class: "sources-foot" }, h("b", {}, "Sources: "),
+    ...list.flatMap((s, i) => [h("a", { href: s.url, target: "_blank", rel: "noopener" }, s.title),
+      ` (${s.publisher}${s.format ? `, ${s.format}` : ""})`, i < list.length - 1 ? " · " : ""]),
+    " · ", h("a", { href: "#about" }, "All sources"));
+}
+
 function renderWindow(id) {
   const w = windows.get(id);
   try { w.render(); } catch (e) {
     console.error(`Failed to render ${id}:`, e);
     document.getElementById(id)?.prepend(h("p", { class: "error" }, "Part of this widget couldn't be displayed."));
   }
+  const section = document.getElementById(id);
+  section?.querySelector(":scope > .sources-foot")?.remove();
+  const foot = sourcesFooter(id);
+  if (foot) section?.append(foot);
   rendered.add(id);
 }
 

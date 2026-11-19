@@ -10,6 +10,8 @@ import { weather, wxIcon } from "./weather.js";
 import { alertBanner } from "./sections/weather.js";
 import { callButtons, activeNotices, noticeCard, crimeRows, quarterLabel } from "./sections/police.js";
 import { freeList, stationList } from "./sections/fire.js";
+import { payButtons, feeLine } from "./sections/utility.js";
+import { prepGames, nextHome, homeStands, standLabel, nextGameCard, fmtDay as bbDay, fmtTime as bbTime } from "./sections/baseball.js";
 
 const NS = "http://www.w3.org/2000/svg";
 const svgEl = (tag, attrs = {}) => {
@@ -67,7 +69,7 @@ const contactLinks = (p) => [
 const shortDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
 export function tileDefs(data, COLORS) {
-  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire } = data;
+  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility } = data;
   const t = tokens();
   const geo = census.geographies;
   const k = geo.Kannapolis, nc = geo["North Carolina"], cab = geo["Cabarrus County"], us = geo["United States"];
@@ -173,6 +175,54 @@ export function tileDefs(data, COLORS) {
             h("div", {}, callButtons(fire), freeHead, freeList(fire, 4)),
             h("div", {}, h("div", { class: "mini-head" }, "Fire stations"), stationList(fire, { compact: true }),
               h("p", { class: "tile-meta" }, "ISO Class 1: the best fire-protection rating possible"))));
+      },
+    },
+    utility && {
+      id: "utility", opens: "utility", size: "m", label: "Pay Utility Bill",
+      build: (size) => {
+        const top = [head("bill", COLORS.utility, "Pay utility bill")];
+        const t = utility.terms;
+        const callMain = h("a", { href: `tel:${utility.phones.main.replace(/[^0-9]/g, "")}`, class: "ub-inline" }, utility.phones.main);
+        const ways = (n) => h("ul", { class: "ub-mini" }, utility.ways.filter((w) => !/Online|phone/i.test(w.how)).slice(0, n).map((w) =>
+          h("li", {}, h("b", {}, w.how), h("span", {}, w.detail.split(/[.:]/)[0]))));
+        const dueDays = h("ul", { class: "ub-mini" },
+          h("li", {}, h("b", {}, `Day ${t.past_due_day}`), h("span", {}, "Past due")),
+          h("li", {}, h("b", {}, `Day ${t.late_fee_day}`), h("span", {}, `Late fee: ${t.late_fee_rate * 100}%, max $${t.late_fee_max}`)),
+          h("li", {}, h("b", {}, `Day ${t.disconnect_day}`), h("span", {}, "Service may be cut off")));
+        if (size === "s") return h("div", { class: "tile-body" }, ...top, payButtons(utility, { compact: true }));
+        if (size === "m") return h("div", { class: "tile-body" }, ...top,
+          h("div", { class: "tile-split top ub-m" }, payButtons(utility, { compact: true }), h("div", {}, h("div", { class: "mini-head bb-mh" }, "Other ways"), ways(2))), feeLine(utility));
+        if (size === "l") return h("div", { class: "tile-body" }, ...top, payButtons(utility, { compact: true }), feeLine(utility),
+          h("div", { class: "mini-head" }, "After your bill date"), dueDays,
+          h("p", { class: "tile-meta" }, "Behind? Ask for a payment plan: ", callMain));
+        return h("div", { class: "tile-body" }, ...top,
+          h("div", { class: "tile-split top" },
+            h("div", {}, payButtons(utility), feeLine(utility), h("div", { class: "mini-head" }, "Other ways"), ways(4)),
+            h("div", {}, h("div", { class: "mini-head bb-mh" }, "After your bill date"), dueDays,
+              h("p", { class: "tile-meta" }, "Behind on your bill? Customer Service will set up a payment plan: ", callMain))));
+      },
+    },
+    baseball && {
+      id: "baseball", opens: "baseball", size: "m", label: "Cannon Ballers",
+      build: (size) => {
+        const games = prepGames(baseball);
+        const today0 = new Date(); today0.setHours(0, 0, 0, 0);
+        const stands = homeStands(games).filter((s) => s.end >= today0);
+        const g = nextHome(games);
+        const top = [head("baseball", COLORS.baseball, "Cannon Ballers 2027")];
+        const upcoming = (n) => h("ul", { class: "mini-list" }, games.filter((x) => x.home && x._d >= today0 && x !== g).slice(0, n).map((x) =>
+          h("li", {}, h("span", { class: "mini-date" }, bbDay(x._d, { month: "short", day: "numeric" })), h("span", {}, `vs ${x.opp} · ${bbTime(x.time)}`))));
+        const standList = (n) => h("ul", { class: "bb-stands compact", role: "list" }, stands.slice(0, n).map((s) =>
+          h("li", {}, h("span", { class: "bb-stand-dates" }, standLabel(s)), h("b", {}, `vs ${s.name}`), h("small", {}, `${s.games.length}`))));
+        if (!g) return h("div", { class: "tile-body" }, ...top, nextGameCard(baseball, games, { compact: true }));
+        if (size === "s") return h("div", { class: "tile-body" }, ...top, nextGameCard(baseball, games, { compact: true }));
+        if (size === "m") return h("div", { class: "tile-body" }, ...top,
+          h("div", { class: "tile-split top" }, nextGameCard(baseball, games, { compact: true }), h("div", {}, h("div", { class: "mini-head bb-mh" }, "Next at home"), upcoming(3))));
+        if (size === "l") return h("div", { class: "tile-body" }, ...top, nextGameCard(baseball, games),
+          h("div", { class: "mini-head" }, "Upcoming home stands"), standList(5));
+        return h("div", { class: "tile-body" }, ...top,
+          h("div", { class: "tile-split top" }, h("div", {}, nextGameCard(baseball, games), h("div", { class: "mini-head" }, "Next at home"), upcoming(4)),
+            h("div", {}, h("div", { class: "mini-head bb-mh" }, "Upcoming home stands"), standList(8))));
       },
     },
     gaugeTile({ id: "g-debt-limit", opens: "budget", label: "Legal debt limit used" },
@@ -404,9 +454,9 @@ export function tileDefs(data, COLORS) {
         return h("div", { class: "tile-body" }, ...top,
           h("div", { class: "about-xl" },
             h("div", {}, h("div", { class: "mini-head" }, "Sources by publisher"),
-              h("ul", { class: "pub-list" }, byPublisher(sources).map(([pub, list]) => h("li", {},
+              h("ul", { class: "pub-list" }, byPublisher(sources).slice(0, 5).map(([pub, list]) => h("li", {},
                 h("b", {}, pub), h("span", {}, list.map((x) => x.format).filter((v, i, arr) => arr.indexOf(v) === i).join(" · ")), h("small", {}, list.length))))),
-            h("div", {}, h("div", { class: "mini-head" }, "Freshness"), freshList(9))));
+            h("div", {}, h("div", { class: "mini-head" }, "Freshness"), freshList(8))));
       },
     },
   ].filter(Boolean);
