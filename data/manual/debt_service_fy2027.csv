@@ -1,27 +1,27 @@
-fund,kind,name,project,principal,interest,other,maturity,source,note
-General Fund,Limited obligation bond,LOB 2018C,Stadium,2600000,1532700,0,2039-10-01,fy27_budget p.114,
-General Fund,Installment note,2020 Notes Payable,NCRC Projects,2594000,47730,0,2027-03-01,fy27_budget p.114,
-General Fund,Limited obligation bond,LOB 2014,City Hall / Police Headquarters,1365000,402556,0,2034-04-01,fy27_budget p.114,
-General Fund,Limited obligation bond,LOB 2021,Parking Deck at Vida,735000,245777,0,2041-04-01,fy27_budget p.114,
-General Fund,Special obligation bond,Spec Oblig Bond 2015,Downtown Purchase,733000,157338,0,2030-08-01,fy27_budget p.114,
-General Fund,Limited obligation bond,LOB 2018B,Fire Stations 2 and 3,555000,264402,0,2038-04-01,fy27_budget p.114,
-General Fund,Limited obligation bond,LOB 2018,College Station / Duct Bank / Streetscape,394999,171588,0,2038-04-01,fy27_budget p.114,
-General Fund,Installment note,2017 Notes Payable,Village Park / Fire Truck,446000,110534,0,2037-04-01,fy27_budget p.114,
-General Fund,Short-term borrowing,Short Term Borrowing,Capital Outlay,428000,43189,0,2029-06-01,fy27_budget p.114,
-General Fund,Limited obligation bond,LOB 2020,Irish Buffalo Creek,92000,18382,0,2035-04-01,fy27_budget p.114,
-General Fund,Installment note,2011 Notes Payable,Equipment,0,0,0,2026-06-10,fy27_budget p.114,Paid off before FY27
-General Fund,Lease,Lease,Motorola radios (Police),0,0,0,2025-11-01,fy27_budget p.114,Paid off before FY27
-General Fund,Planned,Proposed short-term borrowing,"Replace City vehicles, machinery and equipment (up to $6M, Oct 2026)",0,225000,0,,fy27_budget p.114,"Interest only in FY27; about $600,000 a year in principal and interest starts in FY28"
-General Fund,Planned,GO bond issuance costs,Parks and recreation projects,0,0,200000,,fy27_budget p.114; ncsbe_2026_parks_bond,"Budgeted in case voters approved the parks General Obligation bond; voters rejected it 57% to 43% on Nov 3, 2026, so this won't be needed"
-Water and Sewer Fund,Revenue bond,Rev Bond 2023,Kannapolis Crossing / Lane St / Water Treatment Plant,873000,210974,0,2042-02-01,fy27_budget p.157,
-Water and Sewer Fund,Revenue bond,Rev Bond 2018,Downtown Water and Sewer,809000,456836,0,2038-04-01,fy27_budget p.157,
-Water and Sewer Fund,Revenue bond,Rev Bond 2021B,Kannapolis Crossing / Lane St / Water Treatment Plant,436000,155828,0,2042-02-01,fy27_budget p.157,
-Water and Sewer Fund,Revenue bond,Rev Bond 2021,Downtown Water and Sewer,509000,148419,0,2038-04-01,fy27_budget p.157,
-Water and Sewer Fund,Revenue bond,Rev Bond 2025,Kannapolis Lake Spillway,0,543211,0,2045-08-01,fy27_budget p.157,Interest only in FY27
-Water and Sewer Fund,Revenue bond,Rev Bond 2017,Davidson Rd Water,326000,133362,0,2041-04-01,fy27_budget p.157,
-Water and Sewer Fund,State revolving loan,Revolving DEQ Loan,Lead Service Line,200000,0,0,2031-05-01,fy27_budget p.157,
-Water and Sewer Fund,Installment note,2011A Notes Payable,Second Creek,15172,2258,0,2032-05-01,fy27_budget p.157,
-Water and Sewer Fund,Revenue bond,Rev Bond 2021C,Kannapolis Crossing / Lane St / Water Treatment Plant,0,0,0,2042-02-01,fy27_budget p.157,No payment budgeted in FY27
-Water and Sewer Fund,Installment note,2011 Notes Payable,Equipment,0,0,0,2026-06-10,fy27_budget p.157,Paid off before FY27
-Water and Sewer Fund,Planned,Debt issuance cost (account 58300),Financing for water and sewer capital projects,0,0,2324147,,fy27_budget p.157 and p.20,"Not itemized; the budget says added debt service is for capital projects that are ""a good candidate for financing"" (p.20) and cites new debt for the Kannapolis Lake spillway and dam ($12M) and a downtown sewer outfall ($4M) (p.75)"
-Stormwater Fund,Installment financing,Stormwater installment obligations,Various stormwater projects,350001,152040,0,2038-04-01,fy27_budget p.163,
+fund,kind,name,project,principal,interest,other,maturity,source,source_url,note
+General Fund,Limited obligation bond,LOB 2018C,Stadium,2600000,1532700,0,2039-10-01,fy27_budget p.114,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/FY%2027%20Adopted%20Budget.pdf#page=114,
+General Fund,Installment note,2020 Notes Payable,NCRC Projects,2594000,47730,0,2027-03-01,fy27_budget p.114,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/FY%2027%20Adopted%20Budget.pdf#page=114,
+General Fund,Limited obligation bond,LOB 2014,City Hall / Police Headquarters,1365000,402556,0,2034-04-01,fy27_budget p.114,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/FY%2027%20Adopted%20Budget.pdf#page=114,
+General Fund,Limited obligation bond,LOB 2021,Parking Deck at Vida,735000,245777,0,2041-04-01,fy27_budget p.114,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/FY%2027%20Adopted%20Budget.pdf#page=114,
+General Fund,Special obligation bond,Spec Oblig Bond 2015,Downtown Purchase,733000,157338,0,2030-08-01,fy27_budget p.114,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/FY%2027%20Adopted%20Budget.pdf#page=114,
+General Fund,Limited obligation bond,LOB 2018B,Fire Stations 2 and 3,555000,264402,0,2038-04-01,fy27_budget p.114,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/FY%2027%20Adopted%20Budget.pdf#page=114,
+General Fund,Limited obligation bond,LOB 2018,College Station / Duct Bank / Streetscape,394999,171588,0,2038-04-01,fy27_budget p.114,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/FY%2027%20Adopted%20Budget.pdf#page=114,
+General Fund,Installment note,2017 Notes Payable,Village Park / Fire Truck,446000,110534,0,2037-04-01,fy27_budget p.114,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/FY%2027%20Adopted%20Budget.pdf#page=114,
+General Fund,Short-term borrowing,Short Term Borrowing,Capital Outlay,428000,43189,0,2029-06-01,fy27_budget p.114,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/FY%2027%20Adopted%20Budget.pdf#page=114,
+General Fund,Limited obligation bond,LOB 2020,Irish Buffalo Creek,92000,18382,0,2035-04-01,fy27_budget p.114,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/FY%2027%20Adopted%20Budget.pdf#page=114,
+General Fund,Installment note,2011 Notes Payable,Equipment,0,0,0,2026-06-10,fy27_budget p.114,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/FY%2027%20Adopted%20Budget.pdf#page=114,Paid off before FY27
+General Fund,Lease,Lease,Motorola radios (Police),0,0,0,2025-11-01,fy27_budget p.114,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/FY%2027%20Adopted%20Budget.pdf#page=114,Paid off before FY27
+General Fund,Planned,Proposed short-term borrowing,"Replace City vehicles, machinery and equipment (up to $6M, Oct 2026)",0,225000,0,,fy27_budget p.114,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/FY%2027%20Adopted%20Budget.pdf#page=114,"Interest only in FY27; about $600,000 a year in principal and interest starts in FY28"
+General Fund,Planned,GO bond issuance costs,Parks and recreation projects,0,0,200000,,fy27_budget p.114; ncsbe_2026_parks_bond,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/FY%2027%20Adopted%20Budget.pdf#page=114,"Budgeted in case voters approved the parks General Obligation bond; voters rejected it 57% to 43% on Nov 3, 2026, so this won't be needed"
+Water and Sewer Fund,Revenue bond,Rev Bond 2023,Kannapolis Crossing / Lane St / Water Treatment Plant,873000,210974,0,2042-02-01,fy27_budget p.157,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/FY%2027%20Adopted%20Budget.pdf#page=157,
+Water and Sewer Fund,Revenue bond,Rev Bond 2018,Downtown Water and Sewer,809000,456836,0,2038-04-01,fy27_budget p.157,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/FY%2027%20Adopted%20Budget.pdf#page=157,
+Water and Sewer Fund,Revenue bond,Rev Bond 2021B,Kannapolis Crossing / Lane St / Water Treatment Plant,436000,155828,0,2042-02-01,fy27_budget p.157,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/FY%2027%20Adopted%20Budget.pdf#page=157,
+Water and Sewer Fund,Revenue bond,Rev Bond 2021,Downtown Water and Sewer,509000,148419,0,2038-04-01,fy27_budget p.157,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/FY%2027%20Adopted%20Budget.pdf#page=157,
+Water and Sewer Fund,Revenue bond,Rev Bond 2025,Kannapolis Lake Spillway,0,543211,0,2045-08-01,fy27_budget p.157,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/FY%2027%20Adopted%20Budget.pdf#page=157,Interest only in FY27
+Water and Sewer Fund,Revenue bond,Rev Bond 2017,Davidson Rd Water,326000,133362,0,2041-04-01,fy27_budget p.157,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/FY%2027%20Adopted%20Budget.pdf#page=157,
+Water and Sewer Fund,State revolving loan,Revolving DEQ Loan,Lead Service Line,200000,0,0,2031-05-01,fy27_budget p.157,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/FY%2027%20Adopted%20Budget.pdf#page=157,
+Water and Sewer Fund,Installment note,2011A Notes Payable,Second Creek,15172,2258,0,2032-05-01,fy27_budget p.157,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/FY%2027%20Adopted%20Budget.pdf#page=157,
+Water and Sewer Fund,Revenue bond,Rev Bond 2021C,Kannapolis Crossing / Lane St / Water Treatment Plant,0,0,0,2042-02-01,fy27_budget p.157,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/FY%2027%20Adopted%20Budget.pdf#page=157,No payment budgeted in FY27
+Water and Sewer Fund,Installment note,2011 Notes Payable,Equipment,0,0,0,2026-06-10,fy27_budget p.157,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/FY%2027%20Adopted%20Budget.pdf#page=157,Paid off before FY27
+Water and Sewer Fund,Planned,Debt issuance cost (account 58300),Financing for water and sewer capital projects,0,0,2324147,,fy27_budget p.157 and p.20,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/FY%2027%20Adopted%20Budget.pdf#page=157,"Not itemized; the budget says added debt service is for capital projects that are ""a good candidate for financing"" (p.20) and cites new debt for the Kannapolis Lake spillway and dam ($12M) and a downtown sewer outfall ($4M) (p.75)"
+Stormwater Fund,Installment financing,Stormwater installment obligations,Various stormwater projects,350001,152040,0,2038-04-01,fy27_budget p.163,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/FY%2027%20Adopted%20Budget.pdf#page=163,

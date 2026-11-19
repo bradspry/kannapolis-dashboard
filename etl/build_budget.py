@@ -39,7 +39,14 @@ def debt_service() -> list[dict]:
 
 
 def main() -> None:
-    sources = {r["id"]: {"title": r["title"], "url": r["url"]} for r in rows("sources.csv")}
+    sources = {r["id"]: {k: r[k] for k in ("title", "publisher", "format", "url", "used_for")} for r in rows("sources.csv")}
+    # Every hand-entered row must cite a known source and link to it.
+    for name in ("general_fund_by_function.csv", "general_fund_revenue.csv", "funds_fy2027.csv",
+                 "tax_rate_history.csv", "debt_history.csv", "debt_service_fy2027.csv"):
+        for i, r in enumerate(rows(name), 2):
+            sid = r["source"].split()[0].rstrip(";")
+            if sid not in sources or not r.get("source_url", "").startswith(sources[sid]["url"]):
+                raise ValueError(f"{name} line {i}: cite a source id from sources.csv and its source_url")
 
     def typed(name, numeric):
         return [{k: (n(v) if k in numeric else v) for k, v in r.items()} for r in rows(name)]

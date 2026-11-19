@@ -73,6 +73,9 @@ export function renderDebtService(budget) {
     { key: "total", label: "Total", num: true, format: usd },
     { key: "maturity", label: "Final payment", format: (v) => (v ? monthYear(parseDate(v)) : "—") },
     { key: "note", label: "Note", format: (v) => v || "" },
+    { key: "source", label: "Source", format: (v, r) => (r.source_url
+      ? h("a", { href: r.source_url, target: "_blank", rel: "noopener" }, (v || "").replace(/^fy27_budget /, "FY27 budget ").replace(/; .*/, ""))
+      : "") },
   ], [...items.map((i) => ({ ...i, total: total(i) })),
      { fund: "All funds", name: "Total", project: "", principal: sum("principal"), interest: sum("interest"), other: sum("other"), total: grand }],
   "Show the full schedule"));

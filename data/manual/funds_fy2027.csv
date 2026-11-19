@@ -1,8 +1,8 @@
-fund,amount,description,source
-General Fund,90022285,"Police, fire, parks, streets, planning and administration",fy27_ordinance Sec I
-Water and Sewer Fund,32504004,"Drinking water, wastewater treatment and pipes",fy27_ordinance Sec II
-Insurance and Risk Fund,8825900,Employee health insurance and workers' compensation,fy27_ordinance Sec VII
-Environmental Fund,8064746,Garbage and recycling collection,fy27_ordinance Sec IV
-Stormwater Fund,3927549,Drainage and stormwater management,fy27_ordinance Sec III
-Transit Fund,1210205,Rider public transit,fy27_ordinance Sec VI
-Separation Pay Fund,758000,Retirement separation pay for sworn officers,fy27_ordinance Sec V
+fund,amount,description,source,source_url
+General Fund,90022285,"Police, fire, parks, streets, planning and administration",fy27_ordinance Sec I,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Budget%20Ordinance%20FY%202027.pdf#page=1
+Water and Sewer Fund,32504004,"Drinking water, wastewater treatment and pipes",fy27_ordinance Sec II,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Budget%20Ordinance%20FY%202027.pdf#page=1
+Insurance and Risk Fund,8825900,Employee health insurance and workers' compensation,fy27_ordinance Sec VII,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Budget%20Ordinance%20FY%202027.pdf#page=2
+Environmental Fund,8064746,Garbage and recycling collection,fy27_ordinance Sec IV,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Budget%20Ordinance%20FY%202027.pdf#page=1
+Stormwater Fund,3927549,Drainage and stormwater management,fy27_ordinance Sec III,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Budget%20Ordinance%20FY%202027.pdf#page=1
+Transit Fund,1210205,Rider public transit,fy27_ordinance Sec VI,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Budget%20Ordinance%20FY%202027.pdf#page=2
+Separation Pay Fund,758000,Retirement separation pay for sworn officers,fy27_ordinance Sec V,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Budget%20Ordinance%20FY%202027.pdf#page=2

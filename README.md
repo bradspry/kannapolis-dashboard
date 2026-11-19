@@ -64,6 +64,30 @@ It prints the address to open on your phone (for example `http://192.168.1.20:51
 | City Council | [City Council page](https://www.kannapolisnc.gov/citycouncil) | **By hand**: `data/manual/council.csv`, photos in `site/photos/council/` |
 | Who runs the City | The City's 2026 org chart and staff directory | **By hand**: `data/manual/org_chart.json`, photos in `site/photos/staff/` |
 
+### Official sources
+
+Every hand-entered number in `data/manual/*.csv` has a `source` citation and a `source_url` that opens the official PDF at the cited page (for example `…FY%2027%20Adopted%20Budget.pdf#page=114`). The build fails if a row's citation is missing. The full registry is [`data/manual/sources.csv`](data/manual/sources.csv):
+
+| Source | Publisher | Format | Used for |
+|---|---|---|---|
+| [FY 2026-27 Budget Ordinance (adopted June 22, 2026)](https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Budget%20Ordinance%20FY%202027.pdf) | City of Kannapolis | PDF | Budget & debt; fund totals; tax rate; debt service totals |
+| [FY 2026-27 Adopted Budget Document](https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/FY%2027%20Adopted%20Budget.pdf) | City of Kannapolis | PDF | Debt service schedule (PDF pp. 114, 157, 163); debt policy (p. 48) |
+| [FY 2025-26 Adopted Budget Document](https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf) | City of Kannapolis | PDF | General Fund history (p. 110); tax rate and assessed value history (pp. 255-256) |
+| [Annual Comprehensive Financial Report, fiscal year ended June 30, 2025](https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Annual%20Financial%20Report/City%20of%20Kannapolis%20-%202025%20Audit%20Report.pdf) | City of Kannapolis | PDF | Outstanding debt (Table 10, p. 217), legal debt margin (Table 12, p. 219), population (Table 14, p. 221) |
+| [City of Kannapolis 2026 Organizational Chart](https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Administration/Documents/Kannapolis%202026%20Organizational%20Restructuring_pdf%20(Real%20Estate%20Flyer)%20(3).png?ver=KPxbJgZQ_avWU5oc4CTq3Q%3d%3d) | City of Kannapolis | PNG | Who runs the City |
+| [Administration Staff Directory](https://www.kannapolisnc.gov/Government-Departments/Administration/Staff-Directory) | City of Kannapolis | Web page | Staff emails and phones |
+| [City Council](https://www.kannapolisnc.gov/citycouncil) | City of Kannapolis | Web page | City Council names, emails, phones, photos |
+| [City News](https://www.kannapolisnc.gov/news) | City of Kannapolis | Web page | City news |
+| [Upcoming Events (RSS)](https://www.kannapolisnc.gov/DesktopModules/Events/EventRSS.aspx?mid=650&tabid=56) | City of Kannapolis | RSS | Upcoming events |
+| [Public meetings portal (CivicClerk) and its API](https://kannapolisnc.portal.civicclerk.com) | City of Kannapolis | JSON API | Public meetings, agendas and minutes |
+| [American Community Survey 2020-2024 5-year estimates: Kannapolis city, NC](https://data.census.gov/profile/Kannapolis_city,_North_Carolina?g=160XX00US3735200) | U.S. Census Bureau | CSV | People; homeowners gauge |
+| [Census Reporter profile and API (ACS tables B01001, B01002, B01003, B03002, B08301, B15003, B17001, B19013, B25003, B25064, B25077)](https://censusreporter.org/profiles/16000US3735200-kannapolis-nc/) | Census Reporter (U.S. Census Bureau data) | CSV | People (the API this dashboard calls) |
+| [Tax Parcels (current)](https://location.cabarruscounty.us/arcgisservices/rest/services/OpenData/Tax_Parcels/MapServer/1) | Cabarrus County GIS | ArcGIS REST | Growth & property |
+| [Historical parcel and boundary snapshots (Historical_YYYY services)](https://location.cabarruscounty.us/arcgisservices/rest/services/OpenData) | Cabarrus County GIS | ArcGIS REST | Growth & property history |
+| [Municipal Districts (city limits)](https://location.cabarruscounty.us/arcgisservices/rest/services/OpenData/MunicipalDistrict/MapServer/0) | Cabarrus County GIS | ArcGIS REST | City boundary and area |
+| [Zoning by Municipalities: Kannapolis Zoning](https://location.cabarruscounty.us/arcgisservices/rest/services/OpenData/Zoning_By_Municipalities/MapServer/3) | Cabarrus County GIS | ArcGIS REST | Land use & zoning |
+| [Election results: City of Kannapolis Parks and Recreation Bonds Referendum, Nov 3, 2026 (No 10,134 / Yes 7,534; 17 of 17 precincts)](https://er.ncsbe.gov/contest_details.html?election_dt=11/03/2026&county_id=0&contest_id=800012) | NC State Board of Elections | Web page | Debt service note on the parks bond |
+
 The news and meetings harvesters are adapted from [kspider](https://github.com/bradspry/kannapolis-news-wire).
 
 **Coverage:** Kannapolis spans Cabarrus *and* Rowan counties. Property, growth and zoning cover the Cabarrus part only; Census and budget figures cover the whole city. Parcel data is published only as aggregates, with no owner names or individual parcels.

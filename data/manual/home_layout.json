@@ -4,6 +4,7 @@
     "news",
     "council",
     "org",
+    "events",
     "people",
     "budget",
     "debt-service",
@@ -22,7 +23,8 @@
     "council": "m",
     "org": "m",
     "debt-service": "l",
-    "people": "l",
-    "about": "m"
+    "people": "m",
+    "about": "l",
+    "growth": "s"
   }
 }

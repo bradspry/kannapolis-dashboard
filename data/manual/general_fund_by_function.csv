@@ -1,36 +1,36 @@
-fiscal_year,function,amount,source
-2023,General government,9117500,fy26_budget p110
-2023,Planning,1102225,fy26_budget p110
-2023,Public safety,20265066,fy26_budget p110
-2023,Parks and recreation,5650799,fy26_budget p110
-2023,Public works,4853405,fy26_budget p110
-2023,Other,6537498,fy26_budget p110
-2023,Debt service,14960666,fy26_budget p110
-2024,General government,11518036,fy26_budget p110
-2024,Planning,1263207,fy26_budget p110
-2024,Public safety,24950736,fy26_budget p110
-2024,Parks and recreation,7027545,fy26_budget p110
-2024,Public works,5719735,fy26_budget p110
-2024,Other,5907929,fy26_budget p110
-2024,Debt service,13984091,fy26_budget p110
-2025,General government,14143755,fy26_budget p110
-2025,Planning,1339115,fy26_budget p110
-2025,Public safety,25958779,fy26_budget p110
-2025,Parks and recreation,9217946,fy26_budget p110
-2025,Public works,6079494,fy26_budget p110
-2025,Other,12345887,fy26_budget p110
-2025,Debt service,14175856,fy26_budget p110
-2026,General government,14315886,fy26_budget p110
-2026,Planning,1534126,fy26_budget p110
-2026,Public safety,32111129,fy26_budget p110
-2026,Parks and recreation,9773803,fy26_budget p110
-2026,Public works,6565534,fy26_budget p110
-2026,Other,7756754,fy26_budget p110
-2026,Debt service,13926149,fy26_budget p110
-2027,General government,14577619,fy27_ordinance Sec VIII
-2027,Planning,1587491,fy27_ordinance Sec VIII
-2027,Public safety,34800415,fy27_ordinance Sec VIII
-2027,Parks and recreation,9304730,fy27_ordinance Sec VIII
-2027,Public works,7010611,fy27_ordinance Sec VIII
-2027,Other,9379224,fy27_ordinance Sec VIII
-2027,Debt service,13362195,fy27_ordinance Sec VIII
+fiscal_year,function,amount,source,source_url
+2023,General government,9117500,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2023,Planning,1102225,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2023,Public safety,20265066,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2023,Parks and recreation,5650799,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2023,Public works,4853405,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2023,Other,6537498,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2023,Debt service,14960666,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2024,General government,11518036,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2024,Planning,1263207,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2024,Public safety,24950736,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2024,Parks and recreation,7027545,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2024,Public works,5719735,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2024,Other,5907929,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2024,Debt service,13984091,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2025,General government,14143755,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2025,Planning,1339115,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2025,Public safety,25958779,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2025,Parks and recreation,9217946,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2025,Public works,6079494,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2025,Other,12345887,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2025,Debt service,14175856,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2026,General government,14315886,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2026,Planning,1534126,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2026,Public safety,32111129,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2026,Parks and recreation,9773803,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2026,Public works,6565534,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2026,Other,7756754,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2026,Debt service,13926149,fy26_budget p110,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Budget/FY%2026%20-%20FINAL%20Budget%20Document.pdf#page=110
+2027,General government,14577619,fy27_ordinance Sec VIII,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Budget%20Ordinance%20FY%202027.pdf#page=2
+2027,Planning,1587491,fy27_ordinance Sec VIII,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Budget%20Ordinance%20FY%202027.pdf#page=2
+2027,Public safety,34800415,fy27_ordinance Sec VIII,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Budget%20Ordinance%20FY%202027.pdf#page=2
+2027,Parks and recreation,9304730,fy27_ordinance Sec VIII,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Budget%20Ordinance%20FY%202027.pdf#page=2
+2027,Public works,7010611,fy27_ordinance Sec VIII,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Budget%20Ordinance%20FY%202027.pdf#page=2
+2027,Other,9379224,fy27_ordinance Sec VIII,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Budget%20Ordinance%20FY%202027.pdf#page=2
+2027,Debt service,13362195,fy27_ordinance Sec VIII,https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Budget%20Ordinance%20FY%202027.pdf#page=2

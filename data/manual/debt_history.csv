@@ -1,11 +1,11 @@
-fiscal_year,total_debt,governmental_debt,business_debt,debt_per_capita,debt_limit,net_debt_applicable,legal_debt_margin,population,source
-2016,110495541,70129913,40365628,2395,299633000,81130000,218503000,46144,acfr_2025 Tables 10/12/14
-2017,102851522,65252195,37599327,2150,314367000,73488000,240879000,47839,acfr_2025 Tables 10/12/14
-2018,152392924,78848626,73544298,3122,321583000,103280000,218303000,48806,acfr_2025 Tables 10/12/14
-2019,193739618,72103618,121636000,3893,331051000,147057000,183994000,49761,acfr_2025 Tables 10/12/14
-2020,180551726,63013726,117538000,3469,350279000,136488000,213791000,52053,acfr_2025 Tables 10/12/14
-2021,193329034,134356837,58972197,3640,415711000,140306000,275405000,53114,acfr_2025 Tables 10/12/14
-2022,192148098,126236102,65911996,3529,436896000,126288000,310608000,54446,acfr_2025 Tables 10/12/14
-2023,173723553,112290558,61432995,3073,458190000,115453000,342737000,56534,acfr_2025 Tables 10/12/14
-2024,159188593,102385599,56802994,2822,500049000,105443000,394606000,56417,acfr_2025 Tables 10/12/14
-2025,145717770,93624776,52092994,2525,721731000,97127000,624604000,57706,acfr_2025 Tables 10/12/14
+fiscal_year,total_debt,governmental_debt,business_debt,debt_per_capita,debt_limit,net_debt_applicable,legal_debt_margin,population,source,source_url
+2016,110495541,70129913,40365628,2395,299633000,81130000,218503000,46144,acfr_2025 Tables 10/12/14 (pp. 217/219/221),https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Annual%20Financial%20Report/City%20of%20Kannapolis%20-%202025%20Audit%20Report.pdf#page=217
+2017,102851522,65252195,37599327,2150,314367000,73488000,240879000,47839,acfr_2025 Tables 10/12/14 (pp. 217/219/221),https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Annual%20Financial%20Report/City%20of%20Kannapolis%20-%202025%20Audit%20Report.pdf#page=217
+2018,152392924,78848626,73544298,3122,321583000,103280000,218303000,48806,acfr_2025 Tables 10/12/14 (pp. 217/219/221),https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Annual%20Financial%20Report/City%20of%20Kannapolis%20-%202025%20Audit%20Report.pdf#page=217
+2019,193739618,72103618,121636000,3893,331051000,147057000,183994000,49761,acfr_2025 Tables 10/12/14 (pp. 217/219/221),https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Annual%20Financial%20Report/City%20of%20Kannapolis%20-%202025%20Audit%20Report.pdf#page=217
+2020,180551726,63013726,117538000,3469,350279000,136488000,213791000,52053,acfr_2025 Tables 10/12/14 (pp. 217/219/221),https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Annual%20Financial%20Report/City%20of%20Kannapolis%20-%202025%20Audit%20Report.pdf#page=217
+2021,193329034,134356837,58972197,3640,415711000,140306000,275405000,53114,acfr_2025 Tables 10/12/14 (pp. 217/219/221),https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Annual%20Financial%20Report/City%20of%20Kannapolis%20-%202025%20Audit%20Report.pdf#page=217
+2022,192148098,126236102,65911996,3529,436896000,126288000,310608000,54446,acfr_2025 Tables 10/12/14 (pp. 217/219/221),https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Annual%20Financial%20Report/City%20of%20Kannapolis%20-%202025%20Audit%20Report.pdf#page=217
+2023,173723553,112290558,61432995,3073,458190000,115453000,342737000,56534,acfr_2025 Tables 10/12/14 (pp. 217/219/221),https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Annual%20Financial%20Report/City%20of%20Kannapolis%20-%202025%20Audit%20Report.pdf#page=217
+2024,159188593,102385599,56802994,2822,500049000,105443000,394606000,56417,acfr_2025 Tables 10/12/14 (pp. 217/219/221),https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Annual%20Financial%20Report/City%20of%20Kannapolis%20-%202025%20Audit%20Report.pdf#page=217
+2025,145717770,93624776,52092994,2525,721731000,97127000,624604000,57706,acfr_2025 Tables 10/12/14 (pp. 217/219/221),https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/Documents/Annual%20Financial%20Report/City%20of%20Kannapolis%20-%202025%20Audit%20Report.pdf#page=217

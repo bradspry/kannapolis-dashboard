@@ -15,6 +15,7 @@ import { renderMeetings } from "./sections/meetings.js";
 import { renderNews } from "./sections/news.js";
 import { renderEvents } from "./sections/events.js";
 import { renderDebtService } from "./sections/debtservice.js";
+import { renderAbout } from "./sections/about.js";
 
 function load(name, { optional = false } = {}) {
   const d = window.KDASH_DATA?.[name];
@@ -22,28 +23,6 @@ function load(name, { optional = false } = {}) {
   return d ?? null;
 }
 
-function about({ census, budget, property, zoning }) {
-  const src = budget.sources;
-  const body = document.getElementById("about-body");
-  body.replaceChildren(
-    h("h3", {}, "Where the numbers come from"),
-    h("ul", {},
-      h("li", {}, h("b", {}, "People: "), `${census.source}, ${census.release} (${census.years}). `,
-        h("a", { href: "https://censusreporter.org/profiles/16000US3735200-kannapolis-nc/" }, "Census Reporter profile")),
-      h("li", {}, h("b", {}, "Growth, property & zoning: "), "Cabarrus County GIS open data — current and historical (2005–2024) tax parcels, municipal boundaries and Kannapolis zoning. ",
-        h("a", { href: "https://location.cabarruscounty.us/arcgisservices/rest/services/OpenData" }, "County GIS services")),
-      h("li", {}, h("b", {}, "Budget & debt: "), "Transcribed from City documents: ",
-        ...Object.values(src).flatMap((s, i, a) => [h("a", { href: s.url }, s.title), i < a.length - 1 ? "; " : "."]))),
-    h("h3", {}, "Things to know"),
-    h("ul", {},
-      h("li", {}, "Kannapolis sits in both Cabarrus and Rowan counties. Property, growth and zoning figures cover the Cabarrus County part only. Census and budget figures cover the whole city."),
-      h("li", {}, "Census figures are survey estimates averaged over five years and carry margins of error."),
-      h("li", {}, "Dollar amounts are not adjusted for inflation."),
-      ...budget.notes.map((n) => h("li", {}, n))),
-    h("h3", {}, "Spot a problem?"),
-    h("p", {}, "This dashboard is open source. Every chart has a “Show data” table with the exact numbers, and the budget figures cite the page they came from."),
-  );
-}
 
 
 // Icon-chip color per widget (identity only; follows the categorical order).
@@ -75,7 +54,7 @@ function main() {
   if (D.meetings) win("meetings", { title: "Public meetings", short: "Meetings", icon: "meetings", color: "var(--series-4)", render: () => renderMeetings(D.meetings) });
   if (D.council) win("council", { title: "City Council", short: "Council", icon: "council", color: "var(--series-1)", render: () => renderCouncil(D.council) });
   if (D.org) win("org", { title: "Who runs the City", short: "Staff", icon: "org", color: "var(--series-3)", render: () => renderOrg(D.org) });
-  win("about", { title: "About the data", short: "About", icon: "about", color: "var(--muted-fill)", render: () => about(D) });
+  win("about", { title: "About the data", short: "About", icon: "about", color: "var(--muted-fill)", render: () => renderAbout(D) });
 
   initOS({ defaultLayout: load("home_layout.json", { optional: true }) });
   defineTiles(() => tileDefs(D, colors()));

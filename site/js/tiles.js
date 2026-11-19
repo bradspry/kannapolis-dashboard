@@ -5,6 +5,7 @@ import { gauge } from "./gauge.js";
 import { chip } from "./os.js";
 import { fy, num, pct, usd, usdCompact } from "./format.js";
 import { upcomingEvents, whenLabel, fmtTime } from "./sections/events.js";
+import { datasets, ago, fmtDate, byPublisher, formatCounts, statusDot } from "./sections/about.js";
 
 const NS = "http://www.w3.org/2000/svg";
 const svgEl = (tag, attrs = {}) => {
@@ -256,9 +257,30 @@ export function tileDefs(data, COLORS) {
         const avatar = (m) => (m.photo ? h("img", { src: m.photo, alt: "" }) : h("span", { class: "avatar-fallback" }, m.name[0]));
         const mayor = council.members.find((m) => m.role === "Mayor");
         const email = h("a", { class: "tile-action", href: `mailto:${council.group_email}` }, size === "s" ? "Email all" : "Email all of Council");
-        if (!isBig(size)) return h("div", { class: "tile-body" }, head("council", COLORS.council, size === "s" ? "City Council" : "Your City Council"),
-          h("div", { class: "avatars" }, council.members.slice(0, size === "s" ? 4 : 7).map(avatar)),
-          h("div", { class: "tile-meta" }, size === "s" ? `${council.members.length} members` : `${council.members.length} members · Mayor ${mayor?.name || ""}`), email);
+        if (size === "s") return h("div", { class: "tile-body" }, head("council", COLORS.council, "City Council"),
+          h("div", { class: "avatars" }, council.members.slice(0, 4).map(avatar)),
+          h("div", { class: "tile-meta" }, `${council.members.length} members`), email);
+        if (size === "m") {
+          // Right side: the next Council meeting, and the two Council leaders.
+          const next = meetings && parseM().find((m) => /council/i.test(`${m.category || ""} ${m.title}`));
+          const leaders = council.members.filter((m) => m.role === "Mayor" || m.role === "Mayor Pro Tem");
+          return h("div", { class: "tile-body" }, head("council", COLORS.council, "Your City Council"),
+            h("div", { class: "council-m" },
+              h("div", { class: "council-m-left" },
+                h("div", { class: "avatars" }, council.members.map(avatar)),
+                h("div", { class: "tile-meta" }, `${council.members.length} members · one email reaches them all`), email),
+              h("div", { class: "council-m-right" },
+                next ? h("div", { class: "council-next" },
+                  h("div", { class: "date-block sm" }, h("span", {}, next._d.toLocaleDateString("en-US", { month: "short" })), h("b", {}, next._d.getDate())),
+                  h("div", {},
+                    h("div", { class: "mini-head" }, "Next Council meeting"),
+                    h("div", { class: "council-next-when" }, `${next._d.toLocaleDateString("en-US", { weekday: "long" })} · ${next._d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}`),
+                    h("span", { class: `pill ${next.agenda ? "ok" : ""}` }, next.agenda ? "Agenda posted" : "No agenda yet"))) : null,
+                h("ul", { class: "council-leaders" }, leaders.map((m) => h("li", {}, avatar(m),
+                  h("div", {}, h("b", {}, m.name), h("span", {}, m.role)),
+                  m.phone ? h("a", { class: "mail-link", href: `tel:${m.phone.replace(/[^0-9+]/g, "")}`, "aria-label": `Call ${m.name}, ${m.phone}` }, "☎") : null,
+                  m.email ? h("a", { class: "mail-link", href: `mailto:${m.email}`, "aria-label": `Email ${m.name}` }, "✉") : null))))));
+        }
         return h("div", { class: "tile-body" }, head("council", COLORS.council, "Your City Council"),
           h("ul", { class: `people-list ${size === "xl" ? "cols-2" : ""}` }, council.members.map((m) => h("li", {}, avatar(m),
             h("div", {}, h("b", {}, m.name), h("span", {}, m.role)),
@@ -284,11 +306,27 @@ export function tileDefs(data, COLORS) {
     },
     {
       id: "about", opens: "about", size: "s", label: "About the data",
-      build: (size) => h("div", { class: "tile-body" },
-        head("about", COLORS.about, "About the data"),
-        h("p", { class: "tile-meta" }, "Census, Cabarrus County GIS, City budgets, audits, meetings and news. Every number cites its source."),
-        size !== "s" ? h("ul", { class: "mini-legend about-src" }, ["U.S. Census ACS", "Cabarrus County GIS", "FY27 budget & ordinance", "2025 audit", "CivicClerk meetings", "City news", "NC State Board of Elections"].slice(0, isBig(size) ? 7 : 4).map((x) => h("li", {}, x))) : null,
-        h("div", { class: "tile-meta" }, `Refreshed ${budget.generated || ""}`)),
+      build: (size) => {
+        const sources = budget.sources, n = Object.keys(sources).length;
+        const fresh = datasets(data);
+        const newest = fresh.reduce((x, y) => (y.date > x.date ? y : x), fresh[0]);
+        const counts = h("ul", { class: "fmt-counts" }, formatCounts(sources).map(([f, c]) => h("li", {}, h("b", {}, c), ` ${f}`)));
+        const top = [head("about", COLORS.about, "About the data"),
+          h("div", { class: "about-big" }, big(String(n)), h("span", {}, "official sources"))];
+        const refreshed = h("div", { class: "tile-meta" }, newest ? `Data refreshed ${ago(newest.age).toLowerCase()} · ${fmtDate(newest.date)}` : "");
+        if (size === "s") return h("div", { class: "tile-body" }, ...top, refreshed);
+        if (size === "m") return h("div", { class: "tile-body" }, ...top, counts, refreshed);
+        const freshList = (k) => h("ul", { class: "fresh-mini" }, fresh.slice(0, k).map((f) =>
+          h("li", {}, statusDot(f.status), h("span", {}, f.name), h("small", {}, f.status === "manual" ? "by hand" : ago(f.age)))));
+        if (size === "l") return h("div", { class: "tile-body" }, ...top, counts,
+          h("div", { class: "mini-head" }, "Freshness"), freshList(6));
+        return h("div", { class: "tile-body" }, ...top,
+          h("div", { class: "about-xl" },
+            h("div", {}, h("div", { class: "mini-head" }, "Sources by publisher"),
+              h("ul", { class: "pub-list" }, byPublisher(sources).map(([pub, list]) => h("li", {},
+                h("b", {}, pub), h("span", {}, list.map((x) => x.format).filter((v, i, arr) => arr.indexOf(v) === i).join(" · ")), h("small", {}, list.length))))),
+            h("div", {}, h("div", { class: "mini-head" }, "Freshness"), freshList(9))));
+      },
     },
   ].filter(Boolean);
 }
