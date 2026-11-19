@@ -1,6 +1,7 @@
 {
   "order": [
     "gem",
+    "swanee",
     "parks",
     "utility",
     "police",
@@ -41,7 +42,7 @@
     "g-owners": "m",
     "baseball": "m",
     "utility": "m",
-    "parks": "m"
+    "parks": "l"
   },
   "spacers": []
 }

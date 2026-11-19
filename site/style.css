@@ -1398,3 +1398,19 @@ body.editing .tile-w:first-child .tile-top { opacity: .4; }
 .gem-strip .gem-poster.md { width: 100%; max-height: 220px; }
 @media (max-width: 720px) { .gem-hero { flex-direction: column; } .gem-poster.lg { width: 140px; } .gem-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 720px) { .size-s .gem-tile-now .gem-poster { display: none; } }
+
+/* ---------- The Swanee Theatre ---------- */
+.sw-img { display: block; object-fit: cover; border-radius: 10px; background: var(--page); border: 1px solid var(--border); flex: none; }
+.sw-img.lg { width: 240px; aspect-ratio: 3 / 2; }
+.sw-img.md { width: 120px; aspect-ratio: 3 / 2; }
+.sw-img.sm { width: 74px; aspect-ratio: 3 / 2; border-radius: 7px; }
+.sw-img.none { display: grid; place-items: center; font-size: 24px; }
+.sw-shows { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 10px; }
+.sw-show { display: flex; gap: 12px; align-items: flex-start; padding: 10px; border-radius: 14px; background: var(--surface-1); border: 1px solid var(--border); }
+.sw-when { font-size: 12.5px; color: var(--accent-ink); font-weight: 600; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+.sw-title { display: block; font-size: 14.5px; line-height: 1.25; margin: 2px 0; }
+.sw-rent { position: relative; z-index: 2; align-self: flex-start; }
+.sw-rent.compact { padding: 6px 13px; font-size: 13px; margin-top: 6px; }
+.sw-rent-card .gem-actions { margin-top: 10px; }
+@media (max-width: 720px) { .sw-img.lg { width: 100%; } .sw-shows { grid-template-columns: minmax(0, 1fr); } .sw-img.md { width: 92px; } }
+@media (max-width: 720px) { .size-s .gem-tile-now .sw-img { display: none; } }

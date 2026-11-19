@@ -3,11 +3,11 @@ name: Refresh data
 on:
   schedule:
     - cron: "0 9 * * 1" # Mondays 09:00 UTC: everything
-    - cron: "30 10 * * *" # daily 10:30 UTC: meetings, news, events, weather, Gem (time-sensitive)
+    - cron: "30 10 * * *" # daily 10:30 UTC: meetings, news, events, weather, Gem, Swanee (time-sensitive)
   workflow_dispatch:
     inputs:
       steps:
-        description: "Steps to run (space-separated: budget census council meetings news events weather gem org zoning property). Blank = all."
+        description: "Steps to run (space-separated: budget census council meetings news events weather gem swanee org zoning property). Blank = all."
         required: false
         default: ""
 
@@ -31,7 +31,7 @@ jobs:
         env:
           CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
           KDASH_CONTACT: ${{ secrets.KDASH_CONTACT }}
-        run: python etl/run_all.py ${{ github.event.schedule == '30 10 * * *' && 'meetings news events weather gem' || github.event.inputs.steps }}
+        run: python etl/run_all.py ${{ github.event.schedule == '30 10 * * *' && 'meetings news events weather gem swanee' || github.event.inputs.steps }}
       - name: Commit changed data
         if: always()
         run: |

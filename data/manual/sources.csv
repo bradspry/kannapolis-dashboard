@@ -44,6 +44,10 @@ gis_facilities,County Facilities (location of Vietnam Veterans Park),Cabarrus Co
 christmas_page,"A Kannapolis Christmas (Celebration of Lights, parade, holiday events)",City of Kannapolis,Web page,https://www.kannapolisnc.gov/christmas,"Holiday events, carousel & train holiday season",parks
 gem_tickets,The Gem Theatre: Tickets (now showing and coming soon),The Gem Theatre (City of Kannapolis),Web page,https://gem-theatre.com/Tickets,"What's showing, dates, posters",gem
 gem_info,"The Gem Theatre: Ticket Information (prices, policies, accessibility)",The Gem Theatre (City of Kannapolis),Web page,https://gem-theatre.com/Movies/Ticket-Information,Prices and policies,gem
-gem_parking,The Gem Theatre: Public Parking,The Gem Theatre (City of Kannapolis),Web page,https://gem-theatre.com/Parking,Parking and shuttle,gem
+gem_parking,The Gem Theatre: Public Parking,The Gem Theatre (City of Kannapolis),Web page,https://gem-theatre.com/Parking,Parking and shuttle,gem swanee
 gem_now,The Gem Theatre: Now Playing (fallback listing source),The Gem Theatre (City of Kannapolis),Web page,https://gem-theatre.com/Movies/Now-Playing,Gem listings if the Tickets page changes,gem
 gem_soon,The Gem Theatre: Coming Soon (fallback listing source),The Gem Theatre (City of Kannapolis),Web page,https://gem-theatre.com/Movies/Coming-Soon,Gem listings if the Tickets page changes,gem
+swanee_events,The Swanee Theatre events (public Events Calendar feed),The Swanee Theatre (City of Kannapolis),JSON API,https://swaneetheatre.com/events/,"Upcoming shows, times, tickets",swanee
+swanee_weekly,The Swanee Theatre: Weekly Happenings,The Swanee Theatre (City of Kannapolis),Web page,https://swaneetheatre.com/weekly-happenings/,Weekly dance nights,swanee
+swanee_rent,Rent The Swanee (capacity and rates),The Swanee Theatre (City of Kannapolis),Web page,https://swaneetheatre.com/rent-the-swanee/,Rentals,swanee
+swanee_site,"The Swanee Theatre website (contact, address)",The Swanee Theatre (City of Kannapolis),Web page,https://swaneetheatre.com,Contact info,swanee

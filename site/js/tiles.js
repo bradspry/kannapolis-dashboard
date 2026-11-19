@@ -13,6 +13,7 @@ import { freeList, stationList } from "./sections/fire.js";
 import { payButtons, feeLine } from "./sections/utility.js";
 import { parkButtons, seasonStatus, holidayStatus } from "./sections/parks.js";
 import { gemLineup, whenText as gemWhen, poster as gemPoster, rating as gemRating, ticketsButton } from "./sections/gem.js";
+import { upcomingShows, whenBadge as swBadge, dayOf as swDay, timeOf as swTime, rentButton, showImage, weeklyStatus } from "./sections/swanee.js";
 import { prepGames, nextHome, homeStands, standLabel, nextGameCard, fmtDay as bbDay, fmtTime as bbTime } from "./sections/baseball.js";
 
 const NS = "http://www.w3.org/2000/svg";
@@ -71,7 +72,7 @@ const contactLinks = (p) => [
 const shortDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
 export function tileDefs(data, COLORS) {
-  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem } = data;
+  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee } = data;
   const t = tokens();
   const geo = census.geographies;
   const k = geo.Kannapolis, nc = geo["North Carolina"], cab = geo["Cabarrus County"], us = geo["United States"];
@@ -177,6 +178,29 @@ export function tileDefs(data, COLORS) {
             h("div", {}, callButtons(fire), freeHead, freeList(fire, 4)),
             h("div", {}, h("div", { class: "mini-head" }, "Fire stations"), stationList(fire, { compact: true }),
               h("p", { class: "tile-meta" }, "ISO Class 1: the best fire-protection rating possible"))));
+      },
+    },
+    swanee && {
+      id: "swanee", opens: "swanee", size: "m", label: "The Swanee Theatre",
+      build: (size) => {
+        const shows = upcomingShows(swanee);
+        const next = shows[0];
+        const top = [head("mic", COLORS.swanee, "The Swanee Theatre")];
+        const nextBlock = next ? h("div", { class: "gem-tile-now" }, showImage(next, "sm"),
+          h("div", {}, h("div", { class: "bb-next-label" }, swBadge(next._d) || "Next show"), h("div", { class: "gem-tile-title" }, next.title),
+            h("div", { class: "tile-meta" }, `${swDay(next._d)} · ${swTime(next._d)}`))) : h("p", { class: "tile-meta" }, "No shows listed right now.");
+        const list = (n) => h("ul", { class: "mini-list" }, shows.slice(1, 1 + n).map((e) =>
+          h("li", {}, h("span", { class: "mini-date" }, swDay(e._d, { month: "short", day: "numeric" })), h("span", {}, e.title))));
+        const weekly = h("ul", { class: "ub-mini pk-mini" }, swanee.weekly.map((w) => h("li", {}, h("b", {}, w.title), h("span", {}, weeklyStatus(w).label))));
+        if (size === "s") return h("div", { class: "tile-body" }, ...top, nextBlock);
+        if (size === "m") return h("div", { class: "tile-body" }, ...top,
+          h("div", { class: "tile-split top" }, nextBlock, h("div", {}, h("div", { class: "mini-head bb-mh" }, "Coming up"), list(2), rentButton(swanee, { compact: true }))));
+        if (size === "l") return h("div", { class: "tile-body" }, ...top, nextBlock,
+          h("div", { class: "mini-head" }, "Coming up"), list(4), rentButton(swanee, { compact: true }));
+        return h("div", { class: "tile-body" }, ...top,
+          h("div", { class: "tile-split top" },
+            h("div", {}, nextBlock, h("div", { class: "mini-head" }, "Weekly happenings"), weekly, rentButton(swanee, { compact: true })),
+            h("div", {}, h("div", { class: "mini-head bb-mh" }, "Coming up"), list(7))));
       },
     },
     gem && {

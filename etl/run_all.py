@@ -20,6 +20,7 @@ import build_parks
 import build_police
 import build_property
 import build_site
+import build_swanee
 import build_utility
 import build_weather
 import build_zoning
@@ -32,6 +33,7 @@ STEPS = [
     ("meetings", build_meetings.main),
     ("events", build_events.main),
     ("gem", build_gem.main),
+    ("swanee", build_swanee.main),
     ("weather", build_weather.main),
     ("news", build_news.main),
     ("org", build_org.main),

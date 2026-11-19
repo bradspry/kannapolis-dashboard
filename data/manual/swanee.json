@@ -1,0 +1,86 @@
+{
+  "name": "The Swanee Theatre",
+  "tagline": "Downtown Kannapolis live music and event venue",
+  "address": "200 West Avenue, Kannapolis, NC 28081",
+  "phone": "704-935-0149",
+  "email": "swanee@kannapolisnc.gov",
+  "site": "https://swaneetheatre.com",
+  "links": {
+    "events": "https://swaneetheatre.com/events/",
+    "weekly": "https://swaneetheatre.com/weekly-happenings/",
+    "rent": "https://swaneetheatre.com/rent-the-swanee/",
+    "faq": "https://swaneetheatre.com/faqs/"
+  },
+  "weekly": [
+    {
+      "title": "Line dancing lessons",
+      "day": "Mondays",
+      "time": "6–8 p.m.",
+      "price": "Free",
+      "detail": "Beginner 6–7 p.m., intermediate 7–8 p.m.",
+      "season": {
+        "start": "2026-07-06",
+        "end": "2026-12-14"
+      },
+      "skip": [
+        "2026-07-20",
+        "2026-09-07",
+        "2026-10-26"
+      ]
+    },
+    {
+      "title": "Open shag dancing",
+      "day": "Wednesdays",
+      "time": "7–10 p.m.",
+      "price": "$7 at the door",
+      "detail": "Open dancing, not a lesson.",
+      "season": {
+        "start": "2026-07-08",
+        "end": "2026-12-16"
+      },
+      "skip": []
+    }
+  ],
+  "weekly_note": "Schedules can change; the Swanee posts weekly updates on its social media.",
+  "rent": {
+    "button": "Rent The Swanee",
+    "url": "https://swaneetheatre.com/rent-the-swanee/",
+    "form": "https://form.jotform.com/252525187832158",
+    "pitch": "Weddings, conferences, concerts and parties in the heart of downtown, walking distance to restaurants, the ballpark and the Amtrak station. The marquee can carry your special message.",
+    "capacity": "160 banquet · 331 theater-style",
+    "rates": [
+      {
+        "what": "Professional events",
+        "rate": "$200/hour, 2-hour minimum"
+      },
+      {
+        "what": "Social events",
+        "rate": "$350/hour, 4-hour minimum"
+      },
+      {
+        "what": "Refundable security fee",
+        "rate": "$250–$500"
+      },
+      {
+        "what": "Upstairs meeting room",
+        "rate": "$200 flat"
+      },
+      {
+        "what": "AV/sound tech (required with sound system)",
+        "rate": "$50/hour"
+      },
+      {
+        "what": "Bartending staff (required with bar service)",
+        "rate": "$20/hour"
+      }
+    ],
+    "rates_note": "Tables, chairs and linens included. A $150 venue service charge applies to groups serving alcohol; sales tax may be added. More options (kitchen, green room, marquee message) on the rental page."
+  },
+  "good_to_know": [
+    "Most shows: doors open an hour before showtime.",
+    "Under 18 must be with a parent or guardian (check each show).",
+    "Full bar plus snacks for sale. Outside food is OK; outside drinks are not.",
+    "Free downtown parking nearby; the free West Avenue Express shuttle stops at the Swanee (5–10 p.m. Fri–Sun, April–December)."
+  ],
+  "source": "https://swaneetheatre.com"
+}
