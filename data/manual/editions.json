@@ -1,0 +1,84 @@
+{
+  "name": "Editions Coffee Shop & Bookstore",
+  "short": "Editions",
+  "tagline": "Books, brews, and yarn in a 1920s mill house downtown",
+  "address": "217 S Main St, Kannapolis, NC 28081",
+  "map": "https://www.google.com/maps/search/?api=1&query=217+S+Main+St+Kannapolis+NC+28081",
+  "phone": "704-925-1406",
+  "email": "editionsbookstore@gmail.com",
+  "site": "https://www.editionsbookstore.com",
+  "story": "Owner Dawn Evans runs a bookstore, coffee shop and yarn room in a former mill house built in the early 1920s. Selling yarn is her way of bringing textiles back to the home of Cannon Mills.",
+  "hours": {
+    "store": [
+      { "days": [1, 2, 3, 4, 5, 6], "open": "09:00", "close": "17:00" },
+      { "days": [0], "open": "09:00", "close": "16:00" }
+    ],
+    "drive_thru": [
+      { "days": [1, 2, 3, 4, 6], "open": "07:00", "close": "17:00" },
+      { "days": [5], "open": "07:00", "close": "19:00" },
+      { "days": [0], "open": "09:00", "close": "16:00" }
+    ],
+    "note": "Fridays 5–7 pm the shop hosts a private event (Writer's Block); the drive-thru stays open until 7."
+  },
+  "order": [
+    { "label": "Order ahead (Clover)", "detail": "In-store or drive-thru pickup", "url": "https://www.clover.com/online-ordering/editions-coffee-shop--bookstore-kannapolis" },
+    { "label": "DoorDash", "detail": "Pickup or delivery", "url": "https://www.doordash.com/store/editions-coffee-shop-and-book-store-kannapolis-1092140/" }
+  ],
+  "coffee": {
+    "roaster": "Coffee from Fortuna Enterprises, a Greensboro, NC roaster (since 2000): house blends, flavored blends and espresso.",
+    "signature": [
+      { "name": "The Bookend", "what": "French vanilla + brown sugar, whip, white chocolate drizzle", "ways": "Hot, iced, frozen" },
+      { "name": "Grand Slam", "what": "Salted caramel + caramelized peanut + toffee crunch, caramel drizzle, sea salt", "ways": "Hot, iced, frozen" },
+      { "name": "Frosty's Favorite", "what": "Vanilla + hazelnut, whip, white chocolate drizzle, cinnamon", "ways": null },
+      { "name": "Turtle Chip Frappe", "what": "Java chip frappe + toffee crunch, chocolate drizzle, caramel", "ways": "Frozen only" },
+      { "name": "Happy Accident", "what": "Cold brew or nitro + vanilla + coconut + sweet cream", "ways": "Iced only" },
+      { "name": "The Fine Line", "what": "Vanilla + cinnamon iced oatmeal shaken espresso", "ways": "Iced only" },
+      { "name": "Cheerwine Frost", "what": "Cheerwine + vanilla frappe + black cherry, whip, sprinkles", "ways": "Frozen only" }
+    ],
+    "menu": [
+      { "group": "Coffee & espresso", "items": "Drip and iced drip, espresso, Americano, latte, mocha, cappuccino, dirty chai, Red Eye. Drip refill $0.95." },
+      { "group": "Iced", "items": "Iced latte, mocha, Americano, caramel macchiato, iced dirty chai (a local favorite)" },
+      { "group": "Cold brew", "items": "Slow-steeped cold brew and nitro cold brew, S–XL" },
+      { "group": "Frappes", "items": "Caramel, chocolate, java chip, matcha, cookies & cream, vanilla bean and more, S–XL" },
+      { "group": "Smartfruit smoothies & refreshers", "items": "Real-fruit smoothies (mango, berry, peach, pineapple and more) and lightly caffeinated refreshers: Strawberry Acai, Dragonfruit Elderberry" },
+      { "group": "Lotus energy", "items": "Plant-based energy drinks: Lotus Tea, Lotus Lemonade, Specialty Lotus (M, L, XL)" },
+      { "group": "Not coffee", "items": "Hot chocolate, matcha, chai, bagged teas, kids milk (12 oz)" }
+    ],
+    "addons": [
+      { "what": "Oat, almond, coconut or soy milk", "price": "$0.85" },
+      { "what": "Flavor shot", "price": "$0.85" },
+      { "what": "Extra espresso shot", "price": "$0.85" },
+      { "what": "Coffee ice cubes", "price": "$0.75" },
+      { "what": "Whip, sweet cream or cold foam", "price": "$1.00" }
+    ],
+    "menu_image": "https://www.editionsbookstore.com/media/new%20editions%20menu%202026.png",
+    "url": "https://www.editionsbookstore.com/page/CoffeeShop"
+  },
+  "yarn": {
+    "brands": ["Universal", "Berroco", "Amano", "West Yorkshire Spinners", "Local hand-dyed"],
+    "tools": ["Brittany", "ChiaoGoo", "Knitter's Pride", "Clover"],
+    "pitch": "A craft room for beginners and experts alike: yarn, needles, hooks and accessories, plus knitting and crochet classes.",
+    "returns": [
+      "Returns and exchanges within 30 days with receipt, in original, salable condition.",
+      "Wound yarn, gift cards and discounted items are final sale.",
+      "Dye lots vary. Match multiple skeins before you buy.",
+      "Patterns, needles, hooks and tools can't be returned but are replaced if defective."
+    ],
+    "photo": "https://www.editionsbookstore.com/media/yarn%20room%20photo%20web.jpg",
+    "url": "https://www.editionsbookstore.com/page/yarn",
+    "classes": "https://www.editionsbookstore.com/page/fiber-craft-calendar"
+  },
+  "links": {
+    "new": "https://www.editionsbookstore.com/page/NewArrivals",
+    "events": "https://www.editionsbookstore.com/page/events",
+    "bookclub": "https://www.editionsbookstore.com/page/bookclub",
+    "preorder": "https://www.editionsbookstore.com/page/PreOrder",
+    "special": "https://www.editionsbookstore.com/page/SpecialOrdersRequests",
+    "librofm": "https://libro.fm/editionsbookstore",
+    "bookshop": "https://bookshop.org/shop/editionsbookstore",
+    "newsletter": "https://mailchi.mp/editionsbookstore/newsletter-sign-up",
+    "facebook": "https://www.facebook.com/editionsbookstore",
+    "instagram": "https://www.instagram.com/editionsbookstore/",
+    "tiktok": "https://www.tiktok.com/@editionsbookstore"
+  }
+}

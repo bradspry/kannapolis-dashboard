@@ -1434,3 +1434,46 @@ body.editing .tile-w:first-child .tile-top { opacity: .4; }
 .mk-site { position: relative; z-index: 2; align-self: flex-start; }
 .mk-site.compact { padding: 6px 13px; font-size: 13px; margin-top: 6px; }
 @media (max-width: 720px) { .mk-hero { flex-direction: column; align-items: flex-start; } .mk-img.lg { width: 96px; height: 264px; } .size-s .mk-tile-now .mk-img { display: none; } }
+
+/* ---------- Kannapolis Reads and Weaves (Editions) ---------- */
+.ed-hero { display: flex; gap: 20px; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+.ed-hero h3 { margin: 2px 0 4px; font-size: 22px; }
+.ed-hero-side { display: grid; gap: 8px; min-width: 240px; }
+.ed-status { display: grid; grid-template-columns: 70px minmax(0, 1fr); gap: 8px; align-items: baseline; font-size: 13px; }
+.ed-status b { font-size: 12.5px; }
+.ed-next { display: grid; gap: 1px; padding-top: 8px; border-top: 1px solid var(--grid); }
+.ed-when { font-size: 12.5px; font-weight: 600; color: var(--accent-ink); }
+.ed-closed .ed-when { color: var(--text-muted); }
+.ed-cover { display: block; object-fit: cover; border-radius: 6px; background: var(--page); border: 1px solid var(--border); flex: none; }
+.ed-cover.md { width: 100%; aspect-ratio: 2 / 3; }
+.ed-cover.sm { width: 100%; aspect-ratio: 2 / 3; border-radius: 4px; }
+.ed-cover.none { display: grid; place-items: center; font-size: 22px; }
+.ed-books { list-style: none; margin: 0 0 12px; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 16px 14px; }
+.ed-book { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.ed-book-link { display: flex; flex-direction: column; gap: 6px; color: inherit; text-decoration: none; }
+.ed-book-link:hover .ed-book-title { text-decoration: underline; }
+.ed-book-title { font-size: 13.5px; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.ed-price { font-size: 13px; font-weight: 650; }
+.ed-covers { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-top: 4px; }
+.size-l .ed-covers { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.size-xl .ed-covers { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.ed-tile-status { display: grid; gap: 4px; margin: 2px 0 2px; }
+.ed-mini li { grid-template-columns: 82px minmax(0, 1fr); }
+.ed-menu li { grid-template-columns: 130px minmax(0, 1fr); font-size: 13.5px; }
+.ed-menu span { white-space: normal; }
+.ed-order { position: relative; z-index: 2; align-self: flex-start; }
+.ed-order.compact { padding: 6px 13px; font-size: 13px; margin-top: 8px; display: inline-block; }
+.ed-order-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 6px; }
+.ed-order-row .ed-order { display: flex; flex-direction: column; gap: 1px; padding: 9px 16px; border-radius: 14px; text-decoration: none; }
+.ed-order-row .ed-order { font-size: 14px; }
+.ed-order-row small { font-size: 12px; font-weight: 500; opacity: .85; }
+.btn-secondary { background: var(--surface-1); color: var(--text-primary); border: 1px solid var(--border); font-weight: 600; font-size: 14px; }
+.btn-secondary:hover { border-color: var(--accent); }
+.ed-yarn { margin-bottom: 14px; }
+.ed-yarn-img { width: 260px; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; flex: none; }
+.ed-pane > * + * { margin-top: 12px; }
+@media (max-width: 720px) {
+  .ed-hero, .ed-yarn { flex-direction: column; } .ed-hero-side { min-width: 0; width: 100%; } .ed-yarn-img { width: 100%; }
+  .ed-books { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 10px; }
+  .ed-menu li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+}

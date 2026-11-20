@@ -10,6 +10,7 @@ import build_baseball
 import build_budget
 import build_census
 import build_council
+import build_editions
 import build_events
 import build_fire
 import build_gem
@@ -36,6 +37,7 @@ STEPS = [
     ("gem", build_gem.main),
     ("swanee", build_swanee.main),
     ("made", build_made.main),
+    ("editions", build_editions.main),
     ("weather", build_weather.main),
     ("news", build_news.main),
     ("org", build_org.main),

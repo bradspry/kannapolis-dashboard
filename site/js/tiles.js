@@ -15,6 +15,7 @@ import { parkButtons, seasonStatus, holidayStatus } from "./sections/parks.js";
 import { gemLineup, whenText as gemWhen, poster as gemPoster, rating as gemRating, ticketsButton } from "./sections/gem.js";
 import { upcomingShows, whenBadge as swBadge, dayOf as swDay, timeOf as swTime, rentButton, showImage, weeklyStatus } from "./sections/swanee.js";
 import { featuredMaker, makerImage, statusLine, siteButton, hoursFor, hoursText, hoursTable } from "./sections/made.js";
+import { upcoming as edUpcoming, whenText as edWhen, edStatus, cover as edCover, orderButton as edOrder } from "./sections/editions.js";
 import { prepGames, nextHome, homeStands, standLabel, nextGameCard, fmtDay as bbDay, fmtTime as bbTime } from "./sections/baseball.js";
 
 const NS = "http://www.w3.org/2000/svg";
@@ -73,7 +74,7 @@ const contactLinks = (p) => [
 const shortDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
 export function tileDefs(data, COLORS) {
-  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee, made } = data;
+  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee, made, editions } = data;
   const t = tokens();
   const geo = census.geographies;
   const k = geo.Kannapolis, nc = geo["North Carolina"], cab = geo["Cabarrus County"], us = geo["United States"];
@@ -179,6 +180,27 @@ export function tileDefs(data, COLORS) {
             h("div", {}, callButtons(fire), freeHead, freeList(fire, 4)),
             h("div", {}, h("div", { class: "mini-head" }, "Fire stations"), stationList(fire, { compact: true }),
               h("p", { class: "tile-meta" }, "ISO Class 1: the best fire-protection rating possible"))));
+      },
+    },
+    editions && {
+      id: "editions", opens: "editions", size: "m", label: "Kannapolis Reads and Weaves",
+      build: (size) => {
+        const ed = editions;
+        const top = [head("book", COLORS.editions, "Kannapolis Reads and Weaves")];
+        const evs = edUpcoming(ed);
+        const status = h("div", { class: "ed-tile-status" }, h("div", { class: "gem-tile-title" }, "Editions · S Main St"), edStatus(ed, "store", { compact: true }), edStatus(ed, "drive", { compact: true }));
+        const covers = (n) => h("div", { class: "ed-covers" }, ed.books.slice(0, n).map((b) => edCover(b, "sm")));
+        const events = (n) => h("ul", { class: "ub-mini ed-mini" }, evs.slice(0, n).map((e) => h("li", {}, h("b", {}, edWhen(e).split(" · ")[0]), h("span", {}, e.title))));
+        if (size === "s") return h("div", { class: "tile-body" }, ...top, status);
+        if (size === "m") return h("div", { class: "tile-body" }, ...top,
+          h("div", { class: "tile-split top" }, h("div", {}, status, edOrder(ed, { compact: true })),
+            h("div", {}, h("div", { class: "mini-head bb-mh" }, "New books"), covers(4))));
+        if (size === "l") return h("div", { class: "tile-body" }, ...top, status,
+          h("div", { class: "mini-head" }, "New books"), covers(5), h("div", { class: "mini-head" }, "Coming up"), events(3), edOrder(ed, { compact: true }));
+        return h("div", { class: "tile-body" }, ...top,
+          h("div", { class: "tile-split top" },
+            h("div", {}, status, h("div", { class: "mini-head" }, "Coming up"), events(4), edOrder(ed, { compact: true })),
+            h("div", {}, h("div", { class: "mini-head bb-mh" }, "New books"), covers(8))));
       },
     },
     made && {

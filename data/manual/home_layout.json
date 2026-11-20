@@ -3,6 +3,7 @@
     "gem",
     "swanee",
     "made",
+    "editions",
     "parks",
     "utility",
     "police",
@@ -44,7 +45,8 @@
     "baseball": "m",
     "utility": "m",
     "parks": "m",
-    "made": "m"
+    "made": "m",
+    "editions": "m"
   },
   "spacers": []
 }

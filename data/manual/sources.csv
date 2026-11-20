@@ -54,3 +54,8 @@ swanee_site,"The Swanee Theatre website (contact, address)",The Swanee Theatre (
 oldarmor_site,"Old Armor Beer Company website (about, beers, can images)",Old Armor Beer Company,Web page,https://www.oldarmorbeer.net,"Story, featured beers, ABV (from can art)",made
 oldarmor_contact,"Old Armor Beer Company: Contact (address, phone, hours, booking)",Old Armor Beer Company,Web page,https://www.oldarmorbeer.net/contact,"Hours, address, phone, email, good to know",made
 oldarmor_pif,Old Armor Beer Company: Pay It Forward Board,Old Armor Beer Company,Web page,https://www.oldarmorbeer.net/pay-it-forward,Pay It Forward prices and how it works,made
+editions_new,Editions Coffee Shop & Bookstore: New Arrivals,Editions Coffee Shop & Bookstore,Web page,https://www.editionsbookstore.com/page/NewArrivals,"New books: titles, authors, prices, covers (daily)",editions
+editions_events,Editions Coffee Shop & Bookstore: Events,Editions Coffee Shop & Bookstore,Web page,https://www.editionsbookstore.com/page/events,"Events, closures, monthly calendar (daily)",editions
+editions_coffee,Editions Coffee Shop & Bookstore: Coffee Shop,Editions Coffee Shop & Bookstore,Web page,https://www.editionsbookstore.com/page/CoffeeShop,"Drinks, add-on prices, ordering, store and drive-thru hours",editions
+editions_yarn,Editions Coffee Shop & Bookstore: Yarn,Editions Coffee Shop & Bookstore,Web page,https://www.editionsbookstore.com/page/yarn,"Yarn brands, tools, return policy, Cannon Mills history",editions
+editions_home,"Editions Coffee Shop & Bookstore website (contact, monthly drink specials)",Editions Coffee Shop & Bookstore,Web page,https://www.editionsbookstore.com,"Address, phone, email, monthly specials menu",editions
