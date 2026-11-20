@@ -1,4 +1,4 @@
-// OS-style shell: home-screen tiles, a dock, and windows. Each window hosts one widget <section>,
+// OS-style shell: home-screen tiles and windows. Each window hosts one widget <section>,
 // rendered on first open and again after theme/width changes. Edit mode hides, resizes and reorders
 // tiles; the layout is saved per browser, or for everyone via "Save as default" (./serve.sh only).
 import { h } from "./ui.js";
@@ -188,18 +188,6 @@ function setSize(id, size, name) {
   }
 }
 
-// ---------- dock ----------
-function renderDock() {
-  const dock = document.getElementById("dock");
-  dock.replaceChildren(...[...windows].map(([id, w]) =>
-    h("button", { class: "dock-btn", type: "button", "data-win": id, "aria-label": w.title, title: w.title,
-      onclick: () => (openId === id ? closeWindow() : openWindow(id, document.querySelector(`.tile-w[data-opens="${id}"]`))) },
-      chip(w.icon, w.color), h("span", { class: "dock-label" }, w.short || w.title))));
-}
-function syncDock() {
-  document.querySelectorAll(".dock-btn").forEach((b) => b.classList.toggle("active", b.dataset.win === openId));
-}
-
 // ---------- windows ----------
 let sourceRegistry = {};
 /** The official source registry (data/manual/sources.csv); each entry lists the widgets it feeds. */
@@ -261,7 +249,6 @@ export function openWindow(id, fromTile, { push = true } = {}) {
     history.pushState({ win: id }, "", `#${id}`);
     pushed = true;
   }
-  syncDock();
 }
 
 export function closeWindow({ animate = true, pop = true } = {}) {
@@ -274,7 +261,6 @@ export function closeWindow({ animate = true, pop = true } = {}) {
     document.getElementById("store").append(document.getElementById(id));
     document.documentElement.classList.remove("win-open");
     openId = null;
-    syncDock();
     openerTile?.querySelector(".tile-open")?.focus({ preventScroll: true });
   };
   if (pop) {
@@ -368,7 +354,6 @@ export function initOS({ defaultLayout = null } = {}) {
     onDrop: (ids) => { commitOrder(ids); announce("Layout saved on this device."); },
   });
   detectSaving();
-  renderDock();
 }
 
 /** Open the window named in the URL (#budget etc.), e.g. from a shared link. */

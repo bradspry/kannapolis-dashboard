@@ -430,7 +430,7 @@ g[aria-label="tip"] text { fill: var(--text-primary); }
 }
 
 /* =====================================================================
-   OS shell: wallpaper, top bar, home-screen tiles, dock, windows
+   OS shell: wallpaper, top bar, home-screen tiles, windows
    ===================================================================== */
 body {
   background:
@@ -438,7 +438,7 @@ body {
     radial-gradient(760px 480px at 100% 0%, color-mix(in oklab, var(--series-7) 12%, transparent), transparent 70%),
     var(--page);
   background-attachment: fixed;
-  padding-bottom: 112px; /* room for the dock */
+  padding-bottom: 32px;
 }
 html.win-open { overflow: hidden; }
 
@@ -605,30 +605,6 @@ body.editing .tile-w:nth-child(2n) { animation-delay: -.14s; }
 .tray-label { font-size: 13px; color: var(--text-muted); margin-right: 4px; }
 .tray-chip { display: inline-flex; align-items: center; gap: 6px; font: inherit; font-size: 13px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary); cursor: pointer; }
 
-/* dock */
-.dock {
-  position: fixed; left: 50%; bottom: max(12px, env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 30;
-  display: flex; gap: 4px; padding: 8px 10px; border-radius: 24px; max-width: calc(100vw - 20px); overflow-x: auto; scrollbar-width: none;
-  background: color-mix(in oklab, var(--surface-1) 70%, transparent);
-  backdrop-filter: blur(20px) saturate(1.6); -webkit-backdrop-filter: blur(20px) saturate(1.6);
-  border: 1px solid var(--border); box-shadow: 0 16px 48px -12px rgba(0, 0, 0, .5);
-}
-.dock::-webkit-scrollbar { display: none; }
-.dock-btn {
-  position: relative; flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 56px;
-  padding: 4px 4px 6px; border: 0; border-radius: 14px; background: transparent; cursor: pointer;
-  font: inherit; font-size: 10.5px; color: var(--text-secondary); transition: transform .15s ease;
-}
-.dock-btn .chip-icon { width: 40px; height: 40px; border-radius: 12px; }
-.dock-btn:hover { transform: translateY(-4px); }
-.dock-btn:hover .dock-label, .dock-btn.active .dock-label { color: var(--text-primary); }
-.dock-btn.active::after { content: ""; position: absolute; bottom: 0; width: 4px; height: 4px; border-radius: 50%; background: var(--text-primary); }
-.dock-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; }
-@media (max-width: 720px) {
-  .dock { left: 10px; right: 10px; transform: none; max-width: none; bottom: max(10px, env(safe-area-inset-bottom)); padding: 6px; }
-  .dock-btn { min-width: 52px; }
-  .dock-btn .chip-icon { width: 36px; height: 36px; }
-}
 .site-footer { border-top: 0; }
 
 /* window */

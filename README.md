@@ -6,7 +6,7 @@ An open-data dashboard for **Kannapolis, North Carolina**, built by a resident f
 
 It's **one self-contained HTML file** built by a small Python script. No Node, no venv, nothing to install.
 
-[![The Kannapolis Civic Dashboard home screen on a dark woven background: widget tiles for the Gem and Swanee theatres, Parks & Recreation (Celebration of Lights and Winterland Express train reservations), weather with a 5-day forecast over live radar, paying a utility bill, police and fire with their chiefs and 911 buttons, Editions bookstore's new books, Made in Kannapolis (Old Armor Beer), What-A-Burger, the Cannon Ballers, events, meetings, City Council with upcoming meetings, Council meeting videos, residents, City staff, budget, debt, gauges, a land use zoning map and data sources, with a dock of widget icons along the bottom](docs/dashboard.jpg)](https://bradspry.github.io/kannapolis-dashboard/)
+[![The Kannapolis Civic Dashboard home screen on a dark woven background: widget tiles for the Gem and Swanee theatres, Parks & Recreation (Celebration of Lights and Winterland Express train reservations), weather with a 5-day forecast over live radar, paying a utility bill, police and fire with their chiefs and 911 buttons, Editions bookstore's new books, Made in Kannapolis (Old Armor Beer), What-A-Burger, the Cannon Ballers, events, meetings, City Council with upcoming meetings, Council meeting videos, residents, City staff, budget, debt, gauges, a land use zoning map and data sources](docs/dashboard.jpg)](https://bradspry.github.io/kannapolis-dashboard/)
 
 ## Quick start
 
@@ -31,7 +31,7 @@ open dist/index.html            # or double-click it
 
 ## Using the dashboard
 
-The home screen is a grid of widget tiles. **Tap a tile, or an icon in the dock, to open the full widget in a window.** Links like `#budget` open a window directly.
+The home screen is a grid of widget tiles. **Tap a tile to open the full widget in a window.** Links like `#budget` open a window directly.
 
 **Edit** lets you:
 - **Resize** tiles: S, M, L, XL. Bigger sizes show more detail; XL shows as L on phones.

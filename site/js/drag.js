@@ -59,7 +59,7 @@ export function enableDrag(container, { active, onDrop }) {
 
   const autoScroll = () => {
     if (!s?.started) return;
-    const edge = 90, bottomEdge = innerHeight - 130; // keep clear of the dock
+    const edge = 90, bottomEdge = innerHeight - 90;
     const v = s.y < edge ? -(edge - s.y) / 5 : s.y > bottomEdge ? (s.y - bottomEdge) / 5 : 0;
     if (v) { scrollBy(0, Math.max(-18, Math.min(18, v))); place(); hitTest(); }
     s.raf = requestAnimationFrame(autoScroll);
