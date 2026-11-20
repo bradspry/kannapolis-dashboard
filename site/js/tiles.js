@@ -202,7 +202,7 @@ export function tileDefs(data, COLORS) {
             h("span", { class: "wx-range" }, h("i", { style: { left: `${(100 * (l - lo)) / span}%`, width: `${Math.max(6, (100 * (u - l)) / span)}%` } })),
             h("b", {}, d.hi != null ? `${d.hi}°` : ""));
         }));
-        const top = [radarBackdrop(data.boundaries), head("weather", COLORS.weather, "Kannapolis weather"), alertBanner(w.alerts, { compact: true })];
+        const top = [radarBackdrop(data.boundaries), head("weather", COLORS.weather, "Kannapolis Weather"), alertBanner(w.alerts, { compact: true })];
         if (size === "s") return h("div", { class: "tile-body wx-tile" }, ...top, now);
         if (size === "m") return h("div", { class: "tile-body wx-tile" }, ...top, h("div", { class: "tile-split wx-m" }, now, fiveDay));
         if (size === "l") return h("div", { class: "tile-body wx-tile" }, ...top, now, days(5));
@@ -252,10 +252,10 @@ export function tileDefs(data, COLORS) {
       },
     },
     drought && {
-      id: "drought", opens: "drought", size: "m", label: "Current drought conditions",
+      id: "drought", opens: "drought", size: "m", label: "Current Drought Conditions",
       build: (size) => {
         const dr = drought, lv = dr.levels[String(dr.city.level)];
-        const top = [head("drop", COLORS.drought, "Current drought conditions")];
+        const top = [head("drop", COLORS.drought, "Current Drought Conditions")];
         const monitor = h("div", {}, h("div", { class: "mini-head bb-mh" }, `Drought Monitor · ${new Date(`${dr.counties[0].weeks.at(-1).date}T12:00`).toLocaleDateString("en-US", { month: "short", day: "numeric" })}`),
           ...dr.counties.map((c) => drCounty(dr, c)));
         const year = h("div", {}, h("div", { class: "mini-head" }, "Cabarrus County, past year"), drStrip(dr, dr.counties[0], 52),
@@ -272,9 +272,9 @@ export function tileDefs(data, COLORS) {
       },
     },
     waste && {
-      id: "waste", opens: "waste", size: "m", label: "Waste collection",
+      id: "waste", opens: "waste", size: "m", label: "Waste Collection",
       build: (size) => {
-        const top = [head("trash", COLORS.waste, "Waste collection")];
+        const top = [head("trash", COLORS.waste, "Waste Collection")];
         const now = wsNotices(waste);
         const noteList = (n) => now.length ? h("ul", { class: "ub-mini ws-mini" }, now.slice(0, n).map((x) => h("li", {}, h("b", { "aria-hidden": "true" }, x.emoji), h("span", {}, x.short)))) : null;
         const finder = h("a", { class: "ws-finder", href: waste.cartology.page, target: "_blank", rel: "noopener" }, "📅 Find your pickup day (CARTology) ↗");
@@ -286,7 +286,7 @@ export function tileDefs(data, COLORS) {
           h("div", { class: "tile-split top" }, h("div", {}, label, wsMissed(waste, { compact: true })),
             h("div", {}, h("div", { class: "mini-head bb-mh" }, now.length ? "Heads up" : "Schedule"), noteList(2) || sched, finder)));
         // Large: the department director in the header (like the police and fire chiefs) and the CARTology app links.
-        if (size === "l") return h("div", { class: "tile-body" }, headWithChief("trash", COLORS.waste, "Waste collection", waste.director, "Director of Transportation & Environmental Services"),
+        if (size === "l") return h("div", { class: "tile-body" }, headWithChief("trash", COLORS.waste, "Waste Collection", waste.director, "Director of Transportation & Environmental Services"),
           label, wsMissed(waste, { compact: true, side: true }),
           // Heads up: the first two notes stacked, the third (usually loose-leaf season) beside them.
           now.length ? [h("div", { class: "mini-head" }, "Heads up"),
@@ -306,11 +306,11 @@ export function tileDefs(data, COLORS) {
       },
     },
     videos && {
-      id: "videos", opens: "videos", size: "m", label: "Council meeting videos",
+      id: "videos", opens: "videos", size: "m", label: "Council Meeting Videos",
       build: (size) => {
         const { next, recent } = splitVideos(videos);
         const latest = recent[0];
-        const top = [head("video", COLORS.videos, "Council meeting videos")];
+        const top = [head("video", COLORS.videos, "Council Meeting Videos")];
         const nextBlock = next ? h("div", { class: "vd-tile-next" },
           h("div", { class: "date-block sm" }, h("span", {}, next._d.toLocaleDateString("en-US", { month: "short" })), h("b", {}, next._d.getDate())),
           h("div", {}, h("div", { class: "bb-next-label" }, next.live ? "Streaming now" : vdBadge(next) || "Next meeting · live"),
@@ -468,7 +468,7 @@ export function tileDefs(data, COLORS) {
     utility && {
       id: "utility", opens: "utility", size: "m", label: "Pay Utility Bill",
       build: (size) => {
-        const top = [head("bill", COLORS.utility, "Pay utility bill")];
+        const top = [head("bill", COLORS.utility, "Pay Utility Bill")];
         const t = utility.terms;
         const callMain = h("a", { href: `tel:${utility.phones.main.replace(/[^0-9]/g, "")}`, class: "ub-inline" }, utility.phones.main);
         const ways = (n) => h("ul", { class: "ub-mini" }, utility.ways.filter((w) => !/Online|phone/i.test(w.how)).slice(0, n).map((w) =>
@@ -513,12 +513,12 @@ export function tileDefs(data, COLORS) {
             h("div", {}, h("div", { class: "mini-head bb-mh" }, "Upcoming home stands"), standList(8))));
       },
     },
-    gaugeTile({ id: "g-debt-limit", opens: "budget", label: "Legal debt limit used" },
-      { label: "Legal debt limit used", value: (100 * debt.net_debt_applicable) / debt.debt_limit, max: 100, format: (v) => pct(v), tickFormat: pct0,
+    gaugeTile({ id: "g-debt-limit", opens: "budget", label: "Legal Debt Limit Used" },
+      { label: "Legal Debt Limit Used", value: (100 * debt.net_debt_applicable) / debt.debt_limit, max: 100, format: (v) => pct(v), tickFormat: pct0,
         context: `${usdCompact(debt.net_debt_applicable)} of ${usdCompact(debt.debt_limit)} allowed by state law` },
       [["Debt counted toward limit", usd(debt.net_debt_applicable)], ["State limit (8% of value)", usd(debt.debt_limit)], ["Room left", usd(debt.legal_debt_margin)], ["As of", `June 30, ${debt.fiscal_year}`]]),
-    gfDs && gfSpend && gaugeTile({ id: "g-debt-policy", opens: "debt-service", label: "Taxes going to debt" },
-      { label: "Taxes going to debt", value: (100 * gfDs) / gfSpend, max: 20, zones: [{ from: 15, to: 20 }], format: (v) => pct(v), tickFormat: pct0,
+    gfDs && gfSpend && gaugeTile({ id: "g-debt-policy", opens: "debt-service", label: "Taxes Going to Debt" },
+      { label: "Taxes Going to Debt", value: (100 * gfDs) / gfSpend, max: 20, zones: [{ from: 15, to: 20 }], format: (v) => pct(v), tickFormat: pct0,
         context: "Red: over the City's 15% policy cap" },
       [["General Fund debt payments", usd(gfDs)], ["General Fund spending", usd(gfSpend)], ["City policy cap", "15%"], ["Budget year", "FY27"]]),
     {
@@ -558,7 +558,7 @@ export function tileDefs(data, COLORS) {
       },
     },
     meetings && {
-      id: "meetings", opens: "meetings", size: "l", label: "Next meetings",
+      id: "meetings", opens: "meetings", size: "l", label: "Next Meetings",
       build: (size) => {
         const up = parseM(), next = up[0];
         const nextBlock = next ? h("div", { class: "next-mtg" },
@@ -569,13 +569,13 @@ export function tileDefs(data, COLORS) {
             h("span", { class: `pill ${next.agenda ? "ok" : ""}` }, next.agenda ? "Agenda posted" : size === "s" ? "No agenda yet" : "Agenda not posted yet"))) : h("p", { class: "tile-meta" }, "No upcoming meetings posted.");
         const list = (n) => up.length > 1 ? [h("div", { class: "mini-head" }, "Coming up"),
           h("ul", { class: `mini-list ${size === "xl" ? "cols-2" : ""}` }, up.slice(1, 1 + n).map((m) => h("li", {}, h("span", { class: "mini-date" }, shortDate(m._d)), h("span", {}, m.title))))] : [];
-        if (size === "m") return h("div", { class: "tile-body" }, head("meetings", COLORS.meetings, "Public meetings"),
+        if (size === "m") return h("div", { class: "tile-body" }, head("meetings", COLORS.meetings, "Public Meetings"),
           h("div", { class: "tile-split top" }, nextBlock, h("div", {}, ...list(2))));
-        return h("div", { class: "tile-body" }, head("meetings", COLORS.meetings, "Public meetings"), nextBlock, ...(size === "s" ? [] : list(size === "xl" ? 8 : 5)));
+        return h("div", { class: "tile-body" }, head("meetings", COLORS.meetings, "Public Meetings"), nextBlock, ...(size === "s" ? [] : list(size === "xl" ? 8 : 5)));
       },
     },
     events?.events?.length && {
-      id: "events", opens: "events", size: "m", label: "Upcoming events",
+      id: "events", opens: "events", size: "m", label: "Upcoming Events",
       build: (size) => {
         const up = upcomingEvents(events);
         const n = { s: 1, m: 2, l: 5, xl: 8 }[size];
@@ -590,13 +590,13 @@ export function tileDefs(data, COLORS) {
               h("div", { class: "tile-meta" }, series ? `${e.recurrence.split(",")[0]} to ${shortDate(e._dates.at(-1))} · ${fmtTime(e.time)}`
                 : [when, fmtTime(e.time), size !== "m" ? e.location : null].filter(Boolean).join(" · "))));
         };
-        return h("div", { class: "tile-body" }, head("events", COLORS.events, "Upcoming events"),
+        return h("div", { class: "tile-body" }, head("events", COLORS.events, "Upcoming Events"),
           up.length ? h("ul", { class: `ev-mini-list ${size === "s" ? "solo" : ""} ${size === "xl" ? "cols-2" : ""}` }, up.slice(0, n).map(row))
             : h("p", { class: "tile-meta" }, "Nothing on the City calendar right now."));
       },
     },
-    gaugeTile({ id: "g-tax-rate", opens: "budget", label: "City tax rate" },
-      { label: "City tax rate", value: rate.rate_per_100 * 100, max: 150, format: (v) => `${v.toFixed(2)}¢`, tickFormat: (v) => (v ? "$1.50" : "0¢"),
+    gaugeTile({ id: "g-tax-rate", opens: "budget", label: "City Tax Rate" },
+      { label: "City Tax Rate", value: rate.rate_per_100 * 100, max: 150, format: (v) => `${v.toFixed(2)}¢`, tickFormat: (v) => (v ? "$1.50" : "0¢"),
         context: `per $100 of value (${fy(rate.fiscal_year)}) · dial ends at the state max`, short: `per $100 · state max $1.50` },
       [["On a $300,000 home", `${usd(3000 * rate.rate_per_100)} a year`], ["State maximum", "$1.50 per $100"], ["Taxable value (est.)", usdCompact(rate.assessed_value)], ["Change from last year", (() => { const prev = budget.tax_rate_history.at(-2)?.rate_per_100; return prev == null ? "—" : prev === rate.rate_per_100 ? "No change" : `from ${(prev * 100).toFixed(2)}¢`; })()]]),
     gaugeTile({ id: "g-owners", opens: "people", label: "Homeowners" },
@@ -604,14 +604,14 @@ export function tileDefs(data, COLORS) {
         marker: { value: nc.owner_occupied_pct, label: `NC ${pct(nc.owner_occupied_pct)}` }, context: "Share of occupied homes lived in by their owner" },
       [["Kannapolis", pct(k.owner_occupied_pct)], ["Cabarrus County", pct(cab.owner_occupied_pct)], ["North Carolina", pct(nc.owner_occupied_pct)], ["United States", pct(us.owner_occupied_pct)]]),
     {
-      id: "budget", opens: "budget", size: "m", label: "City budget",
+      id: "budget", opens: "budget", size: "m", label: "City Budget",
       build: (size) => {
         const funds = [...budget.funds_fy2027].sort((a, b) => b.amount - a.amount);
         const top = funds.slice(0, 3), rest = funds.slice(3).reduce((s, f) => s + f.amount, 0);
         const parts = [...top.map((f, i) => ({ label: f.fund.replace(" Fund", ""), value: f.amount, color: t.series[i] })), { label: "Other funds", value: rest, color: t.mutedFill }];
         const sum = parts.reduce((s, p) => s + p.value, 0);
         const bar = h("div", { class: "mini-bar", "aria-hidden": "true" }, parts.map((p) => h("span", { style: { flex: `${p.value} 1 0`, background: p.color } })));
-        const body = [head("budget", COLORS.budget, "FY27 budget"), big(usdCompact(budget.headline.total_budget_fy2027))];
+        const body = [head("budget", COLORS.budget, "FY27 Budget"), big(usdCompact(budget.headline.total_budget_fy2027))];
         if (size === "s") return h("div", { class: "tile-body" }, ...body, h("div", { class: "tile-meta" }, `${num(budget.headline.full_time_positions_fy2027)} full-time jobs`), bar);
         if (size === "m") return h("div", { class: "tile-body" }, ...body, bar,
           h("ul", { class: "mini-legend" }, parts.map((p) => h("li", {}, h("i", { style: { background: p.color } }), `${p.label} ${pct((100 * p.value) / sum, 0)}`))));
@@ -623,14 +623,14 @@ export function tileDefs(data, COLORS) {
       },
     },
     ds.length && {
-      id: "debt-service", opens: "debt-service", size: "s", label: "Debt service",
+      id: "debt-service", opens: "debt-service", size: "s", label: "Debt Service",
       build: (size) => {
         const sum = (key) => ds.reduce((s, i) => s + i[key], 0);
         const tot = ds.reduce((s, i) => s + dsTot(i), 0);
         const parts = [{ label: "Principal", v: sum("principal"), c: t.series[0] }, { label: "Interest", v: sum("interest"), c: t.series[1] }, { label: "Issuance & new debt", v: sum("other"), c: t.series[2] }];
         const bar = h("div", { class: "mini-bar", "aria-hidden": "true" }, parts.map((p) => h("span", { style: { flex: `${p.v} 1 0`, background: p.c } })));
         const legend = (n) => h("ul", { class: "mini-legend" }, parts.slice(0, n).map((p) => h("li", {}, h("i", { style: { background: p.c } }), `${p.label} ${usdCompact(p.v)}`)));
-        const body = [head("debt", COLORS.debt, "Debt payments"), big(usdCompact(tot)), h("div", { class: "tile-meta" }, `this year · ${usd(debt.debt_per_capita)} debt per resident`)];
+        const body = [head("debt", COLORS.debt, "Debt Payments"), big(usdCompact(tot)), h("div", { class: "tile-meta" }, `this year · ${usd(debt.debt_per_capita)} debt per resident`)];
         if (size === "s") return h("div", { class: "tile-body" }, ...body, bar, legend(2));
         if (size === "m") return h("div", { class: "tile-body" }, ...body, bar, legend(3));
         const topPay = ds.filter((i) => dsTot(i) > 0).sort((a, b) => dsTot(b) - dsTot(a)).slice(0, size === "xl" ? 8 : 5);
@@ -640,11 +640,11 @@ export function tileDefs(data, COLORS) {
       },
     },
     news?.items?.length && {
-      id: "news", opens: "news", size: "l", label: "City news",
+      id: "news", opens: "news", size: "l", label: "City News",
       build: (size) => {
         const n = { s: 1, m: 2, l: 5, xl: 6 }[size];
         const items = news.items.slice(0, n);
-        return h("div", { class: "tile-body" }, head("news", COLORS.news, "City news"),
+        return h("div", { class: "tile-body" }, head("news", COLORS.news, "City News"),
           h("ul", { class: `news-mini ${size === "s" ? "solo" : ""} ${size === "xl" ? "cols-2" : ""}` }, items.map((it) => h("li", {},
             h("span", { class: "mini-date" }, it.date ? shortDate(new Date(`${it.date}T12:00`)) : ""),
             h("div", {}, h("span", { class: "news-mini-title" }, it.title),
@@ -652,17 +652,17 @@ export function tileDefs(data, COLORS) {
       },
     },
     {
-      id: "growth", opens: "growth", size: "m", label: "Taxable property",
+      id: "growth", opens: "growth", size: "m", label: "Taxable Property",
       build: (size) => {
         const rows = budget.tax_rate_history.filter((r) => r.assessed_value);
         const first = rows[0], last = rows.at(-1);
         const number = h("div", {}, big(usdCompact(last.assessed_value)), h("div", { class: "tile-delta up" }, `▲ ${Math.round((last.assessed_value / first.assessed_value) * 10) / 10}× since ${fy(first.fiscal_year)}`));
         const spark = h("div", { class: `tile-spark ${size === "s" ? "sm" : ""}` }, sparkline(rows.map((r) => r.assessed_value), t.series[2]));
-        if (size === "s") return h("div", { class: "tile-body" }, head("growth", COLORS.growth, "Taxable property"), number, spark);
-        if (size === "m") return h("div", { class: "tile-body" }, head("growth", COLORS.growth, "Taxable property"),
+        if (size === "s") return h("div", { class: "tile-body" }, head("growth", COLORS.growth, "Taxable Property"), number, spark);
+        if (size === "m") return h("div", { class: "tile-body" }, head("growth", COLORS.growth, "Taxable Property"),
           h("div", { class: "tile-split" }, h("div", {}, number, h("div", { class: "tile-meta" }, property?.current ? `${property.current.area_sqmi.toFixed(0)} sq mi in Cabarrus County` : "Assessed value, whole city")), spark));
         const c = property?.current;
-        return h("div", { class: "tile-body" }, head("growth", COLORS.growth, "Taxable property"),
+        return h("div", { class: "tile-body" }, head("growth", COLORS.growth, "Taxable Property"),
           h("div", { class: "tile-split" }, number, spark),
           c ? facts([["Land area (Cabarrus part)", `${c.area_sqmi.toFixed(1)} sq mi`], ["Tax parcels", num(c.parcels)], ["Median parcel value", usd(c.median_value)],
             ["Vacant parcels", `${num(c.vacant_parcels)} (${pct((100 * c.vacant_parcels) / c.parcels, 0)})`],
@@ -670,7 +670,7 @@ export function tileDefs(data, COLORS) {
       },
     },
     zoning && {
-      id: "land", opens: "land", size: "s", label: "Land use",
+      id: "land", opens: "land", size: "s", label: "Land Use",
       build: (size) => {
         const cats = [...zoning.categories].sort((a, b) => b.acres - a.acres);
         const n = size === "s" ? 3 : size === "m" ? 3 : 6;
@@ -678,18 +678,18 @@ export function tileDefs(data, COLORS) {
           { category: "Other", value: cats.slice(n).reduce((s, c) => s + c.acres, 0), pct: cats.slice(n).reduce((s, c) => s + c.pct, 0), color: t.mutedFill }].filter((p) => p.value > 0);
         const ring = h("div", { class: "ring-wrap" }, donut(parts, isBig(size) ? 150 : 104, isBig(size) ? 16 : 12),
           h("div", { class: "ring-label" }, h("b", {}, pct(cats[0].pct, 0)), h("span", {}, cats[0].category)));
-        if (size === "s") return h("div", { class: "tile-body" }, head("land", COLORS.land, "Land use"), ring);
+        if (size === "s") return h("div", { class: "tile-body" }, head("land", COLORS.land, "Land Use"), ring);
         const leg = h("ul", { class: `ring-legend${isBig(size) ? " with-acres" : ""}` }, parts.map((p) => h("li", {}, h("i", { style: { background: p.color } }), h("span", {}, p.category),
           isBig(size) ? h("small", {}, `${num(Math.round(p.value))} ac`) : null, h("b", {}, pct(p.pct, 0)))));
-        if (size === "m") return h("div", { class: "tile-body" }, head("land", COLORS.land, "Land use"), h("div", { class: "tile-split ring-split" }, ring, leg));
+        if (size === "m") return h("div", { class: "tile-body" }, head("land", COLORS.land, "Land Use"), h("div", { class: "tile-split ring-split" }, ring, leg));
         // Large / XL: acres per category, the biggest zoning districts, and (XL) a zoning map.
         const districts = h("div", {}, h("div", { class: "mini-head" }, "Largest zoning districts"),
           h("ul", { class: "ub-mini land-districts" }, zoning.districts.slice(0, 3).map((d) => h("li", {}, h("b", {}, d.code), h("span", {}, d.category), h("small", {}, `${num(d.acres)} ac`)))));
         const meta = h("div", { class: "tile-meta" }, `${num(zoning.total_acres)} zoned acres · Cabarrus County part of the city`);
-        if (size === "l") return h("div", { class: "tile-body" }, head("land", COLORS.land, "Land use"), h("div", { class: "tile-split ring-split" }, ring, leg), districts, meta);
+        if (size === "l") return h("div", { class: "tile-body" }, head("land", COLORS.land, "Land Use"), h("div", { class: "tile-split ring-split" }, ring, leg), districts, meta);
         const colorOf = new Map(parts.map((p) => [p.category, p.color]));
         const map = data.zoningGeo ? zoningMap(data.zoningGeo, (cat) => colorOf.get(cat) || t.mutedFill, data.boundaries) : null;
-        return h("div", { class: "tile-body" }, head("land", COLORS.land, "Land use"),
+        return h("div", { class: "tile-body" }, head("land", COLORS.land, "Land Use"),
           h("div", { class: "tile-split top land-xl" },
             h("div", {}, h("div", { class: "tile-split ring-split" }, ring, leg), districts, meta),
             map ? h("figure", { class: "land-map" }, map) : null));
@@ -738,15 +738,15 @@ export function tileDefs(data, COLORS) {
       },
     },
     org && {
-      id: "org", opens: "org", size: "s", label: "City staff",
+      id: "org", opens: "org", size: "s", label: "City Staff",
       build: (size) => {
         const ppl = org.people.filter((p) => p.id !== "council" && !p.vacant);
         const mgr = ppl.find((p) => p.title === "City Manager");
         const person = (p) => h("div", { class: "person" }, p.photo ? h("img", { src: p.photo, alt: "" }) : null, h("div", {}, h("b", {}, p.name), h("span", {}, p.title)));
-        if (size === "s") return h("div", { class: "tile-body" }, head("org", COLORS.org, "Who runs the City"), mgr ? person(mgr) : null, h("div", { class: "tile-meta" }, `${ppl.length} leaders and departments`));
+        if (size === "s") return h("div", { class: "tile-body" }, head("org", COLORS.org, "Who Runs the City"), mgr ? person(mgr) : null, h("div", { class: "tile-meta" }, `${ppl.length} leaders and departments`));
         const n = { m: 4, l: 10, xl: 15 }[size];
         const list = ppl.slice(0, n);
-        return h("div", { class: "tile-body" }, head("org", COLORS.org, "Who runs the City"),
+        return h("div", { class: "tile-body" }, head("org", COLORS.org, "Who Runs the City"),
           h("ul", { class: `people-list cols-2 org-list ${size === "xl" ? "cols-3" : ""}` }, list.map((p) => h("li", {},
             p.photo ? h("img", { src: p.photo, alt: "" }) : h("span", { class: "avatar-fallback" }, p.name[0]),
             h("div", {}, h("b", {}, p.name), h("span", {}, p.title)),
@@ -755,13 +755,13 @@ export function tileDefs(data, COLORS) {
       },
     },
     {
-      id: "about", opens: "about", size: "s", label: "About the data",
+      id: "about", opens: "about", size: "s", label: "About the Data",
       build: (size) => {
         const sources = budget.sources, n = Object.keys(sources).length;
         const fresh = datasets(data);
         const newest = fresh.reduce((x, y) => (y.date > x.date ? y : x), fresh[0]);
         const counts = h("ul", { class: "fmt-counts" }, formatCounts(sources).map(([f, c]) => h("li", {}, h("b", {}, c), ` ${f}`)));
-        const top = [head("about", COLORS.about, "About the data"),
+        const top = [head("about", COLORS.about, "About the Data"),
           h("div", { class: "about-big" }, big(String(n)), h("span", {}, "official sources"))];
         const refreshed = h("div", { class: "tile-meta" }, newest ? `Data refreshed ${ago(newest.age).toLowerCase()} · ${fmtDate(newest.date)}` : "");
         if (size === "s") return h("div", { class: "tile-body" }, ...top, refreshed);

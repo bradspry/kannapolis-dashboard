@@ -45,7 +45,7 @@
     "events": "l",
     "land": "xl",
     "weather": "m",
-    "g-debt-limit": "s",
+    "g-debt-limit": "m",
     "g-tax-rate": "s",
     "g-owners": "s",
     "baseball": "m",
@@ -57,7 +57,8 @@
     "videos": "m",
     "police": "m",
     "waste": "l",
-    "drought": "m"
+    "drought": "m",
+    "g-debt-policy": "m"
   },
   "spacers": []
 }
