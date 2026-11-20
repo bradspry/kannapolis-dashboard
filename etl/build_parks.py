@@ -1,4 +1,4 @@
-"""Kannapolis Parks & Recreation for residents (hand-entered from kannapolisnc.gov/parksandrec and its sub-pages).
+"""Kannapolis Parks & Recreation for residents (machine-parsed from kannapolisnc.gov/parksandrec and its sub-pages).
 
 Park map locations: U.S. Census geocoder (exact address matches), or Cabarrus County GIS for
 Vietnam Veterans Park. Parks without a street address are listed but not mapped."""

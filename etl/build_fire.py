@@ -1,4 +1,4 @@
-"""Kannapolis Fire: contacts, free programs, stations and forms (hand-entered from kannapolisnc.gov/kfd).
+"""Kannapolis Fire: contacts, free programs, stations and forms (machine-parsed from kannapolisnc.gov/kfd).
 
 Station coordinates come from the U.S. Census Bureau geocoder (exact address matches)."""
 from __future__ import annotations

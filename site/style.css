@@ -1588,3 +1588,45 @@ body::before {
   background-size: auto, 112px 112px;
   opacity: var(--weave-opacity);
 }
+
+/* ---------- Waste collection ---------- */
+.ws-missed { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.ws-missed.compact { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+.ws-call, .ws-mail { padding: 12px 14px; }
+.ws-call { border-color: color-mix(in oklab, var(--icon-3) 55%, var(--border)); background: color-mix(in oklab, var(--icon-3) 16%, var(--surface-1)); }
+.ws-call-icon { font-size: 20px; line-height: 1; }
+.ws-missed b { display: block; font-size: 16px; }
+.ws-missed small { display: block; font-size: 12px; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ws-missed.compact .ws-call, .ws-missed.compact .ws-mail { padding: 8px 12px; border-radius: 12px; gap: 10px; }
+.ws-missed.compact b { font-size: 14.5px; }
+.ws-label { margin-bottom: 4px; }
+.ws-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 18px; align-items: center; border-color: color-mix(in oklab, var(--icon-3) 45%, var(--border)); }
+.ws-hero h3 { margin: 2px 0 6px; font-size: 22px; }
+.ws-notices { display: grid; gap: 8px; }
+.ws-notice { display: flex; gap: 12px; align-items: center; padding: 12px 16px; border-color: color-mix(in oklab, var(--accent) 45%, var(--border)); }
+.ws-notice p { margin: 0; font-size: 14.5px; }
+.ws-notice-emoji { font-size: 24px; }
+.ws-services .pk-rules { margin: 4px 0 0; font-size: 13px; }
+.ws-mini li, .ws-sched li { grid-template-columns: 22px minmax(0, 1fr); }
+.ws-sched li { grid-template-columns: 82px minmax(0, 1fr); }
+.ws-mini span { white-space: normal; }
+.ws-finder { position: relative; z-index: 2; display: inline-block; margin-top: 8px; font-size: 13px; font-weight: 600; }
+.ws-elsewhere li { grid-template-columns: 130px minmax(0, 1fr); }
+.ws-elsewhere span { white-space: normal; }
+@media (max-width: 720px) { .ws-hero { grid-template-columns: minmax(0, 1fr); } .ws-missed { grid-template-columns: minmax(0, 1fr); } .ws-elsewhere li { grid-template-columns: minmax(0, 1fr); } }
+.ws-missed.compact.side { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 720px) { .ws-missed.compact.side { grid-template-columns: minmax(0, 1fr); } }
+.ws-missed .ws-mail b { font-size: 14.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ws-missed > a > span:last-child { min-width: 0; }
+
+.ws-finder-row { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 8px; font-size: 13px; font-weight: 600; }
+.ws-finder-row a { position: relative; z-index: 2; }
+.tile-chief-text span { overflow: hidden; text-overflow: ellipsis; }
+
+/* Waste, large tile: compact "what goes where" grid */
+.ws-where { list-style: none; margin: 2px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px 10px; }
+.ws-where li { display: flex; gap: 6px; align-items: center; min-width: 0; padding: 3px 0; }
+.ws-where-emoji { font-size: 17px; line-height: 1; flex: none; }
+.ws-where b { display: block; font-size: 12.5px; line-height: 1.2; }
+.ws-where small { display: block; font-size: 11px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ws-heads { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 14px; align-items: start; }

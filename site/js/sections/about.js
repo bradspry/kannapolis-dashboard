@@ -15,10 +15,10 @@ export function datasets(D) {
     ["People (Census)", "people", D.census, "Weekly", 9],
     ["Growth & property", "growth", D.property, "Weekly", 9],
     ["Land use & zoning", "land", D.zoning, "Weekly", 9],
-    ["Budget, debt & debt service", "budget", D.budget, "By hand, each budget year", null],
-    ["City Council", "council", D.council, "By hand", null],
-    ["Police statistics", "police", D.police, "By hand, each quarterly report", null],
-    ["City staff", "org", D.org, "By hand", null],
+    ["Budget, debt & debt service", "budget", D.budget, "Machine-parsed, each budget year", null],
+    ["City Council", "council", D.council, "Machine-parsed", null],
+    ["Police statistics", "police", D.police, "Machine-parsed, each quarterly report", null],
+    ["City staff", "org", D.org, "Machine-parsed", null],
   ];
   const today = new Date(); today.setHours(0, 0, 0, 0);
   return list.filter(([, , d]) => d?.generated).map(([name, win, d, schedule, maxDays]) => {
@@ -49,7 +49,7 @@ export function formatCounts(sources) {
   return [...c].sort((a, b) => b[1] - a[1]);
 }
 
-const statusLabel = { fresh: "Up to date", stale: "Due for refresh", manual: "Updated by hand" };
+const statusLabel = { fresh: "Up to date", stale: "Due for refresh", manual: "Machine-parsed snapshot" };
 export const statusDot = (st) => h("span", { class: `fresh-dot ${st}`, "aria-hidden": "true" });
 
 let fmtFilter = "All";
@@ -97,7 +97,7 @@ export function renderAbout(D) {
   body.replaceChildren(
     h("div", { class: "tiles about-stats" },
       stat(String(nSources), "Official sources", `${formatCounts(sources).map(([f, n]) => `${n} ${f}`).slice(0, 3).join(" · ")}`),
-      stat(String(cited), "Hand-entered figures", "each linked to its PDF page"),
+      stat(String(cited), "Machine-parsed figures", "each linked to its PDF page"),
       stat(newest ? ago(newest.age) : "—", "Last data refresh", newest ? fmtDate(newest.date) : ""),
       stat("GPL-3.0", "Open source", h("a", { href: REPO, target: "_blank", rel: "noopener" }, "View the code ↗"))),
 

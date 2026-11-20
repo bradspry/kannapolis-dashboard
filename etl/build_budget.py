@@ -1,4 +1,4 @@
-"""City budget & debt, from hand-curated CSVs in data/manual/.
+"""City budget & debt, from machine-parsed CSVs in data/manual/.
 
 These numbers come from the city's budget documents and audited financial report (PDFs),
 which have no API. Every row cites its source document and page; see data/manual/README.md
@@ -41,7 +41,7 @@ def debt_service() -> list[dict]:
 def main() -> None:
     sources = {r["id"]: {**{k: r[k] for k in ("title", "publisher", "format", "url", "used_for")},
                          "widgets": r["widgets"].split()} for r in rows("sources.csv")}
-    # Every hand-entered row must cite a known source and link to it.
+    # Every machine-parsed row must cite a known source and link to it.
     for name in ("general_fund_by_function.csv", "general_fund_revenue.csv", "funds_fy2027.csv",
                  "tax_rate_history.csv", "debt_history.csv", "debt_service_fy2027.csv"):
         for i, r in enumerate(rows(name), 2):

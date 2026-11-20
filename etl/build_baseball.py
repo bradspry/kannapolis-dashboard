@@ -1,4 +1,4 @@
-"""Kannapolis Cannon Ballers 2027 schedule, transcribed from the team's printed schedule (an image PDF).
+"""Kannapolis Cannon Ballers 2027 schedule, machine-parsed from the team's printed schedule (an image PDF).
 
 Checks: 132 games, 66 home / 66 away, one game per day, all inside the 2027 season,
 and every home game has a start time."""

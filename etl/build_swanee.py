@@ -1,6 +1,6 @@
 """The Swanee Theatre (downtown live-music venue): upcoming shows from the site's public
 Events Calendar REST feed (WordPress "The Events Calendar": /wp-json/tribe/events/v1/events).
-Weekly happenings and rental details are hand-entered in data/manual/swanee.json."""
+Weekly happenings and rental details are machine-parsed snapshots in data/manual/swanee.json."""
 from __future__ import annotations
 
 import datetime as dt

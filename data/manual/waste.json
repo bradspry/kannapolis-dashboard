@@ -1,0 +1,214 @@
+{
+  "name": "Garbage, Recycling & Yard Waste",
+  "missed": {
+    "phone": "704-920-4444",
+    "email": "missedpickup@kannapolisnc.gov",
+    "rule": "Report within 24 hours of your collection day (not for holiday or posted delays), or items wait until the next scheduled pickup."
+  },
+  "phone": "704-920-4444",
+  "address": "401 Laureate Way, Kannapolis, NC 28081",
+  "physical": "1401 Bethpage Road",
+  "director": {
+    "name": "Michael Rattler",
+    "title": "Director of Transportation and Environmental Services",
+    "email": "mrattler@kannapolisnc.gov",
+    "photo": "photos/staff/rattler.jpg"
+  },
+  "cartology": {
+    "about": "CARTology is the City's free collection calendar: look up your pickup days, get reminders, and search how to get rid of almost anything.",
+    "app_store": "https://apps.apple.com/us/app/cartology/id1368037662",
+    "google_play": "https://play.google.com/store/apps/details?id=us.cabarruscounty.recollect.waste",
+    "page": "https://www.kannapolisnc.gov/Government-Departments/Garbage-Recycling-Yard-Waste/Whats-My-Day"
+  },
+  "services": [
+    {
+      "id": "garbage",
+      "name": "Garbage",
+      "emoji": "🗑️",
+      "every": "Weekly",
+      "cart": "96-gallon cart, BLACK lid",
+      "tips": [
+        "Bag your garbage and close the lid.",
+        "Don't overload the cart."
+      ],
+      "short_name": "Garbage",
+      "short": "Black lid · weekly"
+    },
+    {
+      "id": "recycling",
+      "name": "Recycling",
+      "emoji": "♻️",
+      "every": "Every other week",
+      "cart": "96-gallon cart, YELLOW lid",
+      "tips": [
+        "Don't bag recycling.",
+        "Clean and dry items only.",
+        "Garbage mixed in means it won't be collected."
+      ],
+      "short_name": "Recycling",
+      "short": "Yellow lid · every 2 wks"
+    },
+    {
+      "id": "yard",
+      "name": "Yard waste",
+      "emoji": "🍂",
+      "every": "Weekly (City crews)",
+      "cart": "Bags at the curb",
+      "tips": [
+        "Bag leaves and yard waste, except during loose-leaf season.",
+        "Dark or white bags: leave open. See-through bags: tie shut.",
+        "No processed wood."
+      ],
+      "short_name": "Yard waste",
+      "short": "Bags · weekly"
+    },
+    {
+      "id": "bulky",
+      "name": "Bulky items",
+      "emoji": "🛋️",
+      "every": "Every other week, with recycling",
+      "cart": "At the curb",
+      "tips": [
+        "Up to 5 cubic yards; 50 lb per item.",
+        "No hazardous waste or construction debris."
+      ],
+      "short_name": "Bulky items",
+      "short": "Curb · every 2 wks"
+    },
+    {
+      "id": "white",
+      "name": "White goods (appliances)",
+      "emoji": "🧊",
+      "every": "Every other week, with recycling",
+      "cart": "At the curb",
+      "tips": [
+        "Stoves, refrigerators, freezers, water heaters, dishwashers, washers and dryers.",
+        "Remove refrigerator and freezer doors; owner must remove the freon."
+      ],
+      "short_name": "Appliances",
+      "short": "Curb · every 2 wks"
+    },
+    {
+      "id": "ewaste",
+      "name": "E-waste",
+      "emoji": "🖥️",
+      "every": "Every other week, with recycling",
+      "cart": "At the curb",
+      "tips": [
+        "Computers, TVs, printers, scanners, phones, microwaves and stereos.",
+        "Not accepted: automotive electronics or large industrial equipment."
+      ],
+      "short_name": "E-waste",
+      "short": "Curb · every 2 wks"
+    }
+  ],
+  "set_out": [
+    "Put everything at the curb the night before your collection day.",
+    "Bring empty carts in by 7 a.m. the day after.",
+    "Keep carts, yard waste and bulky items 5 feet from each other and from cars, mailboxes, poles, fences and other obstructions."
+  ],
+  "delay_holidays": [
+    {
+      "date": "2026-11-26",
+      "name": "Thanksgiving"
+    },
+    {
+      "date": "2026-12-25",
+      "name": "Christmas"
+    }
+  ],
+  "delay_rule": "Garbage, recycling, bulky items, white goods and e-waste are collected on every holiday except Thanksgiving and Christmas. Those weeks, pickups from the holiday on run one day late, through Saturday.",
+  "yard_holidays": [
+    {
+      "date": "2026-01-01",
+      "name": "New Year's Day"
+    },
+    {
+      "date": "2026-01-19",
+      "name": "Martin Luther King Jr. Day"
+    },
+    {
+      "date": "2026-04-03",
+      "name": "Good Friday"
+    },
+    {
+      "date": "2026-05-25",
+      "name": "Memorial Day"
+    },
+    {
+      "date": "2026-07-04",
+      "name": "Independence Day"
+    },
+    {
+      "date": "2026-09-07",
+      "name": "Labor Day"
+    },
+    {
+      "date": "2026-11-11",
+      "name": "Veterans Day"
+    },
+    {
+      "date": "2026-11-26",
+      "name": "Thanksgiving"
+    },
+    {
+      "date": "2026-11-27",
+      "name": "Thanksgiving"
+    },
+    {
+      "date": "2026-12-24",
+      "name": "Christmas"
+    },
+    {
+      "date": "2026-12-25",
+      "name": "Christmas"
+    }
+  ],
+  "leaf_season": {
+    "start": "2026-11-02",
+    "end": "2027-01-15",
+    "about": "Loose-leaf vacuum season: rake leaves to the curb, no bags needed. CARTology shows your loose-leaf day."
+  },
+  "christmas_trees": "Real trees: remove decorations and lights, put at the curb on your yard-waste day. Artificial trees: same, on your recycling day (bulky pickup).",
+  "carts": [
+    {
+      "what": "Second garbage cart",
+      "price": "$7.43 / month"
+    },
+    {
+      "what": "Second recycling cart",
+      "price": "$4.18 / month"
+    },
+    {
+      "what": "Damaged cart replacement",
+      "price": "Call 704-920-4444"
+    }
+  ],
+  "cart_note": "Carts aren't replaced for odor or bugs; residents keep them clean.",
+  "elsewhere": [
+    {
+      "what": "Household hazardous waste",
+      "detail": "Paint, oil, batteries, propane cylinders, fluorescent bulbs and more go to the Cabarrus County Household Hazardous Waste Facility.",
+      "phone": "704-920-3278"
+    },
+    {
+      "what": "Unused medicine",
+      "detail": "Don't flush it or trash it. Ask your pharmacy about a medication drop box."
+    },
+    {
+      "what": "Dead animal on the road",
+      "detail": "Report animals hit by cars along the road to Public Works (weekends: leave a message, option 1). Pets and animals off the right-of-way aren't collected.",
+      "phone": "704-920-4444"
+    },
+    {
+      "what": "Business collection",
+      "detail": "The City also collects garbage and recycling for businesses.",
+      "phone": "704-930-4208",
+      "url": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Garbage%20and%20Recycling/Documents/Comm%20Gar_Rec%20bro%20_063025.pdf"
+    }
+  ],
+  "links": {
+    "page": "https://www.kannapolisnc.gov/Garbage",
+    "directory": "https://www.kannapolisnc.gov/Government-Departments/Garbage-Recycling-Yard-Waste/Staff-Directory"
+  }
+}

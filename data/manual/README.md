@@ -1,6 +1,6 @@
-# Hand-curated budget & debt data
+# Machine-parsed budget & debt data
 
-The City publishes its budget and finances only as PDFs, so these CSVs are transcribed by hand.
+The City publishes its budget and finances only as PDFs, so these CSVs are machine-parsed from those PDFs and checked against the documents' own totals. They're snapshots: re-parse them when a new document comes out.
 **Every row has a `source` column and a `source_url` column** naming the document (an `id` from `sources.csv`) and the page or section. `source_url` is that document's URL plus `#page=N` (the PDF page, which can differ from the printed page number); `python3 etl/run_all.py budget` fails if a row's citation is missing or doesn't match `sources.csv`.
 
 ## Files

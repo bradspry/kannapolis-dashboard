@@ -24,6 +24,7 @@ import build_property
 import build_site
 import build_swanee
 import build_utility
+import build_waste
 import build_videos
 import build_whataburger
 import build_weather
@@ -49,6 +50,7 @@ STEPS = [
     ("fire", build_fire.main),
     ("baseball", build_baseball.main),
     ("utility", build_utility.main),
+    ("waste", build_waste.main),
     ("parks", build_parks.main),
     ("zoning", build_zoning.main),
     ("property", build_property.main),  # slowest: ~26k parcels + ~18 yearly snapshots

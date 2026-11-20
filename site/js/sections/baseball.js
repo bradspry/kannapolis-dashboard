@@ -138,5 +138,5 @@ export function renderBaseball(bb) {
       h("div", {}, h("h3", {}, "Opponents"),
         h("ul", { class: "bb-teams", role: "list" }, [...new Set(games.map((g) => g.opp))].sort().map((c) => h("li", {}, h("b", {}, c), ` ${bb.teams[c]}`))))),
     h("p", { class: "note" }, "From the team's ", h("a", { href: bb.schedule_pdf, target: "_blank", rel: "noopener" }, "printed 2027 schedule"),
-      `, transcribed by hand and checked (132 games, 66 home). The printed calendar labels May 28 as "38". ${bb.note}`));
+      `, machine-parsed and checked (132 games, 66 home). The printed calendar labels May 28 as "38". ${bb.note}`));
 }

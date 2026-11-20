@@ -1,6 +1,6 @@
 """Editions Coffee Shop & Bookstore (217 S Main St): new book arrivals and this month's events,
 read daily from editionsbookstore.com (a ChrisLands store site). The coffee menu, yarn, hours and
-contact details are hand-entered in data/manual/editions.json.
+contact details are machine-parsed snapshots in data/manual/editions.json.
 
 Politeness: the site's robots.txt allows these pages and asks for a 10-second crawl delay, so
 requests are spaced 10+ seconds apart and identify themselves with the kdash User-Agent."""

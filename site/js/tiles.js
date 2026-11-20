@@ -18,6 +18,7 @@ import { featuredMaker, makerImage, statusLine, siteButton, hoursFor, hoursText,
 import { upcoming as edUpcoming, whenText as edWhen, edStatus, cover as edCover, orderButton as edOrder } from "./sections/editions.js";
 import { favorites as wabFavorites, wabLogo, orderButton as wabOrder, price as wabPrice, todayHours as wabToday } from "./sections/whataburger.js";
 import { splitVideos, whenBadge as vdBadge, thumb as vdThumb, watchButton as vdWatch, dayLabel as vdDay, timeLabel as vdTime } from "./sections/videos.js";
+import { notices as wsNotices, missedButtons as wsMissed } from "./sections/waste.js";
 import { prepGames, nextHome, homeStands, standLabel, nextGameCard, fmtDay as bbDay, fmtTime as bbTime } from "./sections/baseball.js";
 
 const NS = "http://www.w3.org/2000/svg";
@@ -139,7 +140,7 @@ const contactLinks = (p) => [
 const shortDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
 export function tileDefs(data, COLORS) {
-  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos } = data;
+  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos, waste } = data;
   const t = tokens();
   const geo = census.geographies;
   const k = geo.Kannapolis, nc = geo["North Carolina"], cab = geo["Cabarrus County"], us = geo["United States"];
@@ -247,6 +248,40 @@ export function tileDefs(data, COLORS) {
             h("div", {}, callButtons(fire), freeHead, freeList(fire, 4)),
             h("div", {}, h("div", { class: "mini-head" }, "Fire stations"), stationList(fire, { compact: true }),
               h("p", { class: "tile-meta" }, "ISO Class 1: the best fire-protection rating possible"))));
+      },
+    },
+    waste && {
+      id: "waste", opens: "waste", size: "m", label: "Waste collection",
+      build: (size) => {
+        const top = [head("trash", COLORS.waste, "Waste collection")];
+        const now = wsNotices(waste);
+        const noteList = (n) => now.length ? h("ul", { class: "ub-mini ws-mini" }, now.slice(0, n).map((x) => h("li", {}, h("b", { "aria-hidden": "true" }, x.emoji), h("span", {}, x.short)))) : null;
+        const finder = h("a", { class: "ws-finder", href: waste.cartology.page, target: "_blank", rel: "noopener" }, "📅 Find your pickup day (CARTology) ↗");
+        const schedule = (n) => h("ul", { class: "ub-mini ws-sched" }, waste.services.slice(0, n).map((s) => h("li", {}, h("b", {}, s.name), h("span", {}, s.every))));
+        const sched = schedule(3);
+        const label = h("div", { class: "bb-next-label ws-label" }, "Missed a pickup? Within 24 hours:");
+        if (size === "s") return h("div", { class: "tile-body" }, ...top, label, wsMissed(waste, { compact: true }));
+        if (size === "m") return h("div", { class: "tile-body" }, ...top,
+          h("div", { class: "tile-split top" }, h("div", {}, label, wsMissed(waste, { compact: true })),
+            h("div", {}, h("div", { class: "mini-head bb-mh" }, now.length ? "Heads up" : "Schedule"), noteList(2) || sched, finder)));
+        // Large: the department director in the header (like the police and fire chiefs) and the CARTology app links.
+        if (size === "l") return h("div", { class: "tile-body" }, headWithChief("trash", COLORS.waste, "Waste collection", waste.director, "Director of Transportation & Environmental Services"),
+          label, wsMissed(waste, { compact: true, side: true }),
+          // Heads up: the first two notes stacked, the third (usually loose-leaf season) beside them.
+          now.length ? [h("div", { class: "mini-head" }, "Heads up"),
+            h("div", { class: "ws-heads" }, noteList(2),
+              now[2] ? h("ul", { class: "ub-mini ws-mini" }, h("li", {}, h("b", { "aria-hidden": "true" }, now[2].emoji), h("span", {}, now[2].short))) : null)] : null,
+          h("div", { class: "mini-head" }, "What goes where"),
+          h("ul", { class: "ws-where", role: "list" }, waste.services.map((x) => h("li", {},
+            h("span", { class: "ws-where-emoji", "aria-hidden": "true" }, x.emoji), h("span", {}, h("b", {}, x.short_name), h("small", {}, x.short))))),
+          h("div", { class: "ws-finder-row" }, h("a", { href: waste.cartology.page, target: "_blank", rel: "noopener" }, "📅 Find your day ↗"),
+            h("a", { href: waste.cartology.app_store, target: "_blank", rel: "noopener" }, "iPhone app ↗"),
+            h("a", { href: waste.cartology.google_play, target: "_blank", rel: "noopener" }, "Android app ↗")));
+        return h("div", { class: "tile-body" }, ...top,
+          h("div", { class: "tile-split top" },
+            h("div", {}, label, wsMissed(waste, { compact: true }), finder),
+            h("div", {}, now.length ? [h("div", { class: "mini-head bb-mh" }, "Heads up"), noteList(3)] : null,
+              h("div", { class: "mini-head" }, "Schedule"), sched)));
       },
     },
     videos && {
@@ -711,7 +746,7 @@ export function tileDefs(data, COLORS) {
         if (size === "s") return h("div", { class: "tile-body" }, ...top, refreshed);
         if (size === "m") return h("div", { class: "tile-body" }, ...top, counts, refreshed);
         const freshList = (k) => h("ul", { class: "fresh-mini" }, fresh.slice(0, k).map((f) =>
-          h("li", {}, statusDot(f.status), h("span", {}, f.name), h("small", {}, f.status === "manual" ? "by hand" : ago(f.age)))));
+          h("li", {}, statusDot(f.status), h("span", {}, f.name), h("small", {}, f.status === "manual" ? "parsed" : ago(f.age)))));
         if (size === "l") return h("div", { class: "tile-body" }, ...top, counts,
           h("div", { class: "mini-head" }, "Freshness"), freshList(6));
         return h("div", { class: "tile-body" }, ...top,

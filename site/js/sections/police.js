@@ -128,5 +128,5 @@ export function renderPolice(police, org) {
       h("a", { href: police.page, target: "_blank", rel: "noopener" }, "Kannapolis Police Department"),
       " website and its quarterly crime reports (",
       ...qs.flatMap((q, i) => [h("a", { href: q.source_url, target: "_blank", rel: "noopener" }, quarterLabel(q.quarter)), i < qs.length - 1 ? ", " : ""]),
-      "). Figures are KPD's own, transcribed by hand and checked against each report's total."));
+      "). Figures are KPD's own, machine-parsed from each report and checked against its total."));
 }

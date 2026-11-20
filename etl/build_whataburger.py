@@ -1,6 +1,6 @@
-"""What-A-Burger #1 (1510 N Cannon Blvd): hours, menu and prices, hand-entered in
+"""What-A-Burger #1 (1510 N Cannon Blvd): hours, menu and prices, machine-parsed into
 data/manual/whataburger.json from the restaurant's online menu (what-a-burger1.com/order).
-The menu there is drawn by JavaScript, so it's copied by hand; check prices when updating."""
+The menu there is drawn by JavaScript, so it's parsed from a rendered copy of the page; re-parse to update prices."""
 from __future__ import annotations
 
 import json

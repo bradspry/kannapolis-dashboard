@@ -1,4 +1,4 @@
-"""Mayor & City Council contacts, from data/manual/council.csv (transcribed from the City's website)."""
+"""Mayor & City Council contacts, from data/manual/council.csv (machine-parsed from the City's website)."""
 from __future__ import annotations
 
 import csv

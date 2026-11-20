@@ -1,4 +1,4 @@
-"""How to pay a City of Kannapolis utility bill (hand-entered from kannapolisnc.gov/customer-service)."""
+"""How to pay a City of Kannapolis utility bill (machine-parsed from kannapolisnc.gov/customer-service)."""
 from __future__ import annotations
 
 import json

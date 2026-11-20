@@ -1,4 +1,4 @@
-"""Made in Kannapolis: local makers (hand-entered from each maker's own website)."""
+"""Made in Kannapolis: local makers (machine-parsed from each maker's own website)."""
 from __future__ import annotations
 
 import json

@@ -1,4 +1,4 @@
-"""City staff org chart, from data/manual/org_chart.json (transcribed from the City's published chart).
+"""City staff org chart, from data/manual/org_chart.json (machine-parsed from the City's published chart).
 
 Validates the reporting tree and attaches photo paths for people with a cropped headshot in site/photos/staff/.
 """

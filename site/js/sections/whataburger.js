@@ -1,4 +1,4 @@
-// What-A-Burger #1: hometown drive-in on N Cannon Blvd. Hand-entered menu with prices,
+// What-A-Burger #1: hometown drive-in on N Cannon Blvd. Machine-parsed menu with prices,
 // local favorites, and open-now worked out on the device from posted hours.
 import { h } from "../ui.js";
 import { statusLine, hoursText, hoursFor } from "./made.js";
@@ -71,5 +71,5 @@ export function renderWhatABurger(wab) {
 
     h("div", { class: "card kpd-chief" },
       h("div", {}, h("b", {}, wab.name), h("span", {}, `${wab.address} · ${wab.phone} · Open daily 7 AM – 10 PM`))),
-    h("p", { class: "note" }, "Menu copied by hand from the restaurant's online menu. Open/closed is worked out on your device from posted hours; holidays can change them."));
+    h("p", { class: "note" }, "Menu machine-parsed from the restaurant's online menu. Open/closed is worked out on your device from posted hours; holidays can change them."));
 }

@@ -9,7 +9,7 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 OUT = ROOT / "data" / "generated"   # JSON the site is built from
-MANUAL = ROOT / "data" / "manual"   # hand-curated inputs
+MANUAL = ROOT / "data" / "manual"   # machine-parsed inputs (snapshots), each citing its source
 SITE = ROOT / "site"                # HTML/JS/CSS source + photos
 DIST = ROOT / "dist"                # the finished single-file dashboard
 

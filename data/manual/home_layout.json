@@ -1,13 +1,14 @@
 {
   "order": [
     "gem",
-    "swanee",
-    "parks",
+    "waste",
     "weather",
     "utility",
+    "swanee",
+    "fire",
+    "parks",
     "police",
     "editions",
-    "fire",
     "made",
     "events",
     "baseball",
@@ -31,7 +32,7 @@
   "hidden": [],
   "sizes": {
     "meetings": "m",
-    "news": "s",
+    "news": "m",
     "council": "l",
     "org": "xl",
     "debt-service": "l",
@@ -51,7 +52,8 @@
     "editions": "m",
     "whataburger": "m",
     "videos": "m",
-    "police": "m"
+    "police": "s",
+    "waste": "l"
   },
   "spacers": []
 }

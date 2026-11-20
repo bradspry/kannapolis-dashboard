@@ -1,7 +1,7 @@
-"""Kannapolis Police: contacts, services and quarterly crime statistics (hand-entered).
+"""Kannapolis Police: contacts, services and quarterly crime statistics (machine-parsed from KPD's pages and quarterly report PDFs).
 
 KPD publishes quarterly crime reports as PDFs (Power BI exports). Their Part 1 crime counts
-are transcribed into data/manual/kpd_part1_crimes.csv; this step checks each quarter's crimes
+are machine-parsed into data/manual/kpd_part1_crimes.csv; this step checks each quarter's crimes
 add up to its printed "Total Incident Reports" before publishing them.
 """
 from __future__ import annotations
