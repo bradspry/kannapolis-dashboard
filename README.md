@@ -6,7 +6,7 @@ An open-data dashboard for **Kannapolis, North Carolina**, built by a resident f
 
 It's **one self-contained HTML file** built by a small Python script. No Node, no venv, nothing to install.
 
-[![The Kannapolis Civic Dashboard home screen on a dark woven background: widget tiles for the Gem and Swanee theatres, Parks & Recreation (Celebration of Lights and Winterland Express train reservations), weather with a 5-day forecast over live radar, paying a utility bill, police and fire with their chiefs and 911 buttons, Editions bookstore's new books, Made in Kannapolis (Old Armor Beer), What-A-Burger, the Cannon Ballers, events, meetings, City Council with upcoming meetings, Council meeting videos, residents, City staff, budget, debt, gauges, a land use zoning map and data sources](docs/dashboard.jpg)](https://bradspry.github.io/kannapolis-dashboard/)
+[![The Kannapolis Civic Dashboard home screen on a dark woven background: widget tiles for the Gem and Swanee theatres, waste collection with missed-pickup contacts and holiday delays, Parks & Recreation (Celebration of Lights and Winterland Express train reservations), weather with a 5-day forecast over live radar, paying a utility bill, police and fire with their chiefs and 911 buttons, Editions bookstore's new books, Made in Kannapolis (Old Armor Beer), What-A-Burger, the Cannon Ballers, events, meetings, City Council with upcoming meetings, Council meeting videos, residents, City staff, budget, debt, gauges, a land use zoning map and data sources](docs/dashboard.jpg)](https://bradspry.github.io/kannapolis-dashboard/)
 
 ## Quick start
 

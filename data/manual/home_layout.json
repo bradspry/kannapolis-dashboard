@@ -4,10 +4,10 @@
     "waste",
     "weather",
     "utility",
+    "police",
     "swanee",
     "fire",
     "parks",
-    "police",
     "editions",
     "made",
     "events",
@@ -29,7 +29,9 @@
     "land",
     "about"
   ],
-  "hidden": [],
+  "hidden": [
+    "g-owners"
+  ],
   "sizes": {
     "meetings": "m",
     "news": "m",
@@ -52,7 +54,7 @@
     "editions": "m",
     "whataburger": "m",
     "videos": "m",
-    "police": "s",
+    "police": "m",
     "waste": "l"
   },
   "spacers": []
