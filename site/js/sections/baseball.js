@@ -35,7 +35,7 @@ export function icsUrl(bb, games) {
   const stamp = (d, t) => { const [hh, mm] = t.split(":"); return `${d.replaceAll("-", "")}T${hh}${mm}00`; };
   const end = (t) => { const [hh, mm] = t.split(":").map(Number); return `${String(Math.min(hh + 3, 23)).padStart(2, "0")}${String(mm).padStart(2, "0")}00`; };
   const now = new Date().toISOString().replace(/[-:]/g, "").slice(0, 15) + "Z";
-  const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Kannapolis Citizen-built Dashboard//Cannon Ballers//EN"];
+  const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Kannapolis Civic Dashboard//Cannon Ballers//EN"];
   for (const g of games) {
     lines.push("BEGIN:VEVENT", `UID:kcb-${g.date}@kannapolis-dashboard`, `DTSTAMP:${now}`,
       `DTSTART;TZID=America/New_York:${stamp(g.date, g.time)}`, `DTEND;TZID=America/New_York:${g.date.replaceAll("-", "")}T${end(g.time)}`,

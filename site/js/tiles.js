@@ -77,6 +77,30 @@ const parseLocal = (s) => { const [d, t = "00:00"] = s.split("T"); const [y, m, 
 // Sizes: s = 1×1, m = 2×1, l = 2×2, xl = 4×2. Each build(size) shows more as the tile grows.
 const isBig = (size) => size === "l" || size === "xl";
 
+/** Live NOAA radar (national base-reflectivity mosaic) centered on Kannapolis, for the weather tile's
+ *  background. The image is a 2:1 box in plain lat/lon, sized so 1° of longitude is drawn at its true
+ *  width at this latitude; the overlay SVG uses the same box, and both are cropped the same way
+ *  (object-fit: cover / preserveAspectRatio slice), so rain, city limits and town dots line up.
+ *  The URL changes every 5 minutes so the browser picks up fresh scans when the tile re-renders. */
+const RADAR = { lat0: 34.887, lat1: 36.087, lon0: -82.096, lon1: -79.148, W: 1200, H: 600 };
+const RADAR_HOME = [35.4874, -80.6217]; // Kannapolis city center (same point as the forecast)
+function radarBackdrop(boundaries) {
+  const { lat0, lat1, lon0, lon1, W, H } = RADAR;
+  const bucket = Math.floor(Date.now() / 300000);
+  const src = "https://opengeo.ncep.noaa.gov/geoserver/conus/conus_bref_qcd/ows?service=WMS&version=1.3.0&request=GetMap"
+    + `&layers=conus_bref_qcd&styles=&crs=EPSG:4326&bbox=${lat0},${lon0},${lat1},${lon1}&width=${W}&height=${H}&format=image/png&transparent=true&t=${bucket}`;
+  const img = h("img", { class: "wx-radar-img", src, alt: "", decoding: "async" });
+  img.addEventListener("error", () => img.remove(), { once: true });
+  const px = (lat, lon) => [((lon - lon0) / (lon1 - lon0)) * W, ((lat1 - lat) / (lat1 - lat0)) * H];
+  const svg = svgEl("svg", { viewBox: `0 0 ${W} ${H}`, preserveAspectRatio: "xMidYMid slice", class: "wx-radar-svg" });
+  const city = boundaries?.features?.find((f) => f.properties.year === "current");
+  if (city) svg.append(svgEl("path", { class: "wx-radar-city", d: city.geometry.coordinates.map((poly) => poly.map((ring) =>
+    `M${ring.map(([x, y]) => px(y, x).map((v) => v.toFixed(1)).join(",")).join("L")}Z`).join("")).join("") }));
+  const [hx, hy] = px(...RADAR_HOME);
+  svg.append(svgEl("circle", { cx: hx, cy: hy, r: 4, class: "wx-radar-home" }));
+  return h("div", { class: "wx-radar", "aria-hidden": "true" }, img, svg, h("span", { class: "wx-radar-credit" }, "Radar: NOAA"));
+}
+
 /** Static SVG zoning map for the XL Land use tile: one path per color (fast to draw), city limits on top.
  *  Uses a simple equirectangular projection corrected for latitude, which is accurate at city scale.
  *  The interactive map lives in the Land use window. */
@@ -176,11 +200,11 @@ export function tileDefs(data, COLORS) {
             h("span", { class: "wx-range" }, h("i", { style: { left: `${(100 * (l - lo)) / span}%`, width: `${Math.max(6, (100 * (u - l)) / span)}%` } })),
             h("b", {}, d.hi != null ? `${d.hi}°` : ""));
         }));
-        const top = [head("weather", COLORS.weather, "Kannapolis weather"), alertBanner(w.alerts, { compact: true })];
-        if (size === "s") return h("div", { class: "tile-body" }, ...top, now);
-        if (size === "m") return h("div", { class: "tile-body" }, ...top, h("div", { class: "tile-split wx-m" }, now, fiveDay));
-        if (size === "l") return h("div", { class: "tile-body" }, ...top, now, days(5));
-        return h("div", { class: "tile-body" }, ...top, h("div", { class: "tile-split wx-xl" }, now, days(5)));
+        const top = [radarBackdrop(data.boundaries), head("weather", COLORS.weather, "Kannapolis weather"), alertBanner(w.alerts, { compact: true })];
+        if (size === "s") return h("div", { class: "tile-body wx-tile" }, ...top, now);
+        if (size === "m") return h("div", { class: "tile-body wx-tile" }, ...top, h("div", { class: "tile-split wx-m" }, now, fiveDay));
+        if (size === "l") return h("div", { class: "tile-body wx-tile" }, ...top, now, days(5));
+        return h("div", { class: "tile-body wx-tile" }, ...top, h("div", { class: "tile-split wx-xl" }, now, days(5)));
       },
     },
     police && {

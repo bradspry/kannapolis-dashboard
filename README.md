@@ -1,4 +1,4 @@
-# Kannapolis Citizen-built Dashboard
+# Kannapolis Civic Dashboard
 
 An open-data dashboard for **Kannapolis, North Carolina**, built by a resident for residents: who lives here, how the city is growing, how land is zoned, how the budget and debt work, what's happening, and who to contact.
 

@@ -6,9 +6,9 @@
   <meta name="color-scheme" content="dark light" />
   <!-- Apply the theme before first paint (dark unless the visitor chose light). -->
   <script>try { document.documentElement.dataset.theme = localStorage.getItem("kdash-theme") || "dark"; } catch (e) { document.documentElement.dataset.theme = "dark"; }</script>
-  <title>Kannapolis Citizen-built Dashboard</title>
+  <title>Kannapolis Civic Dashboard</title>
   <meta name="description" content="An open-data look at Kannapolis, NC: who lives here, how the city is growing, how land is zoned, and how the city budget and debt work." />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='6' fill='%232a78d6'/><path d='M5.07 18 A8 8 0 1 1 18.93 18' fill='none' stroke='white' stroke-opacity='.55' stroke-width='2' stroke-linecap='round'/><path d='M19.88 12.61 A8 8 0 0 1 18.93 18' fill='none' stroke='%23ff8a80' stroke-width='2' stroke-linecap='round'/><path d='M11.3 14 L15.6 8.6 L12.7 14.9 Z' fill='white'/><circle cx='12' cy='14' r='1.7' fill='white'/></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='6' fill='%232a78d6'/><circle cx='6.6' cy='16.4' r='3.9' fill='white' fill-opacity='.25' stroke='white' stroke-width='1.1'/><path d='M3.4 14.6c2.2.6 4.6 2.4 5.9 4.9M4.6 13.2c1.9 1.2 4 3.6 4.7 6.5M10.3 15.4c-1.9.1-4.6 1.1-6.6 3.2' fill='none' stroke='white' stroke-width='.8'/><path d='M8.6 13.1C9.6 9 12 6.6 15.2 6.6' fill='none' stroke='white' stroke-width='.8'/><path d='M15.5 3.4V20.6' stroke='white' stroke-width='1.2' stroke-linecap='round'/><path d='M15.5 6.2c1.9 0 2.6 1.6 2.6 3.6s-.9 3.7-2.6 4.4c-1.7-.7-2.6-2.4-2.6-4.4s.7-3.6 2.6-3.6z' fill='white'/><ellipse cx='15.5' cy='16.4' rx='4.3' ry='1.35' fill='white'/></svg>" />
 </head>
 <body>
   <a class="skip" href="#home">Skip to widgets</a>
@@ -17,23 +17,33 @@
       <div class="brand">
         <span class="brand-mark" aria-hidden="true">
           <svg viewBox="0 0 24 24" width="34" height="34">
-            <path class="bm-arc" d="M5.07 18 A8 8 0 1 1 18.93 18" />
-            <path class="bm-red" d="M19.88 12.61 A8 8 0 0 1 18.93 18" />
-            <g class="bm-ticks"><path d="M12 6.4v1.4M6.6 8.6l1 1M17.4 8.6l-1 1M4.4 14h1.4M18.2 14h1.4" /></g>
-            <g class="bm-needle"><path d="M11.3 14 L12 7.2 L12.7 14 Z" /></g>
-            <circle class="bm-hub" cx="12" cy="14" r="1.7" />
+            <defs>
+              <clipPath id="bm-cop-clip"><path d="M15.5 6.2c1.9 0 2.6 1.6 2.6 3.6s-.9 3.7-2.6 4.4c-1.7-.7-2.6-2.4-2.6-4.4s.7-3.6 2.6-3.6z" /></clipPath>
+              <clipPath id="bm-whorl-clip"><ellipse cx="15.5" cy="16.4" rx="4.3" ry="1.35" /></clipPath>
+            </defs>
+            <!-- yarn ball, rolling as it unwinds -->
+            <g class="bm-ball">
+              <circle cx="6.6" cy="16.4" r="3.9" class="bm-ball-body" />
+              <path class="bm-ball-wraps" d="M3.4 14.6c2.2.6 4.6 2.4 5.9 4.9M3 17.3c2 .1 4.6 1.2 6.3 2.8M4.6 13.2c1.9 1.2 4 3.6 4.7 6.5M7.8 12.7c-1.2 1.6-1.8 4.6-1.3 7.6M10.3 15.4c-1.9.1-4.6 1.1-6.6 3.2" />
+            </g>
+            <!-- the strand, travelling from the ball up to the spindle -->
+            <path class="bm-thread" d="M8.6 13.1C9.6 9 12 6.6 15.2 6.6" />
+            <!-- drop spindle: shaft, hook, cop of wound yarn, whorl -->
+            <path class="bm-shaft" d="M15.5 3.4V20.6" />
+            <path class="bm-hook" d="M15.5 3.4c0-1 1.3-1.2 1.5-.3" />
+            <path class="bm-cop" d="M15.5 6.2c1.9 0 2.6 1.6 2.6 3.6s-.9 3.7-2.6 4.4c-1.7-.7-2.6-2.4-2.6-4.4s.7-3.6 2.6-3.6z" />
+            <g clip-path="url(#bm-cop-clip)"><path class="bm-wraps" d="M12 5.4l7 -1.6M12 7.4l7 -1.6M12 9.4l7 -1.6M12 11.4l7 -1.6M12 13.4l7 -1.6M12 15.4l7 -1.6M12 17.4l7 -1.6" /></g>
+            <ellipse class="bm-whorl" cx="15.5" cy="16.4" rx="4.3" ry="1.35" />
+            <g clip-path="url(#bm-whorl-clip)"><rect class="bm-whorl-shine" x="13.6" y="14.8" width="1.6" height="3.2" rx=".8" /></g>
           </svg>
         </span>
         <div>
-          <h1>Kannapolis Citizen-built Dashboard</h1>
+          <h1>Kannapolis Civic Dashboard</h1>
         </div>
       </div>
       <div class="topbar-actions">
         <button id="edit-toggle" class="pill-btn" type="button" aria-pressed="false" title="Hide or restore widgets">
           <span class="label">Edit</span>
-        </button>
-        <button id="palette-toggle" class="pill-btn" type="button" aria-pressed="false" title="Fall colors: Moss &amp; Rust" aria-label="Fall color palette (Moss and Rust)">
-          <span aria-hidden="true">🍂</span>
         </button>
         <button id="theme-toggle" class="pill-btn" type="button" aria-label="Switch color theme">
           <span aria-hidden="true">◐</span><span class="theme-label">Theme</span>

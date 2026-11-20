@@ -434,8 +434,8 @@ g[aria-label="tip"] text { fill: var(--text-primary); }
    ===================================================================== */
 body {
   background:
-    radial-gradient(900px 520px at 8% -12%, color-mix(in oklab, var(--wall-a, var(--accent)) 16%, transparent), transparent 70%),
-    radial-gradient(760px 480px at 100% 0%, color-mix(in oklab, var(--wall-b, var(--series-7)) 12%, transparent), transparent 70%),
+    radial-gradient(900px 520px at 8% -12%, color-mix(in oklab, var(--accent) 16%, transparent), transparent 70%),
+    radial-gradient(760px 480px at 100% 0%, color-mix(in oklab, var(--series-7) 12%, transparent), transparent 70%),
     var(--page);
   background-attachment: fixed;
   padding-bottom: 112px; /* room for the dock */
@@ -452,36 +452,29 @@ html.win-open { overflow: hidden; }
 .topbar-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 12px; padding-bottom: 12px; }
 .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .brand h1 { font-size: clamp(18px, 3.4vw, 24px); font-weight: 650; letter-spacing: -.01em; }
-/* title icon: a gauge whose needle keeps "revving" */
+/* title icon: a drop spindle spinning yarn fed from a ball (a nod to Kannapolis's mill-town roots) */
 .brand-mark { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: var(--accent); flex: none;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25), 0 4px 12px -4px var(--accent); }
-.brand-mark svg { display: block; }
-.bm-arc { fill: none; stroke: rgba(255, 255, 255, .5); stroke-width: 2; stroke-linecap: round; }
-.bm-red { fill: none; stroke: #ff8a80; stroke-width: 2; stroke-linecap: round; }
-.bm-ticks path { fill: none; stroke: rgba(255, 255, 255, .7); stroke-width: 1; stroke-linecap: round; }
-.bm-needle path { fill: #fff; }
-.bm-hub { fill: #fff; }
-.bm-needle {
-  transform-box: view-box; transform-origin: 12px 14px; transform: rotate(-95deg);
-  animation: rev 4.2s cubic-bezier(.45, .05, .35, 1) infinite;
-}
-/* Throttle blips, a climb into the redline, a bounce off the limiter, and back to idle. */
-@keyframes rev {
-  0%   { transform: rotate(-95deg); }
-  8%   { transform: rotate(-20deg); }
-  13%  { transform: rotate(-70deg); }
-  22%  { transform: rotate(10deg); }
-  27%  { transform: rotate(-45deg); }
-  42%  { transform: rotate(100deg); }
-  45%  { transform: rotate(88deg); }
-  48%  { transform: rotate(104deg); }
-  51%  { transform: rotate(92deg); }
-  62%  { transform: rotate(-60deg); }
-  70%  { transform: rotate(30deg); }
-  78%  { transform: rotate(-80deg); }
-  100% { transform: rotate(-95deg); }
-}
-@media (prefers-reduced-motion: reduce) { .bm-needle { animation: none; transform: rotate(35deg); } }
+.brand-mark svg { display: block; overflow: visible; }
+.bm-ball-body { fill: rgba(255, 255, 255, .22); stroke: #fff; stroke-width: 1.1; }
+.bm-ball-wraps { fill: none; stroke: rgba(255, 255, 255, .85); stroke-width: .75; stroke-linecap: round; }
+.bm-thread { fill: none; stroke: #fff; stroke-width: .8; stroke-linecap: round; stroke-dasharray: 2.2 .55; }
+.bm-shaft, .bm-hook { fill: none; stroke: #fff; stroke-width: 1.2; stroke-linecap: round; }
+.bm-hook { stroke-width: .9; }
+.bm-cop { fill: #fff; }
+.bm-wraps { fill: none; stroke: color-mix(in oklab, var(--accent) 70%, #000); stroke-width: .55; stroke-linecap: round; opacity: .55; }
+.bm-whorl { fill: #fff; }
+.bm-whorl-shine { fill: color-mix(in oklab, var(--accent) 55%, #fff); opacity: .9; }
+/* Spinning: wraps stream around the cop, a highlight sweeps the whorl, the ball rolls, the strand feeds in. */
+.bm-wraps { animation: bm-spin .45s linear infinite; }
+.bm-whorl-shine { animation: bm-sweep .45s linear infinite; }
+.bm-ball { transform-box: view-box; transform-origin: 6.6px 16.4px; animation: bm-roll 7s linear infinite; }
+.bm-thread { animation: bm-feed .6s linear infinite; }
+@keyframes bm-spin { to { transform: translateY(-2px); } }
+@keyframes bm-sweep { from { transform: translateX(-3px); } to { transform: translateX(5px); } }
+@keyframes bm-roll { to { transform: rotate(-360deg); } }
+@keyframes bm-feed { to { stroke-dashoffset: -2.75; } }
+@media (prefers-reduced-motion: reduce) { .bm-wraps, .bm-whorl-shine, .bm-ball, .bm-thread { animation: none; } }
 .eyebrow { margin: 2px 0 0; font-size: 12px; color: var(--text-muted); }
 .topbar-actions { display: flex; gap: 8px; flex: none; }
 .pill-btn {
@@ -1028,49 +1021,11 @@ body.editing .tile-w.spacer {
 }
 body.editing .spacer-label { display: block; font-size: 13px; color: var(--text-muted); }
 
-/* ---------- icon colors (default = chart series; the fall palette overrides only these) ---------- */
+/* ---------- icon colors (default = chart series) ---------- */
 :root {
   --icon-1: var(--series-1); --icon-2: var(--series-2); --icon-3: var(--series-3); --icon-4: var(--series-4);
   --icon-5: var(--series-5); --icon-6: var(--series-6); --icon-7: var(--series-7); --icon-8: var(--series-8);
 }
-
-/* ---------- 🍂 Moss & Rust palette: backgrounds, lines, outlines, icons, accent. Charts keep their colors. ----------
-   #25301F deep moss · #4B5D3A moss · #8A7B3F olive · #BE6A34 rust · #E8D5AE sand */
-:root[data-palette="fall"] {
-  --page: #F3ECDD; --surface-1: #FBF7EE;
-  --text-primary: #25301F; --text-secondary: #4B5D3A; --text-muted: #6B6548;
-  --border: rgba(75, 93, 58, .30); --grid: #E4D9BF; --baseline: #C2B184; --axis: #6F6331;
-  --accent: #BE6A34; --accent-ink: #9A4F1F; --muted-fill: #CDBB90;
-  --icon-1: #4B5D3A; --icon-2: #BE6A34; --icon-3: #8A7B3F; --icon-4: #25301F;
-  --icon-5: #8C3B3B; --icon-6: #2F6A6E; --icon-7: #B5862C; --icon-8: #A0552A;
-  --wall-a: #BE6A34; --wall-b: #4B5D3A;
-}
-@media (prefers-color-scheme: dark) {
-  :root[data-palette="fall"]:not([data-theme="light"]) {
-    --page: #151B11; --surface-1: #1F281A;
-    --text-primary: #F0E6CF; --text-secondary: #E8D5AE; --text-muted: #B3A784;
-    --border: rgba(232, 213, 174, .16); --grid: #2E3926; --baseline: #4B5D3A; --axis: #8A7B3F;
-    --accent: #C26E36; --accent-ink: #E9A574; --muted-fill: #4B5D3A;
-    --icon-1: #5E7448; --icon-2: #BE6A34; --icon-3: #8A7B3F; --icon-4: #6E7F4E;
-    --icon-5: #9E4848; --icon-6: #3F8085; --icon-7: #B5862C; --icon-8: #A0552A;
-    --wall-a: #BE6A34; --wall-b: #4B5D3A;
-  }
-}
-:root[data-palette="fall"][data-theme="dark"] {
-  --page: #151B11; --surface-1: #1F281A;
-  --text-primary: #F0E6CF; --text-secondary: #E8D5AE; --text-muted: #B3A784;
-  --border: rgba(232, 213, 174, .16); --grid: #2E3926; --baseline: #4B5D3A; --axis: #8A7B3F;
-  --accent: #C26E36; --accent-ink: #E9A574; --muted-fill: #4B5D3A;
-  --icon-1: #5E7448; --icon-2: #BE6A34; --icon-3: #8A7B3F; --icon-4: #6E7F4E;
-  --icon-5: #9E4848; --icon-6: #3F8085; --icon-7: #B5862C; --icon-8: #A0552A;
-  --wall-a: #BE6A34; --wall-b: #4B5D3A;
-}
-/* event date chips follow the accent */
-:root[data-palette="fall"] .ev-chip:not(.now) { background: color-mix(in oklab, var(--accent) 16%, var(--surface-1)); color: var(--text-secondary); }
-/* widget outlines pick up a moss tint; the revving icon's redline turns sand */
-:root[data-palette="fall"] .tile-w { border-color: color-mix(in oklab, var(--icon-1) 38%, var(--border)); }
-:root[data-palette="fall"] .bm-red { stroke: #E8D5AE; }
-:root[data-palette="fall"] .ev-date, :root[data-palette="fall"] .date-block { border-color: color-mix(in oklab, var(--accent) 45%, transparent); background: color-mix(in oklab, var(--accent) 12%, var(--surface-1)); }
 
 /* ---------- Kannapolis Police ---------- */
 .kpd { display: flex; flex-direction: column; gap: 14px; }
@@ -1619,3 +1574,41 @@ body.editing .tile-w:first-child .tile-top { opacity: .4; }
 .land-xl { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 18px; }
 .land-map { margin: 0; display: grid; gap: 4px; min-height: 0; }
 .zoning-svg { width: 100%; height: auto; max-height: 340px; display: block; }
+
+/* Weather tile: live NOAA radar as the background. The tile body becomes its own stacking context so the
+   radar (z-index -1) sits behind the text but stays under the tile's click-to-open layer. */
+.wx-tile { position: relative; isolation: isolate; }
+.wx-radar { position: absolute; inset: -16px; z-index: -1; overflow: hidden; pointer-events: none;
+  background: radial-gradient(120% 90% at 70% 40%, color-mix(in oklab, var(--icon-1) 10%, var(--surface-1)), var(--surface-1)); }
+.wx-radar-img, .wx-radar-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.wx-radar-img { object-fit: cover; opacity: .9; filter: blur(2px) saturate(1.3); }
+.wx-radar::after { content: ""; position: absolute; inset: 0;
+  background: linear-gradient(90deg, color-mix(in oklab, var(--surface-1) 78%, transparent) 0%, color-mix(in oklab, var(--surface-1) 35%, transparent) 55%, color-mix(in oklab, var(--surface-1) 55%, transparent) 100%); }
+.wx-radar-city { fill: color-mix(in oklab, var(--text-primary) 6%, transparent); stroke: var(--text-primary); stroke-opacity: .45; stroke-width: 1.6; stroke-linejoin: round; }
+.wx-radar-home { fill: var(--accent); stroke: var(--surface-1); stroke-width: 2; }
+.wx-radar-credit { position: absolute; right: 12px; bottom: 6px; z-index: 1; font-size: 10px; color: var(--text-muted); opacity: .8; }
+
+/* Weather window: animated radar */
+.wx-radar-card { margin-top: 14px; }
+.wx-radar-map { height: 420px; }
+.wx-radar-controls { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+.wx-radar-controls input[type=range] { flex: 1; accent-color: var(--accent); }
+.wx-radar-play { min-width: 86px; }
+.wx-radar-time { font-variant-numeric: tabular-nums; font-weight: 600; font-size: 14px; min-width: 120px; text-align: right; }
+.wx-radar-legend { display: grid; gap: 4px; margin-top: 10px; }
+.wx-radar-legend img { width: 100%; max-width: 500px; height: auto; border-radius: 6px; }
+@media (max-width: 720px) { .wx-radar-map { height: 320px; } .wx-radar-time { min-width: 0; font-size: 13px; } }
+
+/* ---------- Woven background: a herringbone twill (threads over two, under two; the diagonal flips
+   every 4 threads), a nod to Cannon Mills. Drawn only in translucent light and shadow so it tints
+   whatever the page color is (dark or light). 16 x 16 thread crossings, 7 px each: a 112 px repeating tile. */
+:root { --weave-opacity: .9; }
+:root[data-theme="light"] { --weave-opacity: .32; }
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background-image:
+    radial-gradient(130% 90% at 50% 35%, transparent 40%, color-mix(in oklab, var(--page) 70%, #000) 100%),
+    url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22112%22 height=%22112%22 viewBox=%220 0 112 112%22%3E%3Cdefs%3E%0A%3ClinearGradient id=%22v%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%220%22%3E%3Cstop offset=%220%22 stop-color=%22%23000%22 stop-opacity=%22.55%22/%3E%3Cstop offset=%22.22%22 stop-color=%22%23fff%22 stop-opacity=%22.05%22/%3E%3Cstop offset=%22.5%22 stop-color=%22%23fff%22 stop-opacity=%22.16%22/%3E%3Cstop offset=%22.78%22 stop-color=%22%23fff%22 stop-opacity=%22.05%22/%3E%3Cstop offset=%221%22 stop-color=%22%23000%22 stop-opacity=%22.55%22/%3E%3C/linearGradient%3E%0A%3ClinearGradient id=%22h%22 x1=%220%22 x2=%220%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22%23000%22 stop-opacity=%22.6%22/%3E%3Cstop offset=%22.25%22 stop-color=%22%23fff%22 stop-opacity=%22.03%22/%3E%3Cstop offset=%22.5%22 stop-color=%22%23fff%22 stop-opacity=%22.11%22/%3E%3Cstop offset=%22.75%22 stop-color=%22%23fff%22 stop-opacity=%22.03%22/%3E%3Cstop offset=%221%22 stop-color=%22%23000%22 stop-opacity=%22.6%22/%3E%3C/linearGradient%3E%0A%3ClinearGradient id=%22s%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22%23000%22 stop-opacity=%220%22/%3E%3Cstop offset=%221%22 stop-color=%22%23000%22 stop-opacity=%22.35%22/%3E%3C/linearGradient%3E%0A%3Cg id=%22w%22%3E%3Crect width=%227%22 height=%227%22 fill=%22url(%23v)%22/%3E%3Crect width=%227%22 height=%227%22 fill=%22url(%23s)%22 fill-opacity=%22.5%22/%3E%3C/g%3E%0A%3Cg id=%22f%22%3E%3Crect width=%227%22 height=%227%22 fill=%22url(%23h)%22/%3E%3Crect width=%227%22 height=%227%22 fill=%22url(%23s)%22 fill-opacity=%22.5%22/%3E%3C/g%3E%0A%3Cg id=%22W%22%3E%3Cuse href=%22%23w%22/%3E%3Crect x=%221%22 width=%225%22 height=%227%22 fill=%22%23fff%22 fill-opacity=%22.05%22/%3E%3C/g%3E%0A%3Cg id=%22F%22%3E%3Cuse href=%22%23f%22/%3E%3Crect y=%221%22 width=%227%22 height=%225%22 fill=%22%23fff%22 fill-opacity=%22.04%22/%3E%3C/g%3E%3C/defs%3E%3Cg shape-rendering=%22crispEdges%22%3E%3Cuse href=%22%23w%22 x=%220%22 y=%220%22/%3E%3Cuse href=%22%23w%22 x=%227%22 y=%220%22/%3E%3Cuse href=%22%23f%22 x=%2214%22 y=%220%22/%3E%3Cuse href=%22%23f%22 x=%2221%22 y=%220%22/%3E%3Cuse href=%22%23w%22 x=%2228%22 y=%220%22/%3E%3Cuse href=%22%23f%22 x=%2235%22 y=%220%22/%3E%3Cuse href=%22%23f%22 x=%2242%22 y=%220%22/%3E%3Cuse href=%22%23W%22 x=%2249%22 y=%220%22/%3E%3Cuse href=%22%23w%22 x=%2256%22 y=%220%22/%3E%3Cuse href=%22%23w%22 x=%2263%22 y=%220%22/%3E%3Cuse href=%22%23f%22 x=%2270%22 y=%220%22/%3E%3Cuse href=%22%23f%22 x=%2277%22 y=%220%22/%3E%3Cuse href=%22%23W%22 x=%2284%22 y=%220%22/%3E%3Cuse href=%22%23f%22 x=%2291%22 y=%220%22/%3E%3Cuse href=%22%23f%22 x=%2298%22 y=%220%22/%3E%3Cuse href=%22%23w%22 x=%22105%22 y=%220%22/%3E%3Cuse href=%22%23w%22 x=%220%22 y=%227%22/%3E%3Cuse href=%22%23f%22 x=%227%22 y=%227%22/%3E%3Cuse href=%22%23f%22 x=%2214%22 y=%227%22/%3E%3Cuse href=%22%23w%22 x=%2221%22 y=%227%22/%3E%3Cuse href=%22%23w%22 x=%2228%22 y=%227%22/%3E%3Cuse href=%22%23w%22 x=%2235%22 y=%227%22/%3E%3Cuse href=%22%23f%22 x=%2242%22 y=%227%22/%3E%3Cuse href=%22%23f%22 x=%2249%22 y=%227%22/%3E%3Cuse href=%22%23w%22 x=%2256%22 y=%227%22/%3E%3Cuse href=%22%23f%22 x=%2263%22 y=%227%22/%3E%3Cuse href=%22%23f%22 x=%2270%22 y=%227%22/%3E%3Cuse href=%22%23w%22 x=%2277%22 y=%227%22/%3E%3Cuse href=%22%23W%22 x=%2284%22 y=%227%22/%3E%3Cuse href=%22%23w%22 x=%2291%22 y=%227%22/%3E%3Cuse href=%22%23f%22 x=%2298%22 y=%227%22/%3E%3Cuse href=%22%23f%22 x=%22105%22 y=%227%22/%3E%3Cuse href=%22%23f%22 x=%220%22 y=%2214%22/%3E%3Cuse href=%22%23f%22 x=%227%22 y=%2214%22/%3E%3Cuse href=%22%23W%22 x=%2214%22 y=%2214%22/%3E%3Cuse href=%22%23w%22 x=%2221%22 y=%2214%22/%3E%3Cuse href=%22%23f%22 x=%2228%22 y=%2214%22/%3E%3Cuse href=%22%23w%22 x=%2235%22 y=%2214%22/%3E%3Cuse href=%22%23w%22 x=%2242%22 y=%2214%22/%3E%3Cuse href=%22%23f%22 x=%2249%22 y=%2214%22/%3E%3Cuse href=%22%23f%22 x=%2256%22 y=%2214%22/%3E%3Cuse href=%22%23f%22 x=%2263%22 y=%2214%22/%3E%3Cuse href=%22%23w%22 x=%2270%22 y=%2214%22/%3E%3Cuse href=%22%23w%22 x=%2277%22 y=%2214%22/%3E%3Cuse href=%22%23f%22 x=%2284%22 y=%2214%22/%3E%3Cuse href=%22%23w%22 x=%2291%22 y=%2214%22/%3E%3Cuse href=%22%23w%22 x=%2298%22 y=%2214%22/%3E%3Cuse href=%22%23f%22 x=%22105%22 y=%2214%22/%3E%3Cuse href=%22%23F%22 x=%220%22 y=%2221%22/%3E%3Cuse href=%22%23w%22 x=%227%22 y=%2221%22/%3E%3Cuse href=%22%23W%22 x=%2214%22 y=%2221%22/%3E%3Cuse href=%22%23F%22 x=%2221%22 y=%2221%22/%3E%3Cuse href=%22%23F%22 x=%2228%22 y=%2221%22/%3E%3Cuse href=%22%23F%22 x=%2235%22 y=%2221%22/%3E%3Cuse href=%22%23w%22 x=%2242%22 y=%2221%22/%3E%3Cuse href=%22%23W%22 x=%2249%22 y=%2221%22/%3E%3Cuse href=%22%23F%22 x=%2256%22 y=%2221%22/%3E%3Cuse href=%22%23w%22 x=%2263%22 y=%2221%22/%3E%3Cuse href=%22%23w%22 x=%2270%22 y=%2221%22/%3E%3Cuse href=%22%23F%22 x=%2277%22 y=%2221%22/%3E%3Cuse href=%22%23F%22 x=%2284%22 y=%2221%22/%3E%3Cuse href=%22%23F%22 x=%2291%22 y=%2221%22/%3E%3Cuse href=%22%23w%22 x=%2298%22 y=%2221%22/%3E%3Cuse href=%22%23w%22 x=%22105%22 y=%2221%22/%3E%3Cuse href=%22%23w%22 x=%220%22 y=%2228%22/%3E%3Cuse href=%22%23w%22 x=%227%22 y=%2228%22/%3E%3Cuse href=%22%23f%22 x=%2214%22 y=%2228%22/%3E%3Cuse href=%22%23f%22 x=%2221%22 y=%2228%22/%3E%3Cuse href=%22%23w%22 x=%2228%22 y=%2228%22/%3E%3Cuse href=%22%23f%22 x=%2235%22 y=%2228%22/%3E%3Cuse href=%22%23f%22 x=%2242%22 y=%2228%22/%3E%3Cuse href=%22%23W%22 x=%2249%22 y=%2228%22/%3E%3Cuse href=%22%23w%22 x=%2256%22 y=%2228%22/%3E%3Cuse href=%22%23w%22 x=%2263%22 y=%2228%22/%3E%3Cuse href=%22%23f%22 x=%2270%22 y=%2228%22/%3E%3Cuse href=%22%23f%22 x=%2277%22 y=%2228%22/%3E%3Cuse href=%22%23W%22 x=%2284%22 y=%2228%22/%3E%3Cuse href=%22%23f%22 x=%2291%22 y=%2228%22/%3E%3Cuse href=%22%23f%22 x=%2298%22 y=%2228%22/%3E%3Cuse href=%22%23w%22 x=%22105%22 y=%2228%22/%3E%3Cuse href=%22%23w%22 x=%220%22 y=%2235%22/%3E%3Cuse href=%22%23f%22 x=%227%22 y=%2235%22/%3E%3Cuse href=%22%23f%22 x=%2214%22 y=%2235%22/%3E%3Cuse href=%22%23w%22 x=%2221%22 y=%2235%22/%3E%3Cuse href=%22%23w%22 x=%2228%22 y=%2235%22/%3E%3Cuse href=%22%23w%22 x=%2235%22 y=%2235%22/%3E%3Cuse href=%22%23f%22 x=%2242%22 y=%2235%22/%3E%3Cuse href=%22%23f%22 x=%2249%22 y=%2235%22/%3E%3Cuse href=%22%23w%22 x=%2256%22 y=%2235%22/%3E%3Cuse href=%22%23f%22 x=%2263%22 y=%2235%22/%3E%3Cuse href=%22%23f%22 x=%2270%22 y=%2235%22/%3E%3Cuse href=%22%23w%22 x=%2277%22 y=%2235%22/%3E%3Cuse href=%22%23W%22 x=%2284%22 y=%2235%22/%3E%3Cuse href=%22%23w%22 x=%2291%22 y=%2235%22/%3E%3Cuse href=%22%23f%22 x=%2298%22 y=%2235%22/%3E%3Cuse href=%22%23f%22 x=%22105%22 y=%2235%22/%3E%3Cuse href=%22%23f%22 x=%220%22 y=%2242%22/%3E%3Cuse href=%22%23f%22 x=%227%22 y=%2242%22/%3E%3Cuse href=%22%23W%22 x=%2214%22 y=%2242%22/%3E%3Cuse href=%22%23w%22 x=%2221%22 y=%2242%22/%3E%3Cuse href=%22%23f%22 x=%2228%22 y=%2242%22/%3E%3Cuse href=%22%23w%22 x=%2235%22 y=%2242%22/%3E%3Cuse href=%22%23w%22 x=%2242%22 y=%2242%22/%3E%3Cuse href=%22%23f%22 x=%2249%22 y=%2242%22/%3E%3Cuse href=%22%23f%22 x=%2256%22 y=%2242%22/%3E%3Cuse href=%22%23f%22 x=%2263%22 y=%2242%22/%3E%3Cuse href=%22%23w%22 x=%2270%22 y=%2242%22/%3E%3Cuse href=%22%23w%22 x=%2277%22 y=%2242%22/%3E%3Cuse href=%22%23f%22 x=%2284%22 y=%2242%22/%3E%3Cuse href=%22%23w%22 x=%2291%22 y=%2242%22/%3E%3Cuse href=%22%23w%22 x=%2298%22 y=%2242%22/%3E%3Cuse href=%22%23f%22 x=%22105%22 y=%2242%22/%3E%3Cuse href=%22%23f%22 x=%220%22 y=%2249%22/%3E%3Cuse href=%22%23w%22 x=%227%22 y=%2249%22/%3E%3Cuse href=%22%23W%22 x=%2214%22 y=%2249%22/%3E%3Cuse href=%22%23f%22 x=%2221%22 y=%2249%22/%3E%3Cuse href=%22%23f%22 x=%2228%22 y=%2249%22/%3E%3Cuse href=%22%23f%22 x=%2235%22 y=%2249%22/%3E%3Cuse href=%22%23w%22 x=%2242%22 y=%2249%22/%3E%3Cuse href=%22%23W%22 x=%2249%22 y=%2249%22/%3E%3Cuse href=%22%23f%22 x=%2256%22 y=%2249%22/%3E%3Cuse href=%22%23w%22 x=%2263%22 y=%2249%22/%3E%3Cuse href=%22%23w%22 x=%2270%22 y=%2249%22/%3E%3Cuse href=%22%23f%22 x=%2277%22 y=%2249%22/%3E%3Cuse href=%22%23f%22 x=%2284%22 y=%2249%22/%3E%3Cuse href=%22%23f%22 x=%2291%22 y=%2249%22/%3E%3Cuse href=%22%23w%22 x=%2298%22 y=%2249%22/%3E%3Cuse href=%22%23w%22 x=%22105%22 y=%2249%22/%3E%3Cuse href=%22%23w%22 x=%220%22 y=%2256%22/%3E%3Cuse href=%22%23w%22 x=%227%22 y=%2256%22/%3E%3Cuse href=%22%23f%22 x=%2214%22 y=%2256%22/%3E%3Cuse href=%22%23f%22 x=%2221%22 y=%2256%22/%3E%3Cuse href=%22%23w%22 x=%2228%22 y=%2256%22/%3E%3Cuse href=%22%23f%22 x=%2235%22 y=%2256%22/%3E%3Cuse href=%22%23f%22 x=%2242%22 y=%2256%22/%3E%3Cuse href=%22%23W%22 x=%2249%22 y=%2256%22/%3E%3Cuse href=%22%23w%22 x=%2256%22 y=%2256%22/%3E%3Cuse href=%22%23w%22 x=%2263%22 y=%2256%22/%3E%3Cuse href=%22%23f%22 x=%2270%22 y=%2256%22/%3E%3Cuse href=%22%23f%22 x=%2277%22 y=%2256%22/%3E%3Cuse href=%22%23W%22 x=%2284%22 y=%2256%22/%3E%3Cuse href=%22%23f%22 x=%2291%22 y=%2256%22/%3E%3Cuse href=%22%23f%22 x=%2298%22 y=%2256%22/%3E%3Cuse href=%22%23w%22 x=%22105%22 y=%2256%22/%3E%3Cuse href=%22%23w%22 x=%220%22 y=%2263%22/%3E%3Cuse href=%22%23F%22 x=%227%22 y=%2263%22/%3E%3Cuse href=%22%23F%22 x=%2214%22 y=%2263%22/%3E%3Cuse href=%22%23w%22 x=%2221%22 y=%2263%22/%3E%3Cuse href=%22%23w%22 x=%2228%22 y=%2263%22/%3E%3Cuse href=%22%23w%22 x=%2235%22 y=%2263%22/%3E%3Cuse href=%22%23F%22 x=%2242%22 y=%2263%22/%3E%3Cuse href=%22%23F%22 x=%2249%22 y=%2263%22/%3E%3Cuse href=%22%23w%22 x=%2256%22 y=%2263%22/%3E%3Cuse href=%22%23F%22 x=%2263%22 y=%2263%22/%3E%3Cuse href=%22%23F%22 x=%2270%22 y=%2263%22/%3E%3Cuse href=%22%23w%22 x=%2277%22 y=%2263%22/%3E%3Cuse href=%22%23W%22 x=%2284%22 y=%2263%22/%3E%3Cuse href=%22%23w%22 x=%2291%22 y=%2263%22/%3E%3Cuse href=%22%23F%22 x=%2298%22 y=%2263%22/%3E%3Cuse href=%22%23F%22 x=%22105%22 y=%2263%22/%3E%3Cuse href=%22%23f%22 x=%220%22 y=%2270%22/%3E%3Cuse href=%22%23f%22 x=%227%22 y=%2270%22/%3E%3Cuse href=%22%23W%22 x=%2214%22 y=%2270%22/%3E%3Cuse href=%22%23w%22 x=%2221%22 y=%2270%22/%3E%3Cuse href=%22%23f%22 x=%2228%22 y=%2270%22/%3E%3Cuse href=%22%23w%22 x=%2235%22 y=%2270%22/%3E%3Cuse href=%22%23w%22 x=%2242%22 y=%2270%22/%3E%3Cuse href=%22%23f%22 x=%2249%22 y=%2270%22/%3E%3Cuse href=%22%23f%22 x=%2256%22 y=%2270%22/%3E%3Cuse href=%22%23f%22 x=%2263%22 y=%2270%22/%3E%3Cuse href=%22%23w%22 x=%2270%22 y=%2270%22/%3E%3Cuse href=%22%23w%22 x=%2277%22 y=%2270%22/%3E%3Cuse href=%22%23f%22 x=%2284%22 y=%2270%22/%3E%3Cuse href=%22%23w%22 x=%2291%22 y=%2270%22/%3E%3Cuse href=%22%23w%22 x=%2298%22 y=%2270%22/%3E%3Cuse href=%22%23f%22 x=%22105%22 y=%2270%22/%3E%3Cuse href=%22%23f%22 x=%220%22 y=%2277%22/%3E%3Cuse href=%22%23w%22 x=%227%22 y=%2277%22/%3E%3Cuse href=%22%23W%22 x=%2214%22 y=%2277%22/%3E%3Cuse href=%22%23f%22 x=%2221%22 y=%2277%22/%3E%3Cuse href=%22%23f%22 x=%2228%22 y=%2277%22/%3E%3Cuse href=%22%23f%22 x=%2235%22 y=%2277%22/%3E%3Cuse href=%22%23w%22 x=%2242%22 y=%2277%22/%3E%3Cuse href=%22%23W%22 x=%2249%22 y=%2277%22/%3E%3Cuse href=%22%23f%22 x=%2256%22 y=%2277%22/%3E%3Cuse href=%22%23w%22 x=%2263%22 y=%2277%22/%3E%3Cuse href=%22%23w%22 x=%2270%22 y=%2277%22/%3E%3Cuse href=%22%23f%22 x=%2277%22 y=%2277%22/%3E%3Cuse href=%22%23f%22 x=%2284%22 y=%2277%22/%3E%3Cuse href=%22%23f%22 x=%2291%22 y=%2277%22/%3E%3Cuse href=%22%23w%22 x=%2298%22 y=%2277%22/%3E%3Cuse href=%22%23w%22 x=%22105%22 y=%2277%22/%3E%3Cuse href=%22%23w%22 x=%220%22 y=%2284%22/%3E%3Cuse href=%22%23w%22 x=%227%22 y=%2284%22/%3E%3Cuse href=%22%23f%22 x=%2214%22 y=%2284%22/%3E%3Cuse href=%22%23f%22 x=%2221%22 y=%2284%22/%3E%3Cuse href=%22%23w%22 x=%2228%22 y=%2284%22/%3E%3Cuse href=%22%23f%22 x=%2235%22 y=%2284%22/%3E%3Cuse href=%22%23f%22 x=%2242%22 y=%2284%22/%3E%3Cuse href=%22%23W%22 x=%2249%22 y=%2284%22/%3E%3Cuse href=%22%23w%22 x=%2256%22 y=%2284%22/%3E%3Cuse href=%22%23w%22 x=%2263%22 y=%2284%22/%3E%3Cuse href=%22%23f%22 x=%2270%22 y=%2284%22/%3E%3Cuse href=%22%23f%22 x=%2277%22 y=%2284%22/%3E%3Cuse href=%22%23W%22 x=%2284%22 y=%2284%22/%3E%3Cuse href=%22%23f%22 x=%2291%22 y=%2284%22/%3E%3Cuse href=%22%23f%22 x=%2298%22 y=%2284%22/%3E%3Cuse href=%22%23w%22 x=%22105%22 y=%2284%22/%3E%3Cuse href=%22%23w%22 x=%220%22 y=%2291%22/%3E%3Cuse href=%22%23f%22 x=%227%22 y=%2291%22/%3E%3Cuse href=%22%23f%22 x=%2214%22 y=%2291%22/%3E%3Cuse href=%22%23w%22 x=%2221%22 y=%2291%22/%3E%3Cuse href=%22%23w%22 x=%2228%22 y=%2291%22/%3E%3Cuse href=%22%23w%22 x=%2235%22 y=%2291%22/%3E%3Cuse href=%22%23f%22 x=%2242%22 y=%2291%22/%3E%3Cuse href=%22%23f%22 x=%2249%22 y=%2291%22/%3E%3Cuse href=%22%23w%22 x=%2256%22 y=%2291%22/%3E%3Cuse href=%22%23f%22 x=%2263%22 y=%2291%22/%3E%3Cuse href=%22%23f%22 x=%2270%22 y=%2291%22/%3E%3Cuse href=%22%23w%22 x=%2277%22 y=%2291%22/%3E%3Cuse href=%22%23W%22 x=%2284%22 y=%2291%22/%3E%3Cuse href=%22%23w%22 x=%2291%22 y=%2291%22/%3E%3Cuse href=%22%23f%22 x=%2298%22 y=%2291%22/%3E%3Cuse href=%22%23f%22 x=%22105%22 y=%2291%22/%3E%3Cuse href=%22%23f%22 x=%220%22 y=%2298%22/%3E%3Cuse href=%22%23f%22 x=%227%22 y=%2298%22/%3E%3Cuse href=%22%23W%22 x=%2214%22 y=%2298%22/%3E%3Cuse href=%22%23w%22 x=%2221%22 y=%2298%22/%3E%3Cuse href=%22%23f%22 x=%2228%22 y=%2298%22/%3E%3Cuse href=%22%23w%22 x=%2235%22 y=%2298%22/%3E%3Cuse href=%22%23w%22 x=%2242%22 y=%2298%22/%3E%3Cuse href=%22%23f%22 x=%2249%22 y=%2298%22/%3E%3Cuse href=%22%23f%22 x=%2256%22 y=%2298%22/%3E%3Cuse href=%22%23f%22 x=%2263%22 y=%2298%22/%3E%3Cuse href=%22%23w%22 x=%2270%22 y=%2298%22/%3E%3Cuse href=%22%23w%22 x=%2277%22 y=%2298%22/%3E%3Cuse href=%22%23f%22 x=%2284%22 y=%2298%22/%3E%3Cuse href=%22%23w%22 x=%2291%22 y=%2298%22/%3E%3Cuse href=%22%23w%22 x=%2298%22 y=%2298%22/%3E%3Cuse href=%22%23f%22 x=%22105%22 y=%2298%22/%3E%3Cuse href=%22%23F%22 x=%220%22 y=%22105%22/%3E%3Cuse href=%22%23w%22 x=%227%22 y=%22105%22/%3E%3Cuse href=%22%23W%22 x=%2214%22 y=%22105%22/%3E%3Cuse href=%22%23F%22 x=%2221%22 y=%22105%22/%3E%3Cuse href=%22%23F%22 x=%2228%22 y=%22105%22/%3E%3Cuse href=%22%23F%22 x=%2235%22 y=%22105%22/%3E%3Cuse href=%22%23w%22 x=%2242%22 y=%22105%22/%3E%3Cuse href=%22%23W%22 x=%2249%22 y=%22105%22/%3E%3Cuse href=%22%23F%22 x=%2256%22 y=%22105%22/%3E%3Cuse href=%22%23w%22 x=%2263%22 y=%22105%22/%3E%3Cuse href=%22%23w%22 x=%2270%22 y=%22105%22/%3E%3Cuse href=%22%23F%22 x=%2277%22 y=%22105%22/%3E%3Cuse href=%22%23F%22 x=%2284%22 y=%22105%22/%3E%3Cuse href=%22%23F%22 x=%2291%22 y=%22105%22/%3E%3Cuse href=%22%23w%22 x=%2298%22 y=%22105%22/%3E%3Cuse href=%22%23w%22 x=%22105%22 y=%22105%22/%3E%3C/g%3E%3C/svg%3E");
+  background-size: auto, 112px 112px;
+  opacity: var(--weave-opacity);
+}

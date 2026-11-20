@@ -38,27 +38,8 @@ export function tokens() {
 export function onThemeChange(fn) { listeners.add(fn); }
 function emit() { listeners.forEach((fn) => fn()); }
 
-// Optional "Moss & Rust" fall palette for backgrounds, lines, outlines, icons and accent (not charts).
-const PALETTE_KEY = "kdash-palette";
-function initPalette() {
-  const btn = document.getElementById("palette-toggle");
-  let saved = null;
-  try { saved = localStorage.getItem(PALETTE_KEY); } catch { /* private mode */ }
-  const set = (on) => {
-    if (on) document.documentElement.dataset.palette = "fall"; else delete document.documentElement.dataset.palette;
-    btn?.setAttribute("aria-pressed", String(on));
-  };
-  set(saved === "fall");
-  btn?.addEventListener("click", () => {
-    const on = document.documentElement.dataset.palette !== "fall";
-    set(on);
-    try { on ? localStorage.setItem(PALETTE_KEY, "fall") : localStorage.removeItem(PALETTE_KEY); } catch { /* ignore */ }
-    emit(); // charts read --grid/--baseline, so redraw them
-  });
-}
-
 export function initTheme() {
-  initPalette();
+  try { localStorage.removeItem("kdash-palette"); } catch { /* the old fall-palette setting; that palette is gone */ }
   // Dark is the default; the toggle's choice (light or dark) is remembered per browser.
   document.documentElement.dataset.theme = stored() || "dark";
   const btn = document.getElementById("theme-toggle");

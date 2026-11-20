@@ -39,7 +39,7 @@ function load(name, { optional = false } = {}) {
 
 
 // Icon-chip color per widget (identity only; follows the categorical order).
-// Icon colors are CSS variables (--icon-N), so the fall palette can restyle icons without touching charts.
+// Icon colors are CSS variables (--icon-N), so icons can be restyled without touching charts.
 function colors() {
   const v = (n) => `var(--icon-${n})`;
   return { people: v(1), growth: v(3), land: v(6), budget: v(7), debt: v(2), news: v(5), meetings: v(4), events: v(8), weather: v(1), police: v(1), fire: v(2), baseball: v(6), utility: v(3), parks: v(6), gem: v(5), swanee: v(7), made: v(2), editions: v(4), whataburger: v(8), videos: v(5), council: v(1), org: v(3), about: "var(--muted-fill)", gauge: "var(--accent)" };
@@ -81,7 +81,7 @@ function main() {
   if (D.editions) win("editions", { title: "Kannapolis Reads and Weaves", short: "Editions", icon: "book", color: "var(--icon-4)", render: () => renderEditions(D.editions) });
   if (D.whataburger) win("whataburger", { title: "What-A-Burger #1", short: "Burgers", icon: "burger", color: "var(--icon-8)", render: () => renderWhatABurger(D.whataburger) });
   if (D.videos) win("videos", { title: "City Council meeting videos", short: "Videos", icon: "video", color: "var(--icon-5)", render: () => renderVideos(D.videos) });
-  if (D.weatherMeta) win("weather", { title: "Weather", icon: "weather", color: "var(--icon-1)", render: () => renderWeather(weather()) });
+  if (D.weatherMeta) win("weather", { title: "Weather", icon: "weather", color: "var(--icon-1)", render: () => renderWeather(weather(), D.boundaries) });
   if (D.events) win("events", { title: "Upcoming events", short: "Events", icon: "events", color: "var(--icon-8)", render: () => renderEvents(D.events) });
   if (D.meetings) win("meetings", { title: "Public meetings", short: "Meetings", icon: "meetings", color: "var(--icon-4)", render: () => renderMeetings(D.meetings) });
   if (D.council) win("council", { title: "City Council", short: "Council", icon: "council", color: "var(--icon-1)", render: () => renderCouncil(D.council) });

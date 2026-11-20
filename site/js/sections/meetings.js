@@ -39,7 +39,7 @@ function icsFor(m, start) {
   const stamp = (d) => `${dayKey(d).replaceAll("-", "")}T${String(d.getHours()).padStart(2, "0")}${String(d.getMinutes()).padStart(2, "0")}00`;
   const esc = (s) => String(s || "").replace(/([,;\\])/g, "\\$1").replace(/\n/g, "\\n");
   const lines = [
-    "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Kannapolis Citizen-built Dashboard//Meetings//EN", "BEGIN:VEVENT",
+    "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Kannapolis Civic Dashboard//Meetings//EN", "BEGIN:VEVENT",
     `UID:civicclerk-${m.id}@kannapolis-dashboard`,
     `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, "").slice(0, 15)}Z`,
     `DTSTART;TZID=America/New_York:${stamp(start)}`,
