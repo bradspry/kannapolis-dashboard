@@ -1500,3 +1500,40 @@ body.editing .tile-w:first-child .tile-top { opacity: .4; }
 .wab-quote { margin: 0; }
 .wab-quote blockquote { margin: 0; font-size: 14.5px; font-style: italic; color: var(--text-secondary); flex: 1; }
 @media (max-width: 720px) { .wab-hero { flex-direction: column; align-items: flex-start; } .wab-logo.lg { width: 150px; height: 139px; } .wab-items { grid-template-columns: minmax(0, 1fr); } .size-s .mk-tile-now .wab-logo { display: none; } }
+
+/* Winterland Express (Parks & Recreation, Celebration of Lights) */
+.pk-train { padding: 12px 14px; border-radius: 14px; background: var(--surface-1); border: 1px solid var(--border); display: grid; gap: 8px; }
+.pk-train-head { display: flex; gap: 12px; align-items: center; }
+.pk-train-head b { display: block; font-size: 16px; }
+.pk-train-head .pk-hol-icon { font-size: 28px; }
+.pk-train p { margin: 0; font-size: 14px; color: var(--text-secondary); }
+.pk-train .pk-rules { margin: 0; }
+.pk-train-btn { position: relative; z-index: 2; align-self: flex-start; }
+.pk-train-btn.compact { display: inline-block; padding: 6px 13px; font-size: 13px; margin-top: 6px; }
+.pk-train-line { margin-top: 4px; }
+
+/* Christmas sprinkles on the Parks holiday card and tile (decorative, aria-hidden) */
+.pk-garland { display: block; text-align: center; font-size: 15px; letter-spacing: .35em; opacity: .9; margin: -2px 0 -4px; overflow: hidden; white-space: nowrap; }
+.pk-deco { font-style: normal; }
+.pk-hol-tilt { margin-left: auto; font-size: 14px; letter-spacing: .15em; }
+@media (max-width: 720px) { .pk-garland { letter-spacing: .12em; font-size: 13px; } }
+
+/* Falling snow (Parks tile + Christmas card during the Celebration of Lights). Each flake falls
+   (pk-fall) and sways side to side (pk-sway) at its own speed; the layer can't be clicked. */
+.pk-holiday { position: relative; overflow: hidden; }
+.pk-holiday > :not(.pk-snow) { position: relative; z-index: 1; }
+.pk-snow { position: absolute; inset: 0; z-index: 3; pointer-events: none; overflow: hidden; border-radius: inherit; container-type: size; }
+.pk-holiday > .pk-snow { z-index: 0; }
+.pk-snow i {
+  position: absolute; top: -10px; display: block; border-radius: 50%;
+  background: #fff; box-shadow: 0 0 4px rgba(255, 255, 255, .7);
+  animation-name: pk-fall, pk-sway; animation-timing-function: linear, ease-in-out;
+  animation-iteration-count: infinite, infinite; animation-direction: normal, alternate;
+  will-change: transform;
+}
+@keyframes pk-fall { from { translate: 0 -10px; } to { translate: 0 calc(100cqh + 20px); } }
+@keyframes pk-sway { from { margin-left: calc(var(--drift) * -1); } to { margin-left: var(--drift); } }
+/* Light theme: white flakes vanish on a pale tile, so give them a soft blue-gray edge. */
+:root[data-theme="light"] .pk-snow i { background: #f4f8ff; box-shadow: 0 0 0 1px rgba(120, 140, 170, .35), 0 0 3px rgba(120, 140, 170, .4); }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .pk-snow i { background: #f4f8ff; box-shadow: 0 0 0 1px rgba(120, 140, 170, .35), 0 0 3px rgba(120, 140, 170, .4); } }
+@media (prefers-reduced-motion: reduce) { .pk-snow { display: none; } }

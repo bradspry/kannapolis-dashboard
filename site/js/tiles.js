@@ -11,7 +11,7 @@ import { alertBanner } from "./sections/weather.js";
 import { callButtons, activeNotices, noticeCard, crimeRows, quarterLabel } from "./sections/police.js";
 import { freeList, stationList } from "./sections/fire.js";
 import { payButtons, feeLine } from "./sections/utility.js";
-import { parkButtons, seasonStatus, holidayStatus } from "./sections/parks.js";
+import { parkButtons, seasonStatus, holidayStatus, trainStatus, trainButton, snowfall } from "./sections/parks.js";
 import { gemLineup, whenText as gemWhen, poster as gemPoster, rating as gemRating, ticketsButton } from "./sections/gem.js";
 import { upcomingShows, whenBadge as swBadge, dayOf as swDay, timeOf as swTime, rentButton, showImage, weeklyStatus } from "./sections/swanee.js";
 import { featuredMaker, makerImage, statusLine, siteButton, hoursFor, hoursText, hoursTable } from "./sections/made.js";
@@ -293,21 +293,29 @@ export function tileDefs(data, COLORS) {
       id: "parks", opens: "parks", size: "m", label: "Parks & Recreation",
       build: (size) => {
         const hol = holidayStatus(parks.holiday);
-        const holLine = hol ? h("p", { class: "pk-hol-line" }, h("span", { "aria-hidden": "true" }, "🎄 "), h("b", {}, "Celebration of Lights: "), hol.label) : null;
-        const top = [head("tree", COLORS.parks, "Parks & Recreation"), holLine];
+        const holLine = hol ? h("p", { class: "pk-hol-line" }, h("span", { "aria-hidden": "true" }, "🎄 "), h("b", {}, "Celebration of Lights: "), hol.label, hol.open ? h("span", { "aria-hidden": "true" }, " ✨") : null) : null;
+        const train = trainStatus(parks.holiday);
+        // Winterland Express: tonight's reservation situation, plus the reserve button when online seats apply.
+        const trainLine = train && !train.reserve ? h("p", { class: "pk-hol-line pk-train-line" }, h("span", { "aria-hidden": "true" }, "🚂 "), h("b", {}, "Winterland Express: "), train.short) : null;
+        const trainBtn = train?.reserve ? trainButton(parks.holiday, { compact: true }) : null;
+        // During the holiday season the tile title gets a little festive (decorative only).
+        const title = hol ? h("div", { class: "tile-head" }, chip("tree", COLORS.parks), h("span", { class: "tile-title" }, "Parks & Recreation"), h("span", { class: "pk-hol-tilt", "aria-hidden": "true" }, "🎄❄️🎁")) : head("tree", COLORS.parks, "Parks & Recreation");
+        const snow = hol ? snowfall(size === "s" ? 14 : size === "m" ? 24 : 34) : null;
+        const top = [snow, title, holLine, trainLine];
         const parkRows = (n) => h("ul", { class: "ub-mini pk-mini" }, parks.parks.slice(0, n).map((p) =>
           h("li", {}, h("b", {}, p.name), h("span", {}, p.tags.slice(0, 3).join(" · ")))));
         const seasonal = h("ul", { class: "ub-mini pk-mini" }, parks.seasonal.map((s) => { const st = seasonStatus(s); return h("li", {}, h("b", {}, s.what.replace("Village Park ", "")), h("span", {}, st.label)); }));
         const counts = h("p", { class: "tile-meta pk-counts" }, `${parks.parks.length} parks · ${parks.greenways.length} greenways · weather hotline ${parks.weather_hotline}`);
-        if (size === "s") return h("div", { class: "tile-body" }, ...top, parkButtons(parks, { compact: true, primaryOnly: !!hol }));
-        if (size === "m") return h("div", { class: "tile-body" }, top[0],
+        if (size === "s") return h("div", { class: "tile-body" }, snow, title, holLine, trainBtn || parkButtons(parks, { compact: true, primaryOnly: true }));
+        if (size === "m") return h("div", { class: "tile-body" }, snow, title,
           h("div", { class: "tile-split top ub-m" }, parkButtons(parks, { compact: true }),
-            h("div", {}, hol ? holLine : h("div", { class: "mini-head bb-mh" }, "Popular parks"), parkRows(hol ? 2 : 3))), hol ? null : counts);
-        if (size === "l") return h("div", { class: "tile-body" }, ...top, parkButtons(parks, { compact: true }),
-          h("div", { class: "mini-head" }, "Parks"), parkRows(5), counts);
+            h("div", {}, hol ? holLine : h("div", { class: "mini-head bb-mh" }, "Popular parks"),
+              train ? [trainLine, trainBtn] : parkRows(hol ? 2 : 3))), hol ? null : counts);
+        if (size === "l") return h("div", { class: "tile-body" }, ...top, trainBtn, parkButtons(parks, { compact: true }),
+          h("div", { class: "mini-head" }, "Parks"), parkRows(train ? 4 : 5), counts);
         return h("div", { class: "tile-body" }, ...top,
           h("div", { class: "tile-split top" },
-            h("div", {}, parkButtons(parks), h("div", { class: "mini-head" }, "Village Park, seasonal"), seasonal, counts),
+            h("div", {}, parkButtons(parks), trainBtn, h("div", { class: "mini-head" }, "Village Park, seasonal"), seasonal, counts),
             h("div", {}, h("div", { class: "mini-head bb-mh" }, "Parks"), parkRows(7))));
       },
     },

@@ -44,6 +44,38 @@ export function holidayStatus(hol, now = new Date()) {
   return { live: true, open: true, label: `Open tonight ${hoursFor(hol.hours, now)}` };
 }
 
+/** Winterland Express tonight: reserve online (Sun–Thu), walk-up only (Fri–Sat, week before Christmas), or closed.
+ *  Before the season it says when it starts; outside the holiday window it returns null. */
+export function trainStatus(hol, now = new Date()) {
+  const t = hol?.train, d = localISO(now);
+  if (!t || d < hol.show_from || d > hol.end) return null;
+  if (d < hol.start) return { reserve: true, short: `Reserve now (Sun–Thu) · starts ${shortDate(hol.start)}`, label: `Rides start ${shortDate(hol.start)}. Reserve Sunday–Thursday seats now.` };
+  if (hol.closed.includes(d)) return { reserve: false, closed: true, short: "No train tonight (park closed)", label: "No train tonight: the park is closed." };
+  const w = t.walkup_only;
+  if (w && w.start <= d && d <= w.end) return { reserve: false, short: "Walk-up only tonight", label: `Walk-up only tonight (${w.why}): first come, first served. Buy tickets at the carousel or park building.` };
+  if (!t.reserve_days.includes(now.getDay())) return { reserve: false, short: "Walk-up only tonight (Fri–Sat)", label: "Walk-up only tonight: Fridays and Saturdays are first come, first served. Buy tickets at the carousel or park building." };
+  return { reserve: true, short: "Reserve seats for tonight", label: "Reservations tonight (Sunday–Thursday). Walk-up tickets too if seats remain." };
+}
+
+export function trainButton(hol, { compact = false } = {}) {
+  const label = compact ? `${hol.tickets.label} (Sun–Thu)` : hol.tickets.label;
+  return h("a", { class: `btn-primary pk-train-btn${compact ? " compact" : ""}`, href: hol.tickets.url, target: "_blank", rel: "noopener" }, `🚂 ${label} ↗`);
+}
+
+function trainCard(hol) {
+  const t = hol.train, st = trainStatus(hol);
+  if (!t || !st) return null;
+  return h("div", { class: "pk-train" },
+    h("div", { class: "pk-train-head" }, h("span", { class: "pk-hol-icon", "aria-hidden": "true" }, "🚂"),
+      h("div", {}, h("b", {}, t.name, deco(" ❄️🛤️")), h("span", { class: `pk-status ${st.reserve ? "open" : ""}` }, st.reserve ? "● " : "○ ", st.label))),
+    h("p", {}, t.about, " ", t.price, "."),
+    h("ul", { class: "pk-rules" },
+      h("li", {}, h("b", {}, "Sunday–Thursday: "), t.how),
+      h("li", {}, h("b", {}, "Walk-up: "), t.walkup),
+      h("li", {}, t.rainout)),
+    h("div", { class: "pk-links" }, trainButton(hol), h("a", { href: t.info, target: "_blank", rel: "noopener" }, "Train details ↗")));
+}
+
 export const upcomingHolidayEvents = (hol, now = new Date()) => (hol?.events || []).filter((e) => e.date >= localISO(now));
 
 /** Primary actions: reserve a shelter, sign up for programs. */
@@ -55,6 +87,30 @@ export function parkButtons(pr, { compact = false, primaryOnly = false } = {}) {
       h("span", { "aria-hidden": "true" }, "⚽"), h("span", {}, h("b", {}, "Sign up"), h("small", {}, compact ? "Sports & programs" : "Youth sports, classes & camps"))));
 }
 
+const deco = (e, cls = "pk-deco") => h("span", { class: cls, "aria-hidden": "true" }, e);
+/** A little holiday emoji for each Christmas event, by what it is. */
+const eventEmoji = (e) => [[/santa/i, "🎅"], [/parade/i, "🥁"], [/grinch/i, "💚"], [/polar express/i, "🚂"], [/\belf\b/i, "🧝"],
+  [/carol/i, "🕯️"], [/tree lighting|fireworks/i, "🎆"], [/show|concert|singing/i, "🎶"], [/movie|matinee/i, "🍿"]].find(([re]) => re.test(e.title))?.[1] || "✨";
+
+/** Gently falling snow over a holiday card or tile: decorative, can't be clicked, and skipped
+ *  entirely when the device asks for reduced motion (see CSS). Flakes are spread out evenly
+ *  with a little randomness so they never clump. */
+export function snowfall(count = 26) {
+  const flakes = Array.from({ length: count }, (_, i) => {
+    const size = 2 + Math.random() * 4;                  // 2–6 px
+    const dur = 7 + Math.random() * 7;                   // 7–14 s to fall
+    const flake = h("i", { style: {
+      left: `${((i + Math.random()) / count) * 100}%`,
+      width: `${size}px`, height: `${size}px`, opacity: (0.45 + Math.random() * 0.5).toFixed(2),
+      animationDuration: `${dur.toFixed(1)}s, ${(2.5 + Math.random() * 2.5).toFixed(1)}s`,
+      animationDelay: `${(-Math.random() * dur).toFixed(1)}s, ${(-Math.random() * 4).toFixed(1)}s`, // negative: already falling on load
+    } });
+    flake.style.setProperty("--drift", `${(Math.random() * 24 - 12).toFixed(0)}px`); // custom properties need setProperty
+    return flake;
+  });
+  return h("div", { class: "pk-snow", "aria-hidden": "true" }, flakes);
+}
+
 const fmtT = (t) => { if (!t) return ""; const [hh, mm] = t.split(":").map(Number); return new Date(2000, 0, 1, hh, mm).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }); };
 
 function holidaySection(hol) {
@@ -62,23 +118,26 @@ function holidaySection(hol) {
   if (!st) return null;
   const evs = upcomingHolidayEvents(hol);
   return h("section", { class: "card pk-holiday" },
+    snowfall(40),
+    deco("❄️ 🎄 ✨ 🎁 ⛄ 🔔 🎅 🔔 ⛄ 🎁 ✨ 🎄 ❄️", "pk-garland"),
     h("div", { class: "pk-hol-head" },
       h("span", { class: "pk-hol-icon", "aria-hidden": "true" }, "🎄"),
       h("div", {}, h("h3", {}, hol.title), h("p", { class: "sub" }, `Celebration of Lights · ${hol.place} · ${shortDate(hol.start)}–${shortDate(hol.end)}`)),
-      h("span", { class: `pk-status big ${st.open ? "open" : ""}` }, st.open ? "● " : "○ ", st.label)),
-    h("p", {}, hol.summary),
+      h("span", { class: `pk-status big ${st.open ? "open" : ""}` }, st.open ? "● " : "○ ", st.label, st.open ? deco(" ✨") : null)),
+    h("p", {}, hol.summary, deco(" 🎅🍪🔥")),
     h("ul", { class: "pk-rules" },
-      h("li", {}, hol.free),
-      h("li", {}, `Hours: ${hol.hours["sun-thu"]} Sunday–Thursday; ${hol.hours["fri-sat"]} Friday & Saturday. Closed Thanksgiving, Christmas Eve and Christmas Day.`),
-      h("li", {}, hol.tickets.note),
-      h("li", {}, hol.weather)),
+      h("li", {}, deco("🎁 "), hol.free),
+      h("li", {}, deco("🌟 "), `Hours: ${hol.hours["sun-thu"]} Sunday–Thursday; ${hol.hours["fri-sat"]} Friday & Saturday. Closed Thanksgiving, Christmas Eve and Christmas Day.`),
+      hol.train ? null : h("li", {}, hol.tickets.note),
+      h("li", {}, deco("🌧️ "), hol.weather)),
+    trainCard(hol),
     h("div", { class: "pk-links" },
-      h("a", { class: "btn-primary", href: hol.tickets.url, target: "_blank", rel: "noopener" }, `🚂 ${hol.tickets.label} ↗`),
+      hol.train ? null : trainButton(hol),
       ...hol.maps.map((m) => h("a", { href: m.url, target: "_blank", rel: "noopener" }, `${m.title} ↗`))),
     evs.length ? h("div", {}, h("div", { class: "mini-head" }, "Coming up"),
       h("ul", { class: "pk-hol-events", role: "list" }, evs.map((e) => h("li", {},
         h("span", { class: "mini-date" }, `${shortDate(e.date)}${e.time ? ` · ${fmtT(e.time)}` : ""}`),
-        h("span", {}, h("b", {}, e.title), e.where ? ` · ${e.where}` : "", e.note ? h("small", {}, e.note) : null),
+        h("span", {}, deco(`${eventEmoji(e)} `), h("b", {}, e.title), e.where ? ` · ${e.where}` : "", e.note ? h("small", {}, e.note) : null),
         e.url ? h("a", { href: e.url, target: "_blank", rel: "noopener" }, `${e.action || "More"} ↗`) : h("span", {}))))) : null);
 }
 

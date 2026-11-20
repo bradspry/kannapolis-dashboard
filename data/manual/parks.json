@@ -348,7 +348,7 @@
     "summary": "Thousands of lights, the Winterland Express train and the carousel, free photos with Santa, holiday crafts, s'mores by the fire pit, weekend artisans and food trucks.",
     "free": "Admission, the light displays and parking are free. Train and carousel rides need tickets ($2.50).",
     "tickets": {
-      "label": "Train tickets",
+      "label": "Reserve train seats",
       "url": "https://www.etix.com/ticket/e/1060906/2026-celebration-of-lights-winterland-express-kannapolis-village-park",
       "note": "Online reservations are for Sunday–Thursday. Friday, Saturday and the week before Christmas: buy tickets on site the day of. Walk-up tickets are sold nightly at the carousel or park building."
     },
@@ -442,6 +442,28 @@
         "url": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Parks%20and%20Rec/Images/Updated%20Map.png"
       }
     ],
-    "source": "https://www.kannapolisnc.gov/christmas"
+    "source": "https://www.kannapolisnc.gov/christmas",
+    "train": {
+      "name": "Winterland Express",
+      "about": "The Christmastime train at Village Park runs every 10 minutes each evening during the Celebration of Lights.",
+      "price": "$2.50 per ride (carousel too; no reservation needed for the carousel)",
+      "reserve_days": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "reservations_open": "2026-10-14",
+      "walkup_only": {
+        "start": "2026-12-18",
+        "end": "2026-12-24",
+        "why": "the week before Christmas"
+      },
+      "how": "Reserve online, then go straight to the train station with your mobile or printed ticket.",
+      "walkup": "Fridays, Saturdays and the week before Christmas are first come, first served. Walk-up tickets are sold nightly at the carousel or park building, including Sunday–Thursday when reserved seats run out.",
+      "rainout": "If weather keeps the park closed, your ticket is honored on another night of your choice (as seats allow). Rainout hotline: 704-920-4344.",
+      "info": "https://www.kannapolisnc.gov/winterland-express"
+    }
   }
 }
