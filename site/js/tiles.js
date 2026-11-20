@@ -17,6 +17,7 @@ import { upcomingShows, whenBadge as swBadge, dayOf as swDay, timeOf as swTime, 
 import { featuredMaker, makerImage, statusLine, siteButton, hoursFor, hoursText, hoursTable } from "./sections/made.js";
 import { upcoming as edUpcoming, whenText as edWhen, edStatus, cover as edCover, orderButton as edOrder } from "./sections/editions.js";
 import { favorites as wabFavorites, wabLogo, orderButton as wabOrder, price as wabPrice, todayHours as wabToday } from "./sections/whataburger.js";
+import { splitVideos, whenBadge as vdBadge, thumb as vdThumb, watchButton as vdWatch, dayLabel as vdDay, timeLabel as vdTime } from "./sections/videos.js";
 import { prepGames, nextHome, homeStands, standLabel, nextGameCard, fmtDay as bbDay, fmtTime as bbTime } from "./sections/baseball.js";
 
 const NS = "http://www.w3.org/2000/svg";
@@ -61,11 +62,50 @@ function donut(parts, size = 92, stroke = 12) {
 }
 
 const head = (iconName, color, title) => h("div", { class: "tile-head" }, chip(iconName, color), h("span", { class: "tile-title" }, title));
+
+/** Department chief for a tile header (photo, name, title), from the City org chart. */
+const chiefOf = (org, re) => org?.people?.find((p) => re.test(p.title));
+const chiefBadge = (p, role) => (p ? h("div", { class: "tile-chief" },
+  h("div", { class: "tile-chief-text" }, h("b", {}, p.name), h("span", {}, role)),
+  p.photo ? h("img", { src: p.photo, alt: `${p.name}, ${role}`, loading: "lazy" }) : null) : null);
+/** Header with the chief on the right (medium tiles). */
+const headWithChief = (iconName, color, title, chief, role) => h("div", { class: "tile-head tile-head-chief" },
+  chip(iconName, color), h("span", { class: "tile-title" }, title), chiefBadge(chief, role));
 const big = (value, unit) => h("div", { class: "tile-big" }, value, unit ? h("small", {}, unit) : null);
 const parseLocal = (s) => { const [d, t = "00:00"] = s.split("T"); const [y, m, dd] = d.split("-").map(Number); const [hh, mm] = t.split(":").map(Number); return new Date(y, m - 1, dd, hh, mm); };
 
 // Sizes: s = 1×1, m = 2×1, l = 2×2, xl = 4×2. Each build(size) shows more as the tile grows.
 const isBig = (size) => size === "l" || size === "xl";
+
+/** Static SVG zoning map for the XL Land use tile: one path per color (fast to draw), city limits on top.
+ *  Uses a simple equirectangular projection corrected for latitude, which is accurate at city scale.
+ *  The interactive map lives in the Land use window. */
+const zoningMapCache = new Map();
+function zoningMap(geo, colorFor, boundaries) {
+  const key = geo.features.map((f) => colorFor(f.properties.category)).join("|").length + ":" + colorFor("Residential");
+  if (!zoningMapCache.has(key)) {
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    for (const f of geo.features) for (const ring of f.geometry.coordinates) for (const [x, y] of ring) {
+      if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y;
+    }
+    const k = Math.cos(((y0 + y1) / 2) * Math.PI / 180), W = 1000, H = Math.round((W * (y1 - y0)) / ((x1 - x0) * k));
+    const px = (x, y) => `${((x - x0) / (x1 - x0) * W).toFixed(1)},${((y1 - y) / (y1 - y0) * H).toFixed(1)}`;
+    const ringPath = (ring) => `M${ring.map(([x, y]) => px(x, y)).join("L")}Z`;
+    const byColor = new Map();
+    for (const f of geo.features) {
+      const c = colorFor(f.properties.category);
+      byColor.set(c, (byColor.get(c) || "") + f.geometry.coordinates.map(ringPath).join(""));
+    }
+    const city = boundaries?.features?.find((f) => f.properties.year === "current");
+    const outline = city ? city.geometry.coordinates.map((poly) => poly.map(ringPath).join("")).join("") : null;
+    zoningMapCache.set(key, { W, H, byColor, outline });
+  }
+  const { W, H, byColor, outline } = zoningMapCache.get(key);
+  const svg = svgEl("svg", { viewBox: `0 0 ${W} ${H}`, class: "zoning-svg", role: "img", "aria-label": "Map of Kannapolis zoning by category" });
+  for (const [c, d] of byColor) svg.append(svgEl("path", { d, fill: c, "fill-rule": "evenodd", stroke: "var(--surface-1)", "stroke-width": 0.6 }));
+  if (outline) svg.append(svgEl("path", { d: outline, fill: "none", stroke: "var(--text-primary)", "stroke-width": 2, "stroke-opacity": 0.55, "stroke-linejoin": "round" }));
+  return svg;
+}
 const facts = (rows, cls = "") => h("dl", { class: `facts ${cls}` }, rows.filter(Boolean).flatMap(([k, v]) => [h("dt", {}, k), h("dd", {}, v)]));
 /** ☎ and ✉ links for a person; omitted when the number or address isn't published. */
 const contactLinks = (p) => [
@@ -75,7 +115,7 @@ const contactLinks = (p) => [
 const shortDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
 export function tileDefs(data, COLORS) {
-  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger } = data;
+  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos } = data;
   const t = tokens();
   const geo = census.geographies;
   const k = geo.Kannapolis, nc = geo["North Carolina"], cab = geo["Cabarrus County"], us = geo["United States"];
@@ -155,7 +195,7 @@ export function tileDefs(data, COLORS) {
             h("a", { href: s.url, target: "_blank", rel: "noopener" }, /Report/.test(s.title) ? "Report online ↗" : "Event map ↗")));
         const top = [head("police", COLORS.police, "Kannapolis Police")];
         if (size === "s") return h("div", { class: "tile-body" }, ...top, callButtons(police, { compact: true }));
-        if (size === "m") return h("div", { class: "tile-body" }, ...top,
+        if (size === "m") return h("div", { class: "tile-body" }, headWithChief("police", COLORS.police, "Kannapolis Police", chiefOf(org, /police chief/i), "Police Chief"),
           h("div", { class: "tile-split kpd-m" }, callButtons(police, { compact: true }),
             h("div", {}, headline, crimeRows(police, { limit: 3, quarters: [last.quarter] }))));
         if (size === "l") return h("div", { class: "tile-body" }, ...top, callButtons(police, { compact: true }),
@@ -174,7 +214,7 @@ export function tileDefs(data, COLORS) {
         const top = [head("fire", COLORS.fire, "Kannapolis Fire Dept.")];
         const freeHead = h("div", { class: "mini-head" }, "Free for residents");
         if (size === "s") return h("div", { class: "tile-body" }, ...top, callButtons(fire, { compact: true }));
-        if (size === "m") return h("div", { class: "tile-body" }, ...top,
+        if (size === "m") return h("div", { class: "tile-body" }, headWithChief("fire", COLORS.fire, "Kannapolis Fire Dept.", chiefOf(org, /fire chief/i), "Fire Chief"),
           h("div", { class: "tile-split kpd-m" }, callButtons(fire, { compact: true }), h("div", { class: "kfd-m-free" }, freeHead, freeList(fire, 3))));
         if (size === "l") return h("div", { class: "tile-body" }, ...top, callButtons(fire, { compact: true }),
           freeHead, freeList(fire, 2), h("div", { class: "mini-head kfd-st-head" }, "Fire stations"), stationList(fire, { compact: true }));
@@ -183,6 +223,32 @@ export function tileDefs(data, COLORS) {
             h("div", {}, callButtons(fire), freeHead, freeList(fire, 4)),
             h("div", {}, h("div", { class: "mini-head" }, "Fire stations"), stationList(fire, { compact: true }),
               h("p", { class: "tile-meta" }, "ISO Class 1: the best fire-protection rating possible"))));
+      },
+    },
+    videos && {
+      id: "videos", opens: "videos", size: "m", label: "Council meeting videos",
+      build: (size) => {
+        const { next, recent } = splitVideos(videos);
+        const latest = recent[0];
+        const top = [head("video", COLORS.videos, "Council meeting videos")];
+        const nextBlock = next ? h("div", { class: "vd-tile-next" },
+          h("div", { class: "date-block sm" }, h("span", {}, next._d.toLocaleDateString("en-US", { month: "short" })), h("b", {}, next._d.getDate())),
+          h("div", {}, h("div", { class: "bb-next-label" }, next.live ? "Streaming now" : vdBadge(next) || "Next meeting · live"),
+            h("div", { class: "gem-tile-title" }, `${vdDay(next._d, { weekday: "long" })} · ${vdTime(next._d)}`), vdWatch(next, { compact: true }))) : null;
+        const latestBlock = latest ? h("a", { class: "vd-tile-latest", href: latest.url, target: "_blank", rel: "noopener", "aria-label": `Watch the ${vdDay(latest._d, { month: "long", day: "numeric" })} meeting on YouTube` },
+          vdThumb(latest, "sm"), h("div", {}, h("div", { class: "bb-next-label" }, "Latest recording"), h("b", {}, vdDay(latest._d, { month: "short", day: "numeric" })),
+            h("span", { class: "tile-meta" }, `${latest.views.toLocaleString("en-US")} views`))) : null;
+        const more = (n) => h("ul", { class: "mini-list" }, recent.slice(1, 1 + n).map((v) => h("li", {}, h("span", { class: "mini-date" }, vdDay(v._d, { month: "short", day: "numeric" })),
+          h("a", { href: v.url, target: "_blank", rel: "noopener" }, `Council meeting ↗`))));
+        if (size === "s") return h("div", { class: "tile-body" }, ...top, nextBlock || latestBlock);
+        const earlier = (n) => h("p", { class: "tile-meta vd-earlier" }, "Earlier: ", ...recent.slice(1, 1 + n).flatMap((v, i) => [i ? " · " : "",
+          h("a", { href: v.url, target: "_blank", rel: "noopener" }, vdDay(v._d, { month: "short", day: "numeric" }))]));
+        if (size === "m") return h("div", { class: "tile-body" }, ...top, h("div", { class: "tile-split top" }, nextBlock || latestBlock,
+          next ? h("div", {}, latestBlock, earlier(3)) : h("div", {}, h("div", { class: "mini-head bb-mh" }, "Earlier"), more(3))));
+        if (size === "l") return h("div", { class: "tile-body" }, ...top, nextBlock, latestBlock, h("div", { class: "mini-head" }, "Earlier meetings"), more(3));
+        return h("div", { class: "tile-body" }, ...top,
+          h("div", { class: "tile-split top" }, h("div", {}, nextBlock, latestBlock),
+            h("div", { class: "vd-tile-row" }, recent.slice(1, 5).map((v) => h("a", { href: v.url, target: "_blank", rel: "noopener", class: "vd-tile-mini" }, vdThumb(v, "sm"), h("span", {}, vdDay(v._d, { month: "short", day: "numeric" })))))));
       },
     },
     whataburger && {
@@ -388,9 +454,22 @@ export function tileDefs(data, COLORS) {
           ["Below poverty line", pct(k.poverty_rate), `NC ${pct(nc.poverty_rate)}`],
           ["Bachelor's degree or higher", pct(k.bachelors_plus_pct), `NC ${pct(nc.bachelors_plus_pct)}`],
           ["Median rent", usd(k.median_gross_rent), `NC ${usd(nc.median_gross_rent)}`]];
-        if (size === "m") return h("div", { class: "tile-body" }, head("people", COLORS.people, "Residents"),
-          h("div", { class: "tile-split" }, h("div", {}, number, h("div", { class: "tile-meta" }, `Median income ${usdCompact(k.median_household_income)} · NC ${usdCompact(nc.median_household_income)}`)),
-            h("div", { class: "tile-spark" }, sparkline(pops, t.series[0]))));
+        if (size === "m") {
+          // Left: population + three key numbers vs. NC. Right: population trend + age mix.
+          const quick = h("ul", { class: "ub-mini pp-mini" },
+            [["Income", usdCompact(k.median_household_income), usdCompact(nc.median_household_income)],
+             ["Home value", usdCompact(k.median_home_value), usdCompact(nc.median_home_value)],
+             ["Median age", String(k.median_age), String(nc.median_age)]].map(([a, b, c]) =>
+              h("li", {}, h("span", {}, a), h("b", {}, b), h("small", {}, `NC ${c}`))));
+          const ages = Object.entries(k.age).map(([label, v], i) => ({ label: label.replace(" and over", "+").replace(" to ", "–"), v, c: t.series[i] }));
+          const ageBar = h("div", {}, h("div", { class: "mini-head bb-mh" }, "Age mix"),
+            h("div", { class: "mini-bar", "aria-hidden": "true" }, ages.map((a) => h("span", { style: { flex: `${a.v} 1 0`, background: a.c } }))),
+            h("ul", { class: "mini-legend" }, ages.map((a) => h("li", {}, h("i", { style: { background: a.c } }), `${a.label} ${pct(a.v, 0)}`))));
+          return h("div", { class: "tile-body" }, head("people", COLORS.people, "Residents"),
+            h("div", { class: "tile-split top pp-m" },
+              h("div", {}, number, quick),
+              h("div", { class: "pp-m-right" }, h("div", { class: "tile-spark pp-spark" }, sparkline(pops, t.series[0])), ageBar)));
+        }
         return h("div", { class: "tile-body" }, head("people", COLORS.people, "Residents"),
           h("div", { class: `tile-split ${size === "xl" ? "wide" : ""}` }, number, h("div", { class: "tile-spark" }, sparkline(pops, t.series[0]))),
           h("ul", { class: `stat-rows ${size === "xl" ? "cols-2" : ""}` }, stats.slice(0, size === "xl" ? 6 : 4).map(([a, b, c]) =>
@@ -520,10 +599,20 @@ export function tileDefs(data, COLORS) {
         const ring = h("div", { class: "ring-wrap" }, donut(parts, isBig(size) ? 150 : 104, isBig(size) ? 16 : 12),
           h("div", { class: "ring-label" }, h("b", {}, pct(cats[0].pct, 0)), h("span", {}, cats[0].category)));
         if (size === "s") return h("div", { class: "tile-body" }, head("land", COLORS.land, "Land use"), ring);
-        const leg = h("ul", { class: "ring-legend" }, parts.map((p) => h("li", {}, h("i", { style: { background: p.color } }), h("span", {}, p.category), h("b", {}, pct(p.pct, 0)))));
+        const leg = h("ul", { class: `ring-legend${isBig(size) ? " with-acres" : ""}` }, parts.map((p) => h("li", {}, h("i", { style: { background: p.color } }), h("span", {}, p.category),
+          isBig(size) ? h("small", {}, `${num(Math.round(p.value))} ac`) : null, h("b", {}, pct(p.pct, 0)))));
+        if (size === "m") return h("div", { class: "tile-body" }, head("land", COLORS.land, "Land use"), h("div", { class: "tile-split ring-split" }, ring, leg));
+        // Large / XL: acres per category, the biggest zoning districts, and (XL) a zoning map.
+        const districts = h("div", {}, h("div", { class: "mini-head" }, "Largest zoning districts"),
+          h("ul", { class: "ub-mini land-districts" }, zoning.districts.slice(0, 3).map((d) => h("li", {}, h("b", {}, d.code), h("span", {}, d.category), h("small", {}, `${num(d.acres)} ac`)))));
+        const meta = h("div", { class: "tile-meta" }, `${num(zoning.total_acres)} zoned acres · Cabarrus County part of the city`);
+        if (size === "l") return h("div", { class: "tile-body" }, head("land", COLORS.land, "Land use"), h("div", { class: "tile-split ring-split" }, ring, leg), districts, meta);
+        const colorOf = new Map(parts.map((p) => [p.category, p.color]));
+        const map = data.zoningGeo ? zoningMap(data.zoningGeo, (cat) => colorOf.get(cat) || t.mutedFill, data.boundaries) : null;
         return h("div", { class: "tile-body" }, head("land", COLORS.land, "Land use"),
-          h("div", { class: "tile-split ring-split" }, ring, leg),
-          isBig(size) ? h("div", { class: "tile-meta" }, `${num(zoning.total_acres)} zoned acres · Cabarrus County part of the city`) : null);
+          h("div", { class: "tile-split top land-xl" },
+            h("div", {}, h("div", { class: "tile-split ring-split" }, ring, leg), districts, meta),
+            map ? h("figure", { class: "land-map" }, map) : null));
       },
     },
     council && {
@@ -554,10 +643,18 @@ export function tileDefs(data, COLORS) {
                 h("ul", { class: "council-leaders" }, leaders.map((m) => h("li", {}, avatar(m),
                   h("div", {}, h("b", {}, m.name), h("span", {}, m.role)), ...contactLinks(m)))))));
         }
+        // Large/XL: everyone, then the next Council meetings (agenda link once it's posted), then the group email.
+        const upcomingCouncil = meetings ? parseM().filter((m) => /council/i.test(`${m.category || ""} ${m.title}`)).slice(0, size === "xl" ? 3 : 2) : [];
+        const meetingRows = upcomingCouncil.length ? h("div", { class: "council-up" }, h("div", { class: "mini-head" }, "Next Council meetings"),
+          h("ul", { class: "ub-mini council-up-list" }, upcomingCouncil.map((m) => h("li", {},
+            h("b", {}, m._d.toLocaleDateString("en-US", { month: "short", day: "numeric" })),
+            h("span", {}, `${m._d.toLocaleDateString("en-US", { weekday: "short" })} ${m._d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })} · ${m.title.replace(/^Kannapolis /, "")}`),
+            m.agenda?.url ? h("a", { class: "council-agenda", href: m.agenda.url, target: "_blank", rel: "noopener" }, "Agenda ↗") : h("small", {}, "No agenda yet"))))) : null;
         return h("div", { class: "tile-body" }, head("council", COLORS.council, "Your City Council"),
           h("ul", { class: "people-list cols-2 council-list" }, council.members.map((m) => h("li", {}, avatar(m),
             h("div", {}, h("b", {}, m.name), h("span", {}, m.role)), h("span", { class: "contact-links" }, contactLinks(m))))),
-          email);
+          meetingRows,
+          h("div", { class: "council-email-row" }, email, h("span", { class: "tile-meta" }, council.group_note)));
       },
     },
     org && {

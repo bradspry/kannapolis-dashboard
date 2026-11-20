@@ -61,3 +61,6 @@ editions_yarn,Editions Coffee Shop & Bookstore: Yarn,Editions Coffee Shop & Book
 editions_home,"Editions Coffee Shop & Bookstore website (contact, monthly drink specials)",Editions Coffee Shop & Bookstore,Web page,https://www.editionsbookstore.com,"Address, phone, email, monthly specials menu",editions
 whataburger_menu,What-A-Burger #1: Menu & Order Online,What-A-Burger #1,Web page,https://www.What-A-Burger1.com/order,"Full menu and prices, hours",whataburger
 whataburger_site,"What-A-Burger #1 website (address, phone, hours, reviews, logo)",What-A-Burger #1,Web page,https://www.what-a-burger1.com,"Address, phone, hours, customer quotes, logo",whataburger
+council_videos,City Council Meetings (YouTube playlist RSS feed),City of Kannapolis,RSS,https://www.youtube.com/playlist?list=PLVO_mqWw3g38u7X_oE4-9k0F2BN05dEaX,"Upcoming live stream and recent meeting recordings, views (daily)",videos
+city_youtube,City of Kannapolis YouTube channel: live streams,City of Kannapolis,Web page,https://www.youtube.com/@CityofKannapolis/streams,Live stream page,videos
+civicclerk_portal,City meeting portal (CivicClerk): agendas for each Council meeting,City of Kannapolis,JSON API,https://kannapolisnc.portal.civicclerk.com,Agenda links matched to each video,videos
