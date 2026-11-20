@@ -24,6 +24,7 @@ import build_property
 import build_site
 import build_swanee
 import build_utility
+import build_whataburger
 import build_weather
 import build_zoning
 from common import log
@@ -38,6 +39,7 @@ STEPS = [
     ("swanee", build_swanee.main),
     ("made", build_made.main),
     ("editions", build_editions.main),
+    ("whataburger", build_whataburger.main),
     ("weather", build_weather.main),
     ("news", build_news.main),
     ("org", build_org.main),

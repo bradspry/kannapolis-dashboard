@@ -34,9 +34,10 @@ export function openStatus(m, now = new Date()) {
   return { open: false, label: "Closed" };
 }
 
-export function statusLine(m, cls = "") {
+export function statusLine(m, cls = "", { compact = false } = {}) {
   const st = openStatus(m);
-  return h("span", { class: `pk-status ${st.open ? "open" : ""} ${cls}` }, st.open ? "● " : "○ ", st.label);
+  // Compact (tiles): the hollow dot already says "closed", so "Closed · opens tomorrow 7 AM" -> "Opens tomorrow 7 AM".
+  return h("span", { class: `pk-status ${st.open ? "open" : ""} ${cls}` }, st.open ? "● " : "○ ", compact ? st.label.replace(/^Closed · o/, "O") : st.label);
 }
 
 export function makerImage(m, size = "md") {

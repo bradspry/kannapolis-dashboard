@@ -3,15 +3,16 @@
     "gem",
     "swanee",
     "made",
-    "editions",
-    "parks",
+    "weather",
     "utility",
     "police",
-    "baseball",
+    "editions",
+    "whataburger",
     "fire",
+    "parks",
+    "baseball",
     "news",
     "meetings",
-    "weather",
     "council",
     "events",
     "org",
@@ -46,7 +47,8 @@
     "utility": "m",
     "parks": "m",
     "made": "m",
-    "editions": "m"
+    "editions": "m",
+    "whataburger": "m"
   },
   "spacers": []
 }

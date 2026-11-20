@@ -16,6 +16,7 @@ import { gemLineup, whenText as gemWhen, poster as gemPoster, rating as gemRatin
 import { upcomingShows, whenBadge as swBadge, dayOf as swDay, timeOf as swTime, rentButton, showImage, weeklyStatus } from "./sections/swanee.js";
 import { featuredMaker, makerImage, statusLine, siteButton, hoursFor, hoursText, hoursTable } from "./sections/made.js";
 import { upcoming as edUpcoming, whenText as edWhen, edStatus, cover as edCover, orderButton as edOrder } from "./sections/editions.js";
+import { favorites as wabFavorites, wabLogo, orderButton as wabOrder, price as wabPrice, todayHours as wabToday } from "./sections/whataburger.js";
 import { prepGames, nextHome, homeStands, standLabel, nextGameCard, fmtDay as bbDay, fmtTime as bbTime } from "./sections/baseball.js";
 
 const NS = "http://www.w3.org/2000/svg";
@@ -74,7 +75,7 @@ const contactLinks = (p) => [
 const shortDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
 export function tileDefs(data, COLORS) {
-  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee, made, editions } = data;
+  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger } = data;
   const t = tokens();
   const geo = census.geographies;
   const k = geo.Kannapolis, nc = geo["North Carolina"], cab = geo["Cabarrus County"], us = geo["United States"];
@@ -107,7 +108,6 @@ export function tileDefs(data, COLORS) {
     return meetings.meetings.map((m) => ({ ...m, _d: parseLocal(m.start) })).filter((m) => m._d >= today && !m.canceled).sort((a, b) => a._d - b._d);
   };
 
-  const hourLabel = (d) => d.toLocaleTimeString("en-US", { hour: "numeric" });
   return [
     data.weatherMeta && {
       id: "weather", opens: "weather", size: "s", label: "Weather",
@@ -119,15 +119,18 @@ export function tileDefs(data, COLORS) {
         const now = h("div", { class: "wx-now" },
           h("span", { class: "wx-now-icon", "aria-hidden": "true" }, wxIcon(c.text, c.isDay)),
           h("div", {}, h("div", { class: "wx-now-temp" }, `${c.temp}°`), h("div", { class: "wx-now-text" }, c.text), h("div", { class: "tile-meta" }, hilo)));
-        const hours = (n) => h("ul", { class: "wx-hours" }, w.hourly.slice(1, n + 1).map((x) => h("li", {},
-          h("span", {}, hourLabel(x.time)), h("i", { "aria-hidden": "true" }, wxIcon(x.text, x.isDay)), h("b", {}, `${x.temp}°`),
-          h("small", {}, x.pop >= 10 ? `${x.pop}%` : ""))));
+        const dayName = (d) => /^(tonight|overnight)$/i.test(d.name) ? "Tonight" : /^(today|this afternoon)$/i.test(d.name) ? "Today" : d.name.slice(0, 3);
+        // 5-day strip: day, icon, high (low below), rain chance.
+        const fiveDay = h("ul", { class: "wx-hours wx-five" }, w.days.slice(0, 5).map((d) => h("li", {},
+          h("span", {}, dayName(d)), h("i", { "aria-hidden": "true" }, wxIcon((d.day || d.night).text, !!d.day)),
+          h("b", {}, d.hi != null ? `${d.hi}°` : `${d.lo}°`), h("em", {}, d.hi != null && d.lo != null ? `${d.lo}°` : ""),
+          h("small", {}, d.pop >= 10 ? `${d.pop}%` : ""))));
         const all = w.days.flatMap((d) => [d.hi, d.lo]).filter((v) => v != null);
         const lo = Math.min(...all), span = Math.max(...all) - lo || 1;
         const days = (n) => h("ul", { class: "wx-days" }, w.days.slice(0, n).map((d) => {
           const p = d.day || d.night, l = d.lo ?? d.hi, u = d.hi ?? d.lo;
           return h("li", {},
-            h("span", {}, /^(tonight|overnight)$/i.test(d.name) ? "Tonight" : /^(today|this afternoon)$/i.test(d.name) ? "Today" : d.name.slice(0, 3)),
+            h("span", {}, dayName(d)),
             h("i", { "aria-hidden": "true" }, wxIcon(p.text, !!d.day)),
             h("small", {}, d.lo != null ? `${d.lo}°` : ""),
             h("span", { class: "wx-range" }, h("i", { style: { left: `${(100 * (l - lo)) / span}%`, width: `${Math.max(6, (100 * (u - l)) / span)}%` } })),
@@ -135,9 +138,9 @@ export function tileDefs(data, COLORS) {
         }));
         const top = [head("weather", COLORS.weather, "Kannapolis weather"), alertBanner(w.alerts, { compact: true })];
         if (size === "s") return h("div", { class: "tile-body" }, ...top, now);
-        if (size === "m") return h("div", { class: "tile-body" }, ...top, h("div", { class: "tile-split wx-m" }, now, hours(5)));
-        if (size === "l") return h("div", { class: "tile-body" }, ...top, now, hours(6), days(4));
-        return h("div", { class: "tile-body" }, ...top, h("div", { class: "tile-split wx-xl" }, h("div", {}, now, hours(8)), days(7)));
+        if (size === "m") return h("div", { class: "tile-body" }, ...top, h("div", { class: "tile-split wx-m" }, now, fiveDay));
+        if (size === "l") return h("div", { class: "tile-body" }, ...top, now, days(5));
+        return h("div", { class: "tile-body" }, ...top, h("div", { class: "tile-split wx-xl" }, now, days(5)));
       },
     },
     police && {
@@ -180,6 +183,24 @@ export function tileDefs(data, COLORS) {
             h("div", {}, callButtons(fire), freeHead, freeList(fire, 4)),
             h("div", {}, h("div", { class: "mini-head" }, "Fire stations"), stationList(fire, { compact: true }),
               h("p", { class: "tile-meta" }, "ISO Class 1: the best fire-protection rating possible"))));
+      },
+    },
+    whataburger && {
+      id: "whataburger", opens: "whataburger", size: "m", label: "What-A-Burger #1",
+      build: (size) => {
+        const wab = whataburger;
+        const top = [head("burger", COLORS.whataburger, "What-A-Burger #1")];
+        const who = h("div", { class: "gem-tile-now mk-tile-now" }, wabLogo(wab, "sm"),
+          h("div", {}, h("div", { class: "bb-next-label" }, "Drive-in · N Cannon Blvd"), h("div", { class: "gem-tile-title" }, wab.name),
+            h("div", { class: "tile-meta" }, `Today: ${wabToday(wab)}`), statusLine(wab, "", { compact: true })));
+        const favs = (n) => h("ul", { class: "ub-mini mk-mini wab-mini" }, wabFavorites(wab).slice(0, n).map((f) => h("li", {}, h("b", {}, f.item ? wabPrice(f.item) : ""), h("span", {}, f.label))));
+        if (size === "s") return h("div", { class: "tile-body" }, ...top, who);
+        if (size === "m") return h("div", { class: "tile-body" }, ...top,
+          h("div", { class: "tile-split top" }, who, h("div", {}, h("div", { class: "mini-head bb-mh" }, "Local favorites"), favs(3), wabOrder(wab, { compact: true }))));
+        if (size === "l") return h("div", { class: "tile-body" }, ...top, who, h("div", { class: "mini-head" }, "Local favorites"), favs(5), wabOrder(wab, { compact: true }));
+        return h("div", { class: "tile-body" }, ...top,
+          h("div", { class: "tile-split top" }, h("div", {}, who, wabOrder(wab, { compact: true })),
+            h("div", {}, h("div", { class: "mini-head bb-mh" }, "Local favorites"), favs(6))));
       },
     },
     editions && {

@@ -961,6 +961,7 @@ body.editing .size-picker { display: flex; }
 .wx-hours i { font-style: normal; font-size: 20px; line-height: 1.2; }
 .wx-hours b { color: var(--text-primary); font-size: 14px; }
 .wx-hours small { font-size: 10.5px; color: var(--accent-ink); min-height: 12px; }
+.wx-five em { font-style: normal; font-size: 12px; color: var(--text-muted); line-height: 1; }
 .wx-m { align-items: center; }
 .wx-days { list-style: none; margin: 6px 0 0; padding: 0; }
 .wx-days li { display: grid; grid-template-columns: 54px 26px 34px minmax(0, 1fr) 34px; align-items: center; gap: 8px; padding: 4px 0; border-top: 1px solid var(--grid); font-size: 13px; }
@@ -1477,3 +1478,25 @@ body.editing .tile-w:first-child .tile-top { opacity: .4; }
   .ed-books { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 10px; }
   .ed-menu li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
 }
+
+/* ---------- What-A-Burger #1 ---------- */
+.wab-logo { flex: none; display: grid; place-items: center; background: #fff; border-radius: 14px; border: 1px solid var(--border); overflow: hidden; }
+.wab-logo img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.wab-logo.lg { width: 200px; height: 185px; padding: 8px; }
+.wab-logo.md { width: 96px; height: 89px; padding: 4px; }
+.wab-logo.sm { width: 64px; height: 59px; padding: 3px; border-radius: 10px; }
+.wab-hero { align-items: center; }
+.wab-hero code { font-size: 12.5px; padding: 1px 6px; border-radius: 6px; background: var(--page); border: 1px solid var(--border); }
+.wab-call { position: relative; z-index: 2; align-self: flex-start; }
+.wab-call.compact { padding: 6px 13px; font-size: 13px; margin-top: 8px; display: inline-block; }
+.wab-mini li { grid-template-columns: 52px minmax(0, 1fr); }
+.wab-search { width: 100%; max-width: 420px; font: inherit; font-size: 14px; padding: 8px 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--page); color: var(--text-primary); }
+.wab-menu { display: grid; gap: 10px; margin-bottom: 10px; }
+.wab-group { margin: 6px 0 2px; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); }
+.wab-items { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); column-gap: 28px; }
+.wab-items li { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--grid); font-size: 14px; }
+.wab-items li span { display: block; font-size: 12.5px; color: var(--text-secondary); margin-top: 1px; }
+.wab-items strong { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.wab-quote { margin: 0; }
+.wab-quote blockquote { margin: 0; font-size: 14.5px; font-style: italic; color: var(--text-secondary); flex: 1; }
+@media (max-width: 720px) { .wab-hero { flex-direction: column; align-items: flex-start; } .wab-logo.lg { width: 150px; height: 139px; } .wab-items { grid-template-columns: minmax(0, 1fr); } .size-s .mk-tile-now .wab-logo { display: none; } }
