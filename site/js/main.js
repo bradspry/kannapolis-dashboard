@@ -79,7 +79,7 @@ function main() {
   if (D.gem) win("gem", { title: "The Gem Theatre", icon: "film", color: "var(--icon-5)", render: () => renderGem(D.gem) });
   if (D.swanee) win("swanee", { title: "The Swanee Theatre", icon: "mic", color: "var(--icon-7)", render: () => renderSwanee(D.swanee) });
   if (D.made) win("made", { title: "Made in Kannapolis", icon: "mug", color: "var(--icon-2)", render: () => renderMade(D.made) });
-  if (D.editions) win("editions", { title: "Kannapolis Reads and Weaves", icon: "book", color: "var(--icon-4)", render: () => renderEditions(D.editions) });
+  if (D.editions) win("editions", { title: "Kannapolis Reads and Yarns", icon: "book", color: "var(--icon-4)", render: () => renderEditions(D.editions) });
   if (D.whataburger) win("whataburger", { title: "What-A-Burger #1", icon: "burger", color: "var(--icon-8)", render: () => renderWhatABurger(D.whataburger) });
   if (D.videos) win("videos", { title: "City Council meeting videos", icon: "video", color: "var(--icon-5)", render: () => renderVideos(D.videos) });
   if (D.waste) win("waste", { title: "Waste collection", icon: "trash", color: "var(--icon-3)", render: () => renderWaste(D.waste) });

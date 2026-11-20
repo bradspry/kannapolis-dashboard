@@ -1367,7 +1367,7 @@ body.editing .tile-w:first-child .tile-top { opacity: .4; }
 .mk-site.compact { padding: 6px 13px; font-size: 13px; margin-top: 6px; }
 @media (max-width: 720px) { .mk-hero { flex-direction: column; align-items: flex-start; } .mk-img.lg { width: 96px; height: 264px; } .size-s .mk-tile-now .mk-img { display: none; } }
 
-/* ---------- Kannapolis Reads and Weaves (Editions) ---------- */
+/* ---------- Kannapolis Reads and Yarns (Editions) ---------- */
 .ed-hero { display: flex; gap: 20px; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
 .ed-hero h3 { margin: 2px 0 4px; font-size: 22px; }
 .ed-hero-side { display: grid; gap: 8px; min-width: 240px; }

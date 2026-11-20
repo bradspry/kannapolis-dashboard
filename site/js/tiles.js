@@ -329,10 +329,10 @@ export function tileDefs(data, COLORS) {
       },
     },
     editions && {
-      id: "editions", opens: "editions", size: "m", label: "Kannapolis Reads and Weaves",
+      id: "editions", opens: "editions", size: "m", label: "Kannapolis Reads and Yarns",
       build: (size) => {
         const ed = editions;
-        const top = [head("book", COLORS.editions, "Kannapolis Reads and Weaves")];
+        const top = [head("book", COLORS.editions, "Kannapolis Reads and Yarns")];
         const evs = edUpcoming(ed);
         const status = h("div", { class: "ed-tile-status" }, h("div", { class: "gem-tile-title" }, "Editions · S Main St"), edStatus(ed, "store", { compact: true }), edStatus(ed, "drive", { compact: true }));
         const covers = (n) => h("div", { class: "ed-covers" }, ed.books.slice(0, n).map((b) => edCover(b, "sm")));
