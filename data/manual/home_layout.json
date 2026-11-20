@@ -2,6 +2,7 @@
   "order": [
     "gem",
     "swanee",
+    "made",
     "parks",
     "utility",
     "police",
@@ -42,7 +43,8 @@
     "g-owners": "m",
     "baseball": "m",
     "utility": "m",
-    "parks": "l"
+    "parks": "m",
+    "made": "m"
   },
   "spacers": []
 }

@@ -527,6 +527,8 @@ html.win-open { overflow: hidden; }
 .tile-w:hover::after, .tile-w:focus-within::after { opacity: 1; }
 .tile-open { position: absolute; inset: 0; z-index: 1; border: 0; padding: 0; margin: 0; background: transparent; border-radius: inherit; cursor: pointer; }
 .tile-open:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+/* Mouse users: the tile's open area shows a magnifier-plus, since clicking it opens the window. Buttons/links on the tile keep the hand. */
+@media (hover: hover) and (pointer: fine) { .tile-open { cursor: zoom-in; } }
 .tile-w a { position: relative; z-index: 2; }
 .tile-body { display: flex; flex-direction: column; gap: 6px; height: 100%; min-height: 0; }
 .tile-head { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-secondary); font-weight: 500; padding-right: 22px; }
@@ -1414,3 +1416,21 @@ body.editing .tile-w:first-child .tile-top { opacity: .4; }
 .sw-rent-card .gem-actions { margin-top: 10px; }
 @media (max-width: 720px) { .sw-img.lg { width: 100%; } .sw-shows { grid-template-columns: minmax(0, 1fr); } .sw-img.md { width: 92px; } }
 @media (max-width: 720px) { .size-s .gem-tile-now .sw-img { display: none; } }
+
+/* ---------- Made in Kannapolis ---------- */
+.mk-img { display: block; object-fit: contain; flex: none; filter: drop-shadow(0 6px 10px rgb(0 0 0 / .18)); }
+.mk-img.lg { width: 120px; height: 330px; }
+.mk-img.md { width: 46px; height: 126px; }
+.mk-img.sm { width: 34px; height: 92px; }
+.mk-img.none { display: grid; place-items: center; font-size: 28px; filter: none; }
+.mk-tile-now { align-items: center; }
+.mk-tile-now .pk-status { display: block; margin-top: 3px; }
+.mk-hero { align-items: center; }
+.mk-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 8px; }
+.mk-tag { font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: color-mix(in oklab, var(--icon-2) 14%, var(--surface-1)); border: 1px solid color-mix(in oklab, var(--icon-2) 40%, transparent); }
+.mk-abv { font-size: 12.5px; font-weight: 600; color: var(--accent-ink); }
+.mk-hours li.today span, .mk-hours li.today b { color: var(--accent-ink); font-weight: 700; }
+.mk-mini li { grid-template-columns: 44px minmax(0, 1fr); }
+.mk-site { position: relative; z-index: 2; align-self: flex-start; }
+.mk-site.compact { padding: 6px 13px; font-size: 13px; margin-top: 6px; }
+@media (max-width: 720px) { .mk-hero { flex-direction: column; align-items: flex-start; } .mk-img.lg { width: 96px; height: 264px; } .size-s .mk-tile-now .mk-img { display: none; } }

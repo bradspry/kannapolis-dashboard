@@ -13,6 +13,7 @@ import { renderUtility } from "./sections/utility.js";
 import { renderParks } from "./sections/parks.js";
 import { renderGem } from "./sections/gem.js";
 import { renderSwanee } from "./sections/swanee.js";
+import { renderMade } from "./sections/made.js";
 import { tileDefs } from "./tiles.js";
 import { renderPeople } from "./sections/people.js";
 import { renderGrowth } from "./sections/growth.js";
@@ -38,7 +39,7 @@ function load(name, { optional = false } = {}) {
 // Icon colors are CSS variables (--icon-N), so the fall palette can restyle icons without touching charts.
 function colors() {
   const v = (n) => `var(--icon-${n})`;
-  return { people: v(1), growth: v(3), land: v(6), budget: v(7), debt: v(2), news: v(5), meetings: v(4), events: v(8), weather: v(1), police: v(1), fire: v(2), baseball: v(6), utility: v(3), parks: v(6), gem: v(5), swanee: v(7), council: v(1), org: v(3), about: "var(--muted-fill)", gauge: "var(--accent)" };
+  return { people: v(1), growth: v(3), land: v(6), budget: v(7), debt: v(2), news: v(5), meetings: v(4), events: v(8), weather: v(1), police: v(1), fire: v(2), baseball: v(6), utility: v(3), parks: v(6), gem: v(5), swanee: v(7), made: v(2), council: v(1), org: v(3), about: "var(--muted-fill)", gauge: "var(--accent)" };
 }
 
 function main() {
@@ -54,7 +55,7 @@ function main() {
     police: load("police.json", { optional: true }), fire: load("fire.json", { optional: true }),
     baseball: load("baseball.json", { optional: true }), utility: load("utility.json", { optional: true }),
     parks: load("parks.json", { optional: true }), gem: load("gem.json", { optional: true }),
-    swanee: load("swanee.json", { optional: true }),
+    swanee: load("swanee.json", { optional: true }), made: load("made.json", { optional: true }),
   };
   const sub = (id) => document.querySelector(`#${id} .section-sub`)?.textContent.trim() || "";
   const win = (id, def) => document.getElementById(id) && defineWindow(id, { ...def, sub: def.sub ?? sub(id) });
@@ -71,6 +72,7 @@ function main() {
   if (D.parks) win("parks", { title: "Parks & Recreation", short: "Parks", icon: "tree", color: "var(--icon-6)", render: () => renderParks(D.parks) });
   if (D.gem) win("gem", { title: "The Gem Theatre", short: "Gem", icon: "film", color: "var(--icon-5)", render: () => renderGem(D.gem) });
   if (D.swanee) win("swanee", { title: "The Swanee Theatre", short: "Swanee", icon: "mic", color: "var(--icon-7)", render: () => renderSwanee(D.swanee) });
+  if (D.made) win("made", { title: "Made in Kannapolis", short: "Made here", icon: "mug", color: "var(--icon-2)", render: () => renderMade(D.made) });
   if (D.weatherMeta) win("weather", { title: "Weather", icon: "weather", color: "var(--icon-1)", render: () => renderWeather(weather()) });
   if (D.events) win("events", { title: "Upcoming events", short: "Events", icon: "events", color: "var(--icon-8)", render: () => renderEvents(D.events) });
   if (D.meetings) win("meetings", { title: "Public meetings", short: "Meetings", icon: "meetings", color: "var(--icon-4)", render: () => renderMeetings(D.meetings) });

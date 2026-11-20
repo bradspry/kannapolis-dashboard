@@ -14,6 +14,7 @@ import { payButtons, feeLine } from "./sections/utility.js";
 import { parkButtons, seasonStatus, holidayStatus } from "./sections/parks.js";
 import { gemLineup, whenText as gemWhen, poster as gemPoster, rating as gemRating, ticketsButton } from "./sections/gem.js";
 import { upcomingShows, whenBadge as swBadge, dayOf as swDay, timeOf as swTime, rentButton, showImage, weeklyStatus } from "./sections/swanee.js";
+import { featuredMaker, makerImage, statusLine, siteButton, hoursFor, hoursText, hoursTable } from "./sections/made.js";
 import { prepGames, nextHome, homeStands, standLabel, nextGameCard, fmtDay as bbDay, fmtTime as bbTime } from "./sections/baseball.js";
 
 const NS = "http://www.w3.org/2000/svg";
@@ -72,7 +73,7 @@ const contactLinks = (p) => [
 const shortDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
 export function tileDefs(data, COLORS) {
-  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee } = data;
+  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee, made } = data;
   const t = tokens();
   const geo = census.geographies;
   const k = geo.Kannapolis, nc = geo["North Carolina"], cab = geo["Cabarrus County"], us = geo["United States"];
@@ -178,6 +179,28 @@ export function tileDefs(data, COLORS) {
             h("div", {}, callButtons(fire), freeHead, freeList(fire, 4)),
             h("div", {}, h("div", { class: "mini-head" }, "Fire stations"), stationList(fire, { compact: true }),
               h("p", { class: "tile-meta" }, "ISO Class 1: the best fire-protection rating possible"))));
+      },
+    },
+    made && {
+      id: "made", opens: "made", size: "m", label: "Made in Kannapolis",
+      build: (size) => {
+        const m = featuredMaker(made);
+        const top = [head("mug", COLORS.made, "Made in Kannapolis")];
+        const today = hoursText(hoursFor(m, new Date().getDay()));
+        const who = h("div", { class: "gem-tile-now mk-tile-now" }, makerImage(m, size === "s" ? "sm" : "md"),
+          h("div", {}, h("div", { class: "bb-next-label" }, `${m.kind.split(" &")[0]} · Est. ${m.est}`), h("div", { class: "gem-tile-title" }, m.name),
+            h("div", { class: "tile-meta" }, "🎖 Veteran-owned · West Ave"), statusLine(m)));
+        const beers = h("ul", { class: "ub-mini mk-mini" }, m.beers.map((b) => h("li", {}, h("b", {}, b.abv), h("span", {}, b.name))));
+        if (size === "s") return h("div", { class: "tile-body" }, ...top, who);
+        if (size === "m") return h("div", { class: "tile-body" }, ...top,
+          h("div", { class: "tile-split top" }, who, h("div", {}, h("div", { class: "mini-head bb-mh" }, "Made here"), beers,
+            h("p", { class: "tile-meta" }, `Today: ${today}`), siteButton(m, { compact: true }))));
+        if (size === "l") return h("div", { class: "tile-body" }, ...top, who,
+          h("div", { class: "mini-head" }, "Made here"), beers, h("p", { class: "tile-meta" }, `Today: ${today}`), siteButton(m, { compact: true }));
+        return h("div", { class: "tile-body" }, ...top,
+          h("div", { class: "tile-split top" },
+            h("div", {}, who, h("div", { class: "mini-head" }, "Made here"), beers, siteButton(m, { compact: true })),
+            h("div", {}, h("div", { class: "mini-head bb-mh" }, "Taproom hours"), hoursTable(m))));
       },
     },
     swanee && {

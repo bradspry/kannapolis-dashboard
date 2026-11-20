@@ -13,6 +13,7 @@ import build_council
 import build_events
 import build_fire
 import build_gem
+import build_made
 import build_meetings
 import build_news
 import build_org
@@ -34,6 +35,7 @@ STEPS = [
     ("events", build_events.main),
     ("gem", build_gem.main),
     ("swanee", build_swanee.main),
+    ("made", build_made.main),
     ("weather", build_weather.main),
     ("news", build_news.main),
     ("org", build_org.main),
