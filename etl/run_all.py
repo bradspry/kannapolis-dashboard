@@ -10,6 +10,7 @@ import build_baseball
 import build_budget
 import build_census
 import build_council
+import build_drought
 import build_editions
 import build_events
 import build_fire
@@ -51,6 +52,7 @@ STEPS = [
     ("baseball", build_baseball.main),
     ("utility", build_utility.main),
     ("waste", build_waste.main),
+    ("drought", build_drought.main),
     ("parks", build_parks.main),
     ("zoning", build_zoning.main),
     ("property", build_property.main),  # slowest: ~26k parcels + ~18 yearly snapshots

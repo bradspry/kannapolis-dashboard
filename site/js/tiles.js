@@ -19,6 +19,7 @@ import { upcoming as edUpcoming, whenText as edWhen, edStatus, cover as edCover,
 import { favorites as wabFavorites, wabLogo, orderButton as wabOrder, price as wabPrice, todayHours as wabToday } from "./sections/whataburger.js";
 import { splitVideos, whenBadge as vdBadge, thumb as vdThumb, watchButton as vdWatch, dayLabel as vdDay, timeLabel as vdTime } from "./sections/videos.js";
 import { notices as wsNotices, missedButtons as wsMissed } from "./sections/waste.js";
+import { levelGauge as drGauge, countyLine as drCounty, strip as drStrip } from "./sections/drought.js";
 import { prepGames, nextHome, homeStands, standLabel, nextGameCard, fmtDay as bbDay, fmtTime as bbTime } from "./sections/baseball.js";
 
 const NS = "http://www.w3.org/2000/svg";
@@ -140,7 +141,7 @@ const contactLinks = (p) => [
 const shortDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
 export function tileDefs(data, COLORS) {
-  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos, waste } = data;
+  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos, waste, drought } = data;
   const t = tokens();
   const geo = census.geographies;
   const k = geo.Kannapolis, nc = geo["North Carolina"], cab = geo["Cabarrus County"], us = geo["United States"];
@@ -248,6 +249,26 @@ export function tileDefs(data, COLORS) {
             h("div", {}, callButtons(fire), freeHead, freeList(fire, 4)),
             h("div", {}, h("div", { class: "mini-head" }, "Fire stations"), stationList(fire, { compact: true }),
               h("p", { class: "tile-meta" }, "ISO Class 1: the best fire-protection rating possible"))));
+      },
+    },
+    drought && {
+      id: "drought", opens: "drought", size: "m", label: "Current drought conditions",
+      build: (size) => {
+        const dr = drought, lv = dr.levels[String(dr.city.level)];
+        const top = [head("drop", COLORS.drought, "Current drought conditions")];
+        const monitor = h("div", {}, h("div", { class: "mini-head bb-mh" }, `Drought Monitor · ${new Date(`${dr.counties[0].weeks.at(-1).date}T12:00`).toLocaleDateString("en-US", { month: "short", day: "numeric" })}`),
+          ...dr.counties.map((c) => drCounty(dr, c)));
+        const year = h("div", {}, h("div", { class: "mini-head" }, "Cabarrus County, past year"), drStrip(dr, dr.counties[0], 52),
+          h("div", { class: "dr-strip-axis" }, h("span", {}, "a year ago"), h("span", {}, "this week")));
+        const tips = h("ul", { class: "pk-rules dr-tile-tips" }, (lv.mandatory ? ["Mandatory rules are in effect. See the City's drought page."] : dr.voluntary_tips.slice(0, 3)).map((x) => h("li", {}, x)));
+        const dial = drGauge(dr, `drought-${size}`);
+        if (size === "s") return h("div", { class: "tile-body" }, ...top, dial);
+        if (size === "m") return h("div", { class: "tile-body" }, ...top, h("div", { class: "tile-split top dr-m" }, dial, monitor));
+        if (size === "l") return h("div", { class: "tile-body" }, ...top,
+          h("div", { class: "tile-split top dr-m" }, dial, h("div", {}, monitor, h("p", { class: "tile-meta dr-goal" }, `City goal: ${lv.goal.replace(/^Cut/, "cut")}.`))), year, tips);
+        return h("div", { class: "tile-body" }, ...top,
+          h("div", { class: "tile-split top" }, h("div", {}, dial, h("p", { class: "tile-meta dr-goal" }, lv.goal), tips),
+            h("div", {}, monitor, year, h("div", { class: "mini-head" }, "Rowan County, past year"), drStrip(dr, dr.counties[1], 52))));
       },
     },
     waste && {

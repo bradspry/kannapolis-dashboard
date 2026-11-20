@@ -1,0 +1,49 @@
+{
+  "levels": {
+    "1": { "name": "Voluntary Water Conservation", "goal": "Cut system-wide water use 3–5%", "mandatory": false },
+    "2": { "name": "Mandatory Water Conservation", "goal": "Cut system-wide water use 5–10%", "mandatory": true },
+    "3": { "name": "Enhanced Water Conservation", "goal": "Cut system-wide water use 10–20%", "mandatory": true },
+    "4": { "name": "Emergency Water Conservation", "goal": "Cut system-wide water use 20–30%", "mandatory": true }
+  },
+  "why": "Kannapolis and Concord draw water from the Catawba River basin under an Inter-Basin Transfer agreement, so they follow the Catawba-Wateree Drought Management Advisory Group's Low Inflow Protocol, the river basin's shared drought plan, along with Harrisburg and Landis.",
+  "voluntary_tips": [
+    "Water lawns and plants in the early morning or evening.",
+    "Fix dripping faucets, running toilets and plumbing leaks.",
+    "Take shorter showers; in a bath, use 1–2 inches less water.",
+    "Turn off the tap while brushing teeth, washing your face or shaving.",
+    "Run only full loads in the washer and dishwasher.",
+    "Don't let the faucet run while rinsing dishes or vegetables.",
+    "Use commercial car washes that recycle water; limit washing at home.",
+    "Check that irrigation systems use the right amount of water."
+  ],
+  "past_rules": {
+    "label": "Level 2 mandatory rules (in effect May 15 – Nov 2, 2026)",
+    "rules": [
+      "Lawn, garden and plant watering only Tuesdays 8 p.m.–Wednesdays 8 a.m. and Saturdays 8 p.m.–Sundays 8 a.m.",
+      "Filling a new or drained pool needed a permit; topping off was allowed.",
+      "No residential car washing, and no home or driveway pressure washing.",
+      "No outdoor fountains unless supporting fish.",
+      "No washing public buildings, sidewalks or streets unless needed for health or safety.",
+      "Soaker hoses, drip irrigation and handheld watering were allowed for gardens.",
+      "Private wells not on City water were exempt."
+    ]
+  },
+  "phone": "704-920-4444",
+  "usdm_categories": [
+    { "key": "d0", "code": "D0", "name": "Abnormally dry", "color": "#FFFF00" },
+    { "key": "d1", "code": "D1", "name": "Moderate drought", "color": "#FCD37F" },
+    { "key": "d2", "code": "D2", "name": "Severe drought", "color": "#FFAA00" },
+    { "key": "d3", "code": "D3", "name": "Extreme drought", "color": "#E60000" },
+    { "key": "d4", "code": "D4", "name": "Exceptional drought", "color": "#730000" }
+  ],
+  "links": {
+    "city": "https://www.kannapolisnc.gov/drought",
+    "faq": "https://www.kannapolisnc.gov/Quick-Links/Drought-Guidance/Drought-Guidance-FAQ",
+    "ncdrought": "https://www.ncdrought.org/",
+    "usdm_cabarrus": "https://droughtmonitor.unl.edu/DmData/TimeSeries.aspx",
+    "usdm_map": "https://droughtmonitor.unl.edu/CurrentMap/StateDroughtMonitor.aspx?NC",
+    "pool_permit": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Communications/Documents/COK%20-%20POOL%20FILLING%20PERMIT%20-%20Fillable.pdf",
+    "well_sign": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Communications/Documents/Irrigation%20Sign%20Application_FILLABLE.pdf",
+    "facebook": "https://www.facebook.com/CityofKannapolis/"
+  }
+}

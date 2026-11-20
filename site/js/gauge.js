@@ -7,7 +7,8 @@ const NS = "http://www.w3.org/2000/svg";
 const SWEEP = 240;               // degrees of dial
 const START = -SWEEP / 2;        // angle of min (0° = straight up)
 const CX = 100, CY = 96, R = 78; // geometry in a 200×160 viewBox
-const animated = new Set();      // gauge ids that already played this page load
+const sweepStart = new Map();    // gauge id -> when its ignition sweep started (performance.now()), this page load
+const UP = 650, SETTLE = 1100;    // sweep up, then settle (ms)
 let io;
 
 const s = (tag, attrs = {}) => {
@@ -86,29 +87,39 @@ export function gauge(o) {
     o.context ? h("div", { class: "gauge-context" }, o.context) : null,
     o.marker ? h("div", { class: "gauge-key" }, h("span", { class: "g-marker-key", "aria-hidden": "true" }), o.marker.label) : null);
 
-  if (animated.has(id) || reducedMotion()) {
-    draw(value);
+  // Sweep, timed from when this gauge id first started. If the home screen redraws mid-sweep (e.g. live
+  // weather arriving), the rebuilt gauge picks the sweep up where it was instead of jumping to the end.
+  const run = (t0) => {
+    const frame = (now) => {
+      const t = now - t0;
+      if (t < UP) draw(min + (max - min) * easeInOut(t / UP));
+      else if (t < UP + SETTLE) draw(max + (value - max) * easeOut((t - UP) / SETTLE));
+      else return draw(value);
+      if (el.isConnected || t < 50) requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+  };
+  if (reducedMotion()) { draw(value); return el; }
+  if (sweepStart.has(id)) {
+    const t0 = sweepStart.get(id);
+    if (performance.now() - t0 >= UP + SETTLE) { draw(value); return el; }
+    draw(min);
+    run(t0);
     return el;
   }
   draw(min);
   el._play = () => {
-    animated.add(id);
-    const up = 650, settle = 1100, t0 = performance.now();
-    const frame = (now) => {
-      const t = now - t0;
-      if (t < up) draw(min + (max - min) * easeInOut(t / up));
-      else if (t < up + settle) draw(max + (value - max) * easeOut((t - up) / settle));
-      else return draw(value);
-      requestAnimationFrame(frame);
-    };
-    requestAnimationFrame(frame);
+    if (sweepStart.has(id)) return;
+    const t0 = performance.now();
+    sweepStart.set(id, t0);
+    run(t0);
   };
   io ??= new IntersectionObserver((entries) => {
     for (const e of entries) {
       if (e.isIntersecting) { io.unobserve(e.target); e.target._play?.(); }
     }
   }, { threshold: 0.6 });
-  // Observe once attached to the document.
-  requestAnimationFrame(() => el.isConnected ? io.observe(el) : (animated.add(id), draw(value)));
+  // Observe once attached; a gauge replaced before it ever reached the page doesn't count as having animated.
+  requestAnimationFrame(() => { if (el.isConnected) io.observe(el); });
   return el;
 }

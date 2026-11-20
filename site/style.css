@@ -1630,3 +1630,51 @@ body::before {
 .ws-where b { display: block; font-size: 12.5px; line-height: 1.2; }
 .ws-where small { display: block; font-size: 11px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ws-heads { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 14px; align-items: start; }
+
+/* ---------- Current drought conditions ---------- */
+.dr-level { display: flex; align-items: center; gap: 12px; --lv: #2a78d6; }
+.dr-level.lv-2 { --lv: #d98a00; } .dr-level.lv-3 { --lv: #d4501c; } .dr-level.lv-4 { --lv: #b3132b; }
+.dr-level-num { display: grid; place-items: center; width: 58px; height: 58px; border-radius: 16px; flex: none; color: #fff;
+  background: var(--lv); box-shadow: 0 6px 16px -8px var(--lv); line-height: 1; }
+.dr-level-num small { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; opacity: .9; }
+.dr-level-num b { font-size: 26px; }
+.dr-level-text b { display: block; font-size: 16px; line-height: 1.2; }
+.dr-level-text small { display: block; font-size: 12.5px; color: var(--text-muted); margin-top: 2px; }
+.dr-level.compact .dr-level-num { width: 46px; height: 46px; border-radius: 13px; } .dr-level.compact .dr-level-num b { font-size: 21px; }
+.dr-level.compact .dr-level-text b { font-size: 14px; }
+.dr-goal { margin: 6px 0 0; }
+.dr-county { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 4px 0; color: var(--text-secondary); }
+.dr-county b { color: var(--text-primary); }
+.dr-chip { width: 12px; height: 12px; border-radius: 3px; flex: none; border: 1px solid var(--border); }
+.dr-strip { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 1px; height: 16px; margin-top: 4px; border-radius: 4px; overflow: hidden; }
+.dr-strip i { display: block; }
+.dr-strip-axis { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--text-muted); margin-top: 2px; }
+.dr-tile-tips { margin: 6px 0 0; font-size: 12.5px; }
+.dr-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 22px; align-items: start; border-color: color-mix(in oklab, #2a78d6 45%, var(--border)); }
+.dr-hero .dr-level { margin: 6px 0 10px; }
+.dr-hero .dr-level-num { width: 72px; height: 72px; } .dr-hero .dr-level-num b { font-size: 32px; }
+.dr-hero .dr-level-text b { font-size: 20px; }
+.dr-hero h3 { margin: 0 0 4px; }
+.dr-bars { display: grid; gap: 12px; margin: 10px 0; }
+.dr-bar-row { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 4px 12px; align-items: center; }
+.dr-bar-label { font-weight: 600; font-size: 14px; }
+.dr-bar { display: flex; gap: 2px; height: 22px; border-radius: 6px; overflow: hidden; background: var(--grid); }
+.dr-bar span { display: block; min-width: 2px; }
+.dr-bar .dr-none { background: var(--grid); }
+.dr-bar-row .dr-county { grid-column: 2; padding: 0; }
+.dr-chart { margin: 6px 0; }
+.dr-levels li.today span, .dr-levels li.today b { color: var(--accent-ink); font-weight: 700; }
+.dr-news li { grid-template-columns: 58px minmax(0, 1fr); }
+.dr-news a { white-space: normal; font-size: 13px; }
+.dr-past summary { cursor: pointer; font-weight: 600; }
+@media (max-width: 720px) { .dr-hero { grid-template-columns: minmax(0, 1fr); } .dr-bar-row { grid-template-columns: minmax(0, 1fr); } .dr-bar-row .dr-county { grid-column: 1; } }
+
+/* Drought tile: the City's level as a gauge (value arc in the level's color) */
+.dr-gauge { --lv: #2a78d6; }
+.dr-gauge.lv-2 { --lv: #d98a00; } .dr-gauge.lv-3 { --lv: #d4501c; } .dr-gauge.lv-4 { --lv: #b3132b; }
+.dr-gauge .g-value { stroke: var(--lv); }
+.dr-gauge .gauge-svg { max-width: 132px; }
+.dr-gauge .gauge-label { font-size: 13px; line-height: 1.25; }
+.dr-gauge .gauge-context { font-size: 11.5px; margin-top: 1px; }
+.dr-m { grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); align-items: center; }
+.size-s .dr-gauge .gauge-svg { max-width: 118px; }

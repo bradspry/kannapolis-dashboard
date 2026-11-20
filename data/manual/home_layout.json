@@ -2,6 +2,7 @@
   "order": [
     "gem",
     "waste",
+    "drought",
     "weather",
     "utility",
     "police",
@@ -55,7 +56,8 @@
     "whataburger": "m",
     "videos": "m",
     "police": "m",
-    "waste": "l"
+    "waste": "l",
+    "drought": "m"
   },
   "spacers": []
 }

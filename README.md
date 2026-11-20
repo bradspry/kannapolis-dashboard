@@ -17,8 +17,8 @@ open dist/index.html            # or double-click it
 ```
 
 - `python3 etl/run_all.py site`: rebuild the page only (instant, no downloads)
-- `python3 etl/run_all.py meetings videos news events weather gem swanee editions site`: refresh the time-sensitive widgets, then rebuild
-- Steps: `budget census council meetings videos events gem swanee made editions whataburger weather news org police fire baseball utility waste parks zoning property site` (`property` takes 5–30 min; the county GIS server is slow)
+- `python3 etl/run_all.py meetings videos news events weather gem swanee editions drought site`: refresh the time-sensitive widgets, then rebuild
+- Steps: `budget census council meetings videos events gem swanee made editions whataburger weather news org police fire baseball utility waste drought parks zoning property site` (`property` takes 5–30 min; the county GIS server is slow)
 
 **Requirements:** Python 3.10+ for the data steps (standard library only). Building and serving also work on macOS's built-in Python 3.9.
 
@@ -67,6 +67,7 @@ It prints the address to open on your phone (for example `http://192.168.1.20:51
 | What-A-Burger #1 | [what-a-burger1.com](https://www.what-a-burger1.com) and its [online menu](https://www.What-A-Burger1.com/order): open-now (on device), local favorites, searchable menu with prices | **Machine-parsed**: `data/manual/whataburger.json` (menu is drawn by JavaScript; recheck prices when updating) |
 | City Council meeting videos | City of Kannapolis [YouTube playlist](https://www.youtube.com/playlist?list=PLVO_mqWw3g38u7X_oE4-9k0F2BN05dEaX) (public RSS feed) and [live streams](https://www.youtube.com/@CityofKannapolis/streams); agendas from the City's meeting portal | Automatic, daily |
 | Waste collection | City [Garbage, Recycling & Yard Waste](https://www.kannapolisnc.gov/Garbage) and [What's My Day?](https://www.kannapolisnc.gov/Government-Departments/Garbage-Recycling-Yard-Waste/Whats-My-Day) pages: report a missed pickup, holiday delays and loose-leaf season (on device), what goes where, set-out rules, carts; links to the City's [CARTology](https://apps.apple.com/us/app/cartology/id1368037662) pickup-day lookup and app | **Machine-parsed**: `data/manual/waste.json` |
+| Current drought conditions | City [Drought Guidance](https://www.kannapolisnc.gov/drought) page (current water-conservation level and news) and the [U.S. Drought Monitor](https://droughtmonitor.unl.edu/) for Cabarrus and Rowan counties (weekly, two years of history) | City level and Drought Monitor: automatic, daily. Tips and level descriptions: **machine-parsed** (`data/manual/drought.json`) |
 | Weather | [National Weather Service](https://www.weather.gov/) API: forecast, hourly, alerts, and observations from Concord Regional Airport; [NOAA's national radar mosaic](https://opengeo.ncep.noaa.gov/geoserver/conus/conus_bref_qcd/ows?service=WMS&request=GetCapabilities) behind the tile and as an animated past-hour radar map in the window | **Live** in the browser every 15 min (daily backup copy of the forecast) |
 | Gauges | Derived from the budget, audit and Census data below | Automatic |
 | Residents | U.S. Census ACS 5-year via [Census Reporter](https://censusreporter.org/profiles/16000US3735200-kannapolis-nc/): population trend, income, home value, age vs. North Carolina | Automatic |
@@ -85,7 +86,7 @@ It prints the address to open on your phone (for example `http://192.168.1.20:51
 Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a `source_url` that opens the official PDF at the cited page (for example `…FY%2027%20Adopted%20Budget.pdf#page=114`). The build fails if a row's citation is missing. The full registry is [`data/manual/sources.csv`](data/manual/sources.csv); its `widgets` column ties each source to the widgets it feeds, and every widget window ends with an automatic **Sources** line built from it. The table below is generated from the same registry on every build, so the README always cites every source:
 
 <!-- sources:start -->
-71 sources, generated from `data/manual/sources.csv`.
+75 sources, generated from `data/manual/sources.csv`.
 
 | Source | Publisher | Format | Used for |
 |---|---|---|---|
@@ -160,6 +161,10 @@ Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a
 | [Garbage, Recycling & Yard Waste (services, set-out rules, holidays, carts, leaf season)](https://www.kannapolisnc.gov/Garbage) | City of Kannapolis | Web page | Services, schedules, holiday delays, cart fees, loose-leaf season, hazardous waste |
 | [What's My Day? (CARTology and missed-pickup reporting)](https://www.kannapolisnc.gov/Government-Departments/Garbage-Recycling-Yard-Waste/Whats-My-Day) | City of Kannapolis | Web page | Missed-pickup phone and email, CARTology |
 | [CARTology app (App Store and Google Play)](https://apps.apple.com/us/app/cartology/id1368037662) | ReCollect / Cabarrus County | Web page | Links to the collection-calendar app |
+| [Drought Guidance: Current Drought Conditions (water-conservation level)](https://www.kannapolisnc.gov/drought) | City of Kannapolis | Web page | Current level and date (read daily), drought news, levels explained, earlier rules, permits |
+| [Concord, Harrisburg, Kannapolis, and Landis Move to Voluntary Water Conservation Effective November 3, 2026](https://www.kannapolisnc.gov/news/ID/461/Concord) | City of Kannapolis | Web page | -Harrisburg |
+| [U.S. Drought Monitor county statistics (Cabarrus 37025, Rowan 37159)](https://usdmdataservices.unl.edu/api/CountyStatistics/GetDroughtSeverityStatisticsByAreaPercent) | National Drought Mitigation Center (USDA / NOAA) | JSON API | Weekly drought categories D0–D4 by county, two years |
+| [North Carolina Drought Management Advisory Council](https://www.ncdrought.org/) | NC Department of Environmental Quality | Web page | Statewide drought conditions (linked) |
 <!-- sources:end -->
 
 The news and meetings harvesters are adapted from [kspider](https://github.com/bradspry/kannapolis-news-wire).
@@ -187,7 +192,7 @@ Everything else is built into the page. From the internet it loads only: the cha
 
 In the repository, open **Settings → Pages** and set **Source: GitHub Actions**. Then:
 - **Deploy site** builds and publishes on every push to `main`.
-- **Refresh data** runs weekly for everything, and daily for the time-sensitive widgets (meetings, Council videos, news, events, weather, the Gem, the Swanee and Editions); it commits new data and triggers a redeploy.
+- **Refresh data** runs weekly for everything, and daily for the time-sensitive widgets (meetings, Council videos, news, events, weather, the Gem, the Swanee, Editions and drought); it commits new data and triggers a redeploy.
 
 Add `KDASH_CONTACT` (and `CENSUS_API_KEY`, if used) under **Settings → Secrets and variables → Actions**.
 
