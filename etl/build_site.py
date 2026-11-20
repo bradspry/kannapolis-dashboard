@@ -107,6 +107,8 @@ def main() -> None:
     out = DIST / "index.html"
     out.write_text(html)
     log(f"site: wrote {out.relative_to(DIST.parent)} ({len(html.encode()) / 1024 / 1024:.1f} MB)")
+    import readme_sources  # keep the README's sources table in step with data/manual/sources.csv
+    readme_sources.main()
 
 
 if __name__ == "__main__":

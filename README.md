@@ -6,7 +6,7 @@ An open-data dashboard for **Kannapolis, North Carolina**, built by a resident f
 
 It's **one self-contained HTML file** built by a small Python script. No Node, no venv, nothing to install.
 
-[![The dashboard's home screen: widget tiles for the Gem and Swanee theatres, Parks & Recreation (Celebration of Lights and Winterland Express train reservations), a 5-day weather forecast, paying a utility bill, police and fire with their chiefs and 911 buttons, Editions bookstore's new books, Made in Kannapolis (Old Armor Beer), What-A-Burger, the Cannon Ballers, events, meetings, City Council with upcoming meetings, Council meeting videos, residents, City staff, budget, debt, gauges, a land use zoning map and data sources, with a dock of widget icons along the bottom](docs/dashboard.jpg)](https://bradspry.github.io/kannapolis-dashboard/)
+[![The Kannapolis Civic Dashboard home screen on a dark woven background: widget tiles for the Gem and Swanee theatres, Parks & Recreation (Celebration of Lights and Winterland Express train reservations), weather with a 5-day forecast over live radar, paying a utility bill, police and fire with their chiefs and 911 buttons, Editions bookstore's new books, Made in Kannapolis (Old Armor Beer), What-A-Burger, the Cannon Ballers, events, meetings, City Council with upcoming meetings, Council meeting videos, residents, City staff, budget, debt, gauges, a land use zoning map and data sources, with a dock of widget icons along the bottom](docs/dashboard.jpg)](https://bradspry.github.io/kannapolis-dashboard/)
 
 ## Quick start
 
@@ -17,8 +17,8 @@ open dist/index.html            # or double-click it
 ```
 
 - `python3 etl/run_all.py site`: rebuild the page only (instant, no downloads)
-- `python3 etl/run_all.py meetings news events weather site`: refresh the time-sensitive widgets, then rebuild
-- Steps: `budget census council meetings events weather news org zoning property site` (`property` takes 5–30 min; the county GIS server is slow)
+- `python3 etl/run_all.py meetings videos news events weather gem swanee editions site`: refresh the time-sensitive widgets, then rebuild
+- Steps: `budget census council meetings videos events gem swanee made editions whataburger weather news org police fire baseball utility parks zoning property site` (`property` takes 5–30 min; the county GIS server is slow)
 
 **Requirements:** Python 3.10+ for the data steps (standard library only). Building and serving also work on macOS's built-in Python 3.9.
 
@@ -55,33 +55,36 @@ It prints the address to open on your phone (for example `http://192.168.1.20:51
 
 | Widget | Source | Updated |
 |---|---|---|
-| Kannapolis Police | [KPD web page](https://www.kannapolisnc.gov/KPD): 911 and non-emergency numbers, online services, notices; serious-crime counts from KPD's quarterly crime reports (PDFs) | **By hand**: `data/manual/kpd.json`, `kpd_part1_crimes.csv`, `kpd_quarterly.csv` (checked against each report's total) |
-| Kannapolis Fire Department | [KFD web pages](https://www.kannapolisnc.gov/kfd): 911 and KFD numbers, free resident programs, after-a-fire forms, the five stations (mapped with the Census geocoder; nearest-station finder runs on the device) | **By hand**: `data/manual/kfd.json` |
+| Kannapolis Police | [KPD web page](https://www.kannapolisnc.gov/KPD): 911 and non-emergency numbers, online services, notices; serious-crime counts from KPD's quarterly crime reports (PDFs); the chief's photo from the City org chart | **By hand**: `data/manual/kpd.json`, `kpd_part1_crimes.csv`, `kpd_quarterly.csv` (checked against each report's total) |
+| Kannapolis Fire Department | [KFD web pages](https://www.kannapolisnc.gov/kfd): 911 and KFD numbers, free resident programs, after-a-fire forms, the five stations (mapped with the Census geocoder; nearest-station finder runs on the device); the chief's photo from the City org chart | **By hand**: `data/manual/kfd.json` |
 | Kannapolis Cannon Ballers | Team's [2027 schedule](https://img.mlbstatic.com/milb-images/image/upload/milb/kljjd0xd8n8fto71x49u.pdf) (image PDF): next home game, home stands, month calendars, add-to-calendar | **By hand**: `data/manual/cannonballers_2027.csv` (checked: 132 games, 66 home) |
 | Pay Utility Bill | City [Customer Service & Utility Billing](https://www.kannapolisnc.gov/customer-service): every way to pay, card-fee and due-date calculators (on device), help | **By hand**: `data/manual/utility_billing.json` |
-| Parks & Recreation | City [Parks & Recreation](https://www.kannapolisnc.gov/parksandrec) pages: park finder by amenity with map and on-device nearest park, shelters, sports sign-up, greenways, seasonal attractions, rules | **By hand**: `data/manual/parks.json` (map locations: Census geocoder, Cabarrus County GIS) |
+| Parks & Recreation | City [Parks & Recreation](https://www.kannapolisnc.gov/parksandrec) pages: park finder by amenity with map and on-device nearest park, shelters, sports sign-up, greenways, seasonal attractions, rules; during the holidays, [A Kannapolis Christmas](https://www.kannapolisnc.gov/christmas) and [Winterland Express](https://www.kannapolisnc.gov/winterland-express) train reservations (tonight's reserve or walk-up status, on device) | **By hand**: `data/manual/parks.json` (map locations: Census geocoder, Cabarrus County GIS) |
 | The Gem Theatre | [gem-theatre.com](https://gem-theatre.com/Tickets) ticket page (scraped; adapted from kannapolis-movies): now showing, coming soon, special screenings, prices, policies | Automatic, daily |
 | The Swanee Theatre | Swanee's public [events feed](https://swaneetheatre.com/events/) (WordPress Events Calendar API), [weekly happenings](https://swaneetheatre.com/weekly-happenings/), [rental info](https://swaneetheatre.com/rent-the-swanee/) | Shows: automatic, daily. Weekly/rental: **by hand** (`data/manual/swanee.json`) |
 | Made in Kannapolis | Featured maker: [Old Armor Beer Company](https://www.oldarmorbeer.net) (veteran-owned brewery, 211 West Ave): beers, taproom hours with open-now (on device), Pay It Forward board, contact | **By hand**: `data/manual/made.json` |
 | Kannapolis Reads and Weaves | [Editions Coffee Shop & Bookstore](https://www.editionsbookstore.com): [new arrivals](https://www.editionsbookstore.com/page/NewArrivals), [events](https://www.editionsbookstore.com/page/events), [coffee](https://www.editionsbookstore.com/page/CoffeeShop), [yarn](https://www.editionsbookstore.com/page/yarn); store and drive-thru open-now (on device) | Books, events: automatic, daily (10 s between requests, per the site's robots.txt). Coffee, yarn, hours: **by hand** (`data/manual/editions.json`) |
 | What-A-Burger #1 | [what-a-burger1.com](https://www.what-a-burger1.com) and its [online menu](https://www.What-A-Burger1.com/order): open-now (on device), local favorites, searchable menu with prices | **By hand**: `data/manual/whataburger.json` (menu is drawn by JavaScript; recheck prices when updating) |
 | City Council meeting videos | City of Kannapolis [YouTube playlist](https://www.youtube.com/playlist?list=PLVO_mqWw3g38u7X_oE4-9k0F2BN05dEaX) (public RSS feed) and [live streams](https://www.youtube.com/@CityofKannapolis/streams); agendas from the City's meeting portal | Automatic, daily |
-| Weather | [National Weather Service](https://www.weather.gov/) API: forecast, hourly, alerts, and observations from Concord Regional Airport | **Live** in the browser every 15 min (daily backup copy) |
+| Weather | [National Weather Service](https://www.weather.gov/) API: forecast, hourly, alerts, and observations from Concord Regional Airport; [NOAA's national radar mosaic](https://opengeo.ncep.noaa.gov/geoserver/conus/conus_bref_qcd/ows?service=WMS&request=GetCapabilities) behind the tile and as an animated past-hour radar map in the window | **Live** in the browser every 15 min (daily backup copy of the forecast) |
 | Gauges | Derived from the budget, audit and Census data below | Automatic |
-| People | U.S. Census ACS 5-year via [Census Reporter](https://censusreporter.org/profiles/16000US3735200-kannapolis-nc/) | Automatic |
+| Residents | U.S. Census ACS 5-year via [Census Reporter](https://censusreporter.org/profiles/16000US3735200-kannapolis-nc/): population trend, income, home value, age vs. North Carolina | Automatic |
 | Growth & property | [Cabarrus County GIS open data](https://location.cabarruscounty.us/arcgisservices/rest/services/OpenData) (current and yearly snapshots) | Automatic |
-| Land use & zoning | Cabarrus County GIS, *Kannapolis Zoning* | Automatic |
+| Land use & zoning | Cabarrus County GIS, *Kannapolis Zoning*: acres by category and district; zoning map (drawn on the XL tile, interactive in the window) | Automatic |
 | Budget & debt | City budget ordinances, budget books and audited financial reports (PDFs) | **By hand**: [`data/manual/README.md`](data/manual/README.md) |
 | Debt service | FY 2026–27 adopted budget, loan by loan, checked against the ordinance totals | **By hand**: `data/manual/debt_service_fy2027.csv` |
 | City news | The City's [news page](https://www.kannapolisnc.gov/news) | Automatic, daily |
 | Upcoming events | The City's [events calendar](https://www.kannapolisnc.gov/Community/Calendar) RSS feed; repeating events merged (meetings never are) | Automatic, daily |
 | Public meetings | The City's [CivicClerk portal](https://kannapolisnc.portal.civicclerk.com) API, with agendas | Automatic, daily |
-| City Council | [City Council page](https://www.kannapolisnc.gov/citycouncil) | **By hand**: `data/manual/council.csv`, photos in `site/photos/council/` |
+| City Council | [City Council page](https://www.kannapolisnc.gov/citycouncil); upcoming Council meetings and agendas from the CivicClerk portal | Members: **by hand** (`data/manual/council.csv`, photos in `site/photos/council/`). Meetings: automatic, daily |
 | Who runs the City | The City's 2026 org chart and staff directory | **By hand**: `data/manual/org_chart.json`, photos in `site/photos/staff/` |
 
 ### Official sources
 
-Every hand-entered number in `data/manual/*.csv` has a `source` citation and a `source_url` that opens the official PDF at the cited page (for example `…FY%2027%20Adopted%20Budget.pdf#page=114`). The build fails if a row's citation is missing. The full registry is [`data/manual/sources.csv`](data/manual/sources.csv); its `widgets` column ties each source to the widgets it feeds, and every widget window ends with an automatic **Sources** line built from it:
+Every hand-entered number in `data/manual/*.csv` has a `source` citation and a `source_url` that opens the official PDF at the cited page (for example `…FY%2027%20Adopted%20Budget.pdf#page=114`). The build fails if a row's citation is missing. The full registry is [`data/manual/sources.csv`](data/manual/sources.csv); its `widgets` column ties each source to the widgets it feeds, and every widget window ends with an automatic **Sources** line built from it. The table below is generated from the same registry on every build, so the README always cites every source:
+
+<!-- sources:start -->
+68 sources, generated from `data/manual/sources.csv`.
 
 | Source | Publisher | Format | Used for |
 |---|---|---|---|
@@ -133,6 +136,27 @@ Every hand-entered number in `data/manual/*.csv` has a `source` citation and a `
 | [The Gem Theatre: Public Parking](https://gem-theatre.com/Parking) | The Gem Theatre (City of Kannapolis) | Web page | Parking and shuttle |
 | [The Gem Theatre: Now Playing (fallback listing source)](https://gem-theatre.com/Movies/Now-Playing) | The Gem Theatre (City of Kannapolis) | Web page | Gem listings if the Tickets page changes |
 | [The Gem Theatre: Coming Soon (fallback listing source)](https://gem-theatre.com/Movies/Coming-Soon) | The Gem Theatre (City of Kannapolis) | Web page | Gem listings if the Tickets page changes |
+| [The Swanee Theatre events (public Events Calendar feed)](https://swaneetheatre.com/events/) | The Swanee Theatre (City of Kannapolis) | JSON API | Upcoming shows, times, tickets |
+| [The Swanee Theatre: Weekly Happenings](https://swaneetheatre.com/weekly-happenings/) | The Swanee Theatre (City of Kannapolis) | Web page | Weekly dance nights |
+| [Rent The Swanee (capacity and rates)](https://swaneetheatre.com/rent-the-swanee/) | The Swanee Theatre (City of Kannapolis) | Web page | Rentals |
+| [The Swanee Theatre website (contact, address)](https://swaneetheatre.com) | The Swanee Theatre (City of Kannapolis) | Web page | Contact info |
+| [Old Armor Beer Company website (about, beers, can images)](https://www.oldarmorbeer.net) | Old Armor Beer Company | Web page | Story, featured beers, ABV (from can art) |
+| [Old Armor Beer Company: Contact (address, phone, hours, booking)](https://www.oldarmorbeer.net/contact) | Old Armor Beer Company | Web page | Hours, address, phone, email, good to know |
+| [Old Armor Beer Company: Pay It Forward Board](https://www.oldarmorbeer.net/pay-it-forward) | Old Armor Beer Company | Web page | Pay It Forward prices and how it works |
+| [Editions Coffee Shop & Bookstore: New Arrivals](https://www.editionsbookstore.com/page/NewArrivals) | Editions Coffee Shop & Bookstore | Web page | New books: titles, authors, prices, covers (daily) |
+| [Editions Coffee Shop & Bookstore: Events](https://www.editionsbookstore.com/page/events) | Editions Coffee Shop & Bookstore | Web page | Events, closures, monthly calendar (daily) |
+| [Editions Coffee Shop & Bookstore: Coffee Shop](https://www.editionsbookstore.com/page/CoffeeShop) | Editions Coffee Shop & Bookstore | Web page | Drinks, add-on prices, ordering, store and drive-thru hours |
+| [Editions Coffee Shop & Bookstore: Yarn](https://www.editionsbookstore.com/page/yarn) | Editions Coffee Shop & Bookstore | Web page | Yarn brands, tools, return policy, Cannon Mills history |
+| [Editions Coffee Shop & Bookstore website (contact, monthly drink specials)](https://www.editionsbookstore.com) | Editions Coffee Shop & Bookstore | Web page | Address, phone, email, monthly specials menu |
+| [What-A-Burger #1: Menu & Order Online](https://www.What-A-Burger1.com/order) | What-A-Burger #1 | Web page | Full menu and prices, hours |
+| [What-A-Burger #1 website (address, phone, hours, reviews, logo)](https://www.what-a-burger1.com) | What-A-Burger #1 | Web page | Address, phone, hours, customer quotes, logo |
+| [City Council Meetings (YouTube playlist RSS feed)](https://www.youtube.com/playlist?list=PLVO_mqWw3g38u7X_oE4-9k0F2BN05dEaX) | City of Kannapolis | RSS | Upcoming live stream and recent meeting recordings, views (daily) |
+| [City of Kannapolis YouTube channel: live streams](https://www.youtube.com/@CityofKannapolis/streams) | City of Kannapolis | Web page | Live stream page |
+| [City meeting portal (CivicClerk): agendas for each Council meeting](https://kannapolisnc.portal.civicclerk.com) | City of Kannapolis | JSON API | Agenda links matched to each video |
+| [NOAA/NWS national radar mosaic, base reflectivity (MRMS QC composite)](https://opengeo.ncep.noaa.gov/geoserver/conus/conus_bref_qcd/ows?service=WMS&request=GetCapabilities) | NOAA National Centers for Environmental Prediction | WMS image | Live radar: weather tile background and the animated past-hour radar map in the Weather window |
+| [Winterland Express train reservations (how reservations and walk-up tickets work)](https://www.kannapolisnc.gov/winterland-express) | City of Kannapolis | Web page | Train runs every 10 minutes; mobile tickets; walk-up; rainout rule |
+| [Kannapolis Cannon Ballers website (team contact and tickets)](https://www.kcballers.com) | Kannapolis Cannon Ballers (Minor League Baseball) | Web page | Team website and ticket email |
+<!-- sources:end -->
 
 The news and meetings harvesters are adapted from [kspider](https://github.com/bradspry/kannapolis-news-wire).
 
@@ -144,7 +168,8 @@ The news and meetings harvesters are adapted from [kspider](https://github.com/b
 etl/               Python pipeline (standard library only)
   run_all.py       runs the steps; one failing source doesn't block the rest
   build_*.py       one per data source → data/generated/*.json
-  build_site.py    inlines CSS, JS, data and photos → dist/index.html
+  build_site.py    inlines CSS, JS, data and photos → dist/index.html (and refreshes the README's sources table)
+  readme_sources.py  writes that table from data/manual/sources.csv
   serve.py         Wi-Fi server with rebuild-on-reload (run via ./serve.sh)
 data/manual/       hand-curated inputs, each row citing its source
 data/generated/    pipeline output (committed, so the site rebuilds offline)
@@ -152,13 +177,13 @@ site/              index.html, style.css, js/ (os.js shell, tiles.js home screen
 dist/index.html    the finished dashboard (git-ignored; rebuild any time)
 ```
 
-Only the chart and map libraries (Observable Plot and MapLibre, pinned versions from jsDelivr) and the map tiles (OpenFreeMap) load from the internet.
+Everything else is built into the page. From the internet it loads only: the chart and map libraries (Observable Plot and MapLibre, pinned versions from jsDelivr), map tiles (OpenFreeMap), live weather (api.weather.gov) and radar (NOAA), and pictures hosted by their publishers (movie posters, show images, book covers, video thumbnails). Council meeting videos play from YouTube's privacy-enhanced player only after you press play.
 
 ## Deploying (GitHub Pages)
 
 In the repository, open **Settings → Pages** and set **Source: GitHub Actions**. Then:
 - **Deploy site** builds and publishes on every push to `main`.
-- **Refresh data** runs weekly (meetings, news and events daily), commits new data, and triggers a redeploy.
+- **Refresh data** runs weekly for everything, and daily for the time-sensitive widgets (meetings, Council videos, news, events, weather, the Gem, the Swanee and Editions); it commits new data and triggers a redeploy.
 
 Add `KDASH_CONTACT` (and `CENSUS_API_KEY`, if used) under **Settings → Secrets and variables → Actions**.
 
@@ -166,4 +191,4 @@ Add `KDASH_CONTACT` (and `CENSUS_API_KEY`, if used) under **Settings → Secrets
 
 [GNU General Public License v3.0](LICENSE). You may use, change and share this code; if you distribute a modified version, it must also be GPL-3.0.
 
-The data belongs to its publishers (the City of Kannapolis, Cabarrus County, the U.S. Census Bureau and others), and photos are courtesy of the City of Kannapolis. **This is an independent community project, not an official City of Kannapolis product.**
+The data belongs to its publishers (the City of Kannapolis, Cabarrus County, the U.S. Census Bureau, NOAA and the National Weather Service, and the local businesses featured), and photos are courtesy of the City of Kannapolis and those businesses. **This is an independent community project, not an official City of Kannapolis product.**
