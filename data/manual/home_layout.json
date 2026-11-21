@@ -12,6 +12,7 @@
     "editions",
     "made",
     "events",
+    "library",
     "baseball",
     "whataburger",
     "news",
@@ -22,11 +23,11 @@
     "people",
     "budget",
     "debt-service",
-    "growth",
     "g-tax-rate",
+    "growth",
     "g-debt-policy",
-    "g-debt-limit",
     "g-owners",
+    "g-debt-limit",
     "land",
     "about"
   ],
@@ -59,7 +60,8 @@
     "police": "m",
     "waste": "l",
     "drought": "m",
-    "g-debt-policy": "m"
+    "g-debt-policy": "m",
+    "library": "l"
   },
   "spacers": []
 }
