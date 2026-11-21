@@ -1,0 +1,32 @@
+{
+  "station": {
+    "name": "Kannapolis Station",
+    "code": "KAN",
+    "address": "201 S. Main St., Kannapolis, NC 28081",
+    "map": "https://www.google.com/maps/search/?api=1&query=Kannapolis+Amtrak+Station+201+S+Main+St+Kannapolis+NC+28081",
+    "phone": "(704) 932-1591"
+  },
+  "services": {
+    "Piedmont": "N.C. Department of Transportation's own trains between Charlotte and Raleigh, operated by Amtrak, every day.",
+    "Carolinian": "Amtrak's daytime train between Charlotte and New York City, through Raleigh, Richmond, Washington, D.C., Baltimore and Philadelphia."
+  },
+  "phones": {
+    "info": "1-800-BY-TRAIN",
+    "info_digits": "18002987246",
+    "rail_division": "919-707-4700"
+  },
+  "links": {
+    "station": "https://www.ncbytrain.org/stations/kannapolis-kan",
+    "tickets": "https://www.ncbytrain.org/tickets",
+    "piedmont": "https://www.ncbytrain.org/schedules/piedmont",
+    "carolinian": "https://www.ncbytrain.org/schedules/carolinian",
+    "track": "https://www.amtrak.com/track-your-train.html",
+    "deals": "https://www.ncbytrain.org/deals",
+    "baggage": "https://www.ncbytrain.org/passenger-services/baggage",
+    "amtrak_app": "https://www.amtrak.com/get-mobile-application-and-access",
+    "home": "https://www.ncbytrain.org/"
+  },
+  "logo": "photos/local/ncbytrain-logo.png",
+  "photo": "photos/local/kannapolis-station.jpg",
+  "photo_credit": "Kannapolis Station, N.C. Department of Transportation (NC By Train)"
+}

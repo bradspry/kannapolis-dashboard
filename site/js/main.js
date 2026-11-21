@@ -20,6 +20,7 @@ import { renderVideos } from "./sections/videos.js";
 import { renderWaste } from "./sections/waste.js";
 import { renderDrought } from "./sections/drought.js";
 import { renderLibrary } from "./sections/library.js";
+import { renderTrain, nextKey as trainKey, tick as trainTick } from "./sections/train.js";
 import { tileDefs } from "./tiles.js";
 import { renderPeople } from "./sections/people.js";
 import { renderGrowth } from "./sections/growth.js";
@@ -45,7 +46,7 @@ function load(name, { optional = false } = {}) {
 // Icon colors are CSS variables (--icon-N), so icons can be restyled without touching charts.
 function colors() {
   const v = (n) => `var(--icon-${n})`;
-  return { people: v(1), growth: v(3), land: v(6), budget: v(7), debt: v(2), news: v(5), meetings: v(4), events: v(8), weather: v(1), police: v(1), fire: v(2), baseball: v(6), utility: v(3), parks: v(6), gem: v(5), swanee: v(7), made: v(2), editions: v(4), whataburger: v(8), videos: v(5), waste: v(3), drought: v(1), library: v(6), council: v(1), org: v(3), about: "var(--muted-fill)", gauge: "var(--accent)" };
+  return { people: v(1), growth: v(3), land: v(6), budget: v(7), debt: v(2), news: v(5), meetings: v(4), events: v(8), weather: v(1), police: v(1), fire: v(2), baseball: v(6), utility: v(3), parks: v(6), gem: v(5), swanee: v(7), made: v(2), editions: v(4), whataburger: v(8), videos: v(5), waste: v(3), drought: v(1), library: v(6), train: v(1), council: v(1), org: v(3), about: "var(--muted-fill)", gauge: "var(--accent)" };
 }
 
 function main() {
@@ -65,6 +66,7 @@ function main() {
     editions: load("editions.json", { optional: true }), whataburger: load("whataburger.json", { optional: true }),
     videos: load("videos.json", { optional: true }), waste: load("waste.json", { optional: true }),
     drought: load("drought.json", { optional: true }), library: load("library.json", { optional: true }),
+    train: load("train.json", { optional: true }),
   };
   const sub = (id) => document.querySelector(`#${id} .section-sub`)?.textContent.trim() || "";
   const win = (id, def) => document.getElementById(id) && defineWindow(id, { ...def, sub: def.sub ?? sub(id) });
@@ -86,6 +88,7 @@ function main() {
   if (D.whataburger) win("whataburger", { title: "What-A-Burger #1", icon: "burger", color: "var(--icon-8)", render: () => renderWhatABurger(D.whataburger) });
   if (D.videos) win("videos", { title: "City Council Meeting Videos", icon: "video", color: "var(--icon-5)", render: () => renderVideos(D.videos) });
   if (D.waste) win("waste", { title: "Waste Collection", icon: "trash", color: "var(--icon-3)", render: () => renderWaste(D.waste) });
+  if (D.train) win("train", { title: "NC By Train", icon: "train", color: "var(--icon-1)", render: () => renderTrain(D.train) });
   if (D.library) win("library", { title: "Cabarrus County Public Library", icon: "library", color: "var(--icon-6)", render: () => renderLibrary(D.library) });
   if (D.drought) win("drought", { title: "Current Drought Conditions", icon: "drop", color: "var(--icon-1)", render: () => renderDrought(D.drought) });
   if (D.weatherMeta) win("weather", { title: "Weather", icon: "weather", color: "var(--icon-1)", render: () => renderWeather(weather(), D.boundaries) });
@@ -111,6 +114,16 @@ function main() {
   defineTiles(() => tileDefs(D, colors()));
   renderHome();
   openFromHash();
+
+  // NC By Train countdowns: refresh the text every 30 seconds, and redraw when a train leaves.
+  if (D.train) {
+    let key = trainKey(D.train);
+    setInterval(() => {
+      trainTick();
+      const k = trainKey(D.train);
+      if (k !== key) { key = k; if (!document.body.classList.contains("is-dragging")) renderHome(); refreshWindow("train"); }
+    }, 30000);
+  }
 
   const gen = [D.census, D.budget, D.property, D.zoning].map((d) => d?.generated).filter(Boolean).sort().at(-1);
   if (gen) document.getElementById("updated").textContent = `Data last refreshed ${gen}.`;

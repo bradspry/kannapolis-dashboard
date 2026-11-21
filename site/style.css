@@ -1813,3 +1813,55 @@ body::before {
 .lib-logo img { display: block; height: 72px; width: auto; }
 .lib-hero .lib-search { clear: right; }
 @media (max-width: 720px) { .lib-logo { float: none; display: inline-block; margin: 0 0 10px; } .lib-logo img { height: 56px; } }
+/* ---------- NC By Train ---------- */
+.tr-logo { position: absolute; top: -4px; right: 18px; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: #fff; box-shadow: 0 2px 8px rgb(0 0 0 / .3); pointer-events: none; }
+.tr-logo img { width: 30px; height: auto; display: block; }
+.tr-logo.s { display: none; }
+.tr-logo.lg { position: static; flex: none; width: 84px; height: 92px; border-radius: 14px; box-shadow: none; }
+.tr-logo.lg img { width: 64px; }
+.tr-next { display: flex; flex-direction: column; gap: 2px; flex-shrink: 0; }
+.tr-next-time { font-size: 30px; font-weight: 750; line-height: 1.1; font-variant-numeric: tabular-nums; color: var(--text-primary); }
+.tr-next.compact .tr-next-time { font-size: 24px; }
+.tr-next-due { font-size: 15px; font-weight: 650; color: var(--accent); margin-left: 4px; }
+.tr-next-what { font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
+.tr-dir { display: inline-grid; place-items: center; flex: none; width: 18px; height: 18px; border-radius: 5px; font-size: 10.5px; font-weight: 800; color: #fff; }
+.tr-dir.southbound { background: var(--series-1); }
+.tr-dir.northbound { background: var(--series-7); }
+.tr-list { list-style: none; margin: 0; padding: 0; }
+.tr-row { display: grid; grid-template-columns: 72px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 7px 0; border-top: 1px solid var(--grid); font-size: 14px; }
+.tr-row:first-child { border-top: 0; }
+.tr-row.compact { grid-template-columns: 62px minmax(0, 1fr) auto; gap: 8px; padding: 4px 0; font-size: 13px; }
+.tr-time { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tr-what { display: flex; align-items: center; gap: 6px; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tr-what small { color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; }
+.tr-due { font-size: 12.5px; color: var(--text-secondary); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.tr-row.gone { opacity: .5; }
+.tr-row.next { background: color-mix(in oklab, var(--accent) 12%, transparent); border-radius: 8px; padding-left: 8px; padding-right: 8px; margin: 0 -8px; border-top-color: transparent; }
+.tr-row.next .tr-due { color: var(--accent); font-weight: 650; }
+.tr-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
+.tr-btn { position: relative; z-index: 2; text-decoration: none; }
+.tr-btn.compact { padding: 6px 12px; font-size: 13px; }
+.tr-status { flex-shrink: 0; }
+.tr-tile-photo { width: 100%; height: 150px; object-fit: cover; object-position: 50% 55%; border-radius: 12px; display: block; margin-bottom: 8px; }
+.tr-xl-left { display: flex; flex-direction: column; gap: 8px; height: 100%; }
+/* window */
+.tr-hero { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 20px; align-items: stretch; }
+.tr-photo { margin: 0; }
+.tr-photo img { width: 100%; height: 100%; min-height: 200px; max-height: 300px; object-fit: cover; border-radius: 14px; display: block; }
+.tr-hero-text { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.tr-hero-top { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+.tr-hero .tr-next-time { font-size: 40px; }
+.tr-hero .tr-actions { margin-top: 0; }
+.tr-hero .tile-meta { margin: 0; }
+@media (max-width: 720px) { .tr-hero { grid-template-columns: minmax(0, 1fr); } .tr-hero .tr-next-time { font-size: 32px; } .tr-logo.lg { width: 64px; height: 72px; } .tr-logo.lg img { width: 48px; } }
+.tr-facts { grid-template-columns: auto minmax(0, 1fr); }
+.tr-facts dd { margin: 0; text-align: left; }
+.tr-m { gap: 16px; }
+.tr-m-left { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.tr-m-left .tr-actions { margin-top: 0; }
+.tr-m .tr-row.compact { grid-template-columns: 58px minmax(0, 1fr) auto; }
+.tr-m .tr-what small { display: none; }
+.tr-m-left .tr-actions { flex-wrap: nowrap; gap: 6px; }
+.tr-m-left .tr-btn { white-space: nowrap; flex: 0 1 auto; min-width: 0; padding: 6px 10px; font-size: 12.5px; }
+.tile-split.tr-m { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); }
+.tr-m .tr-to-word { display: none; }

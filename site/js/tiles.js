@@ -20,6 +20,7 @@ import { favorites as wabFavorites, wabLogo, orderButton as wabOrder, price as w
 import { splitVideos, whenBadge as vdBadge, thumb as vdThumb, watchButton as vdWatch, dayLabel as vdDay, timeLabel as vdTime } from "./sections/videos.js";
 import { notices as wsNotices, missedButtons as wsMissed } from "./sections/waste.js";
 import { searchBox as libSearch, upcoming as libUpcoming, eventRow as libRow, closureNote as libClosed, statusLine as libStatus } from "./sections/library.js";
+import { nextTrains, trainRow, nextCard as trNext, stationStatus as trStatus, ticketButton as trTickets, trackButton as trTrack, phoneButton as trPhone, logo as trLogo } from "./sections/train.js";
 import { levelGauge as drGauge, countyLine as drCounty, strip as drStrip } from "./sections/drought.js";
 import { prepGames, nextHome, homeStands, standLabel, nextGameCard, fmtDay as bbDay, fmtTime as bbTime } from "./sections/baseball.js";
 
@@ -142,7 +143,7 @@ const contactLinks = (p) => [
 const shortDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
 export function tileDefs(data, COLORS) {
-  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos, waste, drought, library } = data;
+  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos, waste, drought, library, train } = data;
   const t = tokens();
   const geo = census.geographies;
   const k = geo.Kannapolis, nc = geo["North Carolina"], cab = geo["Cabarrus County"], us = geo["United States"];
@@ -250,6 +251,27 @@ export function tileDefs(data, COLORS) {
             h("div", {}, callButtons(fire), freeHead, freeList(fire, 4)),
             h("div", {}, h("div", { class: "mini-head" }, "Fire stations"), stationList(fire, { compact: true }),
               h("p", { class: "tile-meta" }, "ISO Class 1: the best fire-protection rating possible"))));
+      },
+    },
+    train && {
+      id: "train", opens: "train", size: "m", label: "NC By Train",
+      build: (size) => {
+        const top = h("div", { class: "lib-tile-head" }, head("train", COLORS.train, "NC By Train"), trLogo(train, size));
+        const [first, ...rest] = nextTrains(train, { n: 8 });
+        const rows = (list, n, short = false) => h("ul", { class: "tr-list mini", role: "list" }, list.slice(0, n).map((t) => trainRow(train, t, { compact: true, short })));
+        const buttons = h("div", { class: "tr-actions" }, trTickets(train, { compact: true }), isBig(size) ? trTrack(train, { compact: true }) : null);
+        const label = (t) => h("div", { class: "mini-head" }, t);
+        if (size === "s") return h("div", { class: "tile-body" }, top, trNext(train, first, { compact: true, short: true }));
+        if (size === "m") return h("div", { class: "tile-body" }, top,
+          h("div", { class: "tile-split top tr-m" },
+            h("div", { class: "tr-m-left" }, trNext(train, first, { compact: true, service: false }), h("div", { class: "tr-actions" }, trTickets(train, { compact: true }), trPhone(train, { compact: true }))),
+            h("div", {}, label("Later trains"), rows(rest, 3, true))));
+        if (size === "l") return h("div", { class: "tile-body" }, top, trNext(train, first), trStatus(train), label("Coming up"), rows(rest, 4), buttons);
+        const dir = (d, title) => h("div", {}, label(title), rows(nextTrains(train, { n: 4, direction: d }), 4));
+        return h("div", { class: "tile-body" }, top,
+          h("div", { class: "tile-split top" },
+            h("div", { class: "tr-xl-left" }, train.photo ? h("img", { class: "tr-tile-photo", src: train.photo, alt: "", loading: "lazy" }) : null, trNext(train, first), trStatus(train), buttons),
+            h("div", {}, dir("southbound", "Southbound to Charlotte"), dir("northbound", "Northbound to Raleigh & New York"))));
       },
     },
     library && {
