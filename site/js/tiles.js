@@ -478,8 +478,17 @@ export function tileDefs(data, COLORS) {
           h("li", {}, h("b", {}, `Day ${t.late_fee_day}`), h("span", {}, `Late fee: ${t.late_fee_rate * 100}%, max $${t.late_fee_max}`)),
           h("li", {}, h("b", {}, `Day ${t.disconnect_day}`), h("span", {}, "Service may be cut off")));
         if (size === "s") return h("div", { class: "tile-body" }, ...top, payButtons(utility, { compact: true }));
+        // Medium: pay buttons beside the late-payment timeline; other ways and fees underneath.
         if (size === "m") return h("div", { class: "tile-body" }, ...top,
-          h("div", { class: "tile-split top ub-m" }, payButtons(utility, { compact: true }), h("div", {}, h("div", { class: "mini-head bb-mh" }, "Other ways"), ways(2))), feeLine(utility));
+          h("div", { class: "tile-split top ub-m" }, h("div", {}, payButtons(utility, { compact: true }),
+            h("p", { class: "ub-fee-line" }, h("b", {}, "Card "), `${(utility.card_fee.rate * 100).toFixed(2)}% fee, min $${utility.card_fee.minimum.toFixed(2)}`, " · ", h("b", {}, "Bank free"))),
+            h("div", {}, h("div", { class: "mini-head bb-mh" }, "After the bill date"),
+              h("ul", { class: "ub-mini ub-due" },
+                h("li", {}, h("b", {}, `Day ${t.past_due_day}`), h("span", {}, "Past due")),
+                h("li", {}, h("b", {}, `Day ${t.late_fee_day}`), h("span", {}, `${t.late_fee_rate * 100}% late fee (max $${t.late_fee_max})`)),
+                h("li", {}, h("b", {}, `Day ${t.disconnect_day}`), h("span", {}, "Service may be cut off"))),
+              h("p", { class: "tile-meta ub-m-help" }, "Behind? Payment plans: ", callMain),
+              h("p", { class: "tile-meta ub-m-ways" }, h("b", {}, "Also: "), "City Hall kiosk (cash), drop box, desk, mail"))));
         if (size === "l") return h("div", { class: "tile-body" }, ...top, payButtons(utility, { compact: true }), feeLine(utility),
           h("div", { class: "mini-head" }, "After your bill date"), dueDays,
           h("p", { class: "tile-meta" }, "Behind? Ask for a payment plan: ", callMain));
@@ -497,7 +506,8 @@ export function tileDefs(data, COLORS) {
         const today0 = new Date(); today0.setHours(0, 0, 0, 0);
         const stands = homeStands(games).filter((s) => s.end >= today0);
         const g = nextHome(games);
-        const top = [head("baseball", COLORS.baseball, "Cannon Ballers 2027")];
+        const top = [h("div", { class: "bb-tile-head" }, head("baseball", COLORS.baseball, "Cannon Ballers 2027"),
+          baseball.logo ? h("img", { class: `bb-logo bb-logo-${size}`, src: baseball.logo, alt: "Kannapolis Cannon Ballers logo" }) : null)];
         const upcoming = (n) => h("ul", { class: "mini-list" }, games.filter((x) => x.home && x._d >= today0 && x !== g).slice(0, n).map((x) =>
           h("li", {}, h("span", { class: "mini-date" }, bbDay(x._d, { month: "short", day: "numeric" })), h("span", {}, `vs ${x.opp} · ${bbTime(x.time)}`))));
         const standList = (n) => h("ul", { class: "bb-stands compact", role: "list" }, stands.slice(0, n).map((s) =>

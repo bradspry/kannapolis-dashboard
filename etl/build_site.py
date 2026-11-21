@@ -50,10 +50,11 @@ def inline_photos(obj):
         return {k: inline_photos(v) for k, v in obj.items()}
     if isinstance(obj, list):
         return [inline_photos(v) for v in obj]
-    if isinstance(obj, str) and obj.startswith("photos/") and obj.endswith((".jpg", ".jpeg", ".png")):
+    if isinstance(obj, str) and obj.startswith("photos/") and obj.endswith((".jpg", ".jpeg", ".png", ".svg")):
         f = SITE / obj
         if f.exists():
-            return data_url("image/png" if obj.endswith(".png") else "image/jpeg", f.read_bytes())
+            mime = {".png": "image/png", ".svg": "image/svg+xml"}.get(f.suffix, "image/jpeg")
+            return data_url(mime, f.read_bytes())
     return obj
 
 

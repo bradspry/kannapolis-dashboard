@@ -31,7 +31,8 @@
     "about"
   ],
   "hidden": [
-    "g-owners"
+    "g-owners",
+    "g-tax-rate"
   ],
   "sizes": {
     "meetings": "m",
@@ -49,7 +50,7 @@
     "g-tax-rate": "s",
     "g-owners": "s",
     "baseball": "m",
-    "utility": "s",
+    "utility": "m",
     "parks": "m",
     "made": "m",
     "editions": "m",

@@ -1696,3 +1696,27 @@ body::before {
 .ds-tile-pay .mini-head { margin: 0 0 8px; }
 .ds-tile-pay .mini-bar { margin-top: 0; flex-shrink: 0; }
 .ds-tile-pay .mini-legend { margin-top: 8px; }
+
+/* Cannon Ballers logo */
+.bb-tile-head { position: relative; }
+.bb-logo { display: block; object-fit: contain; filter: drop-shadow(0 2px 6px rgb(0 0 0 / .35)); pointer-events: none; }
+.bb-tile-head .bb-logo { position: absolute; top: -6px; right: 18px; height: 52px; width: auto; }
+.bb-tile-head .bb-logo-s { height: 40px; right: 16px; top: -4px; }
+.bb-tile-head .bb-logo-l, .bb-tile-head .bb-logo-xl { height: 64px; top: -8px; }
+.bb-hero { position: relative; }
+.bb-logo-hero { position: absolute; top: 14px; right: 16px; height: 96px; width: auto; z-index: 1; }
+@media (max-width: 720px) { .bb-logo-hero { height: 64px; } }
+.bb-tile-head .tile-head { padding-right: 70px; }
+.bb-hero .bb-next { padding-right: 96px; }
+@media (max-width: 720px) { .bb-hero .bb-next { padding-right: 64px; } }
+/* Pay Utility Bill, medium */
+.ub-m .ub-due li { padding: 2px 0; }
+.ub-m .ub-due b { min-width: 52px; }
+.ub-m-help { margin: 4px 0 0; }
+.ub-m-ways { margin: 2px 0 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ub-m-ways b { color: var(--text-secondary); }
+.ub-m .ub-pay.compact .ub-btn { padding: 6px 10px; }
+.ub-m .ub-pay.compact .ub-btn small { margin-top: 0; }
+.ub-m .ub-fee-line { margin: 8px 0 0; font-size: 12.5px; }
+.ub-m .mini-head.bb-mh { margin-top: 0; }
+.ub-m .ub-fee-line { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12px; }

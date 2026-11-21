@@ -116,7 +116,9 @@ export function renderBaseball(bb) {
 
   root.replaceChildren(
     h("div", { class: "bb-top" },
-      h("div", { class: "card" }, nextGameCard(bb, games),
+      h("div", { class: "card bb-hero" },
+        bb.logo ? h("img", { class: "bb-logo bb-logo-hero", src: bb.logo, alt: "Kannapolis Cannon Ballers logo" }) : null,
+        nextGameCard(bb, games),
         h("div", { class: "bb-actions" },
           h("a", { class: "btn-primary", href: bb.website, target: "_blank", rel: "noopener" }, "🎟 Tickets at kcballers.com ↗"),
           calLink(bb, home.filter((g) => g._d >= today()), "📅 Add all home games to my calendar", "cannon-ballers-2027-home.ics")),

@@ -86,7 +86,7 @@ It prints the address to open on your phone (for example `http://192.168.1.20:51
 Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a `source_url` that opens the official PDF at the cited page (for example `…FY%2027%20Adopted%20Budget.pdf#page=114`). The build fails if a row's citation is missing. The full registry is [`data/manual/sources.csv`](data/manual/sources.csv); its `widgets` column ties each source to the widgets it feeds, and every widget window ends with an automatic **Sources** line built from it. The table below is generated from the same registry on every build, so the README always cites every source:
 
 <!-- sources:start -->
-75 sources, generated from `data/manual/sources.csv`.
+76 sources, generated from `data/manual/sources.csv`.
 
 | Source | Publisher | Format | Used for |
 |---|---|---|---|
@@ -165,6 +165,7 @@ Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a
 | [Concord, Harrisburg, Kannapolis, and Landis Move to Voluntary Water Conservation Effective November 3, 2026](https://www.kannapolisnc.gov/news/ID/461/Concord) | City of Kannapolis | Web page | -Harrisburg |
 | [U.S. Drought Monitor county statistics (Cabarrus 37025, Rowan 37159)](https://usdmdataservices.unl.edu/api/CountyStatistics/GetDroughtSeverityStatisticsByAreaPercent) | National Drought Mitigation Center (USDA / NOAA) | JSON API | Weekly drought categories D0–D4 by county, two years |
 | [North Carolina Drought Management Advisory Council](https://www.ncdrought.org/) | NC Department of Environmental Quality | Web page | Statewide drought conditions (linked) |
+| [Kannapolis Cannon Ballers team logo](https://www.mlbstatic.com/team-logos/487.svg) | MLB (mlbstatic.com team logos) | SVG | Team logo |
 <!-- sources:end -->
 
 The news and meetings harvesters are adapted from [kspider](https://github.com/bradspry/kannapolis-news-wire).
