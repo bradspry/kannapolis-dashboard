@@ -1723,3 +1723,25 @@ body::before {
 .ub-m .ub-fee-line { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12px; }
 #feedback-btn:hover { color: #fff; filter: brightness(1.08); }
 @media (max-width: 520px) { .topbar-row { flex-wrap: wrap; row-gap: 8px; } .topbar-actions { width: 100%; } .topbar-actions #feedback-btn { margin-right: auto; } }
+
+/* Police tile: blue. Fire tile: red. Same in light and dark themes; text tokens switch to light ink inside. */
+.tile-w[data-tile="police"], .tile-w[data-tile="fire"] {
+  --text-primary: #fff; --text-secondary: rgb(255 255 255 / .82); --text-muted: rgb(255 255 255 / .68);
+  --border: rgb(255 255 255 / .2); --grid: rgb(255 255 255 / .16); --accent: #fff;
+  color: var(--text-primary); border-color: rgb(255 255 255 / .14);
+}
+.tile-w[data-tile="police"] { --surface-1: #12366f; background: linear-gradient(160deg, #1d4f9c, #12366f 60%, #0d2a58); }
+.tile-w[data-tile="fire"] { --surface-1: #7d1717; background: linear-gradient(160deg, #b02a22, #861c18 60%, #6a1212); }
+.tile-w[data-tile="police"] .chip-icon, .tile-w[data-tile="fire"] .chip-icon { box-shadow: 0 0 0 1.5px rgb(255 255 255 / .55); }
+.tile-w[data-tile="police"] a:not(.kpd-call), .tile-w[data-tile="fire"] a:not(.kpd-call) { color: #fff; }
+/* Call buttons: translucent white; 911 is solid white with red text so it stands out on both colors. */
+.tile-w[data-tile="police"] .kpd-call, .tile-w[data-tile="fire"] .kpd-call { background: rgb(255 255 255 / .1); border-color: rgb(255 255 255 / .28); }
+.tile-w[data-tile="police"] .kpd-call.emergency, .tile-w[data-tile="fire"] .kpd-call.emergency { background: #fff; border-color: #fff; }
+.tile-w[data-tile="police"] .kpd-call.emergency b, .tile-w[data-tile="fire"] .kpd-call.emergency b { color: #c11d1d; }
+.tile-w[data-tile="police"] .kpd-call.emergency small, .tile-w[data-tile="fire"] .kpd-call.emergency small { color: #4a4a4a; }
+/* Crime bars: white (earlier quarter dimmer), legend to match. */
+.tile-w[data-tile="police"] .kpd-bar { background: rgb(255 255 255 / .9) !important; }
+.tile-w[data-tile="police"] .kpd-crime-bars .kpd-bar:not(:last-child) { background: rgb(255 255 255 / .45) !important; }
+.tile-w[data-tile="police"] .mini-legend li:not(:last-child) i { background: rgb(255 255 255 / .45) !important; }
+.tile-w[data-tile="police"] .mini-legend li:last-child i { background: rgb(255 255 255 / .9) !important; }
+.tile-w[data-tile="fire"] .kfd-num { background: #fff; color: #a3201b; }
