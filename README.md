@@ -68,6 +68,7 @@ It prints the address to open on your phone (for example `http://192.168.1.20:51
 | City Council Meeting Videos | City of Kannapolis [YouTube playlist](https://www.youtube.com/playlist?list=PLVO_mqWw3g38u7X_oE4-9k0F2BN05dEaX) (public RSS feed) and [live streams](https://www.youtube.com/@CityofKannapolis/streams); agendas from the City's meeting portal | Automatic, daily |
 | Waste Collection | City [Garbage, Recycling & Yard Waste](https://www.kannapolisnc.gov/Garbage) and [What's My Day?](https://www.kannapolisnc.gov/Government-Departments/Garbage-Recycling-Yard-Waste/Whats-My-Day) pages: report a missed pickup, holiday delays and loose-leaf season (on device), what goes where, set-out rules, carts; links to the City's [CARTology](https://apps.apple.com/us/app/cartology/id1368037662) pickup-day lookup and app | **Machine-parsed**: `data/manual/waste.json` |
 | Current Drought Conditions | City [Drought Guidance](https://www.kannapolisnc.gov/drought) page (current water-conservation level and news) and the [U.S. Drought Monitor](https://droughtmonitor.unl.edu/) for Cabarrus and Rowan counties (weekly, two years of history) | City level and Drought Monitor: automatic, daily. Tips and level descriptions: **machine-parsed** (`data/manual/drought.json`) |
+| Cabarrus County Public Library | Library [events calendar](https://cabarrus-cep.bc.sirsidynix.net/events/list/) (public API: programs and closures at every branch, Kannapolis Library and Afton Ridge first) and a search box that opens the [library catalog](https://cabarrus.ent.sirsi.net/client/en_US/default/) (the catalog itself isn't scraped) | Events: automatic, daily. Branches: **machine-parsed** (`data/manual/library.json`) |
 | Weather | [National Weather Service](https://www.weather.gov/) API: forecast, hourly, alerts, and observations from Concord Regional Airport; [NOAA's national radar mosaic](https://opengeo.ncep.noaa.gov/geoserver/conus/conus_bref_qcd/ows?service=WMS&request=GetCapabilities) behind the tile and as an animated past-hour radar map in the window | **Live** in the browser every 15 min (daily backup copy of the forecast) |
 | Gauges | Derived from the budget, audit and Census data below | Automatic |
 | Residents | U.S. Census ACS 5-year via [Census Reporter](https://censusreporter.org/profiles/16000US3735200-kannapolis-nc/): population trend, income, home value, age vs. North Carolina | Automatic |
@@ -86,7 +87,7 @@ It prints the address to open on your phone (for example `http://192.168.1.20:51
 Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a `source_url` that opens the official PDF at the cited page (for example `…FY%2027%20Adopted%20Budget.pdf#page=114`). The build fails if a row's citation is missing. The full registry is [`data/manual/sources.csv`](data/manual/sources.csv); its `widgets` column ties each source to the widgets it feeds, and every widget window ends with an automatic **Sources** line built from it. The table below is generated from the same registry on every build, so the README always cites every source:
 
 <!-- sources:start -->
-76 sources, generated from `data/manual/sources.csv`.
+80 sources, generated from `data/manual/sources.csv`.
 
 | Source | Publisher | Format | Used for |
 |---|---|---|---|
@@ -166,6 +167,10 @@ Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a
 | [U.S. Drought Monitor county statistics (Cabarrus 37025, Rowan 37159)](https://usdmdataservices.unl.edu/api/CountyStatistics/GetDroughtSeverityStatisticsByAreaPercent) | National Drought Mitigation Center (USDA / NOAA) | JSON API | Weekly drought categories D0–D4 by county, two years |
 | [North Carolina Drought Management Advisory Council](https://www.ncdrought.org/) | NC Department of Environmental Quality | Web page | Statewide drought conditions (linked) |
 | [Kannapolis Cannon Ballers team logo](https://www.mlbstatic.com/team-logos/487.svg) | MLB (mlbstatic.com team logos) | SVG | Team logo |
+| [Cabarrus County Public Library events calendar (REST API)](https://cabarrus-cep.bc.sirsidynix.net/events/list/) | Cabarrus County Public Library | JSON API | Upcoming programs and closures at all branches, venue addresses and phones |
+| [Cabarrus County Public Library catalog (search only; not scraped)](https://cabarrus.ent.sirsi.net/client/en_US/default/) | Cabarrus County Public Library | Web page | Catalog search box |
+| [Cabarrus County Public Library: Locations (branch addresses](Web page) | phones and hours) | Cabarrus County Public Library | https://cabarrus.ent.sirsi.net/client/en_US/default/?rm=LOCATIONS0%7C%7C%7C1%7C%7C%7C0%7C%7C%7Ctrue |
+| [Cabarrus County Public Library System logo](https://cabarrus-cep.bc.sirsidynix.net/wp-content/uploads/2022/09/CABARRUS_newlogo.png) | Cabarrus County Public Library | PNG | Library logo |
 <!-- sources:end -->
 
 The news and meetings harvesters are adapted from [kspider](https://github.com/bradspry/kannapolis-news-wire).

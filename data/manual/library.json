@@ -1,0 +1,246 @@
+{
+  "name": "Cabarrus County Public Library",
+  "kannapolis_branches": [
+    "KAN",
+    "AFT"
+  ],
+  "branches": {
+    "KAN": {
+      "name": "Kannapolis Library",
+      "short": "Kannapolis",
+      "address": "850 Mountain St, Kannapolis, NC 28081",
+      "phone": "704-920-1180",
+      "venue_ids": [
+        51
+      ],
+      "hours": {
+        "mon": [
+          "09:00",
+          "20:00"
+        ],
+        "tue": [
+          "09:00",
+          "20:00"
+        ],
+        "wed": [
+          "09:00",
+          "20:00"
+        ],
+        "thu": [
+          "09:00",
+          "20:00"
+        ],
+        "fri": [
+          "10:00",
+          "18:00"
+        ],
+        "sat": [
+          "10:00",
+          "18:00"
+        ],
+        "sun": null
+      },
+      "hours_text": "M–Th 9am–8pm; Fri–Sat 10am–6pm; closed Sunday"
+    },
+    "AFT": {
+      "name": "Library and Active Living Center at Afton Ridge",
+      "short": "Afton Ridge",
+      "address": "6095 Glen Afton Blvd, Kannapolis, NC 28027",
+      "phone": "704-920-2030",
+      "venue_ids": [
+        12605
+      ],
+      "hours": {
+        "mon": [
+          "09:00",
+          "20:00"
+        ],
+        "tue": [
+          "09:00",
+          "20:00"
+        ],
+        "wed": [
+          "09:00",
+          "20:00"
+        ],
+        "thu": [
+          "09:00",
+          "20:00"
+        ],
+        "fri": [
+          "10:00",
+          "18:00"
+        ],
+        "sat": [
+          "10:00",
+          "18:00"
+        ],
+        "sun": null
+      },
+      "hours_text": "M–Th 9am–8pm; Fri–Sat 10am–6pm; closed Sunday",
+      "catalog_name": "Afton Library"
+    },
+    "CON": {
+      "name": "Concord Library",
+      "short": "Concord",
+      "address": "27 Union St N, Concord, NC 28025",
+      "phone": "704-920-2050",
+      "venue_ids": [
+        38
+      ],
+      "hours": {
+        "mon": [
+          "09:00",
+          "20:00"
+        ],
+        "tue": [
+          "09:00",
+          "20:00"
+        ],
+        "wed": [
+          "09:00",
+          "20:00"
+        ],
+        "thu": [
+          "09:00",
+          "20:00"
+        ],
+        "fri": [
+          "10:00",
+          "18:00"
+        ],
+        "sat": [
+          "10:00",
+          "18:00"
+        ],
+        "sun": null
+      },
+      "hours_text": "M–Th 9am–8pm; Fri–Sat 10am–6pm; closed Sunday"
+    },
+    "HAR": {
+      "name": "Harrisburg Library",
+      "short": "Harrisburg",
+      "address": "201 Sims Pkwy, Harrisburg, NC 28075",
+      "phone": "704-920-2080",
+      "venue_ids": [
+        48
+      ],
+      "hours": {
+        "mon": [
+          "09:00",
+          "20:00"
+        ],
+        "tue": [
+          "09:00",
+          "20:00"
+        ],
+        "wed": [
+          "09:00",
+          "20:00"
+        ],
+        "thu": [
+          "09:00",
+          "20:00"
+        ],
+        "fri": [
+          "10:00",
+          "18:00"
+        ],
+        "sat": [
+          "10:00",
+          "18:00"
+        ],
+        "sun": null
+      },
+      "hours_text": "M–Th 9am–8pm; Fri–Sat 10am–6pm; closed Sunday"
+    },
+    "MTP": {
+      "name": "Mt. Pleasant Library & Active Living Center",
+      "short": "Mt. Pleasant",
+      "address": "1111 N Washington St, Mt. Pleasant, NC 28124",
+      "phone": "704-920-2202",
+      "venue_ids": [
+        10865
+      ],
+      "hours": {
+        "mon": [
+          "09:00",
+          "20:00"
+        ],
+        "tue": [
+          "09:00",
+          "20:00"
+        ],
+        "wed": [
+          "09:00",
+          "20:00"
+        ],
+        "thu": [
+          "09:00",
+          "20:00"
+        ],
+        "fri": [
+          "10:00",
+          "18:00"
+        ],
+        "sat": [
+          "10:00",
+          "18:00"
+        ],
+        "sun": null
+      },
+      "hours_text": "M–Th 9am–8pm; Fri–Sat 10am–6pm; closed Sunday"
+    },
+    "MID": {
+      "name": "Midland Library",
+      "short": "Midland",
+      "address": "4297 NC Hwy 24-27, Midland, NC 28107",
+      "phone": "704-920-2040",
+      "venue_ids": [
+        44
+      ],
+      "hours": {
+        "mon": [
+          "09:00",
+          "19:00"
+        ],
+        "tue": [
+          "09:00",
+          "19:00"
+        ],
+        "wed": [
+          "09:00",
+          "19:00"
+        ],
+        "thu": [
+          "09:00",
+          "19:00"
+        ],
+        "fri": [
+          "10:00",
+          "18:00"
+        ],
+        "sat": [
+          "10:00",
+          "18:00"
+        ],
+        "sun": null
+      },
+      "hours_text": "M–Th 9am–7pm; Fri–Sat 10am–6pm; closed Sunday"
+    }
+  },
+  "catalog": {
+    "home": "https://cabarrus.ent.sirsi.net/client/en_US/default/",
+    "search": "https://cabarrus.ent.sirsi.net/client/en_US/default/search/results?qu="
+  },
+  "links": {
+    "home": "https://www.cabarruscounty.us/Government/Departments/Library",
+    "branches": "https://www.cabarruscounty.us/Activities-and-Recreation/Library/Branches",
+    "events": "https://cabarrus-cep.bc.sirsidynix.net/events/list/",
+    "locations": "https://cabarrus.ent.sirsi.net/client/en_US/default/?rm=LOCATIONS0%7C%7C%7C1%7C%7C%7C0%7C%7C%7Ctrue",
+    "get_card": "https://cabarrus.ent.sirsi.net/client/en_US/default/?rm=GET+A+CARD0%7C%7C%7C1%7C%7C%7C0%7C%7C%7Ctrue"
+  },
+  "hours_source": "Library catalog Locations page, copied 2026-11-20",
+  "logo": "photos/local/cabarrus-library-logo.png",
+  "mark": "photos/local/cabarrus-library-mark.png"
+}

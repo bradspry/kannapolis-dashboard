@@ -28,6 +28,7 @@ import build_utility
 import build_waste
 import build_videos
 import build_whataburger
+import build_library
 import build_weather
 import build_zoning
 from common import log
@@ -44,6 +45,7 @@ STEPS = [
     ("made", build_made.main),
     ("editions", build_editions.main),
     ("whataburger", build_whataburger.main),
+    ("library", build_library.main),
     ("weather", build_weather.main),
     ("news", build_news.main),
     ("org", build_org.main),

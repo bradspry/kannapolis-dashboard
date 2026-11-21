@@ -32,6 +32,7 @@ const PATHS = {
   video: '<rect x="3" y="5" width="18" height="14" rx="3"/><path d="m10 9 5 3-5 3V9z"/>',
   trash: '<path d="M4 7h16"/><path d="M9 7V4.5h6V7"/><path d="M6 7l1 13h10l1-13"/><path d="M10 11v6M14 11v6"/>',
   drop: '<path d="M12 3.5c3 3.9 6 7.4 6 10.6a6 6 0 0 1-12 0c0-3.2 3-6.7 6-10.6z"/><path d="M9.2 14.6a2.9 2.9 0 0 0 2.9 2.7"/>',
+  library: '<path d="M4 20h16"/><rect x="5" y="5" width="3" height="15" rx=".5"/><rect x="9" y="7" width="3" height="13" rx=".5"/><path d="m13.5 8.2 2.9-.8 3.3 12.1-2.9.8z"/>',
   grip: '<circle cx="9" cy="6" r="1.4"/><circle cx="15" cy="6" r="1.4"/><circle cx="9" cy="12" r="1.4"/><circle cx="15" cy="12" r="1.4"/><circle cx="9" cy="18" r="1.4"/><circle cx="15" cy="18" r="1.4"/>',
   mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
 };

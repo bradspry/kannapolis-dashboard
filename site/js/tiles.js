@@ -19,6 +19,7 @@ import { upcoming as edUpcoming, whenText as edWhen, edStatus, cover as edCover,
 import { favorites as wabFavorites, wabLogo, orderButton as wabOrder, price as wabPrice, todayHours as wabToday } from "./sections/whataburger.js";
 import { splitVideos, whenBadge as vdBadge, thumb as vdThumb, watchButton as vdWatch, dayLabel as vdDay, timeLabel as vdTime } from "./sections/videos.js";
 import { notices as wsNotices, missedButtons as wsMissed } from "./sections/waste.js";
+import { searchBox as libSearch, upcoming as libUpcoming, eventRow as libRow, closureNote as libClosed, statusLine as libStatus } from "./sections/library.js";
 import { levelGauge as drGauge, countyLine as drCounty, strip as drStrip } from "./sections/drought.js";
 import { prepGames, nextHome, homeStands, standLabel, nextGameCard, fmtDay as bbDay, fmtTime as bbTime } from "./sections/baseball.js";
 
@@ -141,7 +142,7 @@ const contactLinks = (p) => [
 const shortDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
 export function tileDefs(data, COLORS) {
-  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos, waste, drought } = data;
+  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos, waste, drought, library } = data;
   const t = tokens();
   const geo = census.geographies;
   const k = geo.Kannapolis, nc = geo["North Carolina"], cab = geo["Cabarrus County"], us = geo["United States"];
@@ -249,6 +250,22 @@ export function tileDefs(data, COLORS) {
             h("div", {}, callButtons(fire), freeHead, freeList(fire, 4)),
             h("div", {}, h("div", { class: "mini-head" }, "Fire stations"), stationList(fire, { compact: true }),
               h("p", { class: "tile-meta" }, "ISO Class 1: the best fire-protection rating possible"))));
+      },
+    },
+    library && {
+      id: "library", opens: "library", size: "m", label: "Cabarrus County Public Library",
+      build: (size) => {
+        const top = h("div", { class: "lib-tile-head" }, head("library", COLORS.library, "Cabarrus County Library"),
+          library.mark ? h("span", { class: `lib-mark lib-mark-${size}` }, h("img", { src: library.mark, alt: "Cabarrus County Public Library logo" })) : null);
+        const local = libUpcoming(library, { local: true });
+        const rows = (evs, n, o = {}) => h("ul", { class: "lib-evs mini", role: "list" }, evs.slice(0, n).map((e) => libRow(library, e, { compact: true, ...o })));
+        const search = libSearch(library, { compact: true, id: `lib-q-${size}` });
+        const label = (t) => h("div", { class: "mini-head" }, t);
+        if (size === "s") return h("div", { class: "tile-body" }, top, search, rows(local, 1));
+        if (size === "m") return h("div", { class: "tile-body" }, top, search, libStatus(library), rows(local, 1));
+        if (size === "l") return h("div", { class: "tile-body" }, top, search, libStatus(library), libClosed(library, { compact: true }), label("Next in Kannapolis"), rows(local, 5));
+        const col = (code) => h("div", {}, label(`${library.branches[code].short} (${code})`), rows(libUpcoming(library, { branch: code }), 5, { badge: false }));
+        return h("div", { class: "tile-body" }, top, search, libStatus(library), libClosed(library, { compact: true }), h("div", { class: "tile-split top" }, col("KAN"), col("AFT")));
       },
     },
     drought && {

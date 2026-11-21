@@ -1745,3 +1745,71 @@ body::before {
 .tile-w[data-tile="police"] .mini-legend li:not(:last-child) i { background: rgb(255 255 255 / .45) !important; }
 .tile-w[data-tile="police"] .mini-legend li:last-child i { background: rgb(255 255 255 / .9) !important; }
 .tile-w[data-tile="fire"] .kfd-num { background: #fff; color: #a3201b; }
+
+/* Cabarrus County Public Library */
+.lib-search { display: flex; gap: 8px; margin: 10px 0 4px; position: relative; z-index: 2; }
+.lib-search input { flex: 1; min-width: 0; font: inherit; font-size: 15px; padding: 10px 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--page); color: var(--text-primary); }
+.lib-search input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.lib-search-btn { font: inherit; font-weight: 600; font-size: 14px; padding: 0 16px; border-radius: 12px; border: 0; background: var(--accent); color: #fff; cursor: pointer; white-space: nowrap; }
+.lib-search.compact { margin: 10px 0 2px; }
+.lib-search.compact input { font-size: 14px; padding: 7px 11px; border-radius: 10px; }
+.lib-search.compact .lib-search-btn { padding: 0 12px; border-radius: 10px; font-size: 13px; }
+.lib-hero .lib-search { margin: 8px 0 10px; }
+.lib-hero .lib-search input { font-size: 17px; padding: 13px 16px; }
+.lib-evs { list-style: none; margin: 0; padding: 0; }
+.lib-ev { display: grid; grid-template-columns: 74px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 7px 0; border-top: 1px solid var(--grid); }
+.lib-ev:first-child { border-top: 0; }
+.lib-ev-when { font-size: 13px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+.lib-ev-when b { display: block; color: var(--text-primary); font-size: 13px; }
+.lib-ev-main { min-width: 0; }
+.lib-ev-title { font-weight: 600; color: var(--text-primary); text-decoration: none; }
+.lib-ev-title:hover { text-decoration: underline; }
+.lib-ev-main small { display: block; font-size: 12.5px; color: var(--text-muted); }
+.lib-star { color: #e0a400; font-size: 13px; }
+.lib-ev.dim { opacity: .62; }
+.lib-badge { font-size: 10.5px; font-weight: 700; letter-spacing: .04em; padding: 2px 6px; border-radius: 6px; border: 1px solid var(--border); color: var(--text-muted); }
+.lib-badge.local { color: #fff; border-color: transparent; }
+.lib-badge.b-kan { background: var(--series-1); }
+.lib-badge.b-aft { background: var(--series-6); }
+.lib-evs.mini .lib-ev { grid-template-columns: 64px minmax(0, 1fr) auto; padding: 5px 0; }
+.lib-evs.mini .lib-ev-title { font-size: 13.5px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lib-evs.mini .lib-ev-when, .lib-evs.mini .lib-ev-when b { font-size: 12px; }
+.size-s .lib-evs.mini .lib-ev { grid-template-columns: minmax(0, 1fr) auto; }
+.size-s .lib-evs.mini .lib-ev-when { grid-column: 1 / -1; }
+.size-s .lib-evs.mini .lib-ev-when b { display: inline; margin-right: 4px; }
+.lib-closed { margin: 10px 0 0; padding: 8px 12px; border-radius: 10px; font-size: 13.5px; background: color-mix(in oklab, #e0a400 14%, var(--surface-1)); border: 1px solid color-mix(in oklab, #e0a400 45%, transparent); }
+.lib-closed.compact { margin: 6px 0 0; padding: 4px 10px; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kpd > .lib-closed { margin: 0; }
+.lib-branch-head { display: flex; align-items: center; gap: 8px; }
+.lib-branch-head h3 { margin: 0; }
+.lib-branch-next { margin: 8px 0 0; font-size: 14px; }
+.lib-branch-next span { color: var(--text-muted); }
+.lib-filters .chips { margin-bottom: 8px; }
+.lib-day h4 { margin: 14px 0 2px; font-size: 13px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-muted); }
+@media (max-width: 720px) { .lib-ev { grid-template-columns: 62px minmax(0, 1fr) auto; } }
+.lib-closed { flex-shrink: 0; }
+.lib-evs.mini .lib-ev { grid-template-columns: 112px minmax(0, 1fr) auto; align-items: center; }
+.lib-evs.mini .lib-ev.no-badge { grid-template-columns: 112px minmax(0, 1fr); }
+.lib-evs.mini .lib-ev-when { white-space: nowrap; }
+.lib-evs.mini .lib-ev-when b { display: inline; }
+.size-s .lib-evs.mini .lib-ev { grid-template-columns: minmax(0, 1fr) auto; row-gap: 0; }
+.size-s .lib-evs.mini .lib-ev-when { grid-column: 1 / -1; }
+.size-m .lib-search.compact, .size-s .lib-search.compact { margin-bottom: 6px; }
+.lib-days .lib-day { margin: 0; padding: 0; } .lib-day h4 { margin: 12px 0 2px; }
+.lib-status { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 6px 0 2px; font-size: 13px; color: var(--text-secondary); flex-shrink: 0; }
+.lib-status > span { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.lib-status i { width: 8px; height: 8px; border-radius: 50%; }
+.lib-status i.on { background: #2bb24c; }
+.lib-status i.off { background: var(--text-muted); }
+.lib-branch .lib-status { margin-top: 8px; }
+.lib-branch .lib-status .lib-badge { display: none; }
+/* Library logo */
+.lib-tile-head { position: relative; }
+.lib-tile-head .tile-head { padding-right: 64px; }
+.lib-mark { position: absolute; top: -4px; right: 18px; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: #fff; box-shadow: 0 2px 8px rgb(0 0 0 / .3); pointer-events: none; }
+.lib-mark img { width: 30px; height: auto; display: block; margin-top: 2px; }
+.lib-hero { position: relative; }
+.lib-logo { float: right; margin: 0 0 8px 16px; background: #fff; border-radius: 14px; padding: 10px 14px; }
+.lib-logo img { display: block; height: 72px; width: auto; }
+.lib-hero .lib-search { clear: right; }
+@media (max-width: 720px) { .lib-logo { float: none; display: inline-block; margin: 0 0 10px; } .lib-logo img { height: 56px; } }

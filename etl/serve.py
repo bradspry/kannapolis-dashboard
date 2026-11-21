@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import functools
+import importlib
 import http.server
 import json
 import re
@@ -56,6 +57,7 @@ def ensure_fresh() -> None:
     out = DIST / "index.html"
     if not out.exists() or newest_source_mtime() > out.stat().st_mtime:
         log("serve: sources changed — rebuilding")
+        importlib.reload(build_site)  # pick up edits to the build code itself without restarting the server
         build_site.main()
 
 
