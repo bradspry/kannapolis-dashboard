@@ -74,7 +74,7 @@ It prints the address to open on your phone (for example `http://192.168.1.20:51
 | Growth & Property | [Cabarrus County GIS open data](https://location.cabarruscounty.us/arcgisservices/rest/services/OpenData) (current and yearly snapshots) | Automatic |
 | Land Use & Zoning | Cabarrus County GIS, *Kannapolis Zoning*: acres by category and district; zoning map (drawn on the XL tile, interactive in the window) | Automatic |
 | Budget & Debt | City budget ordinances, budget books and audited financial reports (PDFs) | **Machine-parsed**: [`data/manual/README.md`](data/manual/README.md) |
-| Debt Service | FY 2026–27 adopted budget, loan by loan, checked against the ordinance totals | **Machine-parsed**: `data/manual/debt_service_fy2027.csv` |
+| City Debt | Total owed from the latest audit (ACFR); FY 2026–27 payments loan by loan, checked against the ordinance totals | **Machine-parsed**: `data/manual/debt_service_fy2027.csv` |
 | City News | The City's [news page](https://www.kannapolisnc.gov/news) | Automatic, daily |
 | Upcoming Events | The City's [events calendar](https://www.kannapolisnc.gov/Community/Calendar) RSS feed; repeating events merged (meetings never are) | Automatic, daily |
 | Public Meetings | The City's [CivicClerk portal](https://kannapolisnc.portal.civicclerk.com) API, with agendas | Automatic, daily |

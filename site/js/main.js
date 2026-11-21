@@ -71,7 +71,7 @@ function main() {
   win("growth", { title: "Growth & Property", icon: "growth", color: "var(--icon-3)", render: () => renderGrowth(D.property, D.boundaries, D.grid) });
   if (D.zoning && D.zoningGeo) win("land", { title: "Land Use & Zoning", icon: "land", color: "var(--icon-6)", render: () => renderLand(D.zoning, D.zoningGeo) });
   win("budget", { title: "Budget & Debt", icon: "budget", color: "var(--icon-7)", render: () => renderBudget(D.budget) });
-  if (D.budget.debt_service_fy2027) win("debt-service", { title: "Debt Service", icon: "debt", color: "var(--icon-2)", render: () => renderDebtService(D.budget) });
+  if (D.budget.debt_service_fy2027) win("debt-service", { title: "City Debt", icon: "debt", color: "var(--icon-2)", render: () => renderDebtService(D.budget) });
   if (D.news) win("news", { title: "City News", icon: "news", color: "var(--icon-5)", render: () => renderNews(D.news) });
   if (D.police) win("police", { title: "Kannapolis Police", icon: "police", color: "var(--icon-1)", render: () => renderPolice(D.police, D.org) });
   if (D.fire) win("fire", { title: "Kannapolis Fire Department", icon: "fire", color: "var(--icon-2)", render: () => renderFire(D.fire, D.org) });
@@ -98,6 +98,12 @@ function main() {
   onWeather(() => {
     if (!document.body.classList.contains("is-dragging")) renderHome();
     refreshWindow("weather");
+  });
+  // Dashboard Feedback: add which widget is open (if any) and the page address to the email.
+  document.getElementById("feedback-btn")?.addEventListener("click", (e) => {
+    const open = location.hash.slice(1), title = open && document.getElementById(`${open}-h`)?.textContent.trim();
+    const body = `${title ? `Widget: ${title}\n` : ""}Page: ${location.href}\n\nMy feedback:\n`;
+    e.currentTarget.href = `mailto:bradspry@gmail.com?subject=${encodeURIComponent("Kannapolis Civic Dashboard feedback")}&body=${encodeURIComponent(body)}`;
   });
   initOS({ defaultLayout: load("home_layout.json", { optional: true }) });
   defineTiles(() => tileDefs(D, colors()));

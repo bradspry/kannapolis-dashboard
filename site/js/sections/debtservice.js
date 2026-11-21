@@ -1,4 +1,4 @@
-// Debt Service widget: every loan payment in the adopted FY27 budget, by fund, plus payoff dates.
+// City Debt widget: total owed (latest audit), then every loan payment in the adopted FY27 budget, by fund, plus payoff dates.
 import { h, dataTable, legend, showTip, hideTip } from "../ui.js";
 import { tokens } from "../theme.js";
 import { usd, usdCompact, pct } from "../format.js";
@@ -39,11 +39,37 @@ export function renderDebtService(budget) {
   const sum = (k) => items.reduce((s, i) => s + i[k], 0);
 
   // ---------- tiles ----------
+  const owed = budget.debt_history.at(-1);
   document.getElementById("ds-tiles").replaceChildren(
-    tile("Total debt service, FY27", usdCompact(grand),
-      `${pct((100 * grand) / budget.headline.total_budget_fy2027)} of the ${usdCompact(budget.headline.total_budget_fy2027)} budget · ${usdCompact(sum("interest"))} is interest`),
-    ...byFund.map((f) => tile(f.label, usdCompact(f.total),
+    tile("Total debt owed", usdCompact(owed.total_debt),
+      `as of June 30, ${owed.fiscal_year} (latest audit) · ${usd(owed.debt_per_capita)} per resident`, "ds-owed-tile"),
+    tile("Payments this year (FY27)", usdCompact(grand),
+      `${pct((100 * grand) / budget.headline.total_budget_fy2027)} of the ${usdCompact(budget.headline.total_budget_fy2027)} budget · ${usdCompact(sum("principal"))} pays down what's owed, ${usdCompact(sum("interest"))} is interest`),
+    ...byFund.map((f) => tile(`${f.label} payments`, usdCompact(f.total),
       f === gf && gfShare != null ? `${pct(gfShare)} of General Fund spending · ${f.paidBy}` : f.paidBy)),
+  );
+
+  // ---------- what the City owes ----------
+  const prev = budget.debt_history.at(-2);
+  const owedParts = [
+    { key: "governmental_debt", label: "General government", sub: "City Hall, police HQ, fire stations, ballpark, downtown, parks; repaid mostly from taxes", color: t.series[0] },
+    { key: "business_debt", label: "Water, sewer & stormwater", sub: "repaid from utility bills and fees", color: t.series[1] },
+  ];
+  const change = owed.total_debt - prev.total_debt;
+  document.getElementById("ds-owed").replaceChildren(
+    h("figcaption", {},
+      h("h3", {}, `The City owes ${usd(owed.total_debt)}`),
+      h("p", { class: "sub" }, `All outstanding bonds, loans, notes and leases on June 30, ${owed.fiscal_year}, from the City's latest audited financial report. That's ${usdCompact(Math.abs(change))} ${change < 0 ? "less" : "more"} than a year earlier.`)),
+    h("div", { class: "ds-owed-bar", role: "img", "aria-label": owedParts.map((p) => `${p.label} ${usd(owed[p.key])}`).join(", ") },
+      owedParts.map((p) => h("span", { style: { flex: `${owed[p.key]} 1 0`, background: p.color } }))),
+    h("ul", { class: "ds-owed-list", role: "list" }, owedParts.map((p) => h("li", {},
+      h("i", { style: { background: p.color }, "aria-hidden": "true" }),
+      h("span", {}, h("b", {}, p.label), h("small", {}, p.sub)),
+      h("b", { class: "ds-owed-amt" }, usd(owed[p.key]), h("small", {}, pct((100 * owed[p.key]) / owed.total_debt, 0)))))),
+    h("p", { class: "note" },
+      `This year's ${usdCompact(sum("principal"))} in principal payments reduces the total; new borrowing adds to it. Loans taken out after June 30, ${owed.fiscal_year} won't show here until the next audit. `,
+      h("a", { href: "#budget" }, "See the 10-year trend in Budget & Debt"), ". Source: ",
+      h("a", { href: owed.source_url, target: "_blank", rel: "noopener" }, `FY${owed.fiscal_year} Annual Comprehensive Financial Report, Table 10`), "."),
   );
 
   // ---------- payments card ----------
@@ -117,8 +143,8 @@ export function renderDebtService(budget) {
   );
 }
 
-function tile(label, value, context) {
-  return h("div", { class: "tile" }, h("div", { class: "label" }, label), h("div", { class: "value" }, value), h("div", { class: "context" }, context));
+function tile(label, value, context, cls = "") {
+  return h("div", { class: `tile ${cls}`.trim() }, h("div", { class: "label" }, label), h("div", { class: "value" }, value), h("div", { class: "context" }, context));
 }
 
 function payRow(i, parts, max) {

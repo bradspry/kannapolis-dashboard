@@ -42,6 +42,9 @@
         </div>
       </div>
       <div class="topbar-actions">
+        <a id="feedback-btn" class="pill-btn" href="mailto:bradspry@gmail.com?subject=Kannapolis%20Civic%20Dashboard%20feedback" title="Email feedback about the dashboard" aria-label="Dashboard Feedback (email)">
+          <span aria-hidden="true">✉</span><span class="fb-text" aria-hidden="true">Dashboard Feedback</span>
+        </a>
         <button id="edit-toggle" class="pill-btn" type="button" aria-pressed="false" title="Hide or restore widgets">
           <span class="label">Edit</span>
         </button>
@@ -127,10 +130,11 @@
 
     <section id="debt-service" aria-labelledby="debt-service-h">
       <header class="section-head">
-        <h2 id="debt-service-h">Debt Service</h2>
-        <p class="section-sub">Every loan payment in the City's adopted FY 2026–27 budget</p>
+        <h2 id="debt-service-h">City Debt</h2>
+        <p class="section-sub">What the City owes, and every loan payment in the adopted FY 2026–27 budget</p>
       </header>
       <div id="ds-tiles" class="tiles"></div>
+      <figure class="card" id="ds-owed" style="margin-top:16px"></figure>
       <div class="grid" style="margin-top:16px">
         <figure class="card span-2" id="ds-payments"></figure>
         <figure class="card" id="ds-payoff"></figure>

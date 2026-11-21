@@ -623,19 +623,22 @@ export function tileDefs(data, COLORS) {
       },
     },
     ds.length && {
-      id: "debt-service", opens: "debt-service", size: "s", label: "Debt Service",
+      id: "debt-service", opens: "debt-service", size: "s", label: "City Debt",
       build: (size) => {
         const sum = (key) => ds.reduce((s, i) => s + i[key], 0);
         const tot = ds.reduce((s, i) => s + dsTot(i), 0);
         const parts = [{ label: "Principal", v: sum("principal"), c: t.series[0] }, { label: "Interest", v: sum("interest"), c: t.series[1] }, { label: "Issuance & new debt", v: sum("other"), c: t.series[2] }];
         const bar = h("div", { class: "mini-bar", "aria-hidden": "true" }, parts.map((p) => h("span", { style: { flex: `${p.v} 1 0`, background: p.c } })));
         const legend = (n) => h("ul", { class: "mini-legend" }, parts.slice(0, n).map((p) => h("li", {}, h("i", { style: { background: p.c } }), `${p.label} ${usdCompact(p.v)}`)));
-        const body = [head("debt", COLORS.debt, "Debt Payments"), big(usdCompact(tot)), h("div", { class: "tile-meta" }, `this year · ${usd(debt.debt_per_capita)} debt per resident`)];
-        if (size === "s") return h("div", { class: "tile-body" }, ...body, bar, legend(2));
-        if (size === "m") return h("div", { class: "tile-body" }, ...body, bar, legend(3));
-        const topPay = ds.filter((i) => dsTot(i) > 0).sort((a, b) => dsTot(b) - dsTot(a)).slice(0, size === "xl" ? 8 : 5);
-        return h("div", { class: "tile-body" }, ...body, bar, legend(3),
-          h("div", { class: "mini-head" }, "Biggest payments"),
+        // Lead with what the City owes (latest audit); this year's payments come second.
+        const body = [head("debt", COLORS.debt, "City Debt"), big(usdCompact(debt.total_debt)),
+          h("div", { class: "tile-meta" }, `total owed · June 30, ${debt.fiscal_year} audit · ${usd(debt.debt_per_capita)} per resident`)];
+        const pay = (n) => h("div", { class: "ds-tile-pay" }, h("div", { class: "mini-head" }, `Payments this year (FY27): ${usdCompact(tot)}`), bar, n ? legend(n) : null);
+        if (size === "s") return h("div", { class: "tile-body" }, ...body, pay(0));
+        if (size === "m") return h("div", { class: "tile-body" }, ...body, pay(3));
+        const topPay = ds.filter((i) => dsTot(i) > 0).sort((a, b) => dsTot(b) - dsTot(a)).slice(0, size === "xl" ? 8 : 4);
+        return h("div", { class: "tile-body" }, ...body, pay(3),
+          h("div", { class: "mini-head" }, "Biggest payments this year"),
           h("ul", { class: `mini-list money ${size === "xl" ? "cols-2" : ""}` }, topPay.map((i) => h("li", {}, h("span", {}, i.project), h("b", {}, usdCompact(dsTot(i)))))));
       },
     },
