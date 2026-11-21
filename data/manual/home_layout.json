@@ -23,18 +23,15 @@
     "people",
     "budget",
     "debt-service",
-    "g-tax-rate",
     "growth",
+    "g-tax-rate",
     "g-debt-policy",
-    "g-owners",
     "g-debt-limit",
     "land",
-    "about"
+    "about",
+    "g-owners"
   ],
-  "hidden": [
-    "g-owners",
-    "g-tax-rate"
-  ],
+  "hidden": [],
   "sizes": {
     "meetings": "m",
     "news": "m",
@@ -47,7 +44,7 @@
     "events": "l",
     "land": "xl",
     "weather": "m",
-    "g-debt-limit": "m",
+    "g-debt-limit": "s",
     "g-tax-rate": "s",
     "g-owners": "s",
     "baseball": "m",
@@ -60,7 +57,7 @@
     "police": "m",
     "waste": "l",
     "drought": "m",
-    "g-debt-policy": "m",
+    "g-debt-policy": "s",
     "library": "l"
   },
   "spacers": []
