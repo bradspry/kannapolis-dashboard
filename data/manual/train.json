@@ -7,8 +7,8 @@
     "phone": "(704) 932-1591"
   },
   "services": {
-    "Piedmont": "N.C. Department of Transportation's own trains between Charlotte and Raleigh, operated by Amtrak, every day.",
-    "Carolinian": "Amtrak's daytime train between Charlotte and New York City, through Raleigh, Richmond, Washington, D.C., Baltimore and Philadelphia."
+    "Piedmont": "Piedmont trains are owned and operated by the N.C. Department of Transportation, with daily service between Charlotte and Raleigh.",
+    "Carolinian": "The Carolinian runs between Charlotte and Raleigh, continuing to Richmond, Va., Washington, D.C. and New York."
   },
   "phones": {
     "info": "1-800-BY-TRAIN",
@@ -24,9 +24,11 @@
     "deals": "https://www.ncbytrain.org/deals",
     "baggage": "https://www.ncbytrain.org/passenger-services/baggage",
     "amtrak_app": "https://www.amtrak.com/get-mobile-application-and-access",
-    "home": "https://www.ncbytrain.org/"
+    "home": "https://www.ncbytrain.org/",
+    "kids": "https://www.ncbytrain.org/deals/kids-under-12-ride-half-every-day"
   },
   "logo": "photos/local/ncbytrain-logo.png",
   "photo": "photos/local/kannapolis-station.jpg",
-  "photo_credit": "Kannapolis Station, N.C. Department of Transportation (NC By Train)"
+  "photo_credit": "Kannapolis Station, N.C. Department of Transportation (NC By Train station page)",
+  "kids": "Children 2–12 ride for half the adult fare, and one infant under 2 rides free on the lap of each adult paying full fare."
 }

@@ -1,8 +1,12 @@
-"""NC By Train: Kannapolis Station (KAN) train schedule, station hours, services and connections,
-read from the station's page on ncbytrain.org (N.C. Department of Transportation Rail Division).
+"""NC By Train: every train that stops at Kannapolis Station (KAN), from ncbytrain.org
+(N.C. Department of Transportation Rail Division).
 
-https://www.ncbytrain.org/stations/kannapolis-kan
-robots.txt allows station pages (it blocks only admin, search and user paths; checked 2026-11-21).
+- Departure times: the Piedmont and Carolinian route schedules (/schedules/piedmont, /schedules/carolinian).
+  They're kept more current than the station page (in Nov 2026 the station page still had #76 at 5:30 PM
+  and #79 at 10:12 PM; the route pages had 6:00 PM and 8:23 PM).
+- Station hours, services, tickets and connections: the Kannapolis station page. Its own schedule table
+  is read too, only to report trains where it disagrees with the route schedules.
+robots.txt allows these pages (it blocks only admin, search and user paths; checked 2026-11-21).
 Links, phone numbers and the train descriptions are machine-parsed into data/manual/train.json."""
 from __future__ import annotations
 
@@ -17,6 +21,7 @@ import urllib.request
 from common import MANUAL, USER_AGENT, log, write_json
 
 PAGE = "https://www.ncbytrain.org/stations/kannapolis-kan"
+ROUTES = {"Piedmont": "https://www.ncbytrain.org/schedules/piedmont", "Carolinian": "https://www.ncbytrain.org/schedules/carolinian"}
 
 
 def get(url: str, retries: int = 3) -> str:
@@ -84,6 +89,26 @@ def schedule(page: str) -> tuple[str | None, list[dict]]:
     return effective, trains
 
 
+def route_trains(service: str, url: str) -> tuple[list[dict], str | None]:
+    """Each train on a route page that stops at Kannapolis, with its departure time there."""
+    page = get(url)
+    heads = list(re.finditer(r"<h2[^>]*>\s*(Southbound|Northbound) Train (\d+)\s*</h2>", page))
+    if not heads:
+        raise RuntimeError(f"train: no trains on {url}; the layout may have changed")
+    out = []
+    for i, m in enumerate(heads):
+        chunk = page[m.end():heads[i + 1].start() if i + 1 < len(heads) else len(page)]
+        stop = re.search(r"Kannapolis, N\.C\.\W*(\d{1,2}:\d{2}\s*[ap]\.m\.)", text(chunk))
+        if not stop:
+            continue  # this train runs through without stopping
+        route = text(re.search(r'<button class="accordion-button[^>]*>(.*?)</button>', chunk, re.S).group(1))
+        ends = [re.sub(r"^New York City$", "New York", x.strip()) for x in route.split(" to ")]  # as the station page says it
+        out.append({"direction": m.group(1).lower(), "time": clock(stop.group(1)), "number": int(m.group(2)), "service": service,
+                    "route": f"{ends[0]} to {ends[-1]}", "from": ends[0], "to": ends[-1], "via": ends[1:-1]})
+    modified = re.search(r"last modified on (\d{2})/(\d{2})/(\d{4})", page)
+    return out, f"{modified.group(3)}-{modified.group(1)}-{modified.group(2)}" if modified else None
+
+
 def service_table(page: str, heading: str) -> list[dict]:
     sec = tables_after(page, f"<h2>{heading}</h2>")
     table = re.search(r"<table.*?</table>", sec, re.S).group(0)
@@ -106,9 +131,24 @@ def service_table(page: str, heading: str) -> list[dict]:
 def main() -> None:
     info = json.loads((MANUAL / "train.json").read_text())
     page = get(PAGE)
-    effective, trains = schedule(page)
+    effective, posted = schedule(page)
+    trains, routes = [], {}
+    for service, url in ROUTES.items():
+        found, modified = route_trains(service, url)
+        trains += found
+        routes[service] = {"url": url, "modified": modified, "stops": len(found)}
+        time.sleep(1)
+    trains.sort(key=lambda t: t["time"])
     if len(trains) < 4:
-        raise RuntimeError(f"train: only {len(trains)} trains on the station page")
+        raise RuntimeError(f"train: only {len(trains)} trains stop at Kannapolis on the route schedules")
+    # Where the station page's own table disagrees with the route schedules (shown as a note).
+    by_num = {t["number"]: t for t in trains}
+    differs = [{"number": p["number"], "service": p["service"], "station_page": p["time"], "route_page": by_num[p["number"]]["time"] if p["number"] in by_num else None}
+               for p in posted if p["number"] not in by_num or by_num[p["number"]]["time"] != p["time"]]
+    differs += [{"number": t["number"], "service": t["service"], "station_page": None, "route_page": t["time"]}
+                for t in trains if t["number"] not in {p["number"] for p in posted}]
+    for d in differs:
+        log(f"train: #{d['number']} {d['service']}: station page {d['station_page'] or 'not listed'}, route schedule {d['route_page'] or 'no Kannapolis stop'}")
     hours = text(tables_after(page, "Hours:").split("</div>", 1)[0])
     hours = hours.replace("Hours:", "").strip()
     station_hours = re.search(r"(\d{1,2}:\d{2}\s*[ap]\.m\.)\s*to\s*(\d{1,2}:\d{2}\s*[ap]\.m\.)", hours)
@@ -122,8 +162,9 @@ def main() -> None:
     services = service_table(page, "Station Services")
     transport = service_table(page, "Transportation Services")
     sb = sum(t["direction"] == "southbound" for t in trains)
-    log(f"train: {len(trains)} trains at KAN ({sb} southbound, {len(trains) - sb} northbound), schedule effective {effective}")
-    write_json("train.json", {**info, "station": station, "effective": effective, "trains": trains,
+    log(f"train: {len(trains)} trains stop at KAN ({sb} southbound, {len(trains) - sb} northbound); "
+        + ", ".join(f"{k} schedule updated {v['modified']}" for k, v in routes.items()))
+    write_json("train.json", {**info, "station": station, "effective": effective, "trains": trains, "routes": routes, "station_page_differs": differs,
                               "station_services": services, "transport": transport,
                               "page_modified": f"{modified.group(3)}-{modified.group(1)}-{modified.group(2)}" if modified else None})
 

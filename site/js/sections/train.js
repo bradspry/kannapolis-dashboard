@@ -125,7 +125,9 @@ export function renderTrain(tr) {
   const s = tr.station;
   const svc = (name) => tr.station_services.find((x) => x.name === name);
   const ticketing = svc("Ticketing");
-  const effective = tr.effective ? new Date(`${tr.effective}T12:00`).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) : null;
+  const longDate = (d) => new Date(`${d}T12:00`).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+  const routeDates = Object.entries(tr.routes || {}).filter(([, r]) => r.modified).map(([name, r]) => `${name} ${longDate(r.modified)}`).join(", ");
+  const differs = (tr.station_page_differs || []).filter((d) => d.station_page && d.route_page);
 
   root.replaceChildren(
     h("section", { class: "card tr-hero" },
@@ -140,7 +142,7 @@ export function renderTrain(tr) {
     h("div", { class: "grid" }, dayColumn(tr, "southbound", now), dayColumn(tr, "northbound", now)),
 
     h("div", { class: "grid" }, Object.entries(tr.services).map(([name, about]) => h("section", { class: "card ub-way" },
-      h("h3", {}, `The ${name}`), h("p", { class: "gem-p" }, about),
+      h("h3", {}, `The ${name}`), h("p", { class: "gem-p" }, about, ` ${tr.trains.filter((t) => t.service === name).length} ${name} trains a day stop in Kannapolis.`),
       ext(tr.links[name.toLowerCase()], `Full ${name} schedule ↗`)))),
 
     h("div", { class: "grid" },
@@ -148,7 +150,7 @@ export function renderTrain(tr) {
         stationFacts(tr)),
       h("section", { class: "card" }, h("h3", {}, "Tickets"),
         ticketing ? h("ul", { class: "pk-rules" }, ticketing.items.map((x) => h("li", {}, ...[item(x)].flat()))) : null,
-        h("p", { class: "tile-meta" }, "Kids under 12 ride for half off every day. ", ext(tr.links.deals, "All deals ↗")))),
+        h("p", { class: "tile-meta" }, `${tr.kids} `, ext(tr.links.kids, "Details ↗"), " · ", ext(tr.links.deals, "All deals ↗")))),
 
     h("div", { class: "grid" },
       h("section", { class: "card" }, h("h3", {}, "At the station"),
@@ -158,7 +160,8 @@ export function renderTrain(tr) {
 
     h("div", { class: "pk-links" }, ext(tr.links.station, "Kannapolis station page ↗"), ext(tr.links.piedmont, "Piedmont schedule ↗"), ext(tr.links.carolinian, "Carolinian schedule ↗"),
       ext(tr.links.track, "Track your train (Amtrak) ↗"), ext(tr.links.baggage, "Baggage policy ↗"), ext(tr.links.amtrak_app, "Amtrak app ↗"), ext(tr.links.home, "NC By Train ↗")),
-    h("p", { class: "note" }, `Schedule ${effective ? `effective ${effective}, ` : ""}read daily from the NC By Train Kannapolis station page (N.C. Department of Transportation; updated ${tr.generated}). Schedules can change without notice. ${tr.photo_credit ? `Photo: ${tr.photo_credit}.` : ""}`));
+    differs.length ? h("p", { class: "note" }, `NC By Train's Kannapolis station page lists ${differs.map((d) => `#${d.number} at ${fmtTime(d.station_page)}`).join(" and ")}; the newer route schedules say ${differs.map((d) => fmtTime(d.route_page)).join(" and ")}, which is what this page shows.`) : null,
+    h("p", { class: "note" }, `Departure times read daily from NC By Train's Piedmont and Carolinian schedules${routeDates ? ` (last changed ${routeDates})` : ""}; station hours, services, tickets and connections from its Kannapolis station page (N.C. Department of Transportation; read ${tr.generated}). Schedules can change without notice. ${tr.photo_credit ? `Photo: ${tr.photo_credit}.` : ""}`));
 }
 
 function stationFacts(tr) {

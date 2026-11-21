@@ -69,7 +69,7 @@ It prints the address to open on your phone (for example `http://192.168.1.20:51
 | Waste Collection | City [Garbage, Recycling & Yard Waste](https://www.kannapolisnc.gov/Garbage) and [What's My Day?](https://www.kannapolisnc.gov/Government-Departments/Garbage-Recycling-Yard-Waste/Whats-My-Day) pages: report a missed pickup, holiday delays and loose-leaf season (on device), what goes where, set-out rules, carts; links to the City's [CARTology](https://apps.apple.com/us/app/cartology/id1368037662) pickup-day lookup and app | **Machine-parsed**: `data/manual/waste.json` |
 | Current Drought Conditions | City [Drought Guidance](https://www.kannapolisnc.gov/drought) page (current water-conservation level and news) and the [U.S. Drought Monitor](https://droughtmonitor.unl.edu/) for Cabarrus and Rowan counties (weekly, two years of history) | City level and Drought Monitor: automatic, daily. Tips and level descriptions: **machine-parsed** (`data/manual/drought.json`) |
 | Cabarrus County Public Library | Library [events calendar](https://cabarrus-cep.bc.sirsidynix.net/events/list/) (public API: programs and closures at every branch, Kannapolis Library and Afton Ridge first) and a search box that opens the [library catalog](https://cabarrus.ent.sirsi.net/client/en_US/default/) (the catalog itself isn't scraped) | Events: automatic, daily. Branches: **machine-parsed** (`data/manual/library.json`) |
-| NC By Train | NC By Train [Kannapolis station page](https://www.ncbytrain.org/stations/kannapolis-kan) (N.C. Department of Transportation): every Piedmont and Carolinian departure, with the next train and countdowns worked out on the device, station hours, tickets, services and connections | Schedule: automatic, daily. Links and train descriptions: **machine-parsed** (`data/manual/train.json`) |
+| NC By Train | NC By Train (N.C. Department of Transportation) [Piedmont](https://www.ncbytrain.org/schedules/piedmont) and [Carolinian](https://www.ncbytrain.org/schedules/carolinian) schedules (every departure from Kannapolis, with the next train and countdowns worked out on the device) and the [Kannapolis station page](https://www.ncbytrain.org/stations/kannapolis-kan) (station hours, tickets, services and connections) | Schedule: automatic, daily. Links and train descriptions: **machine-parsed** (`data/manual/train.json`) |
 | Weather | [National Weather Service](https://www.weather.gov/) API: forecast, hourly, alerts, and observations from Concord Regional Airport; [NOAA's national radar mosaic](https://opengeo.ncep.noaa.gov/geoserver/conus/conus_bref_qcd/ows?service=WMS&request=GetCapabilities) behind the tile and as an animated past-hour radar map in the window | **Live** in the browser every 15 min (daily backup copy of the forecast) |
 | Gauges | Derived from the budget, audit and Census data below | Automatic |
 | Residents | U.S. Census ACS 5-year via [Census Reporter](https://censusreporter.org/profiles/16000US3735200-kannapolis-nc/): population trend, income, home value, age vs. North Carolina | Automatic |
@@ -88,7 +88,7 @@ It prints the address to open on your phone (for example `http://192.168.1.20:51
 Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a `source_url` that opens the official PDF at the cited page (for example `…FY%2027%20Adopted%20Budget.pdf#page=114`). The build fails if a row's citation is missing. The full registry is [`data/manual/sources.csv`](data/manual/sources.csv); its `widgets` column ties each source to the widgets it feeds, and every widget window ends with an automatic **Sources** line built from it. The table below is generated from the same registry on every build, so the README always cites every source:
 
 <!-- sources:start -->
-83 sources, generated from `data/manual/sources.csv`.
+87 sources, generated from `data/manual/sources.csv`.
 
 | Source | Publisher | Format | Used for |
 |---|---|---|---|
@@ -172,9 +172,13 @@ Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a
 | [Cabarrus County Public Library catalog (search only; not scraped)](https://cabarrus.ent.sirsi.net/client/en_US/default/) | Cabarrus County Public Library | Web page | Catalog search box |
 | [Cabarrus County Public Library: Locations (branch addresses](Web page) | phones and hours) | Cabarrus County Public Library | https://cabarrus.ent.sirsi.net/client/en_US/default/?rm=LOCATIONS0%7C%7C%7C1%7C%7C%7C0%7C%7C%7Ctrue |
 | [Cabarrus County Public Library System logo](https://cabarrus-cep.bc.sirsidynix.net/wp-content/uploads/2022/09/CABARRUS_newlogo.png) | Cabarrus County Public Library | PNG | Library logo |
-| [NC By Train: Kannapolis (KAN) station page](https://www.ncbytrain.org/stations/kannapolis-kan) | N.C. Department of Transportation Rail Division | Web page | Train schedule, station hours, services, tickets and connections |
-| [NC By Train: Piedmont and Carolinian schedules](https://www.ncbytrain.org/schedules/piedmont) | N.C. Department of Transportation Rail Division | Web page | Piedmont runs every day (service description) |
-| [NC By Train logo and Kannapolis Station photo](https://www.ncbytrain.org/stations/kannapolis-kan) | N.C. Department of Transportation Rail Division | PNG/JPEG | Logo and station photo |
+| [NC By Train: Piedmont schedule](https://www.ncbytrain.org/schedules/piedmont) | N.C. Department of Transportation Rail Division | Web page | Piedmont departure times at Kannapolis (daily); which trains stop here; service description |
+| [NC By Train: Carolinian schedule](https://www.ncbytrain.org/schedules/carolinian) | N.C. Department of Transportation Rail Division | Web page | Carolinian departure times at Kannapolis; service description |
+| [NC By Train: Kannapolis (KAN) station page](https://www.ncbytrain.org/stations/kannapolis-kan) | N.C. Department of Transportation Rail Division | Web page | Station address, phone, hours, ticketing, services (incl. baggage policy link), transit, taxi and rental car; its schedule table is checked against the route schedules |
+| [NC By Train: Kids Under 12 Ride for Half Off Every Day](https://www.ncbytrain.org/deals/kids-under-12-ride-half-every-day) | N.C. Department of Transportation Rail Division | Web page | Child and infant fares |
+| [NC By Train logo](https://files.nc.gov/ncbytrain/NCByTrain_Logo.png) | N.C. Department of Transportation Rail Division | PNG | Logo |
+| [Kannapolis Station photo (NC By Train)](https://files.nc.gov/ncbytrain/styles/_inline_extra_large_/public/sp_migrate/media/ren-RAIL62_1.jpg) | N.C. Department of Transportation Rail Division | JPEG | Station photo |
+| [Amtrak: Track Your Train](https://www.amtrak.com/track-your-train.html) | Amtrak | Web page | Linked for live train status (not read by the dashboard) |
 <!-- sources:end -->
 
 The news and meetings harvesters are adapted from [kspider](https://github.com/bradspry/kannapolis-news-wire).
