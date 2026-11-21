@@ -1681,7 +1681,8 @@ body::before {
 
 /* Dashboard Feedback button (header) */
 #feedback-btn { text-decoration: none; }
-@media (max-width: 720px) { #feedback-btn .fb-text { display: none; } #feedback-btn { padding: 6px 11px; } }
+#feedback-btn .fb-short { display: none; }
+@media (max-width: 720px) { #feedback-btn .fb-long { display: none; } #feedback-btn .fb-short { display: inline; } #feedback-btn { padding: 6px 11px; } }
 
 /* City Debt: total owed */
 .ds-owed-tile .value { color: var(--text-primary); }
@@ -1720,3 +1721,5 @@ body::before {
 .ub-m .ub-fee-line { margin: 8px 0 0; font-size: 12.5px; }
 .ub-m .mini-head.bb-mh { margin-top: 0; }
 .ub-m .ub-fee-line { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12px; }
+#feedback-btn:hover { color: #fff; filter: brightness(1.08); }
+@media (max-width: 520px) { .topbar-row { flex-wrap: wrap; row-gap: 8px; } .topbar-actions { width: 100%; } .topbar-actions #feedback-btn { margin-right: auto; } }
