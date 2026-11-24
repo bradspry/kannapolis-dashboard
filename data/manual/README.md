@@ -7,7 +7,7 @@ The City publishes its budget and finances only as PDFs, so these CSVs are machi
 
 | File | What | Where to find new numbers |
 |---|---|---|
-| `home_layout.json` | Default home-screen tile order and hidden tiles (optional) | Written by Edit → *Save as default home page* while running `./serve.sh`; safe to edit by hand or delete |
+| `home_layout.json` | Default layout of every folder tab: `{"tabs": {"home": {order, hidden, sizes, spacers}, "city": {...}, ...}}` (optional; a tab missing here starts with its widgets from `site/js/tabs.js`) | Written by Edit → *Save as default (all tabs)* while running `./serve.sh`; safe to edit by hand or delete |
 | `sources.csv` | Every official source: id, title, publisher, format, URL, what it's used for, and `widgets` (space-separated widget ids it feeds; each widget window lists these as its Sources) | Add a row for any new source; the build will not cite a widget that isn't tagged |
 | `general_fund_by_function.csv` | Adopted General Fund spending by function | Budget ordinance, "Section VIII – General Fund" (expenditures) |
 | `general_fund_revenue.csv` | Adopted General Fund revenue by source | Budget ordinance, "Section I – General Fund" (revenues) |

@@ -57,17 +57,20 @@
 
   <main id="main" class="wrap">
     <div id="edit-bar" class="edit-bar" hidden>
-      <p class="edit-hint">Drag widgets to rearrange (on a phone, drag the <span aria-hidden="true">⠿</span> handle). Use “–” to hide one.</p>
+      <p class="edit-hint">Arranging this tab: drag widgets to rearrange (on a phone, drag the <span aria-hidden="true">⠿</span> handle). Use “–” to take one off this tab; add any widget from the list below. Each tab has its own layout.</p>
       <div class="edit-actions">
         <button id="add-spacer" class="pill-btn" type="button">+ Blank space</button>
         <button id="reset-layout" class="pill-btn" type="button">Reset layout</button>
-        <button id="save-default" class="pill-btn primary" type="button" hidden>Save as default home page</button>
+        <button id="save-default" class="pill-btn primary" type="button" hidden>Save as default (all tabs)</button>
       </div>
-      <p id="edit-local-note" class="edit-status" hidden>Your layout is saved in this browser. To change the default home page for everyone, run <code>./serve.sh</code> and use <b>Save as default home page</b> there.</p>
+      <p id="edit-local-note" class="edit-status" hidden>Your layout is saved in this browser. To change the default tabs for everyone, run <code>./serve.sh</code> and use <b>Save as default (all tabs)</b> there.</p>
       <p id="edit-status" class="edit-status" role="status" aria-live="polite"></p>
     </div>
-    <div id="home" class="home-grid" aria-label="Widgets"></div>
-    <div id="hidden-tray" class="hidden-tray" hidden></div>
+    <nav id="folder-tabs" class="folder-tabs" role="tablist" aria-label="Dashboard tabs"></nav>
+    <div id="folder" class="folder" role="tabpanel">
+      <div id="home" class="home-grid" aria-label="Widgets"></div>
+      <div id="hidden-tray" class="hidden-tray" hidden></div>
+    </div>
   </main>
 
   <!-- Full widgets. Each <section> moves into the window when its widget is opened. -->

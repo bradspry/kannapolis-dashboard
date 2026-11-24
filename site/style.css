@@ -1869,3 +1869,46 @@ body::before {
 @media (max-width: 520px) { .wx-five li:nth-child(n+4) { display: none; } .wx-five { justify-content: space-around; } }
 /* Phones: the top bar scrolls away with the page (more room for widgets); it stays put while editing so Done is reachable. */
 @media (max-width: 520px) { body:not(.editing) .topbar { position: relative; } }
+/* ---------- folder tabs (manila folders) ---------- */
+:root { --tab-home: #c49a3c; --manila: #f3e6c4; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --tab-home: #b8923f; --manila: #2a2417; } }
+:root[data-theme="dark"] { --tab-home: #b8923f; --manila: #2a2417; }
+.ear-home { --c: var(--tab-home); }
+.ear-city { --c: var(--series-1); }
+.ear-fun { --c: var(--series-2); }
+.ear-jobs { --c: var(--series-6); }
+.ear-transportation { --c: var(--series-7); }
+.folder-home { --c: var(--tab-home); --folder-bg: color-mix(in oklab, var(--manila) 55%, var(--page)); }
+.folder-city { --c: var(--series-1); }
+.folder-fun { --c: var(--series-2); }
+.folder-jobs { --c: var(--series-6); }
+.folder-transportation { --c: var(--series-7); }
+.folder { --folder-bg: color-mix(in oklab, var(--c) 7%, var(--page));
+  position: relative; background: var(--folder-bg); border: 1px solid color-mix(in oklab, var(--c) 50%, var(--border));
+  border-radius: 0 20px 20px 20px; padding: 16px; box-shadow: 0 1px 0 color-mix(in oklab, var(--c) 30%, transparent), 0 18px 40px -28px rgba(0, 0, 0, .5); }
+.folder-tabs { display: flex; align-items: flex-end; gap: 4px; margin-top: 4px; overflow-x: auto; scrollbar-width: none; position: relative; z-index: 1; }
+.folder-tabs::-webkit-scrollbar { display: none; }
+.folder-tab { flex: none; font: inherit; font-size: 14.5px; font-weight: 650; cursor: pointer; color: var(--text-secondary);
+  padding: 8px 18px 7px; margin-bottom: -1px; border: 1px solid color-mix(in oklab, var(--c) 45%, var(--border)); border-bottom: 0;
+  border-radius: 12px 12px 0 0; background: color-mix(in oklab, var(--c) 16%, var(--surface-1));
+  box-shadow: inset 0 4px 0 var(--c); transition: padding .15s, color .15s; }
+.folder-tab:hover { color: var(--text-primary); }
+.folder-tab:focus-visible { outline: 2px solid var(--c); outline-offset: 2px; }
+.folder-tab[aria-selected="true"] { color: var(--text-primary); padding-top: 12px; padding-bottom: 9px; position: relative; z-index: 2;
+  border-color: color-mix(in oklab, var(--c) 50%, var(--border)); }
+/* The open tab takes its folder's color, so tab and folder read as one piece. */
+.folder-tab.ear-home[aria-selected="true"] { background: color-mix(in oklab, var(--manila) 55%, var(--page)); }
+.folder-tab:not(.ear-home)[aria-selected="true"] { background: color-mix(in oklab, var(--c) 7%, var(--page)); }
+.tab-short { display: none; }
+/* Each widget's folder tab, in its subject's color */
+.tile-ear { position: absolute; top: 0; left: 22px; width: 56px; height: 5px; border-radius: 0 0 6px 6px; background: var(--c); z-index: 1; pointer-events: none; }
+.tab-empty { grid-column: 1 / -1; align-self: start; padding: 28px 20px; border: 1px dashed color-mix(in oklab, var(--c, var(--border)) 50%, var(--border)); border-radius: 20px; color: var(--text-secondary); text-align: center; }
+/* Add a widget */
+.folder .hidden-tray { flex-direction: column; align-items: stretch; gap: 10px; background: var(--surface-1); }
+.tray-label { font-weight: 650; color: var(--text-primary); font-size: 14px; }
+.tray-group { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.tray-group-name { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); min-width: 120px;
+  padding-left: 10px; border-left: 4px solid var(--c); }
+@media (max-width: 720px) { .folder { padding: 12px 10px; border-radius: 0 16px 16px 16px; } .folder-tab { padding: 7px 13px 6px; font-size: 13.5px; } .folder-tab[aria-selected="true"] { padding-top: 10px; } }
+@media (max-width: 520px) { .tab-long { display: none; } .tab-short { display: inline; } .tray-group-name { min-width: 0; width: 100%; } }
+.home-grid:has(> .tab-empty) { grid-auto-rows: auto; }

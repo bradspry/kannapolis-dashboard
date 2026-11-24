@@ -36,10 +36,10 @@ The home screen is a grid of widget tiles. **Tap a tile to open the full widget 
 **Edit** lets you:
 - **Resize** tiles: S, M, L, XL. Bigger sizes show more detail; XL shows as L on phones.
 - **Rearrange** tiles by dragging. On a phone, drag the ⠿ handle; with a keyboard, focus the handle and use the arrow keys.
-- **Hide or restore** tiles.
+- **Add or remove** tiles: any widget can go on any tab (Home, City, Entertainment, Jobs, Transportation); “–” takes it off the current tab, and **Add a widget** lists everything not on it, by subject.
 - **Add blank space**: an invisible tile, resizable and draggable like the others, for leaving gaps in the layout. Its “–” deletes it.
 
-Your layout is saved in your browser. While `./serve.sh` is running, **Save as default home page** writes it to `data/manual/home_layout.json`, the home page for every visitor once committed. **Reset layout** returns to the default.
+The dashboard is a set of color-coded folder tabs, each with its own layout (`?tab=city` links straight to one). Home shows every widget unless it's removed, so new widgets appear there by themselves; the other tabs show only the widgets put on them. Your layouts are saved in your browser, one per tab. While `./serve.sh` is running, **Save as default (all tabs)** writes every tab to `data/manual/home_layout.json`, the default for every visitor once committed. **Reset** returns the current tab to its default.
 
 ## Testing on your phone
 

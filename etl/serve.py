@@ -3,7 +3,7 @@
     ./serve.sh   (runs this with Apple-signed /usr/bin/python3, which the macOS firewall allows;
                   unsigned Homebrew python/node are silently blocked. Keep this Python 3.9-compatible.)
 
-POST /api/layout saves the home-screen layout to data/manual/home_layout.json (Edit → Save as default).
+POST /api/layout saves every tab's layout to data/manual/home_layout.json (Edit → Save as default).
 """
 from __future__ import annotations
 
@@ -27,8 +27,18 @@ TILE_ID = re.compile(r"^[a-z0-9-]{1,40}$")
 
 
 def clean_layout(body: bytes) -> dict:
-    """Accept only {"order": [ids], "hidden": [ids], "sizes": {id: s|m|l|xl}, "spacers": [ids]}; nothing else reaches disk."""
+    """Accept only {"tabs": {tab id: one tab's layout}} (see clean_tab); nothing else reaches disk."""
     d = json.loads(body)
+    tabs = d.get("tabs")
+    if not isinstance(tabs, dict) or not tabs or len(tabs) > 12 or not all(isinstance(k, str) and TILE_ID.match(k) for k in tabs):
+        raise ValueError("bad tabs")
+    return {"tabs": {k: clean_tab(v) for k, v in tabs.items()}}
+
+
+def clean_tab(d) -> dict:
+    """One tab: {"order": [ids], "hidden": [ids], "sizes": {id: s|m|l|xl}, "spacers": [ids]}."""
+    if not isinstance(d, dict):
+        raise ValueError("bad tab")
     out = {}
     for key in ("order", "hidden"):
         ids = d.get(key, [])
@@ -87,14 +97,15 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             return
         try:
             length = int(self.headers.get("Content-Length") or 0)
-            if length > 20000:
+            if length > 100000:
                 raise ValueError("too large")
             layout = clean_layout(self.rfile.read(length))
         except Exception as e:
             self.send_json(400, {"ok": False, "error": str(e)})
             return
         LAYOUT.write_text(json.dumps(layout, indent=2) + "\n")
-        log(f"serve: {self.client_address[0]} saved the default home layout ({len(layout['order'])} tiles)")
+        log(f"serve: {self.client_address[0]} saved the default layout for {len(layout['tabs'])} tabs ("
+            + ", ".join(f"{k} {len(v['order'])}" for k, v in layout["tabs"].items()) + ")")
         self.send_json(200, {"ok": True})
 
     def do_GET(self):
