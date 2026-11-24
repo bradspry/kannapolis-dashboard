@@ -86,3 +86,35 @@ train_kids,NC By Train: Kids Under 12 Ride for Half Off Every Day,N.C. Departmen
 train_logo,NC By Train logo,N.C. Department of Transportation Rail Division,PNG,https://files.nc.gov/ncbytrain/NCByTrain_Logo.png,Logo,train
 train_photo,Kannapolis Station photo (NC By Train),N.C. Department of Transportation Rail Division,JPEG,https://files.nc.gov/ncbytrain/styles/_inline_extra_large_/public/sp_migrate/media/ren-RAIL62_1.jpg,Station photo,train
 amtrak_track,Amtrak: Track Your Train,Amtrak,Web page,https://www.amtrak.com/track-your-train.html,"Linked for live train status (not read by the dashboard)",train
+kannapolis_jobs,kannapolis-jobs (job scrapers for the Kannapolis area),Brad Spry,Python (GitHub),https://github.com/bradspry/kannapolis-jobs,"Harvests each employer's openings weekly, filtered to the Kannapolis area",job-city job-kcs job-cabarrus job-ccs job-rowancounty job-rss job-atrium job-cha job-monarch job-rccc job-uncc job-unc job-ncstate job-appstate job-uncg job-dhl job-chewy job-sysco job-gfs job-cfasupply job-macys job-corning job-lilly job-standardprocess job-momentec job-westrock job-foodlion job-lowesfoods job-shoeshow job-speedway job-rebel
+job_city,City of Kannapolis careers site,City of Kannapolis,Web page,https://www.governmentjobs.com/careers/kannapolis,"Job openings (Kannapolis), read weekly",job-city
+job_kcs,Kannapolis City Schools careers site,Kannapolis City Schools,Web page,https://www.applitrack.com/kannapolis/onlineapp/default.aspx?all=1,"Job openings (Kannapolis), read weekly",job-kcs
+job_cabarrus,Cabarrus County Government careers site,Cabarrus County Government,Web page,https://www.governmentjobs.com/careers/Cabarruscounty,"Job openings (Cabarrus County), read weekly",job-cabarrus
+job_ccs,Cabarrus County Schools careers site,Cabarrus County Schools,Web page,https://cabarrus.schoolspring.com/,"Job openings (Cabarrus County), read weekly",job-ccs
+job_rowancounty,Rowan County Government careers site,Rowan County Government,Web page,https://rowancountync.tylerportico.com/tess/citizen/jobs/job-list,"Job openings (Rowan County), read weekly",job-rowancounty
+job_rss,Rowan-Salisbury Schools careers site,Rowan-Salisbury Schools,Web page,https://rssk12.schoolspring.com/,"Job openings (Rowan County), read weekly",job-rss
+job_atrium,Atrium Health careers site,Atrium Health,Web page,https://careers.advocatehealth.org/,"Job openings (Kannapolis), read weekly",job-atrium
+job_cha,Cabarrus Health Alliance careers site,Cabarrus Health Alliance,Web page,https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=c25f2dd9-f40c-43eb-98d8-7e82e7033050&ccId=19000101_000001,"Job openings (Cabarrus County), read weekly",job-cha
+job_monarch,Monarch careers site,Monarch,Web page,https://monarch.wd5.myworkdayjobs.com/en-US/Monarch,"Job openings (Concord & Kannapolis), read weekly",job-monarch
+job_rccc,Rowan-Cabarrus Community College careers site,Rowan-Cabarrus Community College,Web page,https://rcccjobs.com/postings/search,"Job openings (Rowan & Cabarrus counties), read weekly",job-rccc
+job_uncc,UNC Charlotte careers site,UNC Charlotte,Web page,https://jobs.charlotte.edu/postings/search,"Job openings (Charlotte), read weekly",job-uncc
+job_unc,UNC Chapel Hill careers site,UNC Chapel Hill,Web page,https://unc.peopleadmin.com/postings/search,"Job openings (N.C. Research Campus, Kannapolis), read weekly",job-unc
+job_ncstate,NC State careers site,NC State,Web page,https://jobs.ncsu.edu/postings/search,"Job openings (N.C. Research Campus, Kannapolis), read weekly",job-ncstate
+job_appstate,App State careers site,App State,Web page,https://appstate.peopleadmin.com/postings/search,"Job openings (N.C. Research Campus, Kannapolis), read weekly",job-appstate
+job_uncg,UNC Greensboro careers site,UNC Greensboro,Web page,https://spartantalent.uncg.edu/postings/search,"Job openings (N.C. Research Campus, Kannapolis), read weekly",job-uncg
+job_dhl,DHL careers site,DHL,Web page,"https://careers.dhl.com/global/en/search-results?keywords=&p=ChIJPW97u5QIVIgRHdxKah_1bak&location=Kannapolis,%20NC,%20USA","Job openings (Kannapolis, Landis & China Grove), read weekly",job-dhl
+job_chewy,Chewy careers site,Chewy,Web page,https://careers.chewy.com/us/en/salisbury-nc-warehouse-and-fulfillment-center-jobs,"Job openings (Salisbury fulfillment center), read weekly",job-chewy
+job_sysco,Sysco careers site,Sysco,Web page,https://careers.sysco.com/en/search-jobs/Concord%2C%20Cabarrus%20County%2C%20NC,"Job openings (Concord), read weekly",job-sysco
+job_gfs,Gordon Food Service careers site,Gordon Food Service,Web page,https://gfs.wd5.myworkdayjobs.com/en-US/usjobs-gen-gfs/jobs,"Job openings (Kannapolis), read weekly",job-gfs
+job_cfasupply,Chick-fil-A Supply careers site,Chick-fil-A Supply,Web page,https://careers.chick-fil-a.com/supply/jobs/,"Job openings (Kannapolis), read weekly",job-cfasupply
+job_macys,Macy's careers site,Macy's,Web page,https://ebwh.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001,"Job openings (China Grove), read weekly",job-macys
+job_corning,Corning careers site,Corning,Web page,https://corningjobs.corning.com/search/,"Job openings (Concord), read weekly",job-corning
+job_lilly,Lilly careers site,Lilly,Web page,https://jobsearch.lilly.com/,"Job openings (Concord), read weekly",job-lilly
+job_standardprocess,Standard Process careers site,Standard Process,Web page,https://recruiting.ultipro.com/STA1020/JobBoard/1df7fbd1-d8cf-85ff-efe2-77bf30267012,"Job openings (Kannapolis), read weekly",job-standardprocess
+job_momentec,Momentec careers site,Momentec,Web page,https://www.paycomonline.net/v4/ats/web.php/portal/666553572663EC7F7F3472C2CF94B117/career-page,"Job openings (Kannapolis), read weekly",job-momentec
+job_westrock,Westrock Coffee careers site,Westrock Coffee,Web page,https://myjobs.adp.com/westrockcoffeeexternaljobs/cx,"Job openings (Concord), read weekly",job-westrock
+job_foodlion,Food Lion careers site,Food Lion,Web page,https://foodlion.careerswithus.com/,"Job openings (Kannapolis), read weekly",job-foodlion
+job_lowesfoods,Lowes Foods careers site,Lowes Foods,Web page,https://apply.appcast.io/l/lowes-foods-careers,"Job openings (Kannapolis), read weekly",job-lowesfoods
+job_shoeshow,Shoe Show careers site,Shoe Show,Web page,https://careers.shoeshow.com/careers,"Job openings (Kannapolis area), read weekly",job-shoeshow
+job_speedway,Speedway Motorsports careers site,Speedway Motorsports,Web page,https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=d180c324-e784-463d-a355-61b3275338b9&ccId=19000101_000001,"Job openings (Concord & Harrisburg), read weekly",job-speedway
+job_rebel,REBEL careers site,REBEL,Web page,https://rebel.bamboohr.com/careers,"Job openings (Kannapolis & remote), read weekly",job-rebel

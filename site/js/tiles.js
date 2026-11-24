@@ -21,6 +21,7 @@ import { splitVideos, whenBadge as vdBadge, thumb as vdThumb, watchButton as vdW
 import { notices as wsNotices, missedButtons as wsMissed } from "./sections/waste.js";
 import { searchBox as libSearch, upcoming as libUpcoming, eventRow as libRow, closureNote as libClosed, statusLine as libStatus } from "./sections/library.js";
 import { nextTrains, trainRow, nextCard as trNext, stationStatus as trStatus, ticketButton as trTickets, trackButton as trTrack, phoneButton as trPhone, logo as trLogo } from "./sections/train.js";
+import { countText as jobCount, staleNote as jobStale, careersButton as jobCareers, jobList, sectorColor as jobColor, fmtDay as jobDay } from "./sections/jobs.js";
 import { levelGauge as drGauge, countyLine as drCounty, strip as drStrip } from "./sections/drought.js";
 import { prepGames, nextHome, homeStands, standLabel, nextGameCard, fmtDay as bbDay, fmtTime as bbTime } from "./sections/baseball.js";
 
@@ -143,7 +144,7 @@ const contactLinks = (p) => [
 const shortDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
 export function tileDefs(data, COLORS) {
-  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos, waste, drought, library, train } = data;
+  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos, waste, drought, library, train, jobs } = data;
   const t = tokens();
   const geo = census.geographies;
   const k = geo.Kannapolis, nc = geo["North Carolina"], cab = geo["Cabarrus County"], us = geo["United States"];
@@ -832,5 +833,29 @@ export function tileDefs(data, COLORS) {
             h("div", {}, h("div", { class: "mini-head" }, "Freshness"), freshList(8))));
       },
     },
+    // Jobs: one widget per employer, A to Z. They start on the Jobs tab, not Home (home: false).
+    ...(jobs ? [...jobs.employers].sort((a, b) => a.name.localeCompare(b.name)).map((emp) => ({
+      id: `job-${emp.slug}`, opens: `job-${emp.slug}`, size: emp.jobs.length > 3 ? "m" : "s", label: emp.name, home: false,
+      build: (size) => {
+        const top = head("briefcase", jobColor(jobs, emp), emp.name);
+        const n = emp.jobs.length;
+        const count = h("div", { class: "job-tile-count" }, h("b", {}, n || "0"), h("span", {}, n === 1 ? "opening" : "openings"));
+        const where = h("p", { class: "tile-meta job-where" }, emp.where);
+        const stale = jobStale(emp, { compact: true });
+        const btn = jobCareers(emp, { compact: true, label: n ? "All openings ↗" : "Careers site ↗" });
+        const label = (x) => h("div", { class: "mini-head" }, x);
+        const none = h("p", { class: "tile-meta" }, "No openings posted right now.");
+        if (size === "s") return h("div", { class: "tile-body job-tile" }, top, count, stale || where);
+        if (size === "m") return h("div", { class: "tile-body job-tile" }, top,
+          h("div", { class: "tile-split top job-m" }, h("div", { class: "job-m-left" }, count, stale || where, btn),
+            h("div", {}, n ? jobList(emp.jobs, 3, { compact: true, location: false }) : none)));
+        const head2 = h("div", { class: "job-l-head" }, count, h("div", {}, stale || where, h("p", { class: "tile-meta" }, emp.fetched ? `Checked ${jobDay(emp.fetched)}` : "")));
+        if (size === "l") return h("div", { class: "tile-body job-tile" }, top, head2, n ? jobList(emp.jobs, 5, { compact: true }) : none, h("div", { class: "job-actions" }, btn));
+        const half = Math.ceil(Math.min(n, 12) / 2);
+        return h("div", { class: "tile-body job-tile" }, top, head2,
+          n ? h("div", { class: "tile-split top" }, jobList(emp.jobs, half, { compact: true }), jobList(emp.jobs.slice(half), 12 - half, { compact: true })) : none,
+          h("div", { class: "job-actions" }, btn));
+      },
+    })) : []),
   ].filter(Boolean);
 }

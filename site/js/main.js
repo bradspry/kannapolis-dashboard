@@ -20,6 +20,7 @@ import { renderVideos } from "./sections/videos.js";
 import { renderWaste } from "./sections/waste.js";
 import { renderDrought } from "./sections/drought.js";
 import { renderLibrary } from "./sections/library.js";
+import { renderEmployer } from "./sections/jobs.js";
 import { renderTrain, nextKey as trainKey, tick as trainTick } from "./sections/train.js";
 import { tileDefs } from "./tiles.js";
 import { renderPeople } from "./sections/people.js";
@@ -66,7 +67,7 @@ function main() {
     editions: load("editions.json", { optional: true }), whataburger: load("whataburger.json", { optional: true }),
     videos: load("videos.json", { optional: true }), waste: load("waste.json", { optional: true }),
     drought: load("drought.json", { optional: true }), library: load("library.json", { optional: true }),
-    train: load("train.json", { optional: true }),
+    train: load("train.json", { optional: true }), jobs: load("jobs.json", { optional: true }),
   };
   const sub = (id) => document.querySelector(`#${id} .section-sub`)?.textContent.trim() || "";
   const win = (id, def) => document.getElementById(id) && defineWindow(id, { ...def, sub: def.sub ?? sub(id) });
@@ -88,6 +89,15 @@ function main() {
   if (D.whataburger) win("whataburger", { title: "What-A-Burger #1", icon: "burger", color: "var(--icon-8)", render: () => renderWhatABurger(D.whataburger) });
   if (D.videos) win("videos", { title: "City Council Meeting Videos", icon: "video", color: "var(--icon-5)", render: () => renderVideos(D.videos) });
   if (D.waste) win("waste", { title: "Waste Collection", icon: "trash", color: "var(--icon-3)", render: () => renderWaste(D.waste) });
+  // Jobs: a window per employer, built from the data (no fixed <section> in index.html).
+  for (const emp of D.jobs?.employers || []) {
+    const id = `job-${emp.slug}`;
+    document.getElementById("store").append(h("section", { id, "aria-labelledby": `${id}-h` },
+      h("header", { class: "section-head" }, h("h2", { id: `${id}-h` }, emp.name),
+        h("p", { class: "section-sub" }, `Job openings at ${emp.name}${emp.where ? `, ${emp.where}` : ""}, updated weekly`)),
+      h("div", { class: "kpd", id: `${id}-body` })));
+    win(id, { title: emp.name, icon: "briefcase", color: `var(--icon-${D.jobs.sectors[emp.sector]?.color || 4})`, render: () => renderEmployer(D.jobs, emp) });
+  }
   if (D.train) win("train", { title: "NC By Train", icon: "train", color: "var(--icon-1)", render: () => renderTrain(D.train) });
   if (D.library) win("library", { title: "Cabarrus County Public Library", icon: "library", color: "var(--icon-6)", render: () => renderLibrary(D.library) });
   if (D.drought) win("drought", { title: "Current Drought Conditions", icon: "drop", color: "var(--icon-1)", render: () => renderDrought(D.drought) });
@@ -110,8 +120,8 @@ function main() {
     const body = `${title ? `Widget: ${title}\n` : ""}Page: ${location.href}\n\nMy feedback:\n`;
     e.currentTarget.href = `mailto:bradspry@gmail.com?subject=${encodeURIComponent("Kannapolis Civic Dashboard feedback")}&body=${encodeURIComponent(body)}`;
   });
+  defineTiles(() => tileDefs(D, colors())); // before initOS: a tab's starting widgets come from the tile list
   initOS({ defaultLayout: load("home_layout.json", { optional: true }) });
-  defineTiles(() => tileDefs(D, colors()));
   renderHome();
   openFromHash();
 

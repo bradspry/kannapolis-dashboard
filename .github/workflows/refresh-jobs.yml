@@ -1,0 +1,54 @@
+name: Refresh jobs
+
+# Weekly: each employer's openings for the Jobs tab, harvested with the scrapers from
+# bradspry/kannapolis-jobs. Kept apart from "Refresh data" because it needs third-party packages
+# (requests, Playwright + Chromium); the rest of the pipeline is standard-library Python.
+on:
+  schedule:
+    - cron: "0 11 * * 1" # Mondays 11:00 UTC (7 a.m. Eastern in summer, 6 a.m. in winter)
+  workflow_dispatch:
+    inputs:
+      employers:
+        description: "Employer slugs to refresh (space-separated, e.g. kcs atrium). Blank = all."
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-data # one data job at a time, so their commits don't collide
+  cancel-in-progress: false
+
+jobs:
+  jobs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: bradspry/kannapolis-jobs
+          path: .kannapolis-jobs
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install the scrapers' packages
+        run: |
+          pip install requests playwright
+          python -m playwright install --with-deps chromium
+      - name: Harvest openings
+        run: python etl/build_jobs.py ${{ github.event.inputs.employers }}
+      - name: Commit changed data
+        if: always()
+        run: |
+          git config user.name "kdash-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/generated/jobs.json
+          if git diff --cached --quiet; then
+            echo "No job changes."
+          else
+            git commit -m "Refresh jobs ($(date -u +%Y-%m-%d))"
+            git pull --rebase
+            git push
+          fi

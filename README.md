@@ -20,7 +20,7 @@ open dist/index.html            # or double-click it
 - `python3 etl/run_all.py meetings videos news events weather gem swanee editions drought site`: refresh the time-sensitive widgets, then rebuild
 - Steps: `budget census council meetings videos events gem swanee made editions whataburger weather news org police fire baseball utility waste drought parks zoning property site` (`property` takes 5–30 min; the county GIS server is slow)
 
-**Requirements:** Python 3.10+ for the data steps (standard library only). Building and serving also work on macOS's built-in Python 3.9.
+**Requirements:** Python 3.10+ for the data steps (standard library only). Building and serving also work on macOS's built-in Python 3.9. The one exception is the weekly jobs harvest (`etl/build_jobs.py`), which needs `requests`, Playwright with Chromium, and a checkout of [kannapolis-jobs](https://github.com/bradspry/kannapolis-jobs) in `.kannapolis-jobs/`.
 
 **Settings:** copy `.env.example` to `.env` (git-ignored).
 
@@ -70,6 +70,7 @@ It prints the address to open on your phone (for example `http://192.168.1.20:51
 | Current Drought Conditions | City [Drought Guidance](https://www.kannapolisnc.gov/drought) page (current water-conservation level and news) and the [U.S. Drought Monitor](https://droughtmonitor.unl.edu/) for Cabarrus and Rowan counties (weekly, two years of history) | City level and Drought Monitor: automatic, daily. Tips and level descriptions: **machine-parsed** (`data/manual/drought.json`) |
 | Cabarrus County Public Library | Library [events calendar](https://cabarrus-cep.bc.sirsidynix.net/events/list/) (public API: programs and closures at every branch, Kannapolis Library and Afton Ridge first) and a search box that opens the [library catalog](https://cabarrus.ent.sirsi.net/client/en_US/default/) (the catalog itself isn't scraped) | Events: automatic, daily. Branches: **machine-parsed** (`data/manual/library.json`) |
 | NC By Train | NC By Train (N.C. Department of Transportation) [Piedmont](https://www.ncbytrain.org/schedules/piedmont) and [Carolinian](https://www.ncbytrain.org/schedules/carolinian) schedules (every departure from Kannapolis, with the next train and countdowns worked out on the device) and the [Kannapolis station page](https://www.ncbytrain.org/stations/kannapolis-kan) (station hours, tickets, services and connections) | Schedule: automatic, daily. Links and train descriptions: **machine-parsed** (`data/manual/train.json`) |
+| Jobs (one widget per employer) | Current openings at 31 employers in and around Kannapolis (governments, school districts, colleges, health care, distribution, manufacturing, grocery and retail), harvested from each employer's own careers site with the [kannapolis-jobs](https://github.com/bradspry/kannapolis-jobs) scrapers; every listing links to the posting | Automatic, **weekly** (Mondays), in its own workflow because the scrapers need `requests` and Playwright. Employers: **machine-parsed** (`data/manual/jobs.json`) |
 | Weather | [National Weather Service](https://www.weather.gov/) API: forecast, hourly, alerts, and observations from Concord Regional Airport; [NOAA's national radar mosaic](https://opengeo.ncep.noaa.gov/geoserver/conus/conus_bref_qcd/ows?service=WMS&request=GetCapabilities) behind the tile and as an animated past-hour radar map in the window | **Live** in the browser every 15 min (daily backup copy of the forecast) |
 | Gauges | Derived from the budget, audit and Census data below | Automatic |
 | Residents | U.S. Census ACS 5-year via [Census Reporter](https://censusreporter.org/profiles/16000US3735200-kannapolis-nc/): population trend, income, home value, age vs. North Carolina | Automatic |
@@ -88,7 +89,7 @@ It prints the address to open on your phone (for example `http://192.168.1.20:51
 Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a `source_url` that opens the official PDF at the cited page (for example `…FY%2027%20Adopted%20Budget.pdf#page=114`). The build fails if a row's citation is missing. The full registry is [`data/manual/sources.csv`](data/manual/sources.csv); its `widgets` column ties each source to the widgets it feeds, and every widget window ends with an automatic **Sources** line built from it. The table below is generated from the same registry on every build, so the README always cites every source:
 
 <!-- sources:start -->
-87 sources, generated from `data/manual/sources.csv`.
+119 sources, generated from `data/manual/sources.csv`.
 
 | Source | Publisher | Format | Used for |
 |---|---|---|---|
@@ -179,6 +180,38 @@ Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a
 | [NC By Train logo](https://files.nc.gov/ncbytrain/NCByTrain_Logo.png) | N.C. Department of Transportation Rail Division | PNG | Logo |
 | [Kannapolis Station photo (NC By Train)](https://files.nc.gov/ncbytrain/styles/_inline_extra_large_/public/sp_migrate/media/ren-RAIL62_1.jpg) | N.C. Department of Transportation Rail Division | JPEG | Station photo |
 | [Amtrak: Track Your Train](https://www.amtrak.com/track-your-train.html) | Amtrak | Web page | Linked for live train status (not read by the dashboard) |
+| [kannapolis-jobs (job scrapers for the Kannapolis area)](https://github.com/bradspry/kannapolis-jobs) | Brad Spry | Python (GitHub) | Harvests each employer's openings weekly, filtered to the Kannapolis area |
+| [City of Kannapolis careers site](https://www.governmentjobs.com/careers/kannapolis) | City of Kannapolis | Web page | Job openings (Kannapolis), read weekly |
+| [Kannapolis City Schools careers site](https://www.applitrack.com/kannapolis/onlineapp/default.aspx?all=1) | Kannapolis City Schools | Web page | Job openings (Kannapolis), read weekly |
+| [Cabarrus County Government careers site](https://www.governmentjobs.com/careers/Cabarruscounty) | Cabarrus County Government | Web page | Job openings (Cabarrus County), read weekly |
+| [Cabarrus County Schools careers site](https://cabarrus.schoolspring.com/) | Cabarrus County Schools | Web page | Job openings (Cabarrus County), read weekly |
+| [Rowan County Government careers site](https://rowancountync.tylerportico.com/tess/citizen/jobs/job-list) | Rowan County Government | Web page | Job openings (Rowan County), read weekly |
+| [Rowan-Salisbury Schools careers site](https://rssk12.schoolspring.com/) | Rowan-Salisbury Schools | Web page | Job openings (Rowan County), read weekly |
+| [Atrium Health careers site](https://careers.advocatehealth.org/) | Atrium Health | Web page | Job openings (Kannapolis), read weekly |
+| [Cabarrus Health Alliance careers site](https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=c25f2dd9-f40c-43eb-98d8-7e82e7033050&ccId=19000101_000001) | Cabarrus Health Alliance | Web page | Job openings (Cabarrus County), read weekly |
+| [Monarch careers site](https://monarch.wd5.myworkdayjobs.com/en-US/Monarch) | Monarch | Web page | Job openings (Concord & Kannapolis), read weekly |
+| [Rowan-Cabarrus Community College careers site](https://rcccjobs.com/postings/search) | Rowan-Cabarrus Community College | Web page | Job openings (Rowan & Cabarrus counties), read weekly |
+| [UNC Charlotte careers site](https://jobs.charlotte.edu/postings/search) | UNC Charlotte | Web page | Job openings (Charlotte), read weekly |
+| [UNC Chapel Hill careers site](https://unc.peopleadmin.com/postings/search) | UNC Chapel Hill | Web page | Job openings (N.C. Research Campus, Kannapolis), read weekly |
+| [NC State careers site](https://jobs.ncsu.edu/postings/search) | NC State | Web page | Job openings (N.C. Research Campus, Kannapolis), read weekly |
+| [App State careers site](https://appstate.peopleadmin.com/postings/search) | App State | Web page | Job openings (N.C. Research Campus, Kannapolis), read weekly |
+| [UNC Greensboro careers site](https://spartantalent.uncg.edu/postings/search) | UNC Greensboro | Web page | Job openings (N.C. Research Campus, Kannapolis), read weekly |
+| [DHL careers site](https://careers.dhl.com/global/en/search-results?keywords=&p=ChIJPW97u5QIVIgRHdxKah_1bak&location=Kannapolis,%20NC,%20USA) | DHL | Web page | Job openings (Kannapolis, Landis & China Grove), read weekly |
+| [Chewy careers site](https://careers.chewy.com/us/en/salisbury-nc-warehouse-and-fulfillment-center-jobs) | Chewy | Web page | Job openings (Salisbury fulfillment center), read weekly |
+| [Sysco careers site](https://careers.sysco.com/en/search-jobs/Concord%2C%20Cabarrus%20County%2C%20NC) | Sysco | Web page | Job openings (Concord), read weekly |
+| [Gordon Food Service careers site](https://gfs.wd5.myworkdayjobs.com/en-US/usjobs-gen-gfs/jobs) | Gordon Food Service | Web page | Job openings (Kannapolis), read weekly |
+| [Chick-fil-A Supply careers site](https://careers.chick-fil-a.com/supply/jobs/) | Chick-fil-A Supply | Web page | Job openings (Kannapolis), read weekly |
+| [Macy's careers site](https://ebwh.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001) | Macy's | Web page | Job openings (China Grove), read weekly |
+| [Corning careers site](https://corningjobs.corning.com/search/) | Corning | Web page | Job openings (Concord), read weekly |
+| [Lilly careers site](https://jobsearch.lilly.com/) | Lilly | Web page | Job openings (Concord), read weekly |
+| [Standard Process careers site](https://recruiting.ultipro.com/STA1020/JobBoard/1df7fbd1-d8cf-85ff-efe2-77bf30267012) | Standard Process | Web page | Job openings (Kannapolis), read weekly |
+| [Momentec careers site](https://www.paycomonline.net/v4/ats/web.php/portal/666553572663EC7F7F3472C2CF94B117/career-page) | Momentec | Web page | Job openings (Kannapolis), read weekly |
+| [Westrock Coffee careers site](https://myjobs.adp.com/westrockcoffeeexternaljobs/cx) | Westrock Coffee | Web page | Job openings (Concord), read weekly |
+| [Food Lion careers site](https://foodlion.careerswithus.com/) | Food Lion | Web page | Job openings (Kannapolis), read weekly |
+| [Lowes Foods careers site](https://apply.appcast.io/l/lowes-foods-careers) | Lowes Foods | Web page | Job openings (Kannapolis), read weekly |
+| [Shoe Show careers site](https://careers.shoeshow.com/careers) | Shoe Show | Web page | Job openings (Kannapolis area), read weekly |
+| [Speedway Motorsports careers site](https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=d180c324-e784-463d-a355-61b3275338b9&ccId=19000101_000001) | Speedway Motorsports | Web page | Job openings (Concord & Harrisburg), read weekly |
+| [REBEL careers site](https://rebel.bamboohr.com/careers) | REBEL | Web page | Job openings (Kannapolis & remote), read weekly |
 <!-- sources:end -->
 
 The news and meetings harvesters are adapted from [kspider](https://github.com/bradspry/kannapolis-news-wire).

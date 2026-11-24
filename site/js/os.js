@@ -7,7 +7,7 @@
 import { h } from "./ui.js";
 import { icon } from "./icons.js";
 import { enableDrag, moveBy } from "./drag.js";
-import { TABS, DEFAULT_MEMBERS, categoryOf, tabById } from "./tabs.js";
+import { TABS, defaultMembers, categoryOf, tabById } from "./tabs.js";
 
 const KEY = "kdash-home-layout";          // Home tab: { order: [tile ids], hidden: [tile ids], sizes, spacers }
 const keyFor = (t) => (t === "home" ? KEY : `kdash-tab-${t}`); // other tabs: same shape; order = the tab's widgets
@@ -37,7 +37,8 @@ function readLocal(t = tab) {
   } catch { return null; }
 }
 /** A tab nobody has arranged: its starting widgets (Home: everything). */
-const builtin = (t) => (t === "home" ? null : { order: [...(DEFAULT_MEMBERS[t] || [])], hidden: [], sizes: {}, spacers: [] });
+const allTileIds = () => (typeof tileDefs === "function" ? tileDefs() : tileDefs).map((d) => d.id);
+const builtin = (t) => (t === "home" ? null : { order: defaultMembers(t, allTileIds()), hidden: [], sizes: {}, spacers: [] });
 const effective = (t) => readLocal(t) || siteDefaults[t] || builtin(t);
 const auto = () => tab === "home"; // widgets not in the saved order still show (new ones)
 function applyLayout(l) {
@@ -55,10 +56,10 @@ const isDefaultLayout = () => !readLocal();
 
 /** This tab's tile defs in the saved order. On Home, widgets added since the save go at the bottom. */
 function ordered(defs) {
-  if (!order) return auto() ? defs : [];
+  if (!order) return auto() ? defs.filter((d) => d.home !== false) : [];
   const idx = new Map(order.map((id, i) => [id, i]));
   return [...defs.filter((d) => idx.has(d.id)).sort((a, b) => idx.get(a.id) - idx.get(b.id)),
-    ...(auto() ? defs.filter((d) => !idx.has(d.id)) : [])];
+    ...(auto() ? defs.filter((d) => !idx.has(d.id) && d.home !== false) : [])]; // home: false = added to Home only by hand
 }
 
 /** Take a widget off this tab (Home: hide it, so it doesn't come back as "new"). */
