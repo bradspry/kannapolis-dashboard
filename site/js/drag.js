@@ -68,7 +68,7 @@ export function enableDrag(container, { active, onDrop }) {
   container.addEventListener("pointerdown", (e) => {
     if (!active() || s || e.button !== 0) return;
     const tile = e.target.closest(".tile-w");
-    if (!tile || e.target.closest(".tile-remove, .tile-top, .size-picker, a")) return;
+    if (!tile || e.target.closest(".tile-remove, .tile-top, .tile-pin, .size-picker, a")) return;
     if (e.pointerType !== "mouse" && !e.target.closest(".tile-grip")) return;
     s = { tile, id: e.pointerId, x0: e.clientX, y0: e.clientY, x: e.clientX, y: e.clientY, started: false, lockUntil: 0 };
     container.setPointerCapture(e.pointerId);

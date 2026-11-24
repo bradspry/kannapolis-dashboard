@@ -22,6 +22,7 @@ import { notices as wsNotices, missedButtons as wsMissed } from "./sections/wast
 import { searchBox as libSearch, upcoming as libUpcoming, eventRow as libRow, closureNote as libClosed, statusLine as libStatus } from "./sections/library.js";
 import { nextTrains, trainRow, nextCard as trNext, stationStatus as trStatus, ticketButton as trTickets, trackButton as trTrack, phoneButton as trPhone, logo as trLogo } from "./sections/train.js";
 import { countText as jobCount, staleNote as jobStale, careersButton as jobCareers, jobList, sectorColor as jobColor, fmtDay as jobDay, brandVars, brandHead } from "./sections/jobs.js";
+import { latest as ktLatest, logo as ktLogo, meta as ktMeta, thumb as ktThumb, buttons as ktButtons, list as ktList, epLabel as ktEp } from "./sections/ktown.js";
 import { districtsOf as sbDistricts, total as sbTotal, districtRows as sbRows, titleList as sbTitles, SCHOOL_BUS_YELLOW } from "./sections/schoolbus.js";
 import { routeMap as flMap, airlineLegend as flLegend, newLine as flNew, destList as flDests } from "./sections/flights.js";
 import { serviceStatus as trSvc, shuttleStatus as shStatus, statusLine as trStatusLine, systemMap, shuttleMap, routeLegend, liveCount, alertList as trAlerts, callButton as trCall, upcomingHoliday as trHoliday, clock as trClock } from "./sections/transit.js";
@@ -147,7 +148,7 @@ const contactLinks = (p) => [
 const shortDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
 export function tileDefs(data, COLORS) {
-  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos, waste, drought, library, train, jobs, transit, flights } = data;
+  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos, waste, drought, library, train, jobs, transit, flights, ktown } = data;
   const jobSize = jobSizes(jobs);
   const t = tokens();
   const geo = census.geographies;
@@ -476,6 +477,24 @@ export function tileDefs(data, COLORS) {
           h("div", { class: "tile-split top" },
             h("div", {}, status, h("div", { class: "mini-head" }, "Coming up"), events(4), edOrder(ed, { compact: true })),
             h("div", {}, h("div", { class: "mini-head bb-mh" }, "New books"), covers(12))));
+      },
+    },
+    ktown?.episodes?.length && {
+      id: "ktown", opens: "ktown", size: "m", label: "K-Town Connection",
+      build: (size) => {
+        const k = ktown, e = ktLatest(k);
+        const top = h("div", { class: "lib-tile-head" }, head("mic", k.color, "K-Town Connection"), ktLogo(k, "kt-logo-badge"));
+        const title = h("div", { class: "gem-tile-title kt-title" }, e.title);
+        const sub = h("p", { class: "tile-meta" }, ktMeta(e));
+        if (size === "s") return h("div", { class: "tile-body" }, top, h("div", { class: "bb-next-label" }, ktEp(e)), title);
+        if (size === "m") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top kt-m" }, ktThumb(e),
+          h("div", { class: "kt-m-side" }, title, sub, ktButtons(e, { compact: true }))));
+        if (size === "l") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top kt-m" }, ktThumb(e),
+          h("div", { class: "kt-m-side" }, title, sub, ktButtons(e, { compact: true }))),
+          h("div", { class: "mini-head" }, "Earlier episodes"), ktList(k, 1, 5));
+        return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top kt-xl" },
+          h("div", { class: "kt-xl-main" }, ktThumb(e, "wide"), title, sub, ktButtons(e, { compact: true })),
+          h("div", {}, h("div", { class: "mini-head bb-mh" }, "Earlier episodes"), ktList(k, 1, 7))));
       },
     },
     made && {

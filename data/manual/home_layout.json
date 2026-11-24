@@ -36,7 +36,8 @@
         "paratransit",
         "shuttle",
         "flights",
-        "about"
+        "about",
+        "ktown"
       ],
       "hidden": [
         "org",
@@ -48,7 +49,8 @@
         "g-debt-policy",
         "g-debt-limit",
         "land",
-        "g-owners"
+        "g-owners",
+        "ktown"
       ],
       "sizes": {
         "meetings": "m",
@@ -111,6 +113,7 @@
     "fun": {
       "order": [
         "gem",
+        "ktown",
         "swanee",
         "baseball",
         "parks",
@@ -127,7 +130,8 @@
         "parks": "l",
         "editions": "l",
         "made": "l",
-        "library": "l"
+        "library": "l",
+        "ktown": "l"
       },
       "spacers": []
     },

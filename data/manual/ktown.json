@@ -1,0 +1,22 @@
+{
+  "_source": "Machine-parsed from the K-Town Connection YouTube channel (About), its Podbean podcast feed and ktownconnection.com (links), Apple Podcasts' listing (iTunes Search API), Nov 24 2026. Logo: the podcast's cover art on Podbean, cropped. Colors sampled from the logo.",
+  "name": "K-Town Connection",
+  "tagline": "Your one stop shop for all things Kannapolis",
+  "about": "Chris Hughes & Ryan Dayvault take you on a journey through their hometown, Kannapolis, N.C.: the latest happenings from Downtown Kannapolis and the whole community, with a little rough talk and old-school humor. Joined by broadcasting legend Chuck \"Dr. Dave from Z-100\" Irvin and David Steele in Big Dave's Sports Center.",
+  "hosts": ["Chris Hughes", "Ryan Dayvault", "Chuck \"Dr. Dave\" Irvin", "David Steele"],
+  "color": "#e2001f",
+  "accent": "#f5d010",
+  "logo": "photos/local/ktown-connection-logo.png",
+  "youtube_channel_id": "UCjEpFdSMuKGpRPNHLaL-Xow",
+  "podcast_feed": "https://feed.podbean.com/ktownconnection/feed.xml",
+  "links": {
+    "youtube": "https://www.youtube.com/@KTownConnection/videos",
+    "subscribe": "https://www.youtube.com/@KTownConnection?sub_confirmation=1",
+    "apple": "https://podcasts.apple.com/us/podcast/k-town-connection/id6819690593",
+    "podbean": "https://ktownconnection.podbean.com",
+    "website": "https://ktownconnection.com",
+    "facebook": "https://www.facebook.com/ktownconnection",
+    "instagram": "https://instagram.com/ktownconnection",
+    "shop": "https://ktownconnection-shop.fourthwall.com/en-usd"
+  }
+}

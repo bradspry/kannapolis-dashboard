@@ -31,6 +31,7 @@ import build_whataburger
 import build_library
 import build_train
 import build_transit
+import build_ktown
 import build_flights
 import build_weather
 import build_zoning
@@ -42,6 +43,7 @@ STEPS = [
     ("council", build_council.main),
     ("meetings", build_meetings.main),
     ("videos", build_videos.main),  # after meetings: videos are matched to meeting agendas
+    ("ktown", build_ktown.main),
     ("events", build_events.main),
     ("gem", build_gem.main),
     ("swanee", build_swanee.main),
