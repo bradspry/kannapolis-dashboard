@@ -21,7 +21,7 @@ import { splitVideos, whenBadge as vdBadge, thumb as vdThumb, watchButton as vdW
 import { notices as wsNotices, missedButtons as wsMissed } from "./sections/waste.js";
 import { searchBox as libSearch, upcoming as libUpcoming, eventRow as libRow, closureNote as libClosed, statusLine as libStatus } from "./sections/library.js";
 import { nextTrains, trainRow, nextCard as trNext, stationStatus as trStatus, ticketButton as trTickets, trackButton as trTrack, phoneButton as trPhone, logo as trLogo } from "./sections/train.js";
-import { countText as jobCount, staleNote as jobStale, careersButton as jobCareers, jobList, sectorColor as jobColor, fmtDay as jobDay } from "./sections/jobs.js";
+import { countText as jobCount, staleNote as jobStale, careersButton as jobCareers, jobList, sectorColor as jobColor, fmtDay as jobDay, brandVars, brandHead } from "./sections/jobs.js";
 import { levelGauge as drGauge, countyLine as drCounty, strip as drStrip } from "./sections/drought.js";
 import { prepGames, nextHome, homeStands, standLabel, nextGameCard, fmtDay as bbDay, fmtTime as bbTime } from "./sections/baseball.js";
 
@@ -145,6 +145,7 @@ const shortDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "n
 
 export function tileDefs(data, COLORS) {
   const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos, waste, drought, library, train, jobs } = data;
+  const jobSize = jobSizes(jobs);
   const t = tokens();
   const geo = census.geographies;
   const k = geo.Kannapolis, nc = geo["North Carolina"], cab = geo["Cabarrus County"], us = geo["United States"];
@@ -833,13 +834,17 @@ export function tileDefs(data, COLORS) {
             h("div", {}, h("div", { class: "mini-head" }, "Freshness"), freshList(8))));
       },
     },
+    // (jobSize below: 0–9 openings small, 10–49 medium, 50+ large; then the small employers with the most
+    // openings move up to medium until the tiles fill whole rows of the 4-column grid, leaving no holes.)
     // Jobs: one widget per employer, A to Z. They start on the Jobs tab, not Home (home: false).
     ...(jobs ? [...jobs.employers].sort((a, b) => a.name.localeCompare(b.name)).map((emp) => ({
-      id: `job-${emp.slug}`, opens: `job-${emp.slug}`, size: emp.jobs.length > 3 ? "m" : "s", label: emp.name, home: false,
+      // Size follows how much is posted: 0–9 openings small, 10–49 medium, 50+ large (a saved size wins).
+      id: `job-${emp.slug}`, opens: `job-${emp.slug}`, size: jobSize.get(emp.slug), label: emp.name, home: false,
       // No openings this week (and the check didn't fail): a dimmed, dashed "empty folder".
       kind: !emp.jobs.length && !emp.error ? "jobs-none" : undefined,
+      vars: brandVars(emp), // the employer's color, measured from its logo
       build: (size) => {
-        const top = head("briefcase", jobColor(jobs, emp), emp.name);
+        const top = brandHead(emp, size);
         const n = emp.jobs.length;
         if (!n && !emp.error) {
           return h("div", { class: "tile-body job-tile" }, top,
@@ -865,4 +870,15 @@ export function tileDefs(data, COLORS) {
       },
     })) : []),
   ].filter(Boolean);
+}
+
+/** Default size of each employer's Jobs widget: by openings, then whole rows (see tileDefs). */
+function jobSizes(jobs) {
+  const sizes = new Map(), cells = { s: 1, m: 2, l: 4 };
+  if (!jobs) return sizes;
+  for (const e of jobs.employers) sizes.set(e.slug, e.jobs.length >= 50 ? "l" : e.jobs.length >= 10 ? "m" : "s");
+  let total = [...sizes.values()].reduce((n, s) => n + cells[s], 0);
+  const promote = jobs.employers.filter((e) => sizes.get(e.slug) === "s" && e.jobs.length).sort((a, b) => b.jobs.length - a.jobs.length);
+  while (total % 4 && promote.length) { sizes.set(promote.shift().slug, "m"); total += 1; }
+  return sizes;
 }

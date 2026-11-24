@@ -7,7 +7,7 @@ The City publishes its budget and finances only as PDFs, so these CSVs are machi
 
 | File | What | Where to find new numbers |
 |---|---|---|
-| `jobs.json` | Employers on the Jobs tab: name, sector, where the jobs are, careers page, and which kannapolis-jobs scraper reads them | Add an employer here (and its scraper in kannapolis-jobs); `etl/build_jobs.py` harvests them weekly |
+| `jobs.json` | Employers on the Jobs tab: name, sector, where the jobs are, careers page, which kannapolis-jobs scraper reads them, and the logo (`site/photos/local/jobs/`, with where it came from) and color measured from it | Add an employer here (and its scraper in kannapolis-jobs); `etl/build_jobs.py` harvests them weekly |
 | `home_layout.json` | Default layout of every folder tab: `{"tabs": {"home": {order, hidden, sizes, spacers}, "city": {...}, ...}}` (optional; a tab missing here starts with its widgets from `site/js/tabs.js`) | Written by Edit → *Save as default (all tabs)* while running `./serve.sh`; safe to edit by hand or delete |
 | `sources.csv` | Every official source: id, title, publisher, format, URL, what it's used for, and `widgets` (space-separated widget ids it feeds; each widget window lists these as its Sources) | Add a row for any new source; the build will not cite a widget that isn't tagged |
 | `general_fund_by_function.csv` | Adopted General Fund spending by function | Budget ordinance, "Section VIII – General Fund" (expenditures) |

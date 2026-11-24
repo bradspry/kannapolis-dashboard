@@ -89,7 +89,7 @@ It prints the address to open on your phone (for example `http://192.168.1.20:51
 Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a `source_url` that opens the official PDF at the cited page (for example `…FY%2027%20Adopted%20Budget.pdf#page=114`). The build fails if a row's citation is missing. The full registry is [`data/manual/sources.csv`](data/manual/sources.csv); its `widgets` column ties each source to the widgets it feeds, and every widget window ends with an automatic **Sources** line built from it. The table below is generated from the same registry on every build, so the README always cites every source:
 
 <!-- sources:start -->
-119 sources, generated from `data/manual/sources.csv`.
+150 sources, generated from `data/manual/sources.csv`.
 
 | Source | Publisher | Format | Used for |
 |---|---|---|---|
@@ -212,6 +212,37 @@ Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a
 | [Shoe Show careers site](https://careers.shoeshow.com/careers) | Shoe Show | Web page | Job openings (Kannapolis area), read weekly |
 | [Speedway Motorsports careers site](https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=d180c324-e784-463d-a355-61b3275338b9&ccId=19000101_000001) | Speedway Motorsports | Web page | Job openings (Concord & Harrisburg), read weekly |
 | [REBEL careers site](https://rebel.bamboohr.com/careers) | REBEL | Web page | Job openings (Kannapolis & remote), read weekly |
+| [City of Kannapolis logo](https://www.kannapolisnc.gov/Portals/_default/skins/kannapolis/images/logo.png) | City of Kannapolis | PNG | Logo; widget color measured from it |
+| [Kannapolis City Schools logo](https://resources.finalsite.net/images/v1707768219/kcsk12ncus/nkeb6sv2kfs3ay9h0wzn/ALB_Logo.png) | Kannapolis City Schools | PNG | Logo; widget color measured from it |
+| [Cabarrus County Government logo](https://www.governmentjobs.com/AgencyPages/cabarruscounty/agencyImages/download/CabCountyLogoFinal1.png) | Cabarrus County Government | PNG | Logo; widget color measured from it |
+| [Cabarrus County Schools logo](https://files.smartsites.parentsquare.com/3048/social_media_preview_img_fxieqm.png) | Cabarrus County Schools | PNG | Logo; widget color measured from it |
+| [Rowan County Government logo](https://www.rowancountync.gov/ImageRepository/Document?documentID=40676) | Rowan County Government | PNG | Logo; widget color measured from it |
+| [Rowan-Salisbury Schools logo](https://files.smartsites.parentsquare.com/7521/_variants/contain-1440w/header_logo_img_effpko.png) | Rowan-Salisbury Schools | PNG | Logo; widget color measured from it |
+| [Atrium Health logo](https://cdn.atriumhealth.org/-/media/chs/images/logo/atrium-health-logo-teal-1200x630.png?rev=1a52d83bcb6748448abcd65deaa88f1e&hash=F13EB0F27AE8BD026F5F94661FE24F99) | Atrium Health | PNG | Logo; widget color measured from it |
+| [Cabarrus Health Alliance logo](https://www.cabarrushealth.org/ImageRepository/Document?documentID=2961) | Cabarrus Health Alliance | PNG | Logo; widget color measured from it |
+| [Monarch logo](https://monarchnc.org/wp-content/themes/monarch-refresh/dist/images/monarch-logo.png?ver=1781798351) | Monarch | PNG | Logo; widget color measured from it |
+| [Rowan-Cabarrus Community College logo](https://www.rccc.edu/wp-content/uploads/2019/01/rccc_550_logo-1.png) | Rowan-Cabarrus Community College | PNG | Logo; widget color measured from it |
+| [UNC Charlotte logo](https://www.charlotte.edu/wp-content/uploads/2024/12/cropped-All-in-C-1-192x192.png) | UNC Charlotte | PNG | Logo; widget color measured from it |
+| [UNC Chapel Hill logo](https://www.unc.edu/wp-content/themes/unc/assets/images/favicon/apple-touch-icon.png?v=jwLzlQrBRl) | UNC Chapel Hill | PNG | Logo; widget color measured from it |
+| [NC State logo](https://cdn.ncsu.edu/brand-assets/favicons/favicon.svg) | NC State | SVG | Logo; widget color measured from it |
+| [App State logo](https://www.appstate.edu/_images/apple-touch-icon-60x60.png) | App State | PNG | Logo; widget color measured from it |
+| [UNC Greensboro logo](https://static.uncg.edu/web-assets/theme/assets/images/favicon/icon.svg?v=2) | UNC Greensboro | SVG | Logo; widget color measured from it |
+| [DHL logo](https://commons.wikimedia.org/wiki/File:DHL_Logo.svg) | DHL | SVG (Wikimedia Commons) | Logo; widget color measured from it |
+| [Chewy logo](https://cdn.phenompeople.com/CareerConnectResources/CHINUS/images/Chewy_Logo_RGB_Blue3-1713543901058.png) | Chewy | PNG | Logo; widget color measured from it |
+| [Sysco logo](https://commons.wikimedia.org/wiki/File:Sysco-Logo.svg) | Sysco | SVG (Wikimedia Commons) | Logo; widget color measured from it |
+| [Gordon Food Service logo](https://gfs.com/wp-content/uploads/2023/01/logo.svg) | Gordon Food Service | SVG | Logo; widget color measured from it |
+| [Chick-fil-A Supply logo](https://cms.jibecdn.com/prod/chickfila/assets/HEADER-SUPPLY_NAV_LOGO-en-us-1774288846749.png) | Chick-fil-A Supply | PNG | Logo; widget color measured from it |
+| [Macy's logo](https://commons.wikimedia.org/wiki/File:Macy's_logo.svg) | Macy's | SVG (Wikimedia Commons) | Logo; widget color measured from it |
+| [Corning logo](https://commons.wikimedia.org/wiki/File:Corning_Incorporated_Logo.svg) | Corning | SVG (Wikimedia Commons) | Logo; widget color measured from it |
+| [Lilly logo](https://commons.wikimedia.org/wiki/File:Eli_Lilly_and_Company.svg) | Lilly | SVG (Wikimedia Commons) | Logo; widget color measured from it |
+| [Standard Process logo](https://www.standardprocess.com/media/cache/attachment/filter/wysiwyg_original/87ce74c18aefc3f765aae166bfe23016/50000/6a7c7ffd67e00475097068-SP-Logo-155.png) | Standard Process | PNG | Logo; widget color measured from it |
+| [Momentec logo](https://static.momentecbrands.com/marketing/00_WEB_ASSETS/momentec-brands/09162025/m_favicon_48x48_v2.png) | Momentec | PNG | Logo; widget color measured from it |
+| [Westrock Coffee logo](https://www.westrockcoffee.com/wp-content/uploads/2024/10/westrock-logo-150x150.png) | Westrock Coffee | PNG | Logo; widget color measured from it |
+| [Food Lion logo](https://commons.wikimedia.org/wiki/File:Food_lion.png) | Food Lion | PNG (Wikimedia Commons) | Logo; widget color measured from it |
+| [Lowes Foods logo](https://commons.wikimedia.org/wiki/File:Lowesfoods.svg) | Lowes Foods | SVG (Wikimedia Commons) | Logo; widget color measured from it |
+| [Shoe Show logo](https://www.shoeshow.com/on/demandware.static/Sites-shoe-show-Site/-/default/dw3b767baf/images/favicons/shoeshow-favicon-196x196.png) | Shoe Show | PNG | Logo; widget color measured from it |
+| [Speedway Motorsports logo](https://www.speedwaymotorsports.com/images/speedwaymotorsports-llc.png) | Speedway Motorsports | PNG | Logo; widget color measured from it |
+| [REBEL logo](https://images7.bamboohr.com/733550/logos/cropped.jpg?v=30) | REBEL | JPG | Logo; widget color measured from it |
 <!-- sources:end -->
 
 The news and meetings harvesters are adapted from [kspider](https://github.com/bradspry/kannapolis-news-wire).

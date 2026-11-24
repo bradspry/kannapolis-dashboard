@@ -1,11 +1,35 @@
 // Jobs tab: one widget per employer, from the weekly kannapolis-jobs harvest (data/generated/jobs.json).
 // Every listing links to the employer's own posting.
-import { h, fill } from "../ui.js";
+import { h, fill, inkOn } from "../ui.js";
+import { chip } from "../os.js";
 
 const ext = (href, label, cls) => h("a", { href, target: "_blank", rel: "noopener", class: cls }, label);
 const parseDay = (s) => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); };
 export const fmtDay = (s, o = { month: "short", day: "numeric" }) => (s ? parseDay(s).toLocaleDateString("en-US", o) : "");
-export const sectorColor = (jobs, emp) => `var(--icon-${jobs.sectors[emp.sector]?.color || 4})`;
+export const sectorColor = (jobs, emp) => emp.color || `var(--icon-${jobs.sectors[emp.sector]?.color || 4})`;
+
+/** CSS custom properties for an employer's brand color: --brand, the ink to put on it, and whether
+ *  it's near-black (which needs an outline to show up in dark mode). */
+export function brandVars(emp) {
+  if (!emp.color) return {};
+  const c = emp.color.replace("#", ""), [r, g, b] = [0, 2, 4].map((i) => parseInt(c.slice(i, i + 2), 16) / 255);
+  const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  return { "--brand": emp.color, "--brand-ink": lum > 0.55 ? "#0b0b0b" : "#ffffff", "--brand-ring": lum < 0.15 ? "rgb(255 255 255 / .45)" : "transparent" };
+}
+
+/** The employer's logo on its own panel (white, or the employer's color for a light logo). */
+export function logoBadge(emp, cls = "job-logo") {
+  if (!emp.logo) return null;
+  return h("span", { class: cls, style: emp.logo_bg ? { background: emp.logo_bg } : null }, h("img", { src: emp.logo, alt: `${emp.name} logo` }));
+}
+
+/** Tile header: brand-colored briefcase chip, name, and the logo at the right. */
+export function brandHead(emp, size) {
+  const icon = chip("briefcase", emp.color || "var(--icon-4)");
+  if (emp.color) icon.style.color = brandVars(emp)["--brand-ink"];
+  return h("div", { class: `job-head job-head-${size}` },
+    h("div", { class: "tile-head" }, icon, h("span", { class: "tile-title" }, emp.name)), logoBadge(emp));
+}
 export const hostOf = (url) => { try { return new URL(url).hostname.replace(/^www\./, ""); } catch { return ""; } };
 
 const possessive = (name) => (/s$/i.test(name) ? `${name}'` : `${name}'s`);
@@ -56,9 +80,11 @@ export function renderEmployer(jobs, emp) {
   };
   search.addEventListener("input", () => { f.q = search.value; draw(); });
   const sector = jobs.sectors[emp.sector]?.label;
-  fill(root, 
+  for (const [k, v] of Object.entries(brandVars(emp))) root.style.setProperty(k, v);
+  fill(root,
     h("section", { class: "card job-hero" },
-      h("div", {},
+      logoBadge(emp, "job-hero-logo"),
+      h("div", { class: "job-hero-text" },
         h("div", { class: "bb-next-label" }, [sector, emp.where].filter(Boolean).join(" · ")),
         h("div", { class: "job-count" }, h("b", {}, emp.jobs.length || "No"), ` opening${emp.jobs.length === 1 ? "" : "s"}${emp.jobs.length ? "" : " posted"}`),
         h("p", { class: "tile-meta" }, emp.fetched ? `Checked ${fmtDay(emp.fetched, { month: "long", day: "numeric", year: "numeric" })}; updated weekly.` : "Not checked yet."),

@@ -20,7 +20,7 @@ import { renderVideos } from "./sections/videos.js";
 import { renderWaste } from "./sections/waste.js";
 import { renderDrought } from "./sections/drought.js";
 import { renderLibrary } from "./sections/library.js";
-import { renderEmployer } from "./sections/jobs.js";
+import { renderEmployer, brandVars } from "./sections/jobs.js";
 import { renderTrain, nextKey as trainKey, tick as trainTick } from "./sections/train.js";
 import { tileDefs } from "./tiles.js";
 import { renderPeople } from "./sections/people.js";
@@ -96,7 +96,8 @@ function main() {
       h("header", { class: "section-head" }, h("h2", { id: `${id}-h` }, emp.name),
         h("p", { class: "section-sub" }, `Job openings at ${emp.name}${emp.where ? `, ${emp.where}` : ""}, updated weekly`)),
       h("div", { class: "kpd", id: `${id}-body` })));
-    win(id, { title: emp.name, icon: "briefcase", color: `var(--icon-${D.jobs.sectors[emp.sector]?.color || 4})`, render: () => renderEmployer(D.jobs, emp) });
+    win(id, { title: emp.name, icon: "briefcase", color: emp.color || `var(--icon-${D.jobs.sectors[emp.sector]?.color || 4})`,
+      ink: brandVars(emp)["--brand-ink"], render: () => renderEmployer(D.jobs, emp) });
   }
   if (D.train) win("train", { title: "NC By Train", icon: "train", color: "var(--icon-1)", render: () => renderTrain(D.train) });
   if (D.library) win("library", { title: "Cabarrus County Public Library", icon: "library", color: "var(--icon-6)", render: () => renderLibrary(D.library) });

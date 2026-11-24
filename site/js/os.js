@@ -154,6 +154,7 @@ export function renderHome() {
           "aria-label": `${label}`, onclick: () => setSize(t.id, k, name) }, k.toUpperCase()))),
       h("button", { class: "tile-remove", type: "button", "aria-label": t.spacer ? "Delete this blank space" : `Remove the ${name} widget from ${tabById(tab).name}`,
         onclick: () => (t.spacer ? removeSpacer(t.id) : removeTile(t.id, name)) }, icon("minus", 14)));
+    for (const [k, v] of Object.entries(t.vars || {})) tile.style.setProperty(k, v); // e.g. an employer's --brand color
     tiles.push(tile);
   }
   const editing = document.body.classList.contains("editing");
@@ -308,7 +309,9 @@ export function openWindow(id, fromTile, { push = true } = {}) {
   openerTile = fromTile || null;
   winTitle.textContent = w.title;
   winSub.textContent = w.sub || "";
-  winIcon.replaceChildren(chip(w.icon, w.color));
+  const ic = chip(w.icon, w.color);
+  if (w.ink) ic.style.color = w.ink; // icon color on a light chip (e.g. a yellow brand color)
+  winIcon.replaceChildren(ic);
   winBody.replaceChildren(section);
   winBody.scrollTop = 0;
   if (!dialog.open) dialog.showModal();

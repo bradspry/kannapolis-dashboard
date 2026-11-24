@@ -1954,3 +1954,29 @@ body::before {
 .tile-w.kind-jobs-none .tile-body { opacity: .55; transition: opacity .15s; }
 .tile-w.kind-jobs-none:hover .tile-body, .tile-w.kind-jobs-none:focus-within .tile-body { opacity: 1; }
 .job-none { margin: 2px 0 0; font-size: 15px; font-weight: 600; color: var(--text-secondary); }
+/* ---------- Jobs: employer brand colors and logos ---------- */
+.tile-w[data-tile^="job-"] { background: linear-gradient(160deg, color-mix(in oklab, var(--brand, var(--surface-1)) 16%, var(--surface-1)), var(--surface-1) 62%); }
+.tile-w[data-tile^="job-"] .chip-icon { box-shadow: 0 0 0 1.5px var(--brand-ring, transparent), 0 4px 12px -4px var(--chip); }
+.tile-w[data-tile^="job-"] .job-btn, .job-hero .job-btn { background: var(--brand, var(--accent)); color: var(--brand-ink, #fff); box-shadow: 0 0 0 1px var(--brand-ring, transparent); }
+.job-head { position: relative; flex-shrink: 0; }
+.job-head .tile-head { padding-right: 104px; }
+.job-head-s .tile-head { padding-right: 0; }
+.job-logo { position: absolute; top: -6px; right: 18px; display: grid; place-items: center; width: 92px; height: 42px; padding: 5px 8px; border-radius: 11px;
+  background: #fff; box-shadow: 0 2px 8px rgb(0 0 0 / .25); pointer-events: none; }
+.job-logo img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
+.job-head-s .job-logo { position: static; width: auto; height: 30px; max-width: 120px; margin-top: 8px; justify-self: start; place-items: start; padding: 4px 8px; box-shadow: none; display: inline-grid; }
+.tile-w.kind-jobs-none { background: color-mix(in oklab, var(--surface-1) 55%, transparent); }
+/* window */
+.job-hero { border-top: 4px solid var(--brand, var(--border)); }
+.job-hero-logo { display: grid; place-items: center; flex: none; width: 168px; height: 84px; padding: 10px 16px; border-radius: 14px; background: #fff; }
+.job-hero-logo img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.job-hero-text { flex: 1 1 260px; min-width: 0; }
+@media (max-width: 720px) { .job-hero-logo { width: 132px; height: 66px; } }
+/* logo sizes: explicit, so tall or large images can't spill out of the badge */
+.job-logo { width: 96px; height: 40px; padding: 5px 9px; top: -4px; }
+.job-logo img { width: auto; height: auto; max-width: 78px; max-height: 30px; }
+.job-head-s .job-logo { position: absolute; top: -2px; right: 0; width: 64px; height: 30px; padding: 4px 6px; margin: 0; box-shadow: 0 2px 6px rgb(0 0 0 / .2); display: grid; place-items: center; max-width: none; }
+.job-head-s .job-logo img { max-width: 52px; max-height: 22px; }
+.job-head-s .tile-head { padding-right: 70px; }
+.job-hero-logo img { width: auto; height: auto; max-width: 136px; max-height: 64px; }
+@media (max-width: 720px) { .job-hero-logo img { max-width: 100px; max-height: 46px; } }
