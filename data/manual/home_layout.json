@@ -32,9 +32,24 @@
         "g-debt-limit",
         "land",
         "about",
+        "g-owners",
+        "rider",
+        "paratransit",
+        "shuttle",
+        "flights"
+      ],
+      "hidden": [
+        "org",
+        "people",
+        "budget",
+        "debt-service",
+        "growth",
+        "g-tax-rate",
+        "g-debt-policy",
+        "g-debt-limit",
+        "land",
         "g-owners"
       ],
-      "hidden": [],
       "sizes": {
         "meetings": "m",
         "news": "m",
@@ -61,7 +76,8 @@
         "waste": "l",
         "drought": "m",
         "g-debt-policy": "s",
-        "library": "l"
+        "library": "l",
+        "paratransit": "l"
       },
       "spacers": []
     },

@@ -58,6 +58,57 @@ export function hoursTable(m, now = new Date()) {
 
 const ext = (href, text) => h("a", { href, target: "_blank", rel: "noopener" }, text);
 
+// ---------- live music (from the maker's event calendar; times are the venue's local clock) ----------
+const ymd = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+const at = (s) => new Date(s); // "2026-11-25T20:00" (no zone) is read as local time
+
+/** Shows that haven't ended yet. */
+export function upcomingShows(m, now = new Date()) {
+  return (m.events || []).filter((e) => at(e.end || e.start) > now);
+}
+
+/** "Tonight", "Tomorrow", "Fri", or "Sat, Dec 5". */
+export function showDay(e, now = new Date()) {
+  const d = at(e.start), today = ymd(now), tmr = new Date(now); tmr.setDate(tmr.getDate() + 1);
+  if (ymd(d) === today) return d.getHours() >= 17 ? "Tonight" : "Today";
+  if (ymd(d) === ymd(tmr)) return "Tomorrow";
+  const days = (d - now) / 864e5;
+  return d.toLocaleDateString("en-US", days < 6 ? { weekday: "short" } : { weekday: "short", month: "short", day: "numeric" });
+}
+const hm = (s) => s.slice(11, 16);
+export const showTime = (e) => `${fmtClock(hm(e.start))}${e.end ? `–${fmtClock(hm(e.end))}` : ""}`;
+
+/** Tile line: "♫ Tonight 8 PM · Uptown Dueling Pianos" (or "Live now"). */
+export function nextShowLine(m, now = new Date()) {
+  const e = upcomingShows(m, now)[0];
+  if (!e) return null;
+  const live = at(e.start) <= now;
+  return h("p", { class: "mk-next-show" }, h("span", { class: "mk-note", "aria-hidden": "true" }, "♫"),
+    h("b", {}, live ? "Live now" : `${showDay(e, now)} ${fmtClock(hm(e.start))}`), h("span", {}, ` · ${e.name}`));
+}
+
+/** Compact list for tiles. */
+export function showList(m, n, { stack = false } = {}, now = new Date()) {
+  // stack: when above the band (narrow columns), so long names get the full width.
+  return h("ul", { class: `ub-mini mk-shows${stack ? " stack" : ""}` }, upcomingShows(m, now).slice(0, n).map((e) =>
+    h("li", {}, h("b", {}, `${showDay(e, now)} ${fmtClock(hm(e.start))}`), h("span", {}, e.name))));
+}
+
+function showsCard(m) {
+  const list = upcomingShows(m);
+  if (!list.length) return null;
+  const now = new Date();
+  return h("section", { class: "card" }, h("h3", {}, "Live music"),
+    h("p", { class: "tile-meta" }, `${list.length} upcoming show${list.length === 1 ? "" : "s"} on the Old Armor Stage${list.every((e) => e.free) ? ", all free to attend" : ""}.`),
+    h("ul", { class: "mk-show-rows", role: "list" }, list.slice(0, 16).map((e) => {
+      const d = at(e.start);
+      return h("li", { class: at(e.start) <= now ? "live" : "" },
+        h("span", { class: "mk-show-date" }, h("small", {}, d.toLocaleDateString("en-US", { weekday: "short" })), h("b", {}, String(d.getDate())), h("small", {}, d.toLocaleDateString("en-US", { month: "short" }))),
+        h("span", {}, h("b", {}, e.name), h("small", {}, [showTime(e), e.genre, e.free === false ? "Tickets" : null].filter(Boolean).join(" · "))));
+    })),
+    h("p", { class: "tile-meta" }, m.events_note, " ", ext(m.links.events, "Full calendar ↗")));
+}
+
 function makerSection(m) {
   return [
     h("section", { class: "card gem-hero mk-hero" }, makerImage(m, "lg"),
@@ -75,6 +126,8 @@ function makerSection(m) {
     h("div", { class: "ub-ways" }, m.beers.map((b) => h("div", { class: "card ub-way" },
       h("b", {}, b.name), h("span", { class: "mk-abv" }, `${b.abv} ABV · ${b.size}`), h("p", {}, b.about)))),
     h("p", { class: "tile-meta" }, m.beers_note, " ", ext(m.links.beers, "Full beer lineup ↗")),
+
+    showsCard(m),
 
     h("div", { class: "grid" },
       h("section", { class: "card" }, h("h3", {}, "Taproom hours"), hoursTable(m),
@@ -99,5 +152,5 @@ export function renderMade(made) {
   fill(root, 
     h("p", { class: "gem-p" }, made.intro),
     ...makerSection(m),
-    h("p", { class: "note" }, "From the maker's own website. Open/closed is worked out on your device from posted hours; holidays and private events can change them, so check before you go. Please enjoy responsibly; 21+ to drink."));
+    h("p", { class: "note" }, "From the maker's own website; live music from the calendar on its Weekly Schedule page, read daily. Open/closed is worked out on your device from posted hours; holidays and private events can change them, so check before you go. Please enjoy responsibly; 21+ to drink."));
 }

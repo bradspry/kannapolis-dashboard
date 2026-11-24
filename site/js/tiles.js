@@ -14,7 +14,7 @@ import { payButtons, feeLine } from "./sections/utility.js";
 import { parkButtons, seasonStatus, holidayStatus, trainStatus, trainButton, snowfall } from "./sections/parks.js";
 import { gemLineup, whenText as gemWhen, poster as gemPoster, rating as gemRating, ticketsButton } from "./sections/gem.js";
 import { upcomingShows, whenBadge as swBadge, dayOf as swDay, timeOf as swTime, rentButton, showImage, weeklyStatus } from "./sections/swanee.js";
-import { featuredMaker, makerImage, statusLine, siteButton, hoursFor, hoursText, hoursTable } from "./sections/made.js";
+import { nextShowLine as mkNext, showList as mkShows, featuredMaker, makerImage, statusLine, siteButton, hoursFor, hoursText, hoursTable } from "./sections/made.js";
 import { upcoming as edUpcoming, whenText as edWhen, edStatus, cover as edCover, orderButton as edOrder } from "./sections/editions.js";
 import { favorites as wabFavorites, wabLogo, orderButton as wabOrder, price as wabPrice, todayHours as wabToday } from "./sections/whataburger.js";
 import { splitVideos, whenBadge as vdBadge, thumb as vdThumb, watchButton as vdWatch, dayLabel as vdDay, timeLabel as vdTime } from "./sections/videos.js";
@@ -488,15 +488,18 @@ export function tileDefs(data, COLORS) {
             h("div", { class: "tile-meta" }, "🎖 Veteran-owned · West Ave"), statusLine(m)));
         const beers = h("ul", { class: "ub-mini mk-mini" }, m.beers.map((b) => h("li", {}, h("b", {}, b.abv), h("span", {}, b.name))));
         if (size === "s") return h("div", { class: "tile-body" }, ...top, who);
+        if (size === "m") { const phoneShow = mkNext(m); phoneShow?.classList.add("mk-phone-only"); who.lastChild.append(phoneShow || ""); }
         if (size === "m") return h("div", { class: "tile-body" }, ...top,
           h("div", { class: "tile-split top" }, who, h("div", {}, h("div", { class: "mini-head bb-mh" }, "Made here"), beers,
-            h("p", { class: "tile-meta" }, `Today: ${today}`), siteButton(m, { compact: true }))));
-        if (size === "l") return h("div", { class: "tile-body" }, ...top, who,
-          h("div", { class: "mini-head" }, "Made here"), beers, h("p", { class: "tile-meta" }, `Today: ${today}`), siteButton(m, { compact: true }));
-        return h("div", { class: "tile-body" }, ...top,
+            mkNext(m) || h("p", { class: "tile-meta" }, `Today: ${today}`), siteButton(m, { compact: true }))));
+        if (size === "l") return h("div", { class: "tile-body" }, ...top,
           h("div", { class: "tile-split top" },
             h("div", {}, who, h("div", { class: "mini-head" }, "Made here"), beers, siteButton(m, { compact: true })),
-            h("div", {}, h("div", { class: "mini-head bb-mh" }, "Taproom hours"), hoursTable(m))));
+            h("div", {}, h("div", { class: "mini-head bb-mh" }, "Live music"), mkShows(m, 7, { stack: true }))));
+        return h("div", { class: "tile-body" }, ...top,
+          h("div", { class: "tile-split top" },
+            h("div", {}, who, h("div", { class: "mini-head" }, "Made here"), beers, h("p", { class: "tile-meta" }, `Today: ${today}`), siteButton(m, { compact: true })),
+            h("div", {}, h("div", { class: "mini-head bb-mh" }, "Live music"), mkShows(m, 7))));
       },
     },
     swanee && {

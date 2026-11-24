@@ -54,6 +54,8 @@ swanee_site,"The Swanee Theatre website (contact, address)",The Swanee Theatre (
 oldarmor_site,"Old Armor Beer Company website (about, beers, can images)",Old Armor Beer Company,Web page,https://www.oldarmorbeer.net,"Story, featured beers, ABV (from can art)",made
 oldarmor_contact,"Old Armor Beer Company: Contact (address, phone, hours, booking)",Old Armor Beer Company,Web page,https://www.oldarmorbeer.net/contact,"Hours, address, phone, email, good to know",made
 oldarmor_pif,Old Armor Beer Company: Pay It Forward Board,Old Armor Beer Company,Web page,https://www.oldarmorbeer.net/pay-it-forward,Pay It Forward prices and how it works,made
+oldarmor_events,Old Armor Beer Company: Weekly Schedule (events),Old Armor Beer Company,Web page,https://www.oldarmorbeer.net/events-1,Where the live music calendar is published,made
+oldarmor_dusk,Old Armor Beer Company venue calendar (BeatGig / Dusk),"BeatGig (Dusk), for Old Armor Beer Company",Web page (schema.org JSON-LD),https://dusk.fm/embed/venue-calendar/oldarmorbeercompany,"Upcoming live music: performer, date, start and end time, genre, free to attend (read daily)",made
 editions_new,Editions Coffee Shop & Bookstore: New Arrivals,Editions Coffee Shop & Bookstore,Web page,https://www.editionsbookstore.com/page/NewArrivals,"New books: titles, authors, prices, covers (daily)",editions
 editions_events,Editions Coffee Shop & Bookstore: Events,Editions Coffee Shop & Bookstore,Web page,https://www.editionsbookstore.com/page/events,"Events, closures, monthly calendar (daily)",editions
 editions_coffee,Editions Coffee Shop & Bookstore: Coffee Shop,Editions Coffee Shop & Bookstore,Web page,https://www.editionsbookstore.com/page/CoffeeShop,"Drinks, add-on prices, ordering, store and drive-thru hours",editions

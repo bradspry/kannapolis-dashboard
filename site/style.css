@@ -2101,3 +2101,26 @@ body::before {
 .fl-marker { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 1px 4px rgb(0 0 0 / .35); cursor: pointer; }
 .fl-marker.origin { width: 26px; height: 26px; background: #1d4e89; color: #fff; display: grid; place-items: center; font-size: 14px; }
 @media (max-width: 720px) { .fl-map { height: 400px; } .fl-l { grid-template-columns: minmax(0, 1fr); } .fl-l > .fl-map-box { display: none; } }
+
+/* ---------- Made in Kannapolis: live music ---------- */
+.mk-next-show { margin: 4px 0 6px; font-size: 12.5px; color: var(--text-secondary); display: flex; align-items: baseline; gap: 5px; min-width: 0; }
+.mk-next-show b { color: var(--text-primary); white-space: nowrap; }
+.mk-next-show span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.mk-note { color: var(--icon-5, #c9a227); font-weight: 700; }
+.mk-shows li { grid-template-columns: minmax(96px, max-content) minmax(0, 1fr); }
+.mk-shows b { white-space: nowrap; }
+.mk-show-rows { list-style: none; margin: 8px 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 6px 18px; }
+.mk-show-rows li { display: flex; align-items: center; gap: 12px; padding: 6px 0; border-top: 1px solid var(--grid); min-width: 0; }
+.mk-show-rows li > span:last-child { display: flex; flex-direction: column; min-width: 0; }
+.mk-show-rows li > span:last-child b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mk-show-rows small { color: var(--text-muted); font-size: 12px; }
+.mk-show-date { flex: none; width: 46px; display: flex; flex-direction: column; align-items: center; line-height: 1.1; padding: 4px 0; border-radius: 10px; background: color-mix(in oklab, var(--text-primary) 7%, transparent); }
+.mk-show-date b { font-size: 18px; }
+.mk-show-date small { font-size: 10.5px; text-transform: uppercase; letter-spacing: .04em; }
+.mk-show-rows li.live .mk-show-date { background: var(--icon-5, #c9a227); color: #111; }
+.mk-show-rows li.live .mk-show-date small { color: #111; }
+.mk-phone-only { display: none; }
+@media (max-width: 720px) { .mk-phone-only { display: flex; } }
+.mk-shows.stack li { grid-template-columns: minmax(0, 1fr); gap: 0; padding: 3px 0; }
+.mk-shows.stack b { font-size: 11.5px; color: var(--text-muted); font-weight: 650; }
+.mk-shows.stack span { color: var(--text-primary); }

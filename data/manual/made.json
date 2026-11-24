@@ -16,6 +16,8 @@
       "phone": "704-933-9203",
       "email": "pr@oldarmorbeer.net",
       "site": "https://www.oldarmorbeer.net",
+      "events_feed": "https://dusk.fm/embed/venue-calendar/oldarmorbeercompany",
+      "events_note": "Live music on the Old Armor Stage, from the calendar on Old Armor's Weekly Schedule page (booked through BeatGig/Dusk).",
       "hours": [
         { "days": [1, 2, 3], "open": "15:00", "close": "22:00" },
         { "days": [4], "open": "15:00", "close": "23:00" },
