@@ -87,7 +87,9 @@ function radarCard(boundaries) {
 
 const hourLabel = (d) => d.toLocaleTimeString("en-US", { hour: "numeric" });
 const timeLabel = (d) => d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
-const dayShort = (name) => (/^(tonight|overnight)$/i.test(name) ? "Tonight" : /^(today|this afternoon)$/i.test(name) ? "Today" : name.replace(/ Night$/, "").slice(0, 3));
+// Weekday from the date, not the name: the forecast says "Thanksgiving Day", not "Thursday".
+const dayShort = (d) => (/^(tonight|overnight)$/i.test(d.name) ? "Tonight" : /^(today|this afternoon)$/i.test(d.name) ? "Today"
+  : (d.day || d.night).start.toLocaleDateString("en-US", { weekday: "short" }));
 const severityClass = (s) => ({ Extreme: "critical", Severe: "critical", Moderate: "warning" }[s] || "info");
 
 export function alertBanner(alerts, { compact = false } = {}) {
@@ -151,7 +153,7 @@ export function renderWeather(w, boundaries) {
       const l = d.lo ?? d.hi, u = d.hi ?? d.lo;
       return h("li", {}, h("details", {},
         h("summary", {},
-          h("span", { class: "wx-day" }, dayShort(d.name)),
+          h("span", { class: "wx-day" }, dayShort(d)),
           h("span", { class: "wx-day-icon", "aria-hidden": "true", title: p.text }, wxIcon(p.text, !!d.day)),
           h("span", { class: "wx-pop" }, d.pop >= 10 ? `${d.pop}%` : ""),
           h("span", { class: "wx-lo" }, d.lo != null ? `${d.lo}°` : ""),

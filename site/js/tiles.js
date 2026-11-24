@@ -187,8 +187,10 @@ export function tileDefs(data, COLORS) {
         const now = h("div", { class: "wx-now" },
           h("span", { class: "wx-now-icon", "aria-hidden": "true" }, wxIcon(c.text, c.isDay)),
           h("div", {}, h("div", { class: "wx-now-temp" }, `${c.temp}°`), h("div", { class: "wx-now-text" }, c.text), h("div", { class: "tile-meta" }, hilo)));
-        const dayName = (d) => /^(tonight|overnight)$/i.test(d.name) ? "Tonight" : /^(today|this afternoon)$/i.test(d.name) ? "Today" : d.name.slice(0, 3);
-        // 5-day strip: day, icon, high (low below), rain chance.
+        // Weekday from the date, not the name: the forecast says "Thanksgiving Day", not "Thursday".
+        const dayName = (d) => /^(tonight|overnight)$/i.test(d.name) ? "Tonight" : /^(today|this afternoon)$/i.test(d.name) ? "Today"
+          : (d.day || d.night).start.toLocaleDateString("en-US", { weekday: "short" });
+        // 5-day strip (3 days on phones): day, icon, high (low below), rain chance.
         const fiveDay = h("ul", { class: "wx-hours wx-five" }, w.days.slice(0, 5).map((d) => h("li", {},
           h("span", {}, dayName(d)), h("i", { "aria-hidden": "true" }, wxIcon((d.day || d.night).text, !!d.day)),
           h("b", {}, d.hi != null ? `${d.hi}°` : `${d.lo}°`), h("em", {}, d.hi != null && d.lo != null ? `${d.lo}°` : ""),

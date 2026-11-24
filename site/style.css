@@ -1865,3 +1865,7 @@ body::before {
 .tr-m-left .tr-btn { white-space: nowrap; flex: 0 1 auto; min-width: 0; padding: 6px 10px; font-size: 12.5px; }
 .tile-split.tr-m { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); }
 .tr-m .tr-to-word { display: none; }
+/* Weather: 3-day forecast on the medium tile at phone widths (5 is too crammed) */
+@media (max-width: 520px) { .wx-five li:nth-child(n+4) { display: none; } .wx-five { justify-content: space-around; } }
+/* Phones: the top bar scrolls away with the page (more room for widgets); it stays put while editing so Done is reachable. */
+@media (max-width: 520px) { body:not(.editing) .topbar { position: relative; } }
