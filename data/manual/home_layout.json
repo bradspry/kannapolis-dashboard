@@ -31,12 +31,12 @@
         "g-debt-policy",
         "g-debt-limit",
         "land",
-        "about",
-        "g-owners",
         "rider",
+        "g-owners",
         "paratransit",
         "shuttle",
-        "flights"
+        "flights",
+        "about"
       ],
       "hidden": [
         "org",
@@ -83,7 +83,6 @@
     },
     "city": {
       "order": [
-        "weather",
         "waste",
         "utility",
         "drought",

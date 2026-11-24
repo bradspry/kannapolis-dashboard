@@ -5,7 +5,7 @@ import { gauge } from "./gauge.js";
 import { chip } from "./os.js";
 import { fy, num, pct, usd, usdCompact } from "./format.js";
 import { upcomingEvents, whenLabel, fmtTime } from "./sections/events.js";
-import { datasets, ago, fmtDate, byPublisher, formatCounts, statusDot } from "./sections/about.js";
+import { datasets, ago, fmtDate, byPublisher, formatCounts, fmtCount, statusDot } from "./sections/about.js";
 import { weather, wxIcon } from "./weather.js";
 import { alertBanner } from "./sections/weather.js";
 import { callButtons, activeNotices, noticeCard, crimeRows, quarterLabel } from "./sections/police.js";
@@ -883,7 +883,7 @@ export function tileDefs(data, COLORS) {
         const sources = budget.sources, n = Object.keys(sources).length;
         const fresh = datasets(data);
         const newest = fresh.reduce((x, y) => (y.date > x.date ? y : x), fresh[0]);
-        const counts = h("ul", { class: "fmt-counts" }, formatCounts(sources).map(([f, c]) => h("li", {}, h("b", {}, c), ` ${f}`)));
+        const counts = h("ul", { class: "fmt-counts" }, formatCounts(sources).map(([f, c]) => h("li", {}, h("b", {}, c), fmtCount(f, c).slice(String(c).length))));
         const top = [head("about", COLORS.about, "About the Data"),
           h("div", { class: "about-big" }, big(String(n)), h("span", {}, "official sources"))];
         const refreshed = h("div", { class: "tile-meta" }, newest ? `Data refreshed ${ago(newest.age).toLowerCase()} · ${fmtDate(newest.date)}` : "");
@@ -893,12 +893,24 @@ export function tileDefs(data, COLORS) {
           h("li", {}, statusDot(f.status), h("span", {}, f.name), h("small", {}, f.status === "manual" ? "parsed" : ago(f.age)))));
         if (size === "l") return h("div", { class: "tile-body" }, ...top, counts,
           h("div", { class: "mini-head" }, "Freshness"), freshList(6));
-        return h("div", { class: "tile-body" }, ...top,
-          h("div", { class: "about-xl" },
-            h("div", {}, h("div", { class: "mini-head" }, "Sources by publisher"),
-              h("ul", { class: "pub-list" }, byPublisher(sources).slice(0, 5).map(([pub, list]) => h("li", {},
-                h("b", {}, pub), h("span", {}, list.map((x) => x.format).filter((v, i, arr) => arr.indexOf(v) === i).join(" · ")), h("small", {}, list.length))))),
-            h("div", {}, h("div", { class: "mini-head" }, "Freshness"), freshList(8))));
+        // XL: a summary beside the big number, the top publishers, and every data set's freshness (overdue first).
+        const pubs = byPublisher(sources), per = (c) => fresh.filter((f) => f.cadence === c).length;
+        const stale = fresh.filter((f) => f.status === "stale").length;
+        const summary = h("div", { class: "about-xl-sum" },
+          h("p", {}, h("b", {}, `${pubs.length} publishers`), ` · ${formatCounts(sources).length} formats · ${fresh.length} data sets: `,
+            `${per("daily")} refreshed daily, ${per("weekly")} weekly, ${per("manual")} machine-parsed snapshots`),
+          h("p", { class: stale ? "about-xl-warn" : "" }, stale ? `${stale} data set${stale === 1 ? " is" : "s are"} overdue for a refresh` : "Everything is up to date", newest ? ` · newest data ${ago(newest.age).toLowerCase()}` : ""),
+          counts);
+        const order = { stale: 0, fresh: 1, manual: 2 };
+        const sorted = [...fresh].sort((a, b) => order[a.status] - order[b.status] || a.age - b.age);
+        const fRow = (f) => h("li", {}, statusDot(f.status), h("span", {}, f.name), h("small", {}, f.status === "manual" ? "parsed" : ago(f.age)));
+
+        return h("div", { class: "tile-body" }, head("about", COLORS.about, "About the Data"),
+          h("div", { class: "about-xl-top" }, h("div", { class: "about-big" }, big(String(n)), h("span", {}, "official sources")), summary),
+          h("div", { class: "about-xl two" },
+            h("div", {}, h("div", { class: "mini-head" }, "Top publishers"),
+              h("ul", { class: "pub-list compact" }, pubs.slice(0, 8).map(([pub, list]) => h("li", {}, h("b", {}, pub), h("small", {}, list.length))))),
+            h("div", {}, h("div", { class: "mini-head" }, "Freshness"), h("ul", { class: "fresh-mini small" }, sorted.slice(0, 9).map(fRow)))));
       },
     },
     // (jobSize below: 0–9 openings small, 10–49 medium, 50+ large; then the small employers with the most

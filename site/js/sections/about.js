@@ -3,29 +3,49 @@
 import { h } from "../ui.js";
 
 export const REPO = "https://github.com/bradspry/kannapolis-dashboard";
+const CONTACT = "bradspry@gmail.com";
 const DAY_MS = 86400000;
 
 /** Each dataset, when it was last fetched, and how often it should refresh. */
 export function datasets(D) {
+  const DAILY = "Daily", WEEKLY = "Weekly", firstJob = D.jobs?.employers?.[0]?.slug;
   const list = [
     ["Weather", "weather", D.weatherMeta, "Live in your browser; backup copy daily", 2],
-    ["Public meetings", "meetings", D.meetings, "Daily", 2],
-    ["City news", "news", D.news, "Daily", 2],
-    ["Upcoming events", "events", D.events, "Daily", 2],
-    ["People (Census)", "people", D.census, "Weekly", 9],
-    ["Growth & property", "growth", D.property, "Weekly", 9],
-    ["Land use & zoning", "land", D.zoning, "Weekly", 9],
+    ["Public meetings", "meetings", D.meetings, DAILY, 2],
+    ["Council meeting videos", "videos", D.videos, DAILY, 2],
+    ["City news", "news", D.news, DAILY, 2],
+    ["Upcoming events", "events", D.events, DAILY, 2],
+    ["Gem Theatre shows", "gem", D.gem, DAILY, 2],
+    ["Swanee Theatre shows", "swanee", D.swanee, DAILY, 2],
+    ["Editions books & events", "editions", D.editions, DAILY, 2],
+    ["Old Armor live music", "made", D.made, DAILY, 2],
+    ["Library events", "library", D.library, DAILY, 2],
+    ["NC By Train schedule", "train", D.train, DAILY, 2],
+    ["Drought conditions", "drought", D.drought, DAILY, 2],
+    ["Rider bus schedule", "rider", D.transit, "Weekly; live buses in your browser", 9],
+    ["Flights", "flights", D.flights, WEEKLY, 9],
+    ["Job openings", firstJob ? `job-${firstJob}` : "about", D.jobs, WEEKLY, 9, "?tab=jobs"],
+    ["People (Census)", "people", D.census, WEEKLY, 9],
+    ["Growth & property", "growth", D.property, WEEKLY, 9],
+    ["Land use & zoning", "land", D.zoning, WEEKLY, 9],
     ["Budget, debt & debt service", "budget", D.budget, "Machine-parsed, each budget year", null],
     ["City Council", "council", D.council, "Machine-parsed", null],
     ["Police statistics", "police", D.police, "Machine-parsed, each quarterly report", null],
+    ["Fire department", "fire", D.fire, "Machine-parsed", null],
     ["City staff", "org", D.org, "Machine-parsed", null],
+    ["Parks & recreation", "parks", D.parks, "Machine-parsed", null],
+    ["Waste collection", "waste", D.waste, "Machine-parsed", null],
+    ["Utility billing", "utility", D.utility, "Machine-parsed", null],
+    ["Cannon Ballers", "baseball", D.baseball, "Machine-parsed, each season", null],
+    ["What-A-Burger #1", "whataburger", D.whataburger, "Machine-parsed", null],
   ];
   const today = new Date(); today.setHours(0, 0, 0, 0);
-  return list.filter(([, , d]) => d?.generated).map(([name, win, d, schedule, maxDays]) => {
+  return list.filter(([, , d]) => d?.generated).map(([name, win, d, schedule, maxDays, href]) => {
     const [y, m, dd] = d.generated.split("-").map(Number);
     const date = new Date(y, m - 1, dd);
     const age = Math.round((today - date) / DAY_MS);
-    return { name, win, date, age, schedule, status: maxDays == null ? "manual" : age <= maxDays ? "fresh" : "stale" };
+    return { name, win, href: href || `#${win}`, date, age, schedule, cadence: maxDays == null ? "manual" : maxDays <= 2 ? "daily" : "weekly",
+      status: maxDays == null ? "manual" : age <= maxDays ? "fresh" : "stale" };
   });
 }
 
@@ -41,6 +61,17 @@ export function byPublisher(sources) {
     groups.get(key).push(s);
   }
   return [...groups].sort((a, b) => b[1].length - a[1].length);
+}
+
+/** "99 Web pages", "1 Web page": a format name counted, plural when it should be. */
+const PLURAL = { "Map tiles": "Map tile services", "Web page": "Web pages", "JSON API": "JSON APIs", "ArcGIS REST": "ArcGIS REST services", RSS: "RSS feeds",
+  TopoJSON: "TopoJSON files", "Python (GitHub)": "Python scripts (GitHub)", "WMS image": "WMS images", GTFS: "GTFS feeds",
+  "GTFS-realtime": "GTFS-realtime feeds", "GeoJSON (Overpass)": "GeoJSON files (Overpass)" };
+export function fmtCount(format, n) {
+  if (n === 1) return `${n} ${format === "Map tiles" ? "Map tile service" : format}`;
+  if (PLURAL[format]) return `${n} ${PLURAL[format]}`;
+  const m = format.match(/^([A-Z]{2,5})( \(.*\))?$/); // PNG, SVG (Wikimedia Commons), PDF, CSV, JPEG
+  return `${n} ${m ? `${m[1]}s${m[2] || ""}` : format}`;
 }
 
 export function formatCounts(sources) {
@@ -96,7 +127,7 @@ export function renderAbout(D) {
 
   body.replaceChildren(
     h("div", { class: "tiles about-stats" },
-      stat(String(nSources), "Official sources", `${formatCounts(sources).map(([f, n]) => `${n} ${f}`).slice(0, 3).join(" · ")}`),
+      stat(String(nSources), "Official sources", `${formatCounts(sources).map(([f, n]) => fmtCount(f, n)).slice(0, 3).join(" · ")}`),
       stat(String(cited), "Machine-parsed figures", "each linked to its PDF page"),
       stat(newest ? ago(newest.age) : "—", "Last data refresh", newest ? fmtDate(newest.date) : ""),
       stat("GPL-3.0", "Open source", h("a", { href: REPO, target: "_blank", rel: "noopener" }, "View the code ↗"))),
@@ -109,7 +140,7 @@ export function renderAbout(D) {
     h("div", { class: "card table-wrap" }, h("table", { class: "fresh-table" },
       h("thead", {}, h("tr", {}, ["Data", "Last updated", "Schedule", "Status"].map((c) => h("th", { scope: "col" }, c)))),
       h("tbody", {}, fresh.map((f) => h("tr", {},
-        h("td", {}, h("a", { href: `#${f.win}` }, f.name)),
+        h("td", {}, h("a", { href: f.href }, f.name)),
         h("td", {}, `${fmtDate(f.date)} `, h("span", { class: "muted" }, `(${ago(f.age).toLowerCase()})`)),
         h("td", {}, f.schedule),
         h("td", {}, statusDot(f.status), statusLabel[f.status])))))),
@@ -119,7 +150,7 @@ export function renderAbout(D) {
 
     h("div", { class: "card about-cta" },
       h("div", {}, h("b", {}, "Spot a problem?"),
-        h("p", {}, "Every chart has a “Show data” table, and budget figures link to the exact PDF page they came from. If something looks wrong, open an issue.")),
-      h("a", { class: "btn-primary", href: `${REPO}/issues`, target: "_blank", rel: "noopener" }, "Report an issue ↗")),
+        h("p", {}, "Every chart has a “Show data” table, and budget figures link to the exact PDF page they came from. If something looks wrong, email ", h("a", { href: `mailto:${CONTACT}` }, CONTACT), ".")),
+      h("a", { class: "btn-primary", href: `mailto:${CONTACT}?subject=${encodeURIComponent("Kannapolis Civic Dashboard: data problem")}&body=${encodeURIComponent("What looks wrong (widget, number, and where you saw it):\n\n")}` }, "Email a correction")),
   );
 }
