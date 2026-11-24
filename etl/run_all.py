@@ -30,6 +30,7 @@ import build_videos
 import build_whataburger
 import build_library
 import build_train
+import build_transit
 import build_weather
 import build_zoning
 from common import log
@@ -48,6 +49,7 @@ STEPS = [
     ("whataburger", build_whataburger.main),
     ("library", build_library.main),
     ("train", build_train.main),
+    ("transit", build_transit.main),
     ("weather", build_weather.main),
     ("news", build_news.main),
     ("org", build_org.main),

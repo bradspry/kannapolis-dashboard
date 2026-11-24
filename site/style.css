@@ -1980,3 +1980,76 @@ body::before {
 .job-head-s .tile-head { padding-right: 70px; }
 .job-hero-logo img { width: auto; height: auto; max-width: 136px; max-height: 64px; }
 @media (max-width: 720px) { .job-hero-logo img { max-width: 100px; max-height: 46px; } }
+/* ---------- Transportation: Rider Transit, paratransit, West Avenue Express ---------- */
+.tr-map-box { position: relative; min-width: 0; min-height: 0; }
+.tr-map-box.mini { height: 100%; min-height: 0; display: grid; place-items: center; }
+.tr-map-box.mini.big { flex: 1 1 auto; min-height: 120px; }
+.tr-map-box.mini svg { max-height: 100%; }
+.tr-map-svg { width: 100%; height: 100%; max-height: inherit; display: block; }
+.tr-city { fill: color-mix(in oklab, var(--text-primary) 5%, transparent); stroke: var(--text-muted); stroke-width: 2.5; stroke-dasharray: 8 7; stroke-opacity: .7; }
+.tr-route { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.tr-corridor path { fill: none; stroke: var(--brand-para, #00946e); stroke-opacity: .2; stroke-linecap: round; stroke-linejoin: round; }
+.tr-hub { fill: #041a71; stroke: #fff; stroke-width: 5; }
+.tr-bus { stroke: #fff; stroke-width: 5; }
+.tx-m { gap: 14px; flex: 1; min-height: 0; }
+.tx-m > .tr-map-box { align-self: stretch; }
+.tr-m-side { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.tr-m-side .tile-meta { margin: 0; }
+.tr-count { margin: 0; font-weight: 600; color: var(--text-secondary) !important; }
+.tr-count:empty { display: none; }
+.tr-legend { list-style: none; margin: 2px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 12.5px; color: var(--text-secondary); }
+.tr-legend li { display: inline-flex; align-items: center; gap: 5px; }
+.tr-legend i { width: 14px; height: 4px; border-radius: 2px; }
+.tr-legend.compact { gap: 3px 8px; font-size: 12px; }
+.tr-actions.col { flex-direction: column; align-items: flex-start; gap: 6px; }
+.tr-para-s { margin: 2px 0 0; font-size: 22px; font-weight: 700; }
+.tr-alerts.compact .tr-alert { padding: 4px 8px; font-size: 12px; border-radius: 8px; }
+.tr-alert { padding: 10px 12px; border-radius: 12px; margin-bottom: 8px; }
+.tr-alert p { margin: 4px 0; }
+/* windows */
+.tr-hero-card { display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start; border-top: 4px solid #041a71; }
+.tr-hero-card.para { border-top-color: #00946e; }
+.tr-hero-card.shuttle { border-top-color: #f28a3b; }
+.tr-hero-logo { flex: none; display: grid; place-items: center; width: 190px; height: 86px; padding: 8px 12px; border-radius: 14px; background: #fff; }
+.tr-hero-logo img { max-width: 166px; max-height: 70px; width: auto; height: auto; }
+.tr-hero-body { flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.tr-status.big { font-size: 16px; font-weight: 650; }
+.tr-map { height: 460px; border-radius: 14px; overflow: hidden; margin: 8px 0; }
+.sh-map { height: 380px; }
+.tr-chip-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+.tr-near { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+.tr-near-out:empty { display: none; }
+.tr-deps { list-style: none; margin: 6px 0; padding: 0; }
+.tr-deps li { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
+.tr-deps i, .tr-pop i { width: 10px; height: 10px; border-radius: 50%; flex: none; display: inline-block; margin-right: 6px; }
+.tr-pop ul { list-style: none; margin: 4px 0 0; padding: 0; }
+.tr-routes { list-style: none; margin: 0; padding: 0; }
+.tr-route-row { display: grid; grid-template-columns: 8px minmax(0, 1.3fr) minmax(0, 1.4fr) auto; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid var(--grid); font-size: 14px; }
+.tr-route-row:first-child { border-top: 0; }
+.tr-swatch { width: 8px; height: 34px; border-radius: 4px; }
+.tr-route-row small { display: block; color: var(--text-muted); }
+.tr-route-when { display: flex; flex-direction: column; font-size: 13px; color: var(--text-secondary); }
+@media (max-width: 720px) { .tr-route-row { grid-template-columns: 8px minmax(0, 1fr); } .tr-route-when, .tr-route-row > a { grid-column: 2; } .tr-map { height: 360px; } }
+.tr-hub-marker { width: 26px; height: 26px; border-radius: 50%; background: #041a71; color: #fff; font-weight: 800; display: grid; place-items: center; border: 3px solid #00946e; box-shadow: 0 2px 6px rgb(0 0 0 / .35); cursor: pointer; }
+.tr-fare b { font-size: 28px; margin-right: 6px; }
+.tr-steps { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.sh-badge { flex: none; width: 72px; height: 72px; border-radius: 18px; display: grid; place-items: center; font-size: 38px; background: #f28a3b; }
+.sh-stops { margin: 0; padding-left: 22px; display: grid; gap: 4px; }
+.sh-stops.compact { font-size: 12.5px; gap: 1px; color: var(--text-secondary); padding-left: 18px; }
+.sh-grid { align-items: start; }
+.sh-path { fill: none; stroke: #f28a3b; stroke-width: 22; stroke-linecap: round; stroke-linejoin: round; }
+.sh-path-casing { fill: none; stroke: var(--surface-1); stroke-width: 36; stroke-linecap: round; stroke-linejoin: round; }
+.sh-stop { fill: #fff; stroke: #f28a3b; stroke-width: 9; }
+.sh-stop-n { font: 800 34px system-ui, sans-serif; fill: #7a3a07; }
+.sh-marker { width: 26px; height: 26px; border-radius: 50%; background: #fff; border: 4px solid #f28a3b; color: #7a3a07; font-weight: 800; font-size: 13px; display: grid; place-items: center; box-shadow: 0 2px 6px rgb(0 0 0 / .3); cursor: pointer; }
+.sh-street { fill: none; stroke: var(--text-muted); stroke-opacity: .45; stroke-width: 10; stroke-linecap: round; stroke-linejoin: round; }
+.sh-map-box.mini { overflow: hidden; border-radius: 12px; background: color-mix(in oklab, var(--text-primary) 4%, transparent); }
+.tr-link { position: relative; z-index: 2; font-size: 13px; font-weight: 600; }
+.tr-route { vector-effect: non-scaling-stroke; }
+.tr-map-box.mini .tr-route { stroke-width: 2.2px; }
+/* Phones: medium transit tiles keep their status and buttons, and drop the mini-map */
+@media (max-width: 720px) {
+  .size-m .tile-split.top.tx-m { grid-template-columns: minmax(0, 1fr); }
+  .size-m .tile-split.top.tx-m > :first-child { display: none; }
+  .size-m .tile-split.top.tx-m > :last-child { display: flex; }
+}

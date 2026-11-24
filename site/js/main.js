@@ -21,6 +21,7 @@ import { renderWaste } from "./sections/waste.js";
 import { renderDrought } from "./sections/drought.js";
 import { renderLibrary } from "./sections/library.js";
 import { renderEmployer, brandVars } from "./sections/jobs.js";
+import { renderRider, renderParatransit, renderShuttle, startLive as startTransitLive } from "./sections/transit.js";
 import { renderTrain, nextKey as trainKey, tick as trainTick } from "./sections/train.js";
 import { tileDefs } from "./tiles.js";
 import { renderPeople } from "./sections/people.js";
@@ -67,7 +68,7 @@ function main() {
     editions: load("editions.json", { optional: true }), whataburger: load("whataburger.json", { optional: true }),
     videos: load("videos.json", { optional: true }), waste: load("waste.json", { optional: true }),
     drought: load("drought.json", { optional: true }), library: load("library.json", { optional: true }),
-    train: load("train.json", { optional: true }), jobs: load("jobs.json", { optional: true }),
+    train: load("train.json", { optional: true }), jobs: load("jobs.json", { optional: true }), transit: load("transit.json", { optional: true }),
   };
   const sub = (id) => document.querySelector(`#${id} .section-sub`)?.textContent.trim() || "";
   const win = (id, def) => document.getElementById(id) && defineWindow(id, { ...def, sub: def.sub ?? sub(id) });
@@ -99,6 +100,12 @@ function main() {
     win(id, { title: emp.name, icon: "briefcase", color: emp.color || `var(--icon-${D.jobs.sectors[emp.sector]?.color || 4})`,
       ink: brandVars(emp)["--brand-ink"], render: () => renderEmployer(D.jobs, emp) });
   }
+  if (D.transit) {
+    D.transit._city = D.boundaries?.features?.find((f) => f.properties.year === "current") || null; // for the mini-maps
+    win("rider", { title: "Rider Transit", icon: "bus", color: D.transit.rider.color, render: () => renderRider(D.transit) });
+    win("paratransit", { title: "Rider ADA Paratransit", icon: "accessible", color: D.transit.paratransit.color, render: () => renderParatransit(D.transit) });
+    win("shuttle", { title: "West Avenue Express Shuttle", icon: "shuttle", color: D.transit.shuttle.color, render: () => renderShuttle(D.transit) });
+  }
   if (D.train) win("train", { title: "NC By Train", icon: "train", color: "var(--icon-1)", render: () => renderTrain(D.train) });
   if (D.library) win("library", { title: "Cabarrus County Public Library", icon: "library", color: "var(--icon-6)", render: () => renderLibrary(D.library) });
   if (D.drought) win("drought", { title: "Current Drought Conditions", icon: "drop", color: "var(--icon-1)", render: () => renderDrought(D.drought) });
@@ -125,6 +132,9 @@ function main() {
   initOS({ defaultLayout: load("home_layout.json", { optional: true }) });
   renderHome();
   openFromHash();
+
+  // Rider Transit: live bus positions and alerts (every 30 s while the page is visible).
+  if (D.transit) startTransitLive(D.transit);
 
   // NC By Train countdowns: refresh the text every 30 seconds, and redraw when a train leaves.
   if (D.train) {

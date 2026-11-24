@@ -22,6 +22,7 @@ import { notices as wsNotices, missedButtons as wsMissed } from "./sections/wast
 import { searchBox as libSearch, upcoming as libUpcoming, eventRow as libRow, closureNote as libClosed, statusLine as libStatus } from "./sections/library.js";
 import { nextTrains, trainRow, nextCard as trNext, stationStatus as trStatus, ticketButton as trTickets, trackButton as trTrack, phoneButton as trPhone, logo as trLogo } from "./sections/train.js";
 import { countText as jobCount, staleNote as jobStale, careersButton as jobCareers, jobList, sectorColor as jobColor, fmtDay as jobDay, brandVars, brandHead } from "./sections/jobs.js";
+import { serviceStatus as trSvc, shuttleStatus as shStatus, statusLine as trStatusLine, systemMap, shuttleMap, routeLegend, liveCount, alertList as trAlerts, callButton as trCall, upcomingHoliday as trHoliday, clock as trClock } from "./sections/transit.js";
 import { levelGauge as drGauge, countyLine as drCounty, strip as drStrip } from "./sections/drought.js";
 import { prepGames, nextHome, homeStands, standLabel, nextGameCard, fmtDay as bbDay, fmtTime as bbTime } from "./sections/baseball.js";
 
@@ -144,7 +145,7 @@ const contactLinks = (p) => [
 const shortDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
 export function tileDefs(data, COLORS) {
-  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos, waste, drought, library, train, jobs } = data;
+  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos, waste, drought, library, train, jobs, transit } = data;
   const jobSize = jobSizes(jobs);
   const t = tokens();
   const geo = census.geographies;
@@ -255,6 +256,53 @@ export function tileDefs(data, COLORS) {
             h("div", {}, callButtons(fire), freeHead, freeList(fire, 4)),
             h("div", {}, h("div", { class: "mini-head" }, "Fire stations"), stationList(fire, { compact: true }),
               h("p", { class: "tile-meta" }, "ISO Class 1: the best fire-protection rating possible"))));
+      },
+    },
+    transit && {
+      id: "rider", opens: "rider", size: "l", label: "Rider Transit",
+      build: (size) => {
+        const r = transit.rider, st = trSvc(r.hours), hol = trHoliday();
+        const top = head("bus", r.color, "Rider Transit");
+        const status = trStatusLine(st);
+        const holLine = hol ? h("p", { class: "tile-meta" }, `No buses ${hol.when} (${hol.name})`) : null;
+        const facts = h("p", { class: "tile-meta" }, `Fare ${r.fare} · free transfers · ${r.phone}`);
+        if (size === "s") return h("div", { class: "tile-body" }, top, status, liveCount());
+        if (size === "m") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top tx-m" }, systemMap(transit, null, { cls: "mini" }),
+          h("div", { class: "tr-m-side" }, status, liveCount(), holLine, trAlerts(transit, { compact: true }), routeLegend(transit, { kannapolisOnly: true, compact: true }))));
+        if (size === "l") return h("div", { class: "tile-body" }, top, status, liveCount(), systemMap(transit, null, { cls: "mini big" }), routeLegend(transit, { compact: true }), facts);
+        return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top" }, systemMap(transit, null, { cls: "mini big" }),
+          h("div", { class: "tr-m-side" }, status, liveCount(), holLine, trAlerts(transit, { compact: true }), routeLegend(transit), facts,
+            h("p", { class: "tile-meta" }, r.hours_text))));
+      },
+    },
+    transit && {
+      id: "paratransit", opens: "paratransit", size: "m", label: "Rider ADA Paratransit",
+      build: (size) => {
+        const p = transit.paratransit, res = trSvc(p.reservation_hours, new Date(), { label: "Booking line", line: true });
+        const top = head("accessible", p.color, "Rider ADA Paratransit");
+        const book = trCall(`Book ${p.phones.reservations}`, p.phones.reservations, { primary: true, compact: true });
+        const elig = trCall(`Eligibility ${p.phones.eligibility}`, p.phones.eligibility, { compact: true });
+        const fare = h("p", { class: "tile-meta" }, `Curb-to-curb rides · ${p.fare} each way · book the day before`);
+        if (size === "s") return h("div", { class: "tile-body" }, top, h("p", { class: "tr-para-s" }, `${p.fare} each way`), h("div", { class: "tr-actions" }, book));
+        if (size === "m") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top tx-m" }, systemMap(transit, null, { corridor: true, cls: "mini" }),
+          h("div", { class: "tr-m-side" }, trStatusLine(res), fare, h("div", { class: "tr-actions col" }, book),
+            h("a", { class: "tr-link", href: `tel:${p.phones.eligibility.replace(/[^0-9]/g, "")}` }, `Eligibility: ${p.phones.eligibility}`))));
+        return h("div", { class: "tile-body" }, top, h("div", { class: size === "xl" ? "tile-split top" : "" }, systemMap(transit, null, { corridor: true, cls: "mini big" }),
+          h("div", { class: "tr-m-side" }, trStatusLine(res), fare, h("p", { class: "tile-meta" }, `Shaded: within ¾ mile of a bus route, the service area. Rides run the same hours as the buses.`),
+            h("div", { class: "tr-actions" }, book, elig))));
+      },
+    },
+    transit && {
+      id: "shuttle", opens: "shuttle", size: "m", label: "West Avenue Express Shuttle",
+      build: (size) => {
+        const sh = transit.shuttle, st = shStatus(sh);
+        const top = head("shuttle", sh.color, "West Avenue Express");
+        const status = trStatusLine({ running: st.running, text: st.short.replace(/, 5:00 PM–10:00 PM$/, ", 5 PM") });
+        const what = h("p", { class: "tile-meta" }, `Free · every ~${sh.every_minutes} min · Fri & Sat 5–10 PM`);
+        const stops = h("ol", { class: "sh-stops compact" }, sh.stops.map((s) => h("li", {}, s.name)));
+        if (size === "s") return h("div", { class: "tile-body" }, top, status, what);
+        if (size === "m") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top tx-m" }, shuttleMap(sh, { cls: "mini" }), h("div", { class: "tr-m-side" }, status, what, stops)));
+        return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top" }, shuttleMap(sh, { cls: "mini big" }), h("div", { class: "tr-m-side" }, status, what, stops)));
       },
     },
     train && {
