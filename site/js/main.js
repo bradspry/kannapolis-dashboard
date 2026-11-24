@@ -21,6 +21,7 @@ import { renderWaste } from "./sections/waste.js";
 import { renderDrought } from "./sections/drought.js";
 import { renderLibrary } from "./sections/library.js";
 import { renderEmployer, brandVars } from "./sections/jobs.js";
+import { renderFlights } from "./sections/flights.js";
 import { renderRider, renderParatransit, renderShuttle, startLive as startTransitLive } from "./sections/transit.js";
 import { renderTrain, nextKey as trainKey, tick as trainTick } from "./sections/train.js";
 import { tileDefs } from "./tiles.js";
@@ -68,7 +69,7 @@ function main() {
     editions: load("editions.json", { optional: true }), whataburger: load("whataburger.json", { optional: true }),
     videos: load("videos.json", { optional: true }), waste: load("waste.json", { optional: true }),
     drought: load("drought.json", { optional: true }), library: load("library.json", { optional: true }),
-    train: load("train.json", { optional: true }), jobs: load("jobs.json", { optional: true }), transit: load("transit.json", { optional: true }),
+    train: load("train.json", { optional: true }), jobs: load("jobs.json", { optional: true }), transit: load("transit.json", { optional: true }), flights: load("flights.json", { optional: true }),
   };
   const sub = (id) => document.querySelector(`#${id} .section-sub`)?.textContent.trim() || "";
   const win = (id, def) => document.getElementById(id) && defineWindow(id, { ...def, sub: def.sub ?? sub(id) });
@@ -106,6 +107,7 @@ function main() {
     win("paratransit", { title: "Rider ADA Paratransit", icon: "accessible", color: D.transit.paratransit.color, render: () => renderParatransit(D.transit) });
     win("shuttle", { title: "West Avenue Express Shuttle", icon: "shuttle", color: D.transit.shuttle.color, render: () => renderShuttle(D.transit) });
   }
+  if (D.flights) win("flights", { title: "Flights", icon: "plane", color: D.flights.airport.color, render: () => renderFlights(D.flights) });
   if (D.train) win("train", { title: "NC By Train", icon: "train", color: "var(--icon-1)", render: () => renderTrain(D.train) });
   if (D.library) win("library", { title: "Cabarrus County Public Library", icon: "library", color: "var(--icon-6)", render: () => renderLibrary(D.library) });
   if (D.drought) win("drought", { title: "Current Drought Conditions", icon: "drop", color: "var(--icon-1)", render: () => renderDrought(D.drought) });

@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       steps:
-        description: "Steps to run (space-separated: budget census council meetings news events weather gem swanee editions videos drought org zoning property). Blank = all."
+        description: "Steps to run (space-separated: budget census council meetings news events weather gem swanee editions videos drought org zoning property train transit flights). Blank = all."
         required: false
         default: ""
 
@@ -24,6 +24,10 @@ jobs:
     timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/checkout@v4 # flight routes come from kannapolis-travel's fetch_routes.py
+        with:
+          repository: bradspry/kannapolis-travel
+          path: .kannapolis-travel
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"

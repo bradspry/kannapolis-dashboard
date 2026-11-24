@@ -64,6 +64,112 @@
         "library": "l"
       },
       "spacers": []
+    },
+    "city": {
+      "order": [
+        "weather",
+        "waste",
+        "utility",
+        "drought",
+        "police",
+        "fire",
+        "news",
+        "meetings",
+        "council",
+        "videos",
+        "org",
+        "people",
+        "budget",
+        "debt-service",
+        "growth",
+        "g-tax-rate",
+        "g-debt-policy",
+        "g-debt-limit",
+        "land",
+        "g-owners",
+        "about"
+      ],
+      "hidden": [],
+      "sizes": {},
+      "spacers": []
+    },
+    "fun": {
+      "order": [
+        "gem",
+        "swanee",
+        "baseball",
+        "parks",
+        "made",
+        "library",
+        "editions",
+        "events",
+        "whataburger"
+      ],
+      "hidden": [],
+      "sizes": {
+        "gem": "m",
+        "swanee": "m",
+        "parks": "l",
+        "editions": "l",
+        "made": "l",
+        "library": "l"
+      },
+      "spacers": []
+    },
+    "jobs": {
+      "order": [
+        "job-appstate",
+        "job-atrium",
+        "job-cabarrus",
+        "job-ccs",
+        "job-cha",
+        "job-chewy",
+        "job-cfasupply",
+        "job-city",
+        "job-corning",
+        "job-dhl",
+        "job-foodlion",
+        "job-gfs",
+        "job-kcs",
+        "job-lilly",
+        "job-lowesfoods",
+        "job-macys",
+        "job-momentec",
+        "job-monarch",
+        "job-ncstate",
+        "job-rebel",
+        "job-rowancounty",
+        "job-rccc",
+        "job-rss",
+        "job-shoeshow",
+        "job-speedway",
+        "job-standardprocess",
+        "job-sysco",
+        "job-unc",
+        "job-uncc",
+        "job-uncg",
+        "job-westrock"
+      ],
+      "hidden": [],
+      "sizes": {},
+      "spacers": []
+    },
+    "transportation": {
+      "order": [
+        "train",
+        "rider",
+        "flights",
+        "paratransit",
+        "shuttle"
+      ],
+      "hidden": [],
+      "sizes": {
+        "flights": "l",
+        "shuttle": "l",
+        "paratransit": "l",
+        "train": "m"
+      },
+      "spacers": []
     }
   }
 }

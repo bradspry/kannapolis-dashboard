@@ -36,6 +36,7 @@ const PATHS = {
   accessible: '<circle cx="12" cy="4.5" r="1.7"/><path d="M12 7.5v6h5l2 5"/><path d="M12 10.5h4.5"/><path d="M9.2 10.3a5.5 5.5 0 1 0 7.3 7.4"/>',
   shuttle: '<path d="M3.5 15.5V9a3 3 0 0 1 3-3h9.4a3 3 0 0 1 2.6 1.5l2 3.5v4.5z"/><path d="M3.5 11h17"/><path d="M8 6v5M13 6v5"/><circle cx="7.5" cy="16.5" r="1.8"/><circle cx="16.5" cy="16.5" r="1.8"/>',
   briefcase: '<rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7"/><path d="M3 12.5h18"/><path d="M11 12.5h2v2h-2z"/>',
+  plane: '<path d="M10.2 13.8 6 18l-2.5-.8 2.6-3.2-3.1-2.1 1-1 3.9.9 3.4-3.4L4.5 5l1.3-1.3 9.8 2.6 3-3a1.8 1.8 0 0 1 2.5 2.5l-3 3 2.6 9.8-1.3 1.3-3.4-6.8z"/>',
   train: '<rect x="6" y="3" width="12" height="14" rx="3"/><path d="M6 10h12"/><path d="M10 6.5h4"/><path d="M9 13.5h.01M15 13.5h.01"/><path d="m8.5 17-2.5 4M15.5 17l2.5 4M7.3 19.5h9.4"/>',
   library: '<path d="M4 20h16"/><rect x="5" y="5" width="3" height="15" rx=".5"/><rect x="9" y="7" width="3" height="13" rx=".5"/><path d="m13.5 8.2 2.9-.8 3.3 12.1-2.9.8z"/>',
   grip: '<circle cx="9" cy="6" r="1.4"/><circle cx="15" cy="6" r="1.4"/><circle cx="9" cy="12" r="1.4"/><circle cx="15" cy="12" r="1.4"/><circle cx="9" cy="18" r="1.4"/><circle cx="15" cy="18" r="1.4"/>',

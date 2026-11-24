@@ -31,6 +31,7 @@ import build_whataburger
 import build_library
 import build_train
 import build_transit
+import build_flights
 import build_weather
 import build_zoning
 from common import log
@@ -50,6 +51,7 @@ STEPS = [
     ("library", build_library.main),
     ("train", build_train.main),
     ("transit", build_transit.main),
+    ("flights", build_flights.main),  # needs a kannapolis-travel checkout (.kannapolis-travel)
     ("weather", build_weather.main),
     ("news", build_news.main),
     ("org", build_org.main),

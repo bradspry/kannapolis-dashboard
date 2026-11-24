@@ -22,6 +22,7 @@ import { notices as wsNotices, missedButtons as wsMissed } from "./sections/wast
 import { searchBox as libSearch, upcoming as libUpcoming, eventRow as libRow, closureNote as libClosed, statusLine as libStatus } from "./sections/library.js";
 import { nextTrains, trainRow, nextCard as trNext, stationStatus as trStatus, ticketButton as trTickets, trackButton as trTrack, phoneButton as trPhone, logo as trLogo } from "./sections/train.js";
 import { countText as jobCount, staleNote as jobStale, careersButton as jobCareers, jobList, sectorColor as jobColor, fmtDay as jobDay, brandVars, brandHead } from "./sections/jobs.js";
+import { routeMap as flMap, airlineLegend as flLegend, newLine as flNew, destList as flDests } from "./sections/flights.js";
 import { serviceStatus as trSvc, shuttleStatus as shStatus, statusLine as trStatusLine, systemMap, shuttleMap, routeLegend, liveCount, alertList as trAlerts, callButton as trCall, upcomingHoliday as trHoliday, clock as trClock } from "./sections/transit.js";
 import { levelGauge as drGauge, countyLine as drCounty, strip as drStrip } from "./sections/drought.js";
 import { prepGames, nextHome, homeStands, standLabel, nextGameCard, fmtDay as bbDay, fmtTime as bbTime } from "./sections/baseball.js";
@@ -145,7 +146,7 @@ const contactLinks = (p) => [
 const shortDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
 export function tileDefs(data, COLORS) {
-  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos, waste, drought, library, train, jobs, transit } = data;
+  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos, waste, drought, library, train, jobs, transit, flights } = data;
   const jobSize = jobSizes(jobs);
   const t = tokens();
   const geo = census.geographies;
@@ -270,7 +271,7 @@ export function tileDefs(data, COLORS) {
         if (size === "m") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top tx-m" }, systemMap(transit, null, { cls: "mini" }),
           h("div", { class: "tr-m-side" }, status, liveCount(), holLine, trAlerts(transit, { compact: true }), routeLegend(transit, { kannapolisOnly: true, compact: true }))));
         if (size === "l") return h("div", { class: "tile-body" }, top, status, liveCount(), systemMap(transit, null, { cls: "mini big" }), routeLegend(transit, { compact: true }), facts);
-        return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top" }, systemMap(transit, null, { cls: "mini big" }),
+        return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top tx-big" }, systemMap(transit, null, { cls: "mini big" }),
           h("div", { class: "tr-m-side" }, status, liveCount(), holLine, trAlerts(transit, { compact: true }), routeLegend(transit), facts,
             h("p", { class: "tile-meta" }, r.hours_text))));
       },
@@ -287,9 +288,10 @@ export function tileDefs(data, COLORS) {
         if (size === "m") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top tx-m" }, systemMap(transit, null, { corridor: true, cls: "mini" }),
           h("div", { class: "tr-m-side" }, trStatusLine(res), fare, h("div", { class: "tr-actions col" }, book),
             h("a", { class: "tr-link", href: `tel:${p.phones.eligibility.replace(/[^0-9]/g, "")}` }, `Eligibility: ${p.phones.eligibility}`))));
-        return h("div", { class: "tile-body" }, top, h("div", { class: size === "xl" ? "tile-split top" : "" }, systemMap(transit, null, { corridor: true, cls: "mini big" }),
-          h("div", { class: "tr-m-side" }, trStatusLine(res), fare, h("p", { class: "tile-meta" }, `Shaded: within ¾ mile of a bus route, the service area. Rides run the same hours as the buses.`),
-            h("div", { class: "tr-actions" }, book, elig))));
+        const area = h("p", { class: "tile-meta" }, `Shaded: within ¾ mile of a bus route, the service area. Rides run the same hours as the buses.`);
+        if (size === "l") return h("div", { class: "tile-body" }, top, trStatusLine(res), fare, systemMap(transit, null, { corridor: true, cls: "mini big" }), h("div", { class: "tr-actions" }, book, elig));
+        return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top tx-big" }, systemMap(transit, null, { corridor: true, cls: "mini big" }),
+          h("div", { class: "tr-m-side" }, trStatusLine(res), fare, area, h("div", { class: "tr-actions" }, book, elig))));
       },
     },
     transit && {
@@ -303,6 +305,20 @@ export function tileDefs(data, COLORS) {
         if (size === "s") return h("div", { class: "tile-body" }, top, status, what);
         if (size === "m") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top tx-m" }, shuttleMap(sh, { cls: "mini" }), h("div", { class: "tr-m-side" }, status, what, stops)));
         return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top" }, shuttleMap(sh, { cls: "mini big" }), h("div", { class: "tr-m-side" }, status, what, stops)));
+      },
+    },
+    flights && {
+      id: "flights", opens: "flights", size: "m", label: "Flights",
+      build: (size) => {
+        const F = flights, n = F.flights.length;
+        const top = head("plane", F.airport.color, "Flights");
+        const count = h("p", { class: "fl-count" }, h("b", {}, String(n)), " nonstops from Concord");
+        const where = h("p", { class: "tile-meta" }, `Concord-Padgett (${F.airport.code}) · parking ${F.airport.parking.rate.replace(" per day", "/day")}`);
+        if (size === "s") return h("div", { class: "tile-body" }, top, count, flLegend(F, { compact: true }));
+        if (size === "m") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top tx-m" }, flMap(F, { cls: "mini", mainland: true, aspect: 1.7 }),
+          h("div", { class: "tr-m-side" }, count, flLegend(F, { compact: true }), flNew(F), where)));
+        return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top fl-l" }, flMap(F, { cls: "mini big", labels: true }),
+          h("div", { class: "tr-m-side" }, count, flLegend(F, { compact: true }), flDests(F, { cols: size === "xl" ? 2 : 1 }), where)));
       },
     },
     train && {
@@ -453,12 +469,12 @@ export function tileDefs(data, COLORS) {
         if (size === "m") return h("div", { class: "tile-body" }, ...top,
           h("div", { class: "tile-split top" }, h("div", {}, status, edOrder(ed, { compact: true })),
             h("div", {}, h("div", { class: "mini-head bb-mh" }, "New books"), covers(4))));
-        if (size === "l") return h("div", { class: "tile-body" }, ...top, status,
-          h("div", { class: "mini-head" }, "New books"), covers(5), h("div", { class: "mini-head" }, "Coming up"), events(3), edOrder(ed, { compact: true }));
+        if (size === "l") return h("div", { class: "tile-body" }, ...top, h("div", { class: "ed-l-top" }, status, edOrder(ed, { compact: true })),
+          h("div", { class: "mini-head" }, "New books"), covers(7), h("div", { class: "mini-head" }, "Coming up"), events(3));
         return h("div", { class: "tile-body" }, ...top,
           h("div", { class: "tile-split top" },
             h("div", {}, status, h("div", { class: "mini-head" }, "Coming up"), events(4), edOrder(ed, { compact: true })),
-            h("div", {}, h("div", { class: "mini-head bb-mh" }, "New books"), covers(8))));
+            h("div", {}, h("div", { class: "mini-head bb-mh" }, "New books"), covers(12))));
       },
     },
     made && {

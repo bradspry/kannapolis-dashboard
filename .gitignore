@@ -7,3 +7,6 @@ dist/
 
 # kannapolis-jobs checkout used by etl/build_jobs.py (weekly)
 .kannapolis-jobs/
+
+# kannapolis-travel checkout used by etl/build_flights.py (weekly)
+.kannapolis-travel/

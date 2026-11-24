@@ -1,0 +1,58 @@
+{
+  "_source": "Machine-parsed from Concord-Padgett Regional Airport's Airlines, Parking and Directions pages (concordairportnc.com/Airline-Information/Airlines, /Parking, /Directions), Nov 24 2026. Routes themselves come from etl/build_flights.py (bradspry/kannapolis-travel fetch_routes.py --flights-only). Airline colors match kannapolis-travel's generate_route_map.py.",
+  "airport": {
+    "name": "Concord-Padgett Regional Airport",
+    "code": "USA",
+    "color": "#1d4e89",
+    "phone": "704-920-5901",
+    "terminal": "7435 Zephyr Place NW, Concord, NC 28027",
+    "terminal_note": "Some GPS and navigation apps default to the wrong terminal address: navigate to this address, not just to the airport.",
+    "office": "9000 Aviation Blvd., Concord, NC 28027",
+    "arrive_hours": 2,
+    "parking": {
+      "rate": "$15 per day",
+      "rate_since": "2026-07-01",
+      "free": "Under one hour is free (greeters, drop-offs, deliveries).",
+      "where": "Two-level parking deck in front of the terminal; the lower level is covered. Both levels are short- or long-term.",
+      "pay": "Card only at the exit kiosks; pay cash at the kiosk inside the terminal.",
+      "overflow": "When the deck fills on busy travel days and some holidays, an overflow lot on Aviation Blvd. (about a mile away) runs a shuttle to the terminal: allow at least 30 more minutes."
+    },
+    "links": {
+      "airlines": "https://concordairportnc.com/Airline-Information/Airlines",
+      "parking": "https://concordairportnc.com/Airline-Information/Parking",
+      "directions": "https://concordairportnc.com/Airline-Information/Directions",
+      "home": "https://concordairportnc.com/"
+    }
+  },
+  "airlines": {
+    "Allegiant Air": {
+      "short": "Allegiant",
+      "color": "#f77f00",
+      "site": "https://www.allegiantair.com/",
+      "phone": "702-505-8888"
+    },
+    "Avelo Airlines": {
+      "short": "Avelo",
+      "color": "#7b2cbf",
+      "site": "https://www.aveloair.com/",
+      "phone": "346-616-9500"
+    }
+  },
+  "charter": {
+    "airline": "Sun Country Airlines",
+    "text": "Sun Country flies public charters from Concord for Caesars Rewards Air, packaged trips to Caesars Entertainment resorts and casinos.",
+    "phone": "866-986-1647",
+    "phone_hours": "Mon–Fri 8 AM–7 PM Central",
+    "url": "https://www.caesars.com/myrewards/air"
+  },
+  "city_names": {
+    "_source": "The airport's Airlines page names these by area; OurAirports gives the municipality.",
+    "SFB": "Orlando Sanford",
+    "PIE": "St. Pete–Clearwater",
+    "ISP": "Long Island",
+    "LAL": "Lakeland",
+    "PGD": "Punta Gorda",
+    "MCO": "Orlando",
+    "RSW": "Fort Myers"
+  }
+}

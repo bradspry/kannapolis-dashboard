@@ -13,7 +13,7 @@ export const DEFAULT_MEMBERS = {
     "people", "budget", "debt-service", "growth", "g-tax-rate", "g-debt-policy", "g-debt-limit", "land", "g-owners", "about"],
   fun: ["weather", "gem", "swanee", "baseball", "parks", "events", "editions", "made", "whataburger", "library"],
   jobs: [], // plus every employer widget (job-*): see defaultMembers
-  transportation: ["weather", "rider", "train", "paratransit", "shuttle"],
+  transportation: ["weather", "rider", "train", "flights", "paratransit", "shuttle"],
 };
 
 /** A tab's starting widgets, given every widget id. Jobs starts with all the employer widgets. */
