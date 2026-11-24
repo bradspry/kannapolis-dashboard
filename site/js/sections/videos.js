@@ -1,7 +1,7 @@
 // City Council meeting videos: the next meeting's live stream and recent recordings, from the
 // City's YouTube playlist (read daily). The in-window player loads YouTube only when someone
 // presses play (privacy-enhanced youtube-nocookie.com embed); until then it's just a thumbnail.
-import { h } from "../ui.js";
+import { h, fill } from "../ui.js";
 
 const LIVE_HOURS = 4; // a Council meeting stream is treated as "live" from start time for this long
 const parseLocal = (s) => { const [d, t = "18:00"] = s.split("T"); const [y, m, dd] = d.split("-").map(Number); const [hh, mm] = t.split(":").map(Number); return new Date(y, m - 1, dd, hh, mm); };
@@ -72,7 +72,7 @@ export function renderVideos(vd) {
       h("span", {}, views(v.views))))));
   drawPlayer(false);
 
-  root.replaceChildren(
+  fill(root, 
     next ? h("section", { class: `card gem-hero vd-next${next.live ? " live" : ""}` }, thumb(next, "md", { play: false }),
       h("div", { class: "gem-hero-text" },
         h("div", { class: "bb-next-label" }, next.live ? "Streaming now" : "Next Council meeting · streams live"),

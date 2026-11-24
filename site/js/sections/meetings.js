@@ -1,5 +1,5 @@
 // Meetings widget: a month calendar + list of upcoming City meetings, each linked to its agenda.
-import { h, legend } from "../ui.js";
+import { h, legend, fill } from "../ui.js";
 import { tokens } from "../theme.js";
 
 const DAY_MS = 86400000;
@@ -156,7 +156,7 @@ export function renderMeetings(data) {
 
   drawCalendar();
   drawList();
-  root.replaceChildren(
+  fill(root, 
     h("div", { class: "mtg-layout" }, calWrap, listWrap),
     h("p", { class: "note" }, "From the City's ",
       h("a", { href: data.source, target: "_blank", rel: "noopener" }, "CivicClerk meeting portal"),

@@ -1,6 +1,6 @@
 // Jobs tab: one widget per employer, from the weekly kannapolis-jobs harvest (data/generated/jobs.json).
 // Every listing links to the employer's own posting.
-import { h } from "../ui.js";
+import { h, fill } from "../ui.js";
 
 const ext = (href, label, cls) => h("a", { href, target: "_blank", rel: "noopener", class: cls }, label);
 const parseDay = (s) => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); };
@@ -56,7 +56,7 @@ export function renderEmployer(jobs, emp) {
   };
   search.addEventListener("input", () => { f.q = search.value; draw(); });
   const sector = jobs.sectors[emp.sector]?.label;
-  root.replaceChildren(
+  fill(root, 
     h("section", { class: "card job-hero" },
       h("div", {},
         h("div", { class: "bb-next-label" }, [sector, emp.where].filter(Boolean).join(" · ")),

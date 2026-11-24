@@ -1,6 +1,6 @@
 // Waste collection: report a missed pickup, holiday delays (worked out on the device), the loose-leaf
 // season, what goes in which cart, set-out rules, and links to the City's CARTology pickup-day lookup and app.
-import { h } from "../ui.js";
+import { h, fill } from "../ui.js";
 
 const DAY_MS = 86400000;
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -75,7 +75,7 @@ export function missedButtons(w, { compact = false, side = false } = {}) {
 export function renderWaste(w) {
   const root = document.getElementById("waste-body");
   const now = notices(w);
-  root.replaceChildren(
+  fill(root, 
     h("section", { class: "card ws-hero" },
       h("div", {}, h("div", { class: "bb-next-label" }, "Missed a pickup?"),
         h("h3", {}, "Call or email within 24 hours"),

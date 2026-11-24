@@ -1,6 +1,6 @@
 // The Swanee Theatre: upcoming shows (daily from the venue's public events feed), weekly dance
 // nights, what to know before you go, and how to rent the venue.
-import { h, contactButtons } from "../ui.js";
+import { h, contactButtons, fill } from "../ui.js";
 
 const DAY_MS = 86400000;
 const parseLocal = (s) => { const [d, t = "00:00"] = s.split("T"); const [y, m, dd] = d.split("-").map(Number); const [hh, mm] = t.split(":").map(Number); return new Date(y, m - 1, dd, hh, mm); };
@@ -78,7 +78,7 @@ export function renderSwanee(sw) {
   draw();
   const next = shows[0];
 
-  root.replaceChildren(
+  fill(root, 
     next ? h("section", { class: "card gem-hero" }, showImage(next, "lg"),
       h("div", { class: "gem-hero-text" },
         h("div", { class: "bb-next-label" }, "Next at the Swanee"),

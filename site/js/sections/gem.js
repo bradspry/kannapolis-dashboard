@@ -1,6 +1,6 @@
 // The Gem Theatre: what's showing now and next, tickets, prices and what to know before you go.
 // Posters load from gem-theatre.com; listings refresh daily (etl/build_gem.py).
-import { h, contactButtons } from "../ui.js";
+import { h, contactButtons, fill } from "../ui.js";
 
 const DAY_MS = 86400000;
 const parseDay = (s) => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); };
@@ -55,7 +55,7 @@ export function renderGem(gem) {
         h("a", { href: tel(gem.phones.movie_info) }, `☎ Movie info line ${gem.phones.movie_info}`))))
     : h("section", { class: "card" }, h("p", {}, "No film is listed for today. "), ticketsButton(gem));
 
-  root.replaceChildren(
+  fill(root, 
     hero,
     next.length ? h("h3", { class: "about-h" }, "Coming soon") : null,
     next.length ? h("div", { class: "gem-next" }, next.map((f) => h("article", { class: "card gem-card" },

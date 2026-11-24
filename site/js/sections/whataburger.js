@@ -1,6 +1,6 @@
 // What-A-Burger #1: hometown drive-in on N Cannon Blvd. Machine-parsed menu with prices,
 // local favorites, and open-now worked out on the device from posted hours.
-import { h } from "../ui.js";
+import { h, fill } from "../ui.js";
 import { statusLine, hoursText, hoursFor } from "./made.js";
 
 const tel = (n) => `tel:${n.replace(/[^0-9]/g, "")}`;
@@ -47,7 +47,7 @@ export function renderWhatABurger(wab) {
   search.addEventListener("input", () => { query = search.value; draw(); });
   draw();
 
-  root.replaceChildren(
+  fill(root, 
     h("section", { class: "card gem-hero wab-hero" }, wabLogo(wab, "lg"),
       h("div", { class: "gem-hero-text" },
         h("div", { class: "bb-next-label" }, `${wab.kind} · N Cannon Blvd`),

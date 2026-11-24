@@ -1,6 +1,6 @@
 // Made in Kannapolis: local makers, starting with a featured one. Hours and "open now" are
 // worked out on the device from the maker's posted weekly hours.
-import { h, contactButtons } from "../ui.js";
+import { h, contactButtons, fill } from "../ui.js";
 
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const mins = (s) => { const [hh, mm] = s.split(":").map(Number); return hh * 60 + mm; };
@@ -96,7 +96,7 @@ function makerSection(m) {
 export function renderMade(made) {
   const root = document.getElementById("made-body");
   const m = featuredMaker(made);
-  root.replaceChildren(
+  fill(root, 
     h("p", { class: "gem-p" }, made.intro),
     ...makerSection(m),
     h("p", { class: "note" }, "From the maker's own website. Open/closed is worked out on your device from posted hours; holidays and private events can change them, so check before you go. Please enjoy responsibly; 21+ to drink."));

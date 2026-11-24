@@ -1,6 +1,6 @@
 // Kannapolis Fire: how to reach KFD, free help for residents, after a fire, and the five stations
 // (with "find my nearest station", computed on the device; the location is never sent anywhere).
-import { h, contactButtons } from "../ui.js";
+import { h, contactButtons, fill } from "../ui.js";
 import { makeMap, maplibregl } from "../maps.js";
 import { callButtons } from "./police.js";
 
@@ -49,7 +49,7 @@ export function renderFire(fire, org) {
 
   const mapBox = h("div", { class: "map kfd-map", id: "kfd-map", role: "img", "aria-label": "Map of the five Kannapolis fire stations" });
 
-  root.replaceChildren(
+  fill(root, 
     callButtons(fire),
     h("div", { class: "kpd-contact card" },
       h("div", {}, h("b", {}, "Fire code concern?"), " Call the Fire Marshal at ", h("a", { href: tel(marshal.number) }, marshal.number),

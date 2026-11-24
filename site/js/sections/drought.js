@@ -2,7 +2,7 @@
 // and the weekly U.S. Drought Monitor for Cabarrus and Rowan counties, with two years of history.
 // USDM values are cumulative: d1 = percent of the county in D1 *or worse*.
 import * as Plot from "@observablehq/plot";
-import { h, plotBase, dataTable, legend } from "../ui.js";
+import { h, plotBase, dataTable, legend, fill } from "../ui.js";
 import { gauge } from "../gauge.js";
 import { tokens } from "../theme.js";
 import { pct } from "../format.js";
@@ -115,7 +115,7 @@ export function renderDrought(dr) {
     ], [...county.weeks].reverse(), `Show ${county.name} data (percent of county)`));
   };
 
-  root.replaceChildren(
+  fill(root, 
     h("section", { class: `card dr-hero lv-${c.level}` },
       h("div", {},
         h("div", { class: "bb-next-label" }, "City of Kannapolis water use"),

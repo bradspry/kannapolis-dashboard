@@ -1,7 +1,7 @@
 // Kannapolis Reads and Yarns: Editions Coffee Shop & Bookstore. New arrivals and events are read
 // daily from the store's website; coffee, yarn and hours are machine-parsed snapshots. Open/closed is worked
 // out on the device from the posted hours (and any closure on the store's events list).
-import { h, contactButtons } from "../ui.js";
+import { h, contactButtons, fill } from "../ui.js";
 import { openStatus, hoursTable } from "./made.js";
 
 const DAY_MS = 86400000;
@@ -130,7 +130,7 @@ export function renderEditions(ed) {
   draw();
 
   const next = evs.find((e) => e.date && !e.closed);
-  root.replaceChildren(
+  fill(root, 
     h("section", { class: "card ed-hero" },
       h("div", {}, h("div", { class: "bb-next-label" }, "Books · coffee · yarn"), h("h3", {}, ed.name), h("p", { class: "gem-p" }, ed.tagline, ". ", ed.address, "."),
         h("div", { class: "gem-actions" }, orderButton(ed), ext(ed.map, "Directions ↗"), h("a", { href: tel(ed.phone) }, `☎ ${ed.phone}`))),

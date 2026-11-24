@@ -1,7 +1,7 @@
 // Cabarrus County Public Library: a catalog search box, plus upcoming events with Kannapolis's two
 // branches (KAN = Kannapolis Library, AFT = Afton Ridge) up front. Events come from the library's
 // public events calendar; the search box just opens the library catalog with the visitor's search.
-import { h } from "../ui.js";
+import { h, fill } from "../ui.js";
 
 const parse = (s) => { const [d, t = "00:00"] = s.split("T"); const [y, m, dd] = d.split("-").map(Number); const [hh, mm] = t.split(":").map(Number); return new Date(y, m - 1, dd, hh, mm); };
 const day0 = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
@@ -144,7 +144,7 @@ export function renderLibrary(lib) {
       h("p", { class: "tile-meta" }, `${upcoming(lib, { branch: code }).length} events in the next four weeks`));
   };
 
-  root.replaceChildren(
+  fill(root, 
     h("section", { class: "card lib-hero" },
       lib.logo ? h("div", { class: "lib-logo" }, h("img", { src: lib.logo, alt: "Cabarrus County Public Library System" })) : null,
       h("h3", {}, "Search the library catalog"),

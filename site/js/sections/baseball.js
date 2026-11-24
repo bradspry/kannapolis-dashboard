@@ -1,5 +1,5 @@
 // Kannapolis Cannon Ballers 2027: next home game, home stands, month calendars, and calendar export.
-import { h } from "../ui.js";
+import { h, fill } from "../ui.js";
 
 const DAY_MS = 86400000;
 const MONTHS = ["April", "May", "June", "July", "August", "September"];
@@ -114,7 +114,7 @@ export function renderBaseball(bb) {
   }
   drawCals();
 
-  root.replaceChildren(
+  fill(root, 
     h("div", { class: "bb-top" },
       h("div", { class: "card bb-hero" },
         bb.logo ? h("img", { class: "bb-logo bb-logo-hero", src: bb.logo, alt: "Kannapolis Cannon Ballers logo" }) : null,

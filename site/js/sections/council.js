@@ -1,4 +1,4 @@
-import { h, contactButtons } from "../ui.js";
+import { h, contactButtons, fill } from "../ui.js";
 
 const initials = (name) => name.split(/\s+/).filter((w) => /^[A-Z]/.test(w) && !w.endsWith(".")).map((w) => w[0]).join("").slice(0, 2)
   || name[0];
@@ -54,7 +54,7 @@ export function renderCouncil(council) {
           copyButton(m.email, `${m.name}'s email address`)),
         m.phone ? h("a", { href: `tel:${m.phone.replace(/[^0-9]/g, "")}`, "aria-label": `Call ${m.name}` }, m.phone) : null))));
 
-  root.replaceChildren(banner, grid,
+  fill(root, banner, grid,
     h("p", { class: "note council-note" }, "Contact details from the ",
       h("a", { href: council.source }, "City of Kannapolis City Council page"),
       `. Check there for meeting times and public comment sign-up. ${council.photo_credit || ""}`));

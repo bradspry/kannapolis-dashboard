@@ -1,6 +1,6 @@
 // Weather window: alerts, current conditions, next 24 hours, and the 7-day forecast (NWS).
 import * as Plot from "@observablehq/plot";
-import { h, plotBase, dataTable } from "../ui.js";
+import { h, plotBase, dataTable, fill } from "../ui.js";
 import { tokens } from "../theme.js";
 import { wxIcon } from "../weather.js";
 import { makeMap, firstLabelLayer, maplibregl } from "../maps.js";
@@ -103,7 +103,7 @@ export function alertBanner(alerts, { compact = false } = {}) {
 
 export function renderWeather(w, boundaries) {
   const root = document.getElementById("weather-body");
-  if (!w) { root.replaceChildren(h("p", { class: "loading" }, "Weather is unavailable.")); return; }
+  if (!w) { fill(root, h("p", { class: "loading" }, "Weather is unavailable.")); return; }
   const t = tokens();
   const c = w.current, today = w.days[0];
 
@@ -166,7 +166,7 @@ export function renderWeather(w, boundaries) {
           d.night ? h("p", {}, h("b", {}, `${d.night.name}: `), d.night.detail) : null)));
     })));
 
-  root.replaceChildren(
+  fill(root, 
     alertsBlock,
     h("div", { class: "wx-top" }, hero, hourly),
     radarCard(boundaries),

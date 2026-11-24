@@ -1,6 +1,6 @@
 // Pay Utility Bill: the fastest ways to pay, the card fee and due dates (with small calculators),
 // and where to get help. Nothing is sent anywhere; the calculators run in the browser.
-import { h, contactButtons } from "../ui.js";
+import { h, contactButtons, fill } from "../ui.js";
 import { usd } from "../format.js";
 
 const money = (v) => `$${v.toFixed(2)}`;
@@ -58,7 +58,7 @@ export function renderUtility(u) {
   };
   bill.addEventListener("input", drawDates);
 
-  root.replaceChildren(
+  fill(root, 
     payButtons(u),
     h("p", { class: "ub-tip" }, h("b", {}, "Tip: "), u.portal_tip),
 

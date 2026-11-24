@@ -1,6 +1,6 @@
 // Events widget: the City's official "Upcoming Events" calendar. Repeating events arrive merged into
 // one series (etl/build_events.py), so a 40-night light show is one entry, not forty.
-import { h } from "../ui.js";
+import { h, fill } from "../ui.js";
 
 const DAY_MS = 86400000;
 const parseDay = (s) => { const [y, m, d] = s.slice(0, 10).split("-").map(Number); return new Date(y, m - 1, d); };
@@ -69,7 +69,7 @@ export function renderEvents(data) {
     if (!items.length) list.replaceChildren(h("li", { class: "loading" }, "Nothing upcoming in this category."));
   };
   draw();
-  root.replaceChildren(
+  fill(root, 
     chips, list,
     h("p", { class: "note" },
       "From the City's official ",

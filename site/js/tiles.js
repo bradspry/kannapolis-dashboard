@@ -836,9 +836,16 @@ export function tileDefs(data, COLORS) {
     // Jobs: one widget per employer, A to Z. They start on the Jobs tab, not Home (home: false).
     ...(jobs ? [...jobs.employers].sort((a, b) => a.name.localeCompare(b.name)).map((emp) => ({
       id: `job-${emp.slug}`, opens: `job-${emp.slug}`, size: emp.jobs.length > 3 ? "m" : "s", label: emp.name, home: false,
+      // No openings this week (and the check didn't fail): a dimmed, dashed "empty folder".
+      kind: !emp.jobs.length && !emp.error ? "jobs-none" : undefined,
       build: (size) => {
         const top = head("briefcase", jobColor(jobs, emp), emp.name);
         const n = emp.jobs.length;
+        if (!n && !emp.error) {
+          return h("div", { class: "tile-body job-tile" }, top,
+            h("p", { class: "job-none" }, "No openings this week"), h("p", { class: "tile-meta job-where" }, emp.where),
+            size === "s" ? null : h("div", { class: "job-actions" }, jobCareers(emp, { compact: true, label: "Careers site ↗" })));
+        }
         const count = h("div", { class: "job-tile-count" }, h("b", {}, n || "0"), h("span", {}, n === 1 ? "opening" : "openings"));
         const where = h("p", { class: "tile-meta job-where" }, emp.where);
         const stale = jobStale(emp, { compact: true });

@@ -1949,3 +1949,8 @@ body::before {
 .job-search { flex: 1 1 240px; }
 .job-tools .chips { margin: 0; }
 @media (max-width: 720px) { .job-hero-actions { align-items: flex-start; } }
+/* Employer with no openings this week: dimmed, dashed, back to full on hover/focus */
+.tile-w.kind-jobs-none { border-style: dashed; background: color-mix(in oklab, var(--surface-1) 55%, transparent); box-shadow: none; }
+.tile-w.kind-jobs-none .tile-body { opacity: .55; transition: opacity .15s; }
+.tile-w.kind-jobs-none:hover .tile-body, .tile-w.kind-jobs-none:focus-within .tile-body { opacity: 1; }
+.job-none { margin: 2px 0 0; font-size: 15px; font-weight: 600; color: var(--text-secondary); }

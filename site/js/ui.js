@@ -18,6 +18,13 @@ export function h(tag, attrs = {}, ...children) {
   return el;
 }
 
+/** Replace an element's contents, skipping empty parts (null/false/undefined), as h() does.
+ *  Plain replaceChildren() would print them as the text "null" or "false". */
+export function fill(el, ...children) {
+  el.replaceChildren(...children.flat().filter((c) => c != null && c !== false));
+  return el;
+}
+
 /** Fill a <figure class="card"> with title/subtitle and return its parts. */
 export function card(id, { title, sub, note }) {
   const fig = document.getElementById(id);

@@ -1,7 +1,7 @@
 // Parks & Recreation for residents: find a park by what you want to do, reserve a shelter,
 // sign up for programs, greenways, seasonal attractions, rules and ways to get involved.
 // "Nearest park" uses the device's location only on the device; it is never sent anywhere.
-import { h, contactButtons } from "../ui.js";
+import { h, contactButtons, fill } from "../ui.js";
 import { makeMap, maplibregl } from "../maps.js";
 
 const tel = (n) => `tel:${n.replace(/[^0-9]/g, "")}`;
@@ -187,7 +187,7 @@ export function renderParks(pr) {
   const card = (x) => h("div", { class: "card ub-way" }, h("b", {}, x.title), h("p", {}, x.text),
     h("a", { href: x.url, ...ext(x.url) }, x.action, arrow(x.url)));
 
-  root.replaceChildren(
+  fill(root, 
     parkButtons(pr),
     h("div", { class: "kpd-contact card" },
       h("div", {}, h("b", {}, "Parks office"), " · ", h("a", { href: tel(pr.phone) }, pr.phone), " · ", h("a", { href: `mailto:${pr.email}` }, pr.email),

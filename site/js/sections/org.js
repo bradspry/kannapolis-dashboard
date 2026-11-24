@@ -1,4 +1,4 @@
-import { h, contactButtons } from "../ui.js";
+import { h, contactButtons, fill } from "../ui.js";
 
 const initials = (name) => (name || "").split(/\s+/).filter((w) => /^[A-Z]/.test(w)).map((w) => w[0]).join("").slice(0, 2);
 
@@ -97,7 +97,7 @@ export function renderOrg(org) {
     if (q && hits) chart.querySelector(".org-card.match")?.scrollIntoView({ block: "nearest", behavior: "smooth" });
   });
 
-  root.replaceChildren(
+  fill(root, 
     h("div", { class: "org-search-row" }, search, status),
     chart,
     h("p", { class: "note org-footnote" },

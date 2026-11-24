@@ -1,6 +1,6 @@
 // Kannapolis Police: how to reach police first, things residents can do online, then crime
 // statistics from KPD's quarterly reports in plain language.
-import { h, contactButtons, segmentedBars, legend, dataTable } from "../ui.js";
+import { h, contactButtons, segmentedBars, legend, dataTable, fill } from "../ui.js";
 import { tokens } from "../theme.js";
 import { pct } from "../format.js";
 
@@ -73,7 +73,7 @@ export function renderPolice(police, org) {
   const statusOrder = Object.keys(statusExplain);
   const statusColors = [t.series[0], t.series[2], t.series[3], t.mutedFill, t.series[4]];
 
-  root.replaceChildren(
+  fill(root, 
     callButtons(police),
     h("div", { class: "kpd-contact card" },
       h("div", {}, h("b", {}, "Records"), " · ", h("a", { href: tel(records.number) }, records.number), " · ",

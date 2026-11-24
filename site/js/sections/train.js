@@ -1,6 +1,6 @@
 // NC By Train: Kannapolis Station (KAN). The station's posted schedule (read daily from ncbytrain.org),
 // with the next departures, countdowns and open/closed worked out on the device. Every train runs daily.
-import { h } from "../ui.js";
+import { h, fill } from "../ui.js";
 
 const tel = (n) => `tel:${n.replace(/[^0-9]/g, "")}`;
 const ext = (href, label, cls) => h("a", { href, target: "_blank", rel: "noopener", class: cls }, label);
@@ -129,7 +129,7 @@ export function renderTrain(tr) {
   const routeDates = Object.entries(tr.routes || {}).filter(([, r]) => r.modified).map(([name, r]) => `${name} ${longDate(r.modified)}`).join(", ");
   const differs = (tr.station_page_differs || []).filter((d) => d.station_page && d.route_page);
 
-  root.replaceChildren(
+  fill(root, 
     h("section", { class: "card tr-hero" },
       tr.photo ? h("figure", { class: "tr-photo" }, h("img", { src: tr.photo, alt: "Kannapolis Station, with a Piedmont locomotive at the platform", loading: "lazy" })) : null,
       h("div", { class: "tr-hero-text" },

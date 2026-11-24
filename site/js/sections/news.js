@@ -1,5 +1,5 @@
 // News widget: the City's official news releases, newest first, with topic filters and search.
-import { h } from "../ui.js";
+import { h, fill } from "../ui.js";
 
 const DAY_MS = 86400000;
 const PAGE = 8;
@@ -87,7 +87,7 @@ export function renderNews(data) {
   drawChips();
   drawList();
   const oldest = items.map((i) => i.date).filter(Boolean).sort()[0];
-  root.replaceChildren(
+  fill(root, 
     h("div", { class: "news-controls" }, chips, search),
     status, list, more,
     h("p", { class: "note" }, "Headlines and teasers from the City's official ",
