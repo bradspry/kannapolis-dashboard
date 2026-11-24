@@ -22,6 +22,7 @@ import { notices as wsNotices, missedButtons as wsMissed } from "./sections/wast
 import { searchBox as libSearch, upcoming as libUpcoming, eventRow as libRow, closureNote as libClosed, statusLine as libStatus } from "./sections/library.js";
 import { nextTrains, trainRow, nextCard as trNext, stationStatus as trStatus, ticketButton as trTickets, trackButton as trTrack, phoneButton as trPhone, logo as trLogo } from "./sections/train.js";
 import { countText as jobCount, staleNote as jobStale, careersButton as jobCareers, jobList, sectorColor as jobColor, fmtDay as jobDay, brandVars, brandHead } from "./sections/jobs.js";
+import { districtsOf as sbDistricts, total as sbTotal, districtRows as sbRows, titleList as sbTitles, SCHOOL_BUS_YELLOW } from "./sections/schoolbus.js";
 import { routeMap as flMap, airlineLegend as flLegend, newLine as flNew, destList as flDests } from "./sections/flights.js";
 import { serviceStatus as trSvc, shuttleStatus as shStatus, statusLine as trStatusLine, systemMap, shuttleMap, routeLegend, liveCount, alertList as trAlerts, callButton as trCall, upcomingHoliday as trHoliday, clock as trClock } from "./sections/transit.js";
 import { levelGauge as drGauge, countyLine as drCounty, strip as drStrip } from "./sections/drought.js";
@@ -913,6 +914,22 @@ export function tileDefs(data, COLORS) {
             h("div", {}, h("div", { class: "mini-head" }, "Freshness"), h("ul", { class: "fresh-mini small" }, sorted.slice(0, 9).map(fRow)))));
       },
     },
+    jobs?.school_bus && {
+      // Pinned to the Jobs tab's top-right corner by default (see DEFAULT_PINNED).
+      id: "school-bus", opens: "school-bus", size: "m", label: "School Bus Drivers", home: false,
+      vars: { "--brand": SCHOOL_BUS_YELLOW, "--brand-ink": "#1d1d1d" },
+      build: (size) => {
+        const n = sbTotal(jobs), ds = sbDistricts(jobs), all = ds.flatMap((d) => d.jobs);
+        const top = h("div", { class: "tile-head" }, chip("bus", SCHOOL_BUS_YELLOW, "#1d1d1d"), h("span", { class: "tile-title" }, "School Bus Drivers"));
+        const count = h("p", { class: "sb-total" }, h("b", {}, String(n)), ` driving opening${n === 1 ? "" : "s"}`);
+        if (size === "s") return h("div", { class: "tile-body" }, top, count, h("p", { class: "tile-meta" }, "KCS · Cabarrus · Rowan-Salisbury"));
+        if (size === "m") return h("div", { class: "tile-body" }, top, h("div", { class: "sb-m" },
+          h("div", {}, count, h("p", { class: "tile-meta sb-what" }, "School bus, field trip and van drivers in 3 districts")), sbRows(jobs, { short: true })));
+        if (size === "l") return h("div", { class: "tile-body" }, top, count, sbRows(jobs), h("div", { class: "mini-head" }, "Most posted"), sbTitles(all, 5));
+        return h("div", { class: "tile-body" }, top, h("div", { class: "sb-xl" }, h("div", {}, count, sbRows(jobs)),
+          ...ds.map((d) => h("div", {}, h("div", { class: "mini-head" }, d.name.replace(/ Schools$/, "")), sbTitles(d.jobs, 6)))));
+      },
+    },
     // (jobSize below: 0–9 openings small, 10–49 medium, 50+ large; then the small employers with the most
     // openings move up to medium until the tiles fill whole rows of the 4-column grid, leaving no holes.)
     // Jobs: one widget per employer, A to Z. They start on the Jobs tab, not Home (home: false).
@@ -956,7 +973,8 @@ function jobSizes(jobs) {
   const sizes = new Map(), cells = { s: 1, m: 2, l: 4 };
   if (!jobs) return sizes;
   for (const e of jobs.employers) sizes.set(e.slug, e.jobs.length >= 50 ? "l" : e.jobs.length >= 10 ? "m" : "s");
-  let total = [...sizes.values()].reduce((n, s) => n + cells[s], 0);
+  // The School Bus Drivers widget (medium, pinned) shares the Jobs tab, so count its 2 cells too.
+  let total = [...sizes.values()].reduce((n, s) => n + cells[s], 0) + (jobs.school_bus ? cells.m : 0);
   const promote = jobs.employers.filter((e) => sizes.get(e.slug) === "s" && e.jobs.length).sort((a, b) => b.jobs.length - a.jobs.length);
   while (total % 4 && promote.length) { sizes.set(promote.shift().slug, "m"); total += 1; }
   return sizes;

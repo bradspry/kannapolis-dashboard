@@ -7,7 +7,7 @@
 import { h } from "./ui.js";
 import { icon } from "./icons.js";
 import { enableDrag, moveBy } from "./drag.js";
-import { TABS, defaultMembers, categoryOf, tabById } from "./tabs.js";
+import { TABS, defaultMembers, categoryOf, tabById, DEFAULT_PINNED } from "./tabs.js";
 
 const KEY = "kdash-home-layout";          // Home tab: { order: [tile ids], hidden: [tile ids], sizes, spacers }
 const keyFor = (t) => (t === "home" ? KEY : `kdash-tab-${t}`); // other tabs: same shape; order = the tab's widgets
@@ -15,6 +15,7 @@ const OLD_HIDDEN_KEY = "kdash-hidden-widgets";
 let hidden = new Set();
 let order = null;                         // full tile order, or null = default
 let sizes = {};                           // tile id -> "s" | "m" | "l" | "xl"
+let pinned = null;                        // the widget pinned to this tab's top-right corner, if any
 let spacers = [];                         // ids of blank-space tiles ("space-…")
 export const SIZES = [["s", "Small"], ["m", "Medium"], ["l", "Large"], ["xl", "Extra large"]];
 let tab = "home";                         // the open folder tab
@@ -38,17 +39,18 @@ function readLocal(t = tab) {
 }
 /** A tab nobody has arranged: its starting widgets (Home: everything). */
 const allTileIds = () => (typeof tileDefs === "function" ? tileDefs() : tileDefs).map((d) => d.id);
-const builtin = (t) => (t === "home" ? null : { order: defaultMembers(t, allTileIds()), hidden: [], sizes: {}, spacers: [] });
+const builtin = (t) => (t === "home" ? null : { order: defaultMembers(t, allTileIds()), hidden: [], sizes: {}, spacers: [], pinned: DEFAULT_PINNED[t] || null });
 const effective = (t) => readLocal(t) || siteDefaults[t] || builtin(t);
 const auto = () => tab === "home"; // widgets not in the saved order still show (new ones)
 function applyLayout(l) {
   order = l?.order || null; hidden = new Set(l?.hidden || []); sizes = { ...(l?.sizes || {}) };
   spacers = (l?.spacers || []).filter((id) => /^space-[a-z0-9]{1,20}$/.test(id));
+  pinned = typeof l?.pinned === "string" ? l.pinned : null;
 }
 function loadHidden() { applyLayout(effective(tab)); }
 function saveHidden() {
   try {
-    localStorage.setItem(keyFor(tab), JSON.stringify({ order, hidden: [...hidden], sizes, spacers }));
+    localStorage.setItem(keyFor(tab), JSON.stringify({ order, hidden: [...hidden], sizes, spacers, pinned }));
     if (tab === "home") localStorage.removeItem(OLD_HIDDEN_KEY);
   } catch { /* private mode: lasts for this visit */ }
 }
@@ -92,9 +94,10 @@ function commitOrder(visibleIds) {
   syncEditBar();
 }
 
-export function chip(name, color) {
+export function chip(name, color, ink) {
   const el = h("span", { class: "chip-icon" }, icon(name, 18));
   el.style.setProperty("--chip", color); // custom properties need setProperty
+  if (ink) el.style.color = ink; // dark icon on a light chip (school-bus yellow)
   return el;
 }
 
@@ -123,7 +126,8 @@ export function renderHome() {
     if (!content) continue;
     const w = windows.get(t.opens);
     const name = t.label || w?.title || t.id;
-    const tile = h("article", { class: `tile-w size-${size}${t.kind ? ` kind-${t.kind}` : ""}${t.spacer ? " spacer" : ""}`, "data-tile": t.id, "data-opens": t.opens, "data-size": size },
+    const isPinned = pinned === t.id;
+    const tile = h("article", { class: `tile-w size-${size}${t.kind ? ` kind-${t.kind}` : ""}${t.spacer ? " spacer" : ""}${isPinned ? " pinned" : ""}`, "data-tile": t.id, "data-opens": t.opens, "data-size": size },
       t.spacer ? null : h("button", { class: "tile-open", type: "button", "aria-haspopup": "dialog",
         "aria-label": `Open ${w?.title || t.opens}${t.label ? `: ${t.label}` : ""}`,
         onclick: (e) => openWindow(t.opens, e.currentTarget.closest(".tile-w")) }),
@@ -139,6 +143,10 @@ export function renderHome() {
             window.scrollTo({ top: 0, behavior: reducedMotion() ? "auto" : "smooth" });
           });
         } }, icon("toTop", 16)),
+      t.spacer ? null : h("button", { class: "tile-pin", type: "button", "aria-pressed": String(isPinned),
+        title: isPinned ? "Unpin" : "Pin to the top-right corner",
+        "aria-label": isPinned ? `Unpin the ${name} widget` : `Pin the ${name} widget to the top-right corner of ${tabById(tab).name}`,
+        onclick: () => togglePin(t.id, name) }, icon("pin", 16)),
       h("button", { class: "tile-grip", type: "button", "aria-label": `Move the ${t.label || w?.title} widget. Use arrow keys, or drag.`,
         onkeydown: (e) => {
           const step = { ArrowLeft: -1, ArrowUp: -1, ArrowRight: 1, ArrowDown: 1 }[e.key];
@@ -162,6 +170,9 @@ export function renderHome() {
     tiles.push(h("div", { class: "tab-empty" }, h("b", {}, `Nothing in ${tabById(tab).name} yet.`), " ",
       editing ? "Add widgets from the list below." : h("span", {}, "Tap ", h("b", {}, "Edit"), " to add any widget to this tab.")));
   }
+  // A pinned widget goes first, and CSS holds it in the top-right corner (.pinned); the rest flow around it.
+  const pi = tiles.findIndex((el) => el.classList?.contains("pinned"));
+  if (pi > 0) tiles.unshift(...tiles.splice(pi, 1));
   home.replaceChildren(...tiles);
   // "Add a widget": every widget not on this tab, grouped by subject.
   const shown = new Set(defs.filter((t) => !hidden.has(t.id)).map((t) => t.id));
@@ -176,6 +187,14 @@ export function renderHome() {
       h("span", { class: `tray-group-name ear-${g.id}` }, g.id === "home" ? "General" : g.name),
       ...list.sort((a, b) => nameOf(a).localeCompare(nameOf(b))).map((t) => h("button", { class: "tray-chip", type: "button",
         onclick: () => restore(t.id, nameOf(t)) }, icon("plus", 14), nameOf(t))))));
+}
+
+function togglePin(id, name) {
+  if (!order) order = ordered(currentDefs).map((d) => d.id); // Home's automatic layout becomes a saved one
+  pinned = pinned === id ? null : id;
+  saveHidden();
+  renderHome();
+  announce(pinned ? `${name} is pinned to the top-right corner of ${tabById(tab).name}.` : `${name} is unpinned.`);
 }
 
 // ---------- folder tabs ----------
@@ -378,9 +397,9 @@ async function detectSaving() {
 }
 async function saveDefault() {
   // Every tab: this one as it is now; the others as this browser has them (or their current default).
-  const norm = (l) => ({ order: l?.order || [], hidden: l?.hidden || [], sizes: l?.sizes || {}, spacers: l?.spacers || [] });
+  const norm = (l) => ({ order: l?.order || [], hidden: l?.hidden || [], sizes: l?.sizes || {}, spacers: l?.spacers || [], ...(l?.pinned ? { pinned: l.pinned } : {}) });
   const tabs = Object.fromEntries(TABS.map((t) => [t.id, t.id === tab
-    ? norm({ order: ordered(currentDefs).map((d) => d.id), hidden: [...hidden], sizes, spacers })
+    ? norm({ order: ordered(currentDefs).map((d) => d.id), hidden: [...hidden], sizes, spacers, pinned })
     : norm(effective(t.id))]));
   announce("Saving…");
   try {

@@ -36,7 +36,7 @@ def clean_layout(body: bytes) -> dict:
 
 
 def clean_tab(d) -> dict:
-    """One tab: {"order": [ids], "hidden": [ids], "sizes": {id: s|m|l|xl}, "spacers": [ids]}."""
+    """One tab: {"order": [ids], "hidden": [ids], "sizes": {id: s|m|l|xl}, "spacers": [ids], "pinned": id (optional)}."""
     if not isinstance(d, dict):
         raise ValueError("bad tab")
     out = {}
@@ -55,6 +55,11 @@ def clean_tab(d) -> dict:
             isinstance(i, str) and re.match(r"^space-[a-z0-9]{1,20}$", i) for i in spacers):
         raise ValueError("bad spacers")
     out["spacers"] = list(dict.fromkeys(spacers))
+    pinned = d.get("pinned")
+    if pinned is not None:
+        if not (isinstance(pinned, str) and TILE_ID.match(pinned)):
+            raise ValueError("bad pinned")
+        out["pinned"] = pinned
     return out
 
 

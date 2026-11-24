@@ -16,6 +16,7 @@ Charlotte, RCCC, UNC, NC State, App State, UNCG) and UltiPro (Standard Process) 
 clients not to fetch; they're harvested anyway, once a week, by the owner's decision (Nov 2026)."""
 from __future__ import annotations
 
+import ast
 import datetime as dt
 import importlib
 import json
@@ -65,6 +66,42 @@ def harvest(scraper_path: str) -> list[dict]:
     return jobs
 
 
+def school_bus_rules() -> tuple[list[str], re.Pattern, re.Pattern]:
+    """kannapolis-jobs' --school-bus filter, read from run.py without running it (run.py imports the
+    Indeed modules): SCHOOL_BUS_MODULES (the districts, in report order), SCHOOL_BUS_RE and
+    SCHOOL_BUS_EXCLUDE_RE. Reading them keeps this widget in step with the harvester."""
+    tree = ast.parse((KJ / "run.py").read_text())
+    found = {}
+    for node in tree.body:
+        if isinstance(node, ast.Assign) and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name):
+            name, val = node.targets[0].id, node.value
+            if name == "SCHOOL_BUS_MODULES":
+                found[name] = list(ast.literal_eval(val))
+            elif name in ("SCHOOL_BUS_RE", "SCHOOL_BUS_EXCLUDE_RE") and isinstance(val, ast.Call) and val.args:
+                flags = re.IGNORECASE if "IGNORECASE" in ast.dump(val) else 0
+                found[name] = re.compile(ast.literal_eval(val.args[0]), flags)
+    missing = {"SCHOOL_BUS_MODULES", "SCHOOL_BUS_RE", "SCHOOL_BUS_EXCLUDE_RE"} - found.keys()
+    if missing:
+        raise RuntimeError(f"jobs: kannapolis-jobs run.py no longer defines {', '.join(sorted(missing))}")
+    return found["SCHOOL_BUS_MODULES"], found["SCHOOL_BUS_RE"], found["SCHOOL_BUS_EXCLUDE_RE"]
+
+
+def school_bus(employers: list[dict]) -> dict:
+    """The School Bus Drivers widget: --school-bus run over the districts' openings already harvested."""
+    modules, keep, drop = school_bus_rules()
+    by_slug = {e["slug"]: e for e in employers}
+    out = []
+    for slug in modules:
+        e = by_slug.get(slug)
+        if not e:
+            continue
+        jobs = sorted((j for j in e["jobs"] if keep.search(j["title"]) and not drop.search(j["title"])), key=lambda j: j["title"].lower())
+        out.append({"slug": slug, "name": e["name"], "short": e.get("short") or e["name"], "careers": e.get("careers"),
+                    "fetched": e.get("fetched"), "error": bool(e.get("error")), "jobs": [{k: j[k] for k in ("title", "location", "url", "part_time")} for j in jobs]})
+    log(f"jobs: school bus: {', '.join(f'{d['name']} {len(d['jobs'])}' for d in out)}")
+    return {"districts": out, "filter": "--school-bus"}
+
+
 def main(only: list[str] | None = None) -> None:
     if not (KJ / "scrapers" / "base.py").exists():
         raise SystemExit(f"jobs: no kannapolis-jobs checkout at {KJ} (git clone https://github.com/bradspry/kannapolis-jobs {KJ})")
@@ -94,7 +131,7 @@ def main(only: list[str] | None = None) -> None:
         e.pop("scraper", None)
     total = sum(len(e["jobs"]) for e in out)
     log(f"jobs: {total} openings at {len(out)} employers" + (f"; failed: {', '.join(failed)}" if failed else ""))
-    write_json("jobs.json", {"repo": info["repo"], "sectors": info["sectors"], "employers": out})
+    write_json("jobs.json", {"repo": info["repo"], "sectors": info["sectors"], "employers": out, "school_bus": school_bus(out)})
     if len(failed) > len(info["employers"]) // 2:
         raise SystemExit(f"jobs: {len(failed)} of {len(info['employers'])} employers failed")
 

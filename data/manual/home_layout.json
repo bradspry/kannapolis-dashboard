@@ -133,6 +133,7 @@
     },
     "jobs": {
       "order": [
+        "school-bus",
         "job-appstate",
         "job-atrium",
         "job-cabarrus",
@@ -167,7 +168,8 @@
       ],
       "hidden": [],
       "sizes": {},
-      "spacers": []
+      "spacers": [],
+      "pinned": "school-bus"
     },
     "transportation": {
       "order": [

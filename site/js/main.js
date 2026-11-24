@@ -22,6 +22,7 @@ import { renderDrought } from "./sections/drought.js";
 import { renderLibrary } from "./sections/library.js";
 import { renderEmployer, brandVars } from "./sections/jobs.js";
 import { renderFlights } from "./sections/flights.js";
+import { renderSchoolBus, SCHOOL_BUS_YELLOW } from "./sections/schoolbus.js";
 import { renderRider, renderParatransit, renderShuttle, startLive as startTransitLive } from "./sections/transit.js";
 import { renderTrain, nextKey as trainKey, tick as trainTick } from "./sections/train.js";
 import { tileDefs } from "./tiles.js";
@@ -100,6 +101,13 @@ function main() {
       h("div", { class: "kpd", id: `${id}-body` })));
     win(id, { title: emp.name, icon: "briefcase", color: emp.color || `var(--icon-${D.jobs.sectors[emp.sector]?.color || 4})`,
       ink: brandVars(emp)["--brand-ink"], render: () => renderEmployer(D.jobs, emp) });
+  }
+  if (D.jobs?.school_bus) {
+    document.getElementById("store").append(h("section", { id: "school-bus", "aria-labelledby": "school-bus-h" },
+      h("header", { class: "section-head" }, h("h2", { id: "school-bus-h" }, "School Bus Drivers"),
+        h("p", { class: "section-sub" }, "Openings to drive school buses and vans for Kannapolis City, Cabarrus County and Rowan-Salisbury Schools, updated weekly")),
+      h("div", { class: "kpd", id: "school-bus-body" })));
+    win("school-bus", { title: "School Bus Drivers", icon: "bus", color: SCHOOL_BUS_YELLOW, ink: "#1d1d1d", render: () => renderSchoolBus(D.jobs) });
   }
   if (D.transit) {
     D.transit._city = D.boundaries?.features?.find((f) => f.properties.year === "current") || null; // for the mini-maps
