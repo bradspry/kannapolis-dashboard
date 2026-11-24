@@ -118,6 +118,7 @@ export function onLive(fn) { live.listeners.add(fn); return () => live.listeners
 /** Poll Rider's live feeds every 30 s (alerts every 2 min) while the page is visible. */
 export function startLive(t) {
   if (live.timer) return;
+  live.tracker = t.rider.links.tracker;
   let n = 0;
   const tick = async () => {
     if (document.hidden) return;
@@ -135,7 +136,14 @@ export const busCount = () => live.vehicles?.length ?? null;
 /** "6 buses on the road", kept current as the live feed updates. */
 export function liveCount(cls = "tile-meta tr-count") {
   const el = h("p", { class: cls, role: "status" });
-  const draw = () => { const n = busCount(); el.textContent = n == null ? "" : n ? `🚌 ${n} bus${n === 1 ? "" : "es"} on the road now` : "No buses on the road right now"; };
+  // The public feed can come back empty even while buses run (Rider's tracking moved to CK Rider), so an
+  // empty feed points to Rider's own live map rather than claiming no buses are out.
+  const draw = () => {
+    const n = busCount();
+    if (n) fill(el, `🚌 ${n} bus${n === 1 ? "" : "es"} on the road now`);
+    else if (n === 0 && live.tracker) fill(el, h("a", { class: "tr-link", href: live.tracker, target: "_blank", rel: "noopener" }, "🚌 See buses live on Rider's tracker ↗"));
+    else fill(el);
+  };
   draw();
   const off = onLive(() => { if (!el.isConnected) { off(); return; } draw(); });
   return el;
@@ -274,8 +282,10 @@ export function renderRider(t) {
     return { type: "Feature", geometry: { type: "Point", coordinates: [v.lon, v.lat] }, properties: { color: r?.color || "#888", route: r?.name || "Rider bus", label: v.label || v.id || "" } }; }) });
   const drawLive = () => {
     const n = busCount();
-    liveNote.textContent = n == null ? "Live bus positions load from Rider's real-time feed." : n ? `${n} bus${n === 1 ? "" : "es"} on the road · live positions updated ${live.at.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}`
-      : `No buses reporting right now${st.running ? "" : " (outside service hours)"}.`;
+    if (n) fill(liveNote, `${n} bus${n === 1 ? "" : "es"} on the road · live positions updated ${live.at.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}`);
+    else if (n === 0 && st.running) fill(liveNote, "Rider's public live feed isn't reporting bus positions right now. ", ext(t.rider.links.tracker, "See buses live on Rider's tracker ↗"));
+    else if (n === 0) fill(liveNote, "No buses running now (outside service hours). ", ext(t.rider.links.tracker, "Rider's live tracker ↗"));
+    else fill(liveNote, "Live bus positions load from Rider's real-time feed.");
     mapRef?.getSource("buses")?.setData(liveFC());
     alertsBox.replaceChildren(...[alertList(t)].filter(Boolean));
   };

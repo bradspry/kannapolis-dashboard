@@ -93,7 +93,7 @@ It prints the address to open on your phone (for example `http://192.168.1.20:51
 Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a `source_url` that opens the official PDF at the cited page (for example `…FY%2027%20Adopted%20Budget.pdf#page=114`). The build fails if a row's citation is missing. The full registry is [`data/manual/sources.csv`](data/manual/sources.csv); its `widgets` column ties each source to the widgets it feeds, and every widget window ends with an automatic **Sources** line built from it. The table below is generated from the same registry on every build, so the README always cites every source:
 
 <!-- sources:start -->
-171 sources, generated from `data/manual/sources.csv`.
+172 sources, generated from `data/manual/sources.csv`.
 
 | Source | Publisher | Format | Used for |
 |---|---|---|---|
@@ -252,6 +252,7 @@ Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a
 | [Rider Transit GTFS schedule feed (routes, stops, schedules, route shapes)](https://passio3.com/concordKat/passioTransit/gtfs/google_transit.zip) | Concord Kannapolis Area Transit (published by Passio) | GTFS | Routes, colors, stops, next departures, hours and frequency; route maps; the paratransit service area is drawn from these routes |
 | [Rider Transit GTFS-realtime feeds (vehicle positions, service alerts)](https://passio3.com/concordk/passioTransit/gtfs/realtime/vehiclePositions) | Concord Kannapolis Area Transit (published by Passio) | GTFS-realtime | Live bus positions every 30 seconds and service alerts (alerts: https://passio3.com/concordk/passioTransit/gtfs/realtime/serviceAlerts) |
 | [Rider Transit: Links (official GTFS and GTFS-realtime feed addresses)](https://ckrider.com/resources/links/) | Rider Transit | Web page | Where the feeds are published |
+| [Rider Transit live bus tracker (CK Rider)](https://trackingckrider.com/map) | Concord Kannapolis Area Transit (Syncromatics) | Web page | Linked when the public real-time feed reports no buses; Rider's current live map |
 | [Rider Transit: About (hours, holidays, Transit Center, buses)](https://ckrider.com/about/) | Rider Transit | Web page | Service hours, no-service holidays, Transit Center address and customer service hours, bike racks |
 | [Rider Transit: Accessibility and ADA Paratransit](https://ckrider.com/accessibility/) | Rider Transit | Web page | Paratransit eligibility, service area (3/4 mile), hours, fares ($2.00; bus fare $1.25), phones, booking rules, applications; bus accessibility |
 | [Rider Transit: Fares & Passes (Rider Pass, Umo app, smartcard)](https://ckrider.com/fares-and-passes/) | Rider Transit | Web page | Ways to pay, free transfers, smartcard cost |
