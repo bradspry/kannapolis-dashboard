@@ -157,7 +157,9 @@ export function renderHome() {
         const cat = categoryOf(ranked.find((x) => x.chapter.index === r.chapter.index && !x.t.spacer)?.t.id || "");
         tiles.push(h("section", { class: "chapter", "aria-label": r.chapter.name },
           h("header", { class: "chapter-head" }, h("span", { class: `chapter-dot ear-${cat}`, "aria-hidden": "true" }),
-            h("h2", { class: "chapter-name" }, r.chapter.name), h("span", { class: "chapter-lede" }, top ? top.reason : r.chapter.blurb)), grid));
+            h("h2", { class: "chapter-name" }, r.chapter.name), top // a timely reason opens its widget, like the Right now items; otherwise the chapter's blurb
+              ? h("button", { type: "button", class: "chapter-lede linked", onclick: () => openWindow(top.t.opens, document.querySelector(`[data-tile="${top.t.id}"]`)) }, top.reason)
+              : h("span", { class: "chapter-lede" }, r.chapter.blurb)), grid));
         cur = { ch: r.chapter, grid };
       }
       const tile = makeTile(r.t, r.size, r.reason);
