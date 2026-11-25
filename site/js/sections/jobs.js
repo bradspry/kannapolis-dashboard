@@ -49,7 +49,10 @@ export function careersButton(emp, { compact = false, label } = {}) {
     label || "All openings ↗");
 }
 
-const tags = (j) => [j.part_time ? h("span", { class: "job-tag" }, "Part-time") : null, j.evening ? h("span", { class: "job-tag eve" }, "Evening") : null];
+/** First seen in the last week's harvest (build_jobs.py first_seen). */
+export const isNew = (j) => !!j.first_seen && (Date.now() - new Date(`${j.first_seen}T12:00`)) / 864e5 <= 7;
+const tags = (j) => [isNew(j) ? h("span", { class: "job-tag new" }, "New") : null,
+  j.part_time ? h("span", { class: "job-tag" }, "Part-time") : null, j.evening ? h("span", { class: "job-tag eve" }, "Evening") : null];
 
 /** One listing: title (linked to the posting), location, part-time/evening tags. */
 export function jobRow(j, { compact = false, location = true } = {}) {
@@ -66,16 +69,17 @@ export function renderEmployer(jobs, emp) {
   const root = document.getElementById(`job-${emp.slug}-body`);
   const f = filters.get(emp.slug) || { kind: "all", q: "" };
   filters.set(emp.slug, f);
-  const pt = emp.jobs.filter((j) => j.part_time).length, eve = emp.jobs.filter((j) => j.evening).length;
+  const pt = emp.jobs.filter((j) => j.part_time).length, eve = emp.jobs.filter((j) => j.evening).length, nw = emp.jobs.filter(isNew).length;
   const chips = h("div", { class: "chips", role: "group", "aria-label": "Show" });
   const search = h("input", { type: "search", class: "wab-search job-search", placeholder: "Search these openings", "aria-label": `Search openings at ${emp.name}`, value: f.q });
   const list = h("div", {});
   const draw = () => {
-    chips.replaceChildren(...[["all", `All (${emp.jobs.length})`], ["part_time", `Part-time (${pt})`], ["evening", `Evening (${eve})`]]
-      .filter(([k, , ]) => k === "all" || (k === "part_time" ? pt : eve))
+    const count = { new: nw, part_time: pt, evening: eve };
+    chips.replaceChildren(...[["all", `All (${emp.jobs.length})`], ["new", `New this week (${nw})`], ["part_time", `Part-time (${pt})`], ["evening", `Evening (${eve})`]]
+      .filter(([k]) => k === "all" || count[k])
       .map(([k, label]) => h("button", { class: "chip", type: "button", "aria-pressed": String(f.kind === k), onclick: () => { f.kind = k; draw(); } }, label)));
     const q = f.q.trim().toLowerCase();
-    const shown = emp.jobs.filter((j) => (f.kind === "all" || j[f.kind]) && (!q || `${j.title} ${j.location}`.toLowerCase().includes(q)));
+    const shown = emp.jobs.filter((j) => (f.kind === "all" || (f.kind === "new" ? isNew(j) : j[f.kind])) && (!q || `${j.title} ${j.location}`.toLowerCase().includes(q)));
     list.replaceChildren(shown.length ? jobList(shown, shown.length) : h("p", { class: "tile-meta" }, emp.jobs.length ? "No openings match." : "No openings are posted right now."));
   };
   search.addEventListener("input", () => { f.q = search.value; draw(); });

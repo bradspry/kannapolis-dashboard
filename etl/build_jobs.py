@@ -11,6 +11,9 @@ it on its own. Locally:
 
 Employers, sectors and careers pages are machine-parsed into data/manual/jobs.json. An employer whose
 harvest fails keeps its previous results, marked with the date they're from.
+Each opening also carries first_seen: the date a harvest first found it (matched by its posting URL, or by
+title and location when there's no URL), carried forward from the previous jobs.json. Openings already listed
+when tracking began (tracking_since) have no first_seen, so the first run doesn't call everything new.
 Note: the robots.txt of governmentjobs.com (City of Kannapolis, Cabarrus County), PeopleAdmin (UNC
 Charlotte, RCCC, UNC, NC State, App State, UNCG) and UltiPro (Standard Process) asks automated
 clients not to fetch; they're harvested anyway, once a week, by the owner's decision (Nov 2026)."""
@@ -102,14 +105,28 @@ def school_bus(employers: list[dict]) -> dict:
     return {"districts": out, "filter": "--school-bus"}
 
 
+def job_key(j: dict) -> str:
+    return j.get("url") or f"{j['title'].lower()}|{j.get('location', '').lower()}"
+
+
+def stamp(jobs: list[dict], old_jobs: list[dict], today: str, baseline: bool) -> None:
+    """first_seen for each opening: kept from last time, today if it's new, None for the first run's baseline."""
+    before = {job_key(j): j.get("first_seen") for j in old_jobs}
+    for j in jobs:
+        k = job_key(j)
+        j["first_seen"] = before[k] if k in before else (None if baseline else today)
+
+
 def main(only: list[str] | None = None) -> None:
     if not (KJ / "scrapers" / "base.py").exists():
         raise SystemExit(f"jobs: no kannapolis-jobs checkout at {KJ} (git clone https://github.com/bradspry/kannapolis-jobs {KJ})")
     sys.path.insert(0, str(KJ))
     info = json.loads((MANUAL / "jobs.json").read_text())
     prev_file = OUT / "jobs.json"
-    prev = {e["slug"]: e for e in json.loads(prev_file.read_text())["employers"]} if prev_file.exists() else {}
+    prev_all = json.loads(prev_file.read_text()) if prev_file.exists() else {}
+    prev = {e["slug"]: e for e in prev_all.get("employers", [])}
     today = dt.date.today().isoformat()
+    tracking_since = prev_all.get("tracking_since") or today  # the first run with first_seen dates is the baseline
     out, failed = [], []
     for emp in info["employers"]:
         slug = emp["slug"]
@@ -120,6 +137,8 @@ def main(only: list[str] | None = None) -> None:
         t0 = time.time()
         try:
             jobs = harvest(emp["scraper"])
+            # An employer harvested for the first time since tracking began is its own baseline too.
+            stamp(jobs, prev.get(slug, {}).get("jobs", []), today, baseline=tracking_since == today or slug not in prev)
             out.append({**emp, "jobs": jobs, "fetched": today})
             log(f"jobs: {emp['name']}: {len(jobs)} openings ({time.time() - t0:.0f}s)")
         except Exception as e:  # noqa: BLE001 — one employer's site changing mustn't stop the rest
@@ -131,7 +150,9 @@ def main(only: list[str] | None = None) -> None:
         e.pop("scraper", None)
     total = sum(len(e["jobs"]) for e in out)
     log(f"jobs: {total} openings at {len(out)} employers" + (f"; failed: {', '.join(failed)}" if failed else ""))
-    write_json("jobs.json", {"repo": info["repo"], "sectors": info["sectors"], "employers": out, "school_bus": school_bus(out)})
+    new = sum(1 for e in out for j in e["jobs"] if j.get("first_seen") == today)
+    log(f"jobs: {new} new since the last harvest (tracking since {tracking_since})")
+    write_json("jobs.json", {"repo": info["repo"], "sectors": info["sectors"], "tracking_since": tracking_since, "employers": out, "school_bus": school_bus(out)})
     if len(failed) > len(info["employers"]) // 2:
         raise SystemExit(f"jobs: {len(failed)} of {len(info['employers'])} employers failed")
 

@@ -2007,6 +2007,7 @@ body::before {
 .job-row.compact .job-meta { flex-wrap: nowrap; overflow: hidden; white-space: nowrap; }
 .job-tag { font-size: 11px; font-weight: 650; padding: 1px 7px; border-radius: 999px; background: color-mix(in oklab, var(--series-6) 16%, var(--surface-1)); color: var(--text-secondary); }
 .job-tag.eve { background: color-mix(in oklab, var(--series-7) 18%, var(--surface-1)); }
+.job-tag.new { background: color-mix(in oklab, var(--good-text) 20%, transparent); color: var(--good-text); }
 .job-btn { position: relative; z-index: 2; text-decoration: none; }
 .job-btn.compact { padding: 6px 12px; font-size: 13px; }
 .job-actions { margin-top: auto; padding-top: 6px; }

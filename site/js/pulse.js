@@ -218,10 +218,14 @@ export function pulses(D, now = new Date()) {
   for (const [id, rule] of Object.entries(RULES)) {
     try { const r = rule(D, now); if (r?.score > 0 && r.reason) out[id] = r; } catch (e) { console.warn(`pulse ${id}`, e); }
   }
-  // Employers: how much they're hiring right now (no posting dates to tell what's new). 50+ openings gets a reason.
+  // Employers: how much they're hiring, plus openings first seen in the last week (first_seen, from the weekly
+  // harvest). New openings matter more than a big standing count.
   for (const e of D.jobs?.employers || []) {
     const n = e.jobs?.length || 0;
-    out[`job-${e.slug}`] = { score: 10 + 12 * Math.log10(1 + n), reason: `${n} openings at ${e.name}` };
+    const fresh = (e.jobs || []).filter((j) => j.first_seen && daysAgo(j.first_seen, now) <= 7).length;
+    out[`job-${e.slug}`] = fresh
+      ? { score: 30 + 10 * Math.log10(1 + n) + 14 * Math.log2(1 + fresh), reason: `${fresh} new opening${fresh > 1 ? "s" : ""} at ${e.name} this week` }
+      : { score: 10 + 12 * Math.log10(1 + n), reason: `${n} openings at ${e.name}` };
   }
   return out;
 }
