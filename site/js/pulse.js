@@ -40,6 +40,18 @@ const RULES = {
     if (leaf && today >= leaf.start && today <= leaf.end) return { score: 24, reason: "Loose-leaf vacuum season" };
     return null;
   },
+  parade(D, now) {
+    // The Christmas Parade: up through the week, high the day before, at the top on the day (West Avenue closes at 6 AM).
+    const p = D.parade;
+    if (!p || ymd(now) > p.date) return null;
+    const days = Math.round((new Date(`${p.date}T12:00`) - new Date(`${ymd(now)}T12:00`)) / 864e5);
+    const [hh, mm] = p.time.split(":").map(Number), start = 60 * hh + mm, mins = 60 * now.getHours() + now.getMinutes();
+    const t = new Date(2000, 0, 1, hh, mm).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }).replace(":00", "");
+    if (days === 0 && mins < start + 150) return { score: 88, reason: mins >= start ? "Christmas Parade on now" : `Christmas Parade tonight at ${t}: West Ave closed` };
+    if (days === 1) return { score: 62, reason: `Christmas Parade tomorrow at ${t}` };
+    if (days > 1 && days < 7) return { score: 40, reason: `Christmas Parade ${new Date(`${p.date}T12:00`).toLocaleDateString("en-US", { weekday: "long" })} at ${t}` };
+    return null;
+  },
   events(D, now) {
     const list = (D.events?.events || []).filter((e) => !e.canceled);
     const today = ymd(now), tom = ymd(addDays(now, 1));
@@ -148,7 +160,7 @@ const RULES = {
  *  in the saved layout. Widgets not listed count 10. */
 export const BASE = {
   weather: 34, waste: 30, events: 30, news: 26, meetings: 22, train: 20, gas: 22, utility: 20, police: 18, fire: 14,
-  parks: 18, library: 18, gem: 20, swanee: 16, drought: 16, water: 14, council: 16, videos: 14, ktown: 12, baseball: 14,
+  parks: 18, library: 18, gem: 20, swanee: 16, parade: 15, drought: 16, water: 14, council: 16, videos: 14, ktown: 12, baseball: 14,
   editions: 14, whataburger: 14, made: 10, stocks: 12, rider: 12, shuttle: 9, paratransit: 13, flights: 12, homeless: 10,
   roads: 8, people: 12, growth: 10, budget: 12, "debt-service": 6, land: 8, org: 10, "g-tax-rate": 8, "g-debt-policy": 6,
   "g-debt-limit": 6, "g-owners": 6, about: 4, "school-bus": 6,
@@ -164,7 +176,7 @@ export const STORIES = {
   home: [
     { id: "home", name: "At Home", blurb: "Weather, trash, water and bills", ids: ["weather", "waste", "utility", "drought", "water"] },
     { id: "around", name: "Getting Around", blurb: "Trains, buses, gas and roads", ids: ["train", "gas", "rider", "paratransit", "shuttle", "flights", "roads"] },
-    { id: "out", name: "Out & About", blurb: "Things to do", ids: ["events", "gem", "swanee", "baseball", "parks", "library"] },
+    { id: "out", name: "Out & About", blurb: "Things to do", ids: ["events", "parade", "gem", "swanee", "baseball", "parks", "library"] },
     { id: "local", name: "Local Flavor", blurb: "Eat, drink and shop local", ids: ["editions", "whataburger", "made"] },
     { id: "hall", name: "City Hall", blurb: "News, meetings and decisions", ids: ["news", "meetings", "council", "videos", "org", "people", "budget",
       "debt-service", "growth", "land", "g-tax-rate", "g-debt-policy", "g-debt-limit", "g-owners"] },
@@ -179,14 +191,14 @@ export const STORIES = {
     { id: "services", name: "City Services", blurb: "Trash, water, bills and the weather", ids: ["waste", "utility", "drought", "water", "weather"] },
     { id: "safety", name: "Public Safety", blurb: "Police and fire", ids: ["police", "fire"] },
     { id: "hall", name: "City Hall", blurb: "News, meetings, your council and City jobs", ids: ["news", "meetings", "council", "videos", "org", "job-city"] },
-    { id: "downtown", name: "Downtown & Parks", blurb: "City-run events, parks, theaters and the shuttle", ids: ["events", "parks", "gem", "swanee", "shuttle"] },
+    { id: "downtown", name: "Downtown & Parks", blurb: "City-run events, parks, theaters and the shuttle", ids: ["events", "parade", "parks", "gem", "swanee", "shuttle"] },
     { id: "money", name: "Budget & Taxes", blurb: "Where the money comes from and goes", ids: ["budget", "debt-service", "g-tax-rate", "g-debt-policy", "g-debt-limit"] },
     { id: "growth", name: "People & Growth", blurb: "Who lives here and how the city is changing", ids: ["people", "growth", "land", "g-owners"] },
     { id: "community", name: "Community", blurb: "Neighbors in need and the data behind this site", ids: ["homeless", "about"] },
   ],
   // Entertainment: a night or a weekend out, from what's on to where to eat after.
   fun: [
-    { id: "shows", name: "Shows & Events", blurb: "Movies, live shows and what's on around town", ids: ["events", "gem", "swanee"] },
+    { id: "shows", name: "Shows & Events", blurb: "Movies, live shows and what's on around town", ids: ["events", "parade", "gem", "swanee"] },
     { id: "outside", name: "Get Outside", blurb: "Parks, trails and Cannon Ballers games", ids: ["parks", "baseball"] },
     { id: "eat", name: "Eat & Drink", blurb: "Burgers, coffee and local beer", ids: ["whataburger", "editions", "made"] },
     { id: "read", name: "Read, Watch & Listen", blurb: "The library and a local podcast", ids: ["library", "ktown"] },

@@ -40,6 +40,7 @@ export function datasets(D) {
     ["Fire department", "fire", D.fire, "Machine-parsed", null],
     ["City staff", "org", D.org, "Machine-parsed", null],
     ["Parks & recreation", "parks", D.parks, "Machine-parsed", null],
+    ["Christmas Parade", "parade", D.parade, "Machine-parsed, each year", null],
     ["Waste collection", "waste", D.waste, "Machine-parsed", null],
     ["Utility billing", "utility", D.utility, "Machine-parsed", null],
     ["Cannon Ballers", "baseball", D.baseball, "Machine-parsed, each season", null],

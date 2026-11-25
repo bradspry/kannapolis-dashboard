@@ -18,6 +18,7 @@
         "made",
         "library",
         "events",
+        "parade",
         "baseball",
         "whataburger",
         "news",
@@ -120,6 +121,7 @@
         "g-owners",
         "about",
         "events",
+        "parade",
         "parks",
         "gem",
         "swanee",
@@ -141,6 +143,7 @@
         "library",
         "editions",
         "events",
+        "parade",
         "whataburger"
       ],
       "hidden": [],

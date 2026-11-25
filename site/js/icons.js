@@ -16,6 +16,7 @@ const PATHS = {
   minus: '<path d="M5 12h14"/>',
   grid: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
   expand: '<path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/>',
+  parade: '<path d="M6 3v10"/><path d="M6 3h9l-2 3 2 3H6"/><rect x="3" y="13" width="18" height="4" rx="1.5"/><circle cx="7" cy="19.5" r="1.5"/><circle cx="17" cy="19.5" r="1.5"/>',
   events: '<path d="M12 3l2.4 5.1 5.6.7-4.1 3.9 1 5.5L12 15.6 7.1 18.2l1-5.5L4 8.8l5.6-.7L12 3z"/>',
   weather: '<path d="M7 18h10a4 4 0 0 0 .5-7.97A6 6 0 0 0 6.1 11.3 3.5 3.5 0 0 0 7 18z"/><path d="M12 2v1.5M4.9 4.9l1 1M2 12h1.5"/>',
   police: '<path d="M12 3l7 3v5c0 4.5-3 8.3-7 9.7C8 19.3 5 15.5 5 11V6l7-3z"/><path d="M12 8.2l1.2 2.4 2.6.4-1.9 1.8.5 2.6-2.4-1.3-2.4 1.3.5-2.6-1.9-1.8 2.6-.4z"/>',

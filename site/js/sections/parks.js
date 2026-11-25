@@ -104,20 +104,23 @@ const eventEmoji = (e) => [[/santa/i, "🎅"], [/parade/i, "🥁"], [/grinch/i, 
 /** Gently falling snow over a holiday card or tile: decorative, can't be clicked, and skipped
  *  entirely when the device asks for reduced motion (see CSS). Flakes are spread out evenly
  *  with a little randomness so they never clump. */
-export function snowfall(count = 26) {
+export function snowfall(count = 26, { big = false } = {}) {
   const flakes = Array.from({ length: count }, (_, i) => {
-    const size = 2 + Math.random() * 4;                  // 2–6 px
-    const dur = 7 + Math.random() * 7;                   // 7–14 s to fall
+    // Small round flakes (Parks), or big six-pointed ones that turn slowly as they fall (Christmas Parade).
+    const size = big ? 11 + Math.random() * 13 : 2 + Math.random() * 4; // 11–24 px, or 2–6 px
+    const dur = (big ? 9 : 7) + Math.random() * 7;      // seconds to fall
     const flake = h("i", { style: {
       left: `${((i + Math.random()) / count) * 100}%`,
-      width: `${size}px`, height: `${size}px`, opacity: (0.45 + Math.random() * 0.5).toFixed(2),
+      ...(big ? { fontSize: `${size.toFixed(0)}px`, rotate: `${Math.round(Math.random() * 60)}deg` } : { width: `${size}px`, height: `${size}px` }),
+      opacity: (0.45 + Math.random() * 0.5).toFixed(2),
       animationDuration: `${dur.toFixed(1)}s, ${(2.5 + Math.random() * 2.5).toFixed(1)}s`,
       animationDelay: `${(-Math.random() * dur).toFixed(1)}s, ${(-Math.random() * 4).toFixed(1)}s`, // negative: already falling on load
     } });
-    flake.style.setProperty("--drift", `${(Math.random() * 24 - 12).toFixed(0)}px`); // custom properties need setProperty
+    flake.style.setProperty("--drift", `${(Math.random() * (big ? 36 : 24) - (big ? 18 : 12)).toFixed(0)}px`); // custom properties need setProperty
+    if (big) flake.textContent = "❄❅❆"[i % 3];
     return flake;
   });
-  return h("div", { class: "pk-snow", "aria-hidden": "true" }, flakes);
+  return h("div", { class: `pk-snow${big ? " big" : ""}`, "aria-hidden": "true" }, flakes);
 }
 
 const fmtT = (t) => { if (!t) return ""; const [hh, mm] = t.split(":").map(Number); return new Date(2000, 0, 1, hh, mm).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }); };

@@ -19,6 +19,7 @@ import build_made
 import build_meetings
 import build_news
 import build_org
+import build_parade
 import build_parks
 import build_police
 import build_property
@@ -74,6 +75,7 @@ STEPS = [
     ("water", build_water.main),
     ("homeless", build_homeless.main),
     ("parks", build_parks.main),
+    ("parade", build_parade.main),
     ("zoning", build_zoning.main),
     ("property", build_property.main),  # slowest: ~26k parcels + ~18 yearly snapshots
     ("site", build_site.main),  # always last: bundles everything into dist/index.html

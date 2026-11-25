@@ -5,6 +5,7 @@ import { gauge } from "./gauge.js";
 import { chip } from "./os.js";
 import { fy, num, pct, usd, usdCompact } from "./format.js";
 import { upcomingEvents, whenLabel, fmtTime } from "./sections/events.js";
+import { paradeStatus, tileParadeMap, closureList as prClosures, legend as prLegend, fmtDate as prDate, fmtTime as prTime } from "./sections/parade.js";
 import { datasets, ago, fmtDate, byPublisher, formatCounts, fmtCount, statusDot } from "./sections/about.js";
 import { weather, wxIcon } from "./weather.js";
 import { alertBanner, alertDetails } from "./sections/weather.js";
@@ -153,7 +154,7 @@ const contactLinks = (p) => [
 const shortDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
 export function tileDefs(data, COLORS) {
-  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos, waste, drought, library, train, jobs, transit, flights, ktown, stocks, gas, water, homeless, roads, boundaries } = data;
+  const { census, budget, property, zoning, council, org, meetings, news, events, parade, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos, waste, drought, library, train, jobs, transit, flights, ktown, stocks, gas, water, homeless, roads, boundaries } = data;
   const jobSize = jobSizes(jobs, stocks?.companies?.length ? 2 : 0); // KANDEX (medium) is on the Jobs tab too
   const t = tokens();
   const geo = census.geographies;
@@ -786,6 +787,26 @@ export function tileDefs(data, COLORS) {
         return h("div", { class: "tile-body" }, head("events", COLORS.events, "Upcoming Events"),
           up.length ? h("ul", { class: `ev-mini-list ${size === "s" ? "solo" : ""} ${size === "xl" ? "cols-2" : ""}` }, up.slice(0, n).map(row))
             : h("p", { class: "tile-meta" }, "Nothing on the City calendar right now."));
+      },
+    },
+    parade && {
+      // Shown from the City's announcement through parade night, then it steps aside until next year's data.
+      id: "parade", opens: "parade", size: "m", label: "Christmas Parade",
+      build: (size) => {
+        const st = paradeStatus(parade);
+        if (!st) return null;
+        const top = head("parade", COLORS.parade, "Christmas Parade");
+        const snow = snowfall({ s: 10, m: 16, l: 22, xl: 30 }[size], { big: true }); // big flakes, over the map too
+        const when = h("div", { class: "pr-tile-when" }, h("div", { class: `bb-next-label${st.tonight ? " pr-tonight" : ""}` }, st.short),
+          h("div", { class: "pr-big" }, prDate(parade.date, { weekday: "short", month: "short", day: "numeric" })), h("div", { class: "tile-meta" }, `${prTime(parade.time)} · Laureate Way & West Ave`));
+        const first = parade.closures[0], westAve = h("p", { class: "tile-meta pr-first" }, `🚧 West Ave closed from ${prTime(first.time)}`);
+        if (size === "s") return h("div", { class: "tile-body" }, snow, top, when, westAve);
+        if (size === "m") return h("div", { class: "tile-body" }, snow, top, h("div", { class: "tile-split top pr-m" },
+          tileParadeMap(parade, "pr-tile-m", { labels: false }), h("div", {}, when, westAve)));
+        return h("div", { class: "tile-body" }, snow, top, h("div", { class: `tile-split top pr-${size}` },
+          h("div", { class: "pr-mapcol" }, tileParadeMap(parade, `pr-tile-${size}`), prLegend()),
+          h("div", {}, when, h("div", { class: "mini-head" }, "Road closures"), prClosures(parade, 3, { compact: size === "l" }),
+            h("p", { class: "tile-meta" }, parade.reopen))));
       },
     },
     gaugeTile({ id: "g-tax-rate", opens: "budget", label: "City Tax Rate" },
