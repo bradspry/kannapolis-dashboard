@@ -295,7 +295,11 @@ export function tileDefs(data, COLORS) {
         const book = trCall(`Book ${p.phones.reservations}`, p.phones.reservations, { primary: true, compact: true });
         const elig = trCall(`Eligibility ${p.phones.eligibility}`, p.phones.eligibility, { compact: true });
         const fare = h("p", { class: "tile-meta" }, `Curb-to-curb rides · ${p.fare} each way · book the day before`);
-        if (size === "s") return h("div", { class: "tile-body" }, top, h("p", { class: "tr-para-s" }, `${p.fare} each way`), h("div", { class: "tr-actions" }, book));
+        if (size === "s") { // the number is dropped on the smallest phones (CSS): the button still dials it
+          const bookS = trCall("Book", p.phones.reservations, { primary: true, compact: true });
+          bookS.append(h("span", { class: "tr-num" }, ` ${p.phones.reservations}`));
+          return h("div", { class: "tile-body" }, top, h("p", { class: "tr-para-s" }, `${p.fare} each way`), h("div", { class: "tr-actions" }, bookS));
+        }
         if (size === "m") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top tx-m" }, systemMap(transit, null, { corridor: true, cls: "mini" }),
           h("div", { class: "tr-m-side" }, trStatusLine(res), fare, h("div", { class: "tr-actions col" }, book),
             h("a", { class: "tr-link", href: `tel:${p.phones.eligibility.replace(/[^0-9]/g, "")}` }, `Eligibility: ${p.phones.eligibility}`))));

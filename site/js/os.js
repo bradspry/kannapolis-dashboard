@@ -4,6 +4,7 @@
 // everyone via "Save as default" (./serve.sh only), which saves all tabs.
 // Home shows every widget unless removed (new widgets appear there by themselves); the other tabs show
 // only the widgets put on them.
+import { fitSoon } from "./fit.js";
 import { h } from "./ui.js";
 import { icon } from "./icons.js";
 import { enableDrag, moveBy } from "./drag.js";
@@ -183,6 +184,7 @@ export function renderHome() {
   const pi = smart() ? -1 : tiles.findIndex((el) => el.classList?.contains("pinned"));
   if (pi > 0) tiles.unshift(...tiles.splice(pi, 1));
   home.replaceChildren(...tiles);
+  fitSoon(home); // long lists drop rows from the end rather than run out the bottom (fit.js)
   home.classList.toggle("smart", smart());
   renderBrief(ranked);
   // "Add a widget": every widget not on this tab, grouped by subject.

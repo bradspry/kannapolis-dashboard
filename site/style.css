@@ -569,6 +569,54 @@ button.chapter-lede.linked:focus-visible { outline: 2px solid var(--accent); out
   background: var(--chip); color: #fff;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25), 0 4px 12px -4px var(--chip);
 }
+/* The smallest phones (≤400px): a small tile is ~127px wide, so the 30px icon left the title ~55px and most titles
+   wrapped to 3-4 lines, pushing the content out the bottom. A tighter header gives the content its room back. */
+@media (max-width: 400px) {
+  .tile-w.size-s { padding: 14px 12px; }
+  .tile-w.size-s .tile-head { gap: 7px; padding-right: 0; font-size: 12.5px; line-height: 1.25; }
+  .tile-w.size-s .tile-head .chip-icon { width: 24px; height: 24px; border-radius: 7px; }
+  .tile-w.size-s .tile-head .chip-icon svg { width: 15px; height: 15px; }
+}
+/* …and per widget, what has to give at that width (small, then medium). */
+@media (max-width: 400px) {
+  .tile-w.size-s .about-big { flex-wrap: wrap; row-gap: 0; }
+  .tile-w.size-s .bb-logo-s { display: none; }
+  .tile-w.size-s .bb-next.compact { flex-direction: column; gap: 6px; }
+  .tile-w.size-s .tile-big { font-size: 26px; }
+  .tile-w.size-s .ds-tile-pay { display: none; }
+  .tile-w.size-s .ed-status { display: block; }
+  .tile-w.size-s .ed-status b { display: block; }
+  .tile-w.size-s .ed-status + .ed-status { display: none; }
+  .tile-w.size-s .kx-head.compact .kx-value b { font-size: 22px; }
+  .tile-w.size-s .job-tile-count { flex-wrap: wrap; row-gap: 0; }
+  .tile-w.size-s .job-tile-count b { font-size: 30px; }
+  .tile-w.size-s .job-where { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tile-w.size-s .ev-mini-list.solo .tile-meta { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .tile-w.size-s .mk-tile-now .tile-meta { display: none; }
+  .tile-w.size-s .pk-hol-tilt, .tile-w.size-s .ub-pay.single .ub-btn > span:first-child { display: none; }
+  .tile-w .tr-status span { white-space: normal; }
+  .tile-w.size-s .wx-tile:has(.wx-alert) .wx-now-icon, .tile-w.size-s .wx-tile:has(.wx-alert) .wx-now-text,
+  .tile-w.size-s .wx-tile:has(.wx-alert) .wx-now .tile-meta, .tile-w .wx-radar-credit { display: none; } /* the Weather window credits the radar */
+  .tile-w.size-s .tr-para-s { font-size: 18px; }
+  .tile-w.size-s .tr-num { display: none; }
+  .tile-w.size-s .dr-gauge .gauge svg { max-height: 64px; }
+  .tile-w .dr-gauge .gauge-context { display: none; }
+  .tile-w.size-m .council-next .date-block { display: none; } /* the date's in the next line, and the email button needs the room */
+  .tile-w.size-m .council-next-when { white-space: normal; }
+  .tile-w.size-m .ds-tile-pay .mini-legend { display: none; }
+  .tile-w.size-m .mk-tile-now > div { min-width: 0; }
+  .tile-w.size-m .tx-m .tr-link { display: none; }
+}
+/* Phones, large tiles: one column, so what sat beside something now sits under it (fit.js trims long lists) */
+@media (max-width: 720px) {
+  .tile-w.size-l .wx-alert-detail .wx-ad-row + .wx-ad-row { display: none; } /* "What to do" is in the Weather window */
+  .tile-w.size-l .wx-alert-detail dd { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .tile-w.size-l .rd-l .rd-map.mini { display: none; }
+  .tile-w.size-l .ws-heads { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .tile-w.size-l .ws-heads + .mini-head, .tile-w.size-l .ws-where { display: none; } /* "What goes where" is in the window */
+  .tile-w.size-l .gs-l > :last-child { display: none; } /* diesel and aviation: in the window; regular keeps its rows */
+  .tile-w.size-l .tile-split.top:has(.mk-tile-now) { grid-template-columns: minmax(0, 1fr); }
+}
 .tile-big { font-size: 34px; font-weight: 650; letter-spacing: -.02em; line-height: 1.05; font-variant-numeric: tabular-nums; margin-top: 4px; }
 .tile-big small { font-size: 15px; color: var(--text-muted); margin-left: 4px; font-weight: 500; }
 .tile-delta { font-size: 13px; font-weight: 500; }
@@ -2019,6 +2067,7 @@ body::before {
 .job-meta small { color: var(--text-muted); font-size: 12.5px; }
 .job-row.compact .job-meta:empty { display: none; }
 .job-row.compact .job-meta { flex-wrap: nowrap; overflow: hidden; white-space: nowrap; }
+.job-row.compact .job-meta small { overflow: hidden; text-overflow: ellipsis; min-width: 0; } /* a long location ends in … rather than at the edge */
 .job-tag { font-size: 11px; font-weight: 650; padding: 1px 7px; border-radius: 999px; background: color-mix(in oklab, var(--series-6) 16%, var(--surface-1)); color: var(--text-secondary); }
 .job-tag.eve { background: color-mix(in oklab, var(--series-7) 18%, var(--surface-1)); }
 .job-tag.new { background: color-mix(in oklab, var(--good-text) 20%, transparent); color: var(--good-text); }
@@ -2349,6 +2398,7 @@ body::before {
 .gs-price b { font-size: 34px; line-height: 1; font-variant-numeric: tabular-nums; }
 .gs-price small { color: var(--text-muted); font-size: 13px; }
 .gs-big.compact .gs-price b { font-size: 30px; }
+@media (max-width: 400px) { .size-s .gs-big.compact .gs-price b { font-size: 24px; } .size-s .gs-big.compact .gs-price small { font-size: 11px; } } /* "/gal" fits beside the price */
 .gs-where { font-size: 13px; color: var(--text-secondary); }
 .gs-where b { color: var(--text-primary); }
 .gs-list { list-style: none; margin: 0; padding: 0; font-size: 13px; }
