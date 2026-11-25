@@ -17,6 +17,7 @@ from __future__ import annotations
 import asyncio
 import datetime as dt
 import json
+import os
 import re
 import time
 import urllib.request
@@ -136,9 +137,10 @@ def main() -> None:
     prev = json.loads(prev_file.read_text()) if prev_file.exists() else {}
     try:
         import py_gasbuddy  # noqa: F401
-    except ImportError:
-        if prev:
-            log("gas: py-gasbuddy isn't installed here (pip install py-gasbuddy); keeping the last prices")
+    except ImportError as e:
+        # On GitHub the workflow installs it, so a failed import is a real problem: fail the run so it shows.
+        if prev and not os.environ.get("GITHUB_ACTIONS"):
+            log(f"gas: py-gasbuddy isn't usable here ({e}); keeping the last prices (pip install py-gasbuddy==0.7.2, Python 3.13+)")
             return
         raise
     today = dt.date.today().isoformat()
