@@ -780,7 +780,7 @@ export function tileDefs(data, COLORS) {
               series && e._onNow ? "On now" : shortDate(e._next)),
             h("div", {},
               h("div", { class: "ev-mini-title" }, e.title),
-              h("div", { class: "tile-meta" }, series ? `${e.recurrence.split(",")[0]} to ${shortDate(e._dates.at(-1))} · ${fmtTime(e.time)}`
+              h("div", { class: "tile-meta" }, series ? `${e._closed ? `${when} · ` : ""}${e.recurrence.split(",")[0]} to ${shortDate(e._dates.at(-1))}${e._closed ? "" : ` · ${fmtTime(e.time)}`}`
                 : [when, fmtTime(e.time), size !== "m" ? e.location : null].filter(Boolean).join(" · "))));
         };
         return h("div", { class: "tile-body" }, head("events", COLORS.events, "Upcoming Events"),

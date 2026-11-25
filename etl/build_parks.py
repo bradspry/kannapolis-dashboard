@@ -14,6 +14,13 @@ def main() -> None:
     for p in info["parks"]:
         if "lat" in p and not (35.40 < p["lat"] < 35.54 and -80.72 < p["lon"] < -80.57):  # Kannapolis area; catches e.g. a China Grove "N Main St" match
             raise ValueError(f"{p['name']}: map location is outside Kannapolis")
+    # A night the City closes the Celebration of Lights for weather (the holiday's weather_closed, from its
+    # notices at kannapolisnc.gov/christmas) also closes the carousel and train season that runs with it.
+    hol = info.get("holiday") or {}
+    for s in info.get("seasonal", []):
+        for season in s.get("seasons", []):
+            if season.get("label") == "Celebration of Lights":
+                season["weather_closed"] = hol.get("weather_closed", [])
     write_json("parks.json", info)
 
 

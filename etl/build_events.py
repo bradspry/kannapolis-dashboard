@@ -9,12 +9,13 @@ Times in the feed are Kannapolis local time (EventTimeZoneId = Eastern).
 from __future__ import annotations
 
 import datetime as dt
+import json
 import re
 import time
 import urllib.request
 import xml.etree.ElementTree as ET
 
-from common import USER_AGENT, log, write_json
+from common import MANUAL, USER_AGENT, log, write_json
 
 FEED = "https://www.kannapolisnc.gov/DesktopModules/Events/EventRSS.aspx?mid=650&tabid=56"
 CALENDAR = "https://www.kannapolisnc.gov/Community/Calendar"
@@ -140,6 +141,18 @@ def main() -> None:
         if len(dates) > 1:
             ev["recurrence"] = summarize(dates, evening=first["start"].hour >= 17)
         events.append(ev)
+    # Nights the City closed the Celebration of Lights for weather (data/manual/parks.json holiday.weather_closed):
+    # the calendar feed isn't updated for these, so take them out of the series and say why.
+    closed = json.loads((MANUAL / "parks.json").read_text()).get("holiday", {}).get("weather_closed", [])
+    for ev in events:
+        if closed and "celebration of lights" in ev["title"].lower():
+            shut = [c for c in closed if c["date"] in ev["dates"]]
+            if shut:
+                ev["dates"] = [d for d in ev["dates"] if d not in {c["date"] for c in shut}]
+                ev["count"] = len(ev["dates"])
+                ev["weather_closed"] = [{"date": c["date"], "why": c["why"]} for c in shut]
+                if len(ev["dates"]) > 1:
+                    ev["recurrence"] = summarize([dt.date.fromisoformat(d) for d in ev["dates"]], evening=(ev["time"] or "") >= "17:00")
     events.sort(key=lambda e: e["start"])
     merged = sum(1 for e in events if e["count"] > 1)
     log(f"events: {len(occ)} feed items -> {len(events)} events ({merged} repeating series)")

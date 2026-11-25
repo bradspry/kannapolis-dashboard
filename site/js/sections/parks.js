@@ -21,12 +21,17 @@ const shortDate = (iso) => new Date(`${iso}T12:00`).toLocaleDateString("en-US", 
 /** Tonight's hours from {"sun-thu": …, "fri-sat": …}. */
 const hoursFor = (hours, d) => (hours ? ([5, 6].includes(d.getDay()) ? hours["fri-sat"] : hours["sun-thu"]) : null);
 
+/** Tonight's weather closure, if the City has closed the Celebration of Lights for weather (parks.json weather_closed). */
+export const weatherClosed = (x, now = new Date()) => (x?.weather_closed || []).find((c) => c.date === localISO(now)) || null;
+
 /** Seasonal attractions can have several seasons (e.g. summer, then the Celebration of Lights). */
 export function seasonStatus(s, now = new Date()) {
   const d = localISO(now);
   const cur = s.seasons.find((x) => x.start <= d && d <= x.end);
   if (cur) {
     if ((cur.closed || []).includes(d)) return { open: false, label: "Closed today (holiday)", season: cur };
+    const wx = weatherClosed(cur, now);
+    if (wx) return { open: false, label: `Closed tonight (${wx.why})`, season: cur };
     const hrs = hoursFor(cur.hours, now);
     return { open: true, label: hrs ? `Open tonight ${hrs}` : "Open this season", season: cur };
   }
@@ -41,6 +46,8 @@ export function holidayStatus(hol, now = new Date()) {
   if (!hol || d < hol.show_from || d > hol.end) return null;
   if (d < hol.start) return { live: false, label: `Starts ${shortDate(hol.start)}` };
   if (hol.closed.includes(d)) return { live: true, open: false, label: "Closed today (holiday)" };
+  const wx = weatherClosed(hol, now);
+  if (wx) return { live: true, open: false, weather: wx, label: `Closed tonight (${wx.why})` };
   return { live: true, open: true, label: `Open tonight ${hoursFor(hol.hours, now)}` };
 }
 
@@ -51,6 +58,8 @@ export function trainStatus(hol, now = new Date()) {
   if (!t || d < hol.show_from || d > hol.end) return null;
   if (d < hol.start) return { reserve: true, short: `Reserve now (Sun–Thu) · starts ${shortDate(hol.start)}`, label: `Rides start ${shortDate(hol.start)}. Reserve Sunday–Thursday seats now.` };
   if (hol.closed.includes(d)) return { reserve: false, closed: true, short: "No train tonight (park closed)", label: "No train tonight: the park is closed." };
+  const wx = weatherClosed(hol, now);
+  if (wx) return { reserve: false, closed: true, short: `No train tonight (${wx.why})`, label: `No train tonight: the park is closed for ${wx.why}.${wx.note ? ` ${wx.note}` : ""}` };
   const w = t.walkup_only;
   if (w && w.start <= d && d <= w.end) return { reserve: false, short: "Walk-up only tonight", label: `Walk-up only tonight (${w.why}): first come, first served. Buy tickets at the carousel or park building.` };
   if (!t.reserve_days.includes(now.getDay())) return { reserve: false, short: "Walk-up only tonight (Fri–Sat)", label: "Walk-up only tonight: Fridays and Saturdays are first come, first served. Buy tickets at the carousel or park building." };

@@ -353,6 +353,14 @@
       "note": "Online reservations are for Sunday–Thursday. Friday, Saturday and the week before Christmas: buy tickets on site the day of. Walk-up tickets are sold nightly at the carousel or park building."
     },
     "weather": "May close for bad weather: call 704-920-4344 for updates.",
+    "weather_closed": [
+      {
+        "date": "2026-11-25",
+        "why": "rain",
+        "note": "Winterland Express ticket holders get an email to refund or reschedule.",
+        "source": "https://www.kannapolisnc.gov/christmas"
+      }
+    ],
     "events": [
       {
         "date": "2026-11-13",

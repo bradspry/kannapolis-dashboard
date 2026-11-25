@@ -20,13 +20,16 @@ export function upcomingEvents(data) {
     .map((e) => {
       const dates = e.dates.map(parseDay);
       const next = dates.find((d) => d >= t0);
-      return next ? { ...e, _dates: dates, _next: next, _onNow: e.count > 1 && dates[0] <= t0, _left: dates.filter((d) => d >= t0).length } : null;
+      const iso = `${t0.getFullYear()}-${String(t0.getMonth() + 1).padStart(2, "0")}-${String(t0.getDate()).padStart(2, "0")}`;
+      const shut = (e.weather_closed || []).find((c) => c.date === iso); // closed tonight for weather (build_events.py)
+      return next ? { ...e, _dates: dates, _next: next, _onNow: e.count > 1 && (dates[0] <= t0 || (!!shut && parseDay(e.start.slice(0, 10)) <= t0)), _left: dates.filter((d) => d >= t0).length, _closed: shut } : null;
     })
     .filter(Boolean)
     .sort((a, b) => a._next - b._next || (a.time || "").localeCompare(b.time || ""));
 }
 
 export function whenLabel(e) {
+  if (e._closed) return `Closed tonight (${e._closed.why})`;
   const days = Math.round((e._next - today()) / DAY_MS);
   if (days === 0) return e.time && Number(e.time.slice(0, 2)) >= 17 ? "Tonight" : "Today";
   if (days === 1) return "Tomorrow";

@@ -127,6 +127,8 @@ const RULES = {
     return e && daysAgo(e.published, now) <= 4 ? { score: 38, reason: `New episode: ${clip(e.title, 40)}` } : null;
   },
   parks(D, now) {
+    const hol = D.parks?.holiday, wx = (hol?.weather_closed || []).find((c) => c.date === ymd(now));
+    if (wx) return { score: 76, reason: `Celebration of Lights closed tonight (${wx.why})` };
     if (!isWeekend(now)) return null;
     const d = weather()?.days?.[0];
     return d?.hi >= 55 && d.hi <= 88 && (d.pop ?? 0) < 30 ? { score: 44, reason: `Good park weather: ${d.hi}° and dry` } : null;
