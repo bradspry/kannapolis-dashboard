@@ -3,6 +3,8 @@
     "home": {
       "order": [
         "train",
+        "homeless",
+        "gas",
         "gem",
         "waste",
         "weather",
@@ -20,8 +22,6 @@
         "whataburger",
         "news",
         "meetings",
-        "council",
-        "videos",
         "org",
         "people",
         "budget",
@@ -31,13 +31,18 @@
         "g-debt-policy",
         "g-debt-limit",
         "land",
-        "rider",
+        "council",
         "g-owners",
+        "videos",
+        "rider",
         "paratransit",
         "shuttle",
+        "ktown",
         "flights",
+        "water",
         "about",
-        "ktown"
+        "roads",
+        "stocks"
       ],
       "hidden": [
         "org",
@@ -50,7 +55,13 @@
         "g-debt-limit",
         "land",
         "g-owners",
-        "ktown"
+        "ktown",
+        "roads",
+        "stocks",
+        "rider",
+        "paratransit",
+        "shuttle",
+        "flights"
       ],
       "sizes": {
         "meetings": "m",
@@ -79,7 +90,9 @@
         "drought": "m",
         "g-debt-policy": "s",
         "library": "l",
-        "paratransit": "l"
+        "paratransit": "l",
+        "water": "xl",
+        "flights": "xl"
       },
       "spacers": []
     },
@@ -88,6 +101,7 @@
         "waste",
         "utility",
         "drought",
+        "water",
         "police",
         "fire",
         "news",
@@ -96,6 +110,7 @@
         "videos",
         "org",
         "people",
+        "homeless",
         "budget",
         "debt-service",
         "growth",
@@ -138,6 +153,7 @@
     "jobs": {
       "order": [
         "school-bus",
+        "stocks",
         "job-appstate",
         "job-atrium",
         "job-cabarrus",
@@ -181,7 +197,9 @@
         "rider",
         "flights",
         "paratransit",
-        "shuttle"
+        "shuttle",
+        "gas",
+        "roads"
       ],
       "hidden": [],
       "sizes": {

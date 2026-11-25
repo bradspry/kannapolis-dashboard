@@ -1,0 +1,7 @@
+{
+  "title": "Kannapolis-Area Index (KANDEX)",
+  "index_start": "2026-01-02",
+  "index_note": "Equal-weighted and seeded at 1,000 on the first trading day of 2026: each trading day it compounds the average of the ten stocks' daily percent changes, the way kandex.py does.",
+  "disclaimer": "For information and entertainment only, not financial advice. Prices are Yahoo Finance's daily closes.",
+  "about": {}
+}

@@ -5,12 +5,12 @@ import { isDark } from "./theme.js";
 const live = new Map(); // container id -> map
 
 /** Resolves with a loaded map, or never resolves (with a fallback message shown) if WebGL is unavailable. */
-export function makeMap(container, { bounds, interactive = true } = {}) {
+export function makeMap(container, { bounds, interactive = true, attribution = true } = {}) {
   const id = container.id;
   if (live.has(id)) { live.get(id).remove(); live.delete(id); }
   let map;
   try {
-    map = createMap(container, bounds, interactive);
+    map = createMap(container, bounds, interactive, attribution);
   } catch (e) {
     console.warn("Map unavailable:", e);
     container.classList.add("map-fallback");
@@ -21,17 +21,17 @@ export function makeMap(container, { bounds, interactive = true } = {}) {
   return new Promise((resolve) => map.on("load", () => resolve(map)));
 }
 
-function createMap(container, bounds, interactive) {
+function createMap(container, bounds, interactive, attribution) {
   const map = new maplibregl.Map({
     container,
     style: `https://tiles.openfreemap.org/styles/${isDark() ? "dark" : "positron"}`,
     bounds,
     fitBoundsOptions: { padding: 24 },
-    attributionControl: { compact: true },
+    attributionControl: attribution ? { compact: true } : false, // off only where the caller shows the credit itself
     cooperativeGestures: true, // page scroll isn't hijacked on phones
     interactive,
   });
-  map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
+  if (interactive) map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
   return map;
 }
 

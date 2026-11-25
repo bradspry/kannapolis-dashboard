@@ -12,11 +12,11 @@ export const TABS = [
 export const DEFAULT_PINNED = { jobs: "school-bus" };
 
 export const DEFAULT_MEMBERS = {
-  city: ["weather", "waste", "utility", "drought", "police", "fire", "news", "meetings", "council", "videos", "org",
-    "people", "budget", "debt-service", "growth", "g-tax-rate", "g-debt-policy", "g-debt-limit", "land", "g-owners", "about"],
+  city: ["weather", "waste", "utility", "drought", "water", "police", "fire", "news", "meetings", "council", "videos", "org",
+    "people", "homeless", "budget", "debt-service", "growth", "g-tax-rate", "g-debt-policy", "g-debt-limit", "land", "g-owners", "about"],
   fun: ["weather", "gem", "swanee", "baseball", "parks", "events", "ktown", "editions", "made", "whataburger", "library"],
-  jobs: ["school-bus"], // plus every employer widget (job-*): see defaultMembers
-  transportation: ["weather", "rider", "train", "flights", "paratransit", "shuttle"],
+  jobs: ["school-bus", "stocks"], // plus every employer widget (job-*): see defaultMembers
+  transportation: ["weather", "rider", "train", "flights", "paratransit", "shuttle", "gas", "roads"],
 };
 
 /** A tab's starting widgets, given every widget id. Jobs starts with all the employer widgets. */

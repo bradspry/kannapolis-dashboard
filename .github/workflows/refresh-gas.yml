@@ -1,0 +1,45 @@
+name: Refresh gas
+
+# Daily: the Gas Prices widget, from bradspry/kannapolis-gas's rules (gas_prices.py). Kept apart from
+# "Refresh data" because GasBuddy is read through the py-gasbuddy package; the rest of the pipeline is
+# standard-library Python. If GasBuddy refuses the runner, etl/build_gas.py keeps the last good prices.
+on:
+  schedule:
+    - cron: "15 11 * * *" # daily 11:15 UTC (7:15 a.m. Eastern in summer, 6:15 in winter)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-data # one data job at a time, so their commits don't collide
+  cancel-in-progress: false
+
+jobs:
+  gas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install py-gasbuddy
+        run: pip install py-gasbuddy
+      - name: Read gas prices
+        env:
+          KDASH_CONTACT: ${{ secrets.KDASH_CONTACT }}
+        run: python etl/run_all.py gas
+      - name: Commit changed data
+        if: always()
+        run: |
+          git config user.name "kdash-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/generated/gas.json
+          if git diff --cached --quiet; then
+            echo "No gas changes."
+          else
+            git commit -m "Refresh gas prices ($(date -u +%Y-%m-%d))"
+            git pull --rebase
+            git push
+          fi

@@ -1,0 +1,14 @@
+{
+  "_source": "Each district's McKinney-Vento page (name, title, phone) and the NC Homeless Education Program's Homeless Liaison Contact List (email), checked 2026-11-24.",
+  "checked": "2026-11-24",
+  "liaisons": {
+    "3702430": {"name": "McKenzie Wolford", "title": "Homeless education liaison", "phone": "704-938-1131", "email": "mckenzie.wolford@kcs.k12.nc.us",
+                "page": "https://www.kcs.k12.nc.us/departments/student-services/homeless-support-services"},
+    "3700530": {"name": "Liz Batson", "title": "McKinney-Vento liaison", "phone": "704-796-0109", "email": "elizabeth.batson@cabarrus.k12.nc.us",
+                "page": "https://cabarrus.k12.nc.us/7011_3"},
+    "3704050": {"name": "Carla Johnston", "title": "Homeless & foster care liaison", "phone": "704-630-6072", "email": "johnstoncl@rss.k12.nc.us",
+                "page": "https://rssed.org/mckinney-vento-resources-and-info"}
+  },
+  "state": {"name": "NC Homeless Education Program helpline", "phone": "800-308-2145", "page": "https://hepnc.uncg.edu/"},
+  "directory": "https://hepnc.uncg.edu/homeless-liaisons/"
+}

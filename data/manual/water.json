@@ -1,0 +1,12 @@
+{
+  "_source": "Lakes, gauges, coordinates and the water-supply figures come from bradspry/kannapolis-water-levels (water_map.py), which cites the City of Kannapolis \"Projected Necessary Future Water Supply\" chart and its FY2026-36 Water & Sewer Capital Improvement Plan. Kannapolis Lake has no public sensor: the reading comes by email from the Kannapolis Water Treatment Plant's operations manager. Put it in kannapolis_lake.level (e.g. \"93\\\" Below Full\") with its date; status says why the level is what it is.",
+  "title": "Lakes & Rivers",
+  "kannapolis_lake": {
+    "level": null,
+    "date": null,
+    "status": "Lowered for construction: the City is replacing the 1940 dam's spillway on Irish Buffalo Creek, finishing in 2027.",
+    "status_url": "https://www.kannapolisnc.gov/news/ID/370/Kannapolis-Dam-Spillway-Replacement-Project-Continues-(Blasting-Portion-to-Begin)",
+    "source": "Kannapolis Water Treatment Plant"
+  },
+  "supply_note": "The City's projection states 15.6 MGD of existing capacity but itemizes only 13.6 MGD; the rest is shown as Unlisted. Second Creek's intake is in Rowan County and its current ownership isn't confirmed. Charlotte Water's Summers Walk interconnection (FY2027, capacity not stated) is assumed to be the same point as the 1.0 MGD Davidson Road connection (FY2032)."
+}

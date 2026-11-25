@@ -20,7 +20,9 @@ open dist/index.html            # or double-click it
 - `python3 etl/run_all.py meetings videos news events weather gem swanee editions drought site`: refresh the time-sensitive widgets, then rebuild
 - Steps: `budget census council meetings videos events gem swanee made editions whataburger weather news org police fire baseball utility waste drought parks zoning property site` (`property` takes 5–30 min; the county GIS server is slow)
 
-**Requirements:** Python 3.10+ for the data steps (standard library only). Building and serving also work on macOS's built-in Python 3.9. The one exception is the weekly jobs harvest (`etl/build_jobs.py`), which needs `requests`, Playwright with Chromium, and a checkout of [kannapolis-jobs](https://github.com/bradspry/kannapolis-jobs) in `.kannapolis-jobs/`.
+**Requirements:** Python 3.10+ for the data steps (standard library only). Building and serving also work on macOS's built-in Python 3.9. Two exceptions: the weekly jobs harvest (`etl/build_jobs.py`), which needs `requests`, Playwright with Chromium, and a checkout of [kannapolis-jobs](https://github.com/bradspry/kannapolis-jobs) in `.kannapolis-jobs/`; and Gas Prices (`etl/build_gas.py`), which reads GasBuddy through `py-gasbuddy` (without it, the step keeps the last prices).
+
+Several widgets follow Brad's own scripts: KANDEX ([kannapolis-stocks](https://github.com/bradspry/kannapolis-stocks)), Gas Prices ([kannapolis-gas](https://github.com/bradspry/kannapolis-gas)), Lakes & Rivers ([kannapolis-water-levels](https://github.com/bradspry/kannapolis-water-levels)), City Roads ([kannapolis-city-roads](https://github.com/bradspry/kannapolis-city-roads)) and Homeless Students ([kannapolis-mckinney-vento](https://github.com/bradspry/kannapolis-mckinney-vento)). Their settings (companies, rewards discounts, lakes and gauges, road types, districts) are read from each script with `ast.literal_eval` (`common.repo_constants`), from a `.kannapolis-*/` checkout if there is one, else from GitHub, so a change to a script carries over without running its code.
 
 **Settings:** copy `.env.example` to `.env` (git-ignored).
 
@@ -96,7 +98,7 @@ It prints the address to open on your phone (for example `http://192.168.1.20:51
 Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a `source_url` that opens the official PDF at the cited page (for example `…FY%2027%20Adopted%20Budget.pdf#page=114`). The build fails if a row's citation is missing. The full registry is [`data/manual/sources.csv`](data/manual/sources.csv); its `widgets` column ties each source to the widgets it feeds, and every widget window ends with an automatic **Sources** line built from it. The table below is generated from the same registry on every build, so the README always cites every source:
 
 <!-- sources:start -->
-177 sources, generated from `data/manual/sources.csv`.
+201 sources, generated from `data/manual/sources.csv`.
 
 | Source | Publisher | Format | Used for |
 |---|---|---|---|
@@ -277,6 +279,30 @@ Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a
 | [OurAirports: airports.csv](https://davidmegginson.github.io/ourairports-data/airports.csv) | OurAirports (public domain) | CSV | Airport names, cities and coordinates for each destination |
 | [world-atlas land-50m (Natural Earth 1:50m land)](https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/land-50m.json) | Natural Earth (public domain), packaged by world-atlas | TopoJSON | Coastline outline on the Flights route map |
 | [us-atlas states-10m (U.S. Census Bureau cartographic boundaries)](https://cdn.jsdelivr.net/npm/us-atlas@3.0.1/states-10m.json) | U.S. Census Bureau, packaged by us-atlas | TopoJSON | State lines on the Flights route map |
+| [kannapolis-stocks: kandex.py (KANDEX)](https://github.com/bradspry/kannapolis-stocks) | Brad Spry (GitHub) | Python (GitHub) | The ten companies and the composite's method and 1,000 baseline |
+| [Yahoo Finance chart data (daily closes for each company)](https://finance.yahoo.com/quote/LLY/) | Yahoo Finance | JSON API | Daily closing prices, 52-week range; the KANDEX composite is computed from them |
+| [kannapolis-gas: gas_prices.py (Friday Fill-up)](https://github.com/bradspry/kannapolis-gas) | Brad Spry (GitHub) | Python (GitHub) | ZIP code, station count, 24-hour freshness rule, rewards discounts, pinned stations, AirNav airports |
+| [GasBuddy station prices near 28083 (via the py-gasbuddy package)](https://www.gasbuddy.com/home?search=28083) | GasBuddy | JSON API | Regular and diesel prices, stations, addresses and map positions; NC and U.S. averages |
+| [Dash In, 970 Vinehaven Drive NE: store page](https://locations.dashin.com/l/nc/970-vinehaven-drive-northeast-28025/6266057) | Dash In | Web page | Regular and diesel prices and map position (not on GasBuddy) |
+| [AirNav: Concord-Padgett Regional Airport (KJQF) FBO fuel prices](https://www.airnav.com/airport/KJQF) | AirNav | Web page | 100LL and Jet A prices |
+| [AirNav: Mid-Carolina Regional Airport (KRUQ) FBO fuel prices](https://www.airnav.com/airport/KRUQ) | AirNav | Web page | 100LL and Jet A prices |
+| [kannapolis-water-levels: water_map.py](https://github.com/bradspry/kannapolis-water-levels) | Brad Spry (GitHub) | Python (GitHub) | Lakes, gauges and coordinates; Kannapolis water-supply sources and MGD (from the City's supply projection and FY2026-36 Water & Sewer CIP) |
+| [Lake Level Data (Lake Howell/Coddle Creek, Lake Fisher, Lake Concord)](https://concordnc.gov/Departments/Water-Resources/Lake-Level-Data) | City of Concord | Web page | City lake levels below full pond |
+| [USGS instantaneous streamflow and daily statistics (Second Creek near Barber 02120780, Yadkin River at Yadkin College 02116500)](https://waterservices.usgs.gov/) | U.S. Geological Survey | JSON API | Stream flow now and its rank among the same day's history |
+| [National Water Prediction Service gauges (LKSN7, CWAN7, MOUN7)](https://water.noaa.gov/gauges/cwan7) | NOAA National Weather Service | JSON API | Lookout Shoals, Lake Norman and Mountain Island Lake pool levels |
+| [Cube Hydro Carolinas: lake levels](https://ww4.cubecarolinas.com/lake/levels?orgID=3) | Cube Hydro Carolinas | Web page | High Rock, Tuckertown and Badin pool levels (hourly) |
+| [Kannapolis Dam Spillway Replacement Project Continues](https://www.kannapolisnc.gov/news/ID/370/Kannapolis-Dam-Spillway-Replacement-Project-Continues-(Blasting-Portion-to-Begin)) | City of Kannapolis | Web page | Why Kannapolis Lake is lowered: the 1940 dam's spillway replacement, finishing in 2027 |
+| [kannapolis-mckinney-vento: processed data and district list](https://github.com/bradspry/kannapolis-mckinney-vento) | Brad Spry (GitHub) | CSV | Homeless students, enrollment, area population and statewide residence, by district and school year |
+| [ED Data Express: Homeless students enrolled (EDFacts FS 118)](https://eddataexpress.ed.gov/dashboard/homeless/2022-2023) | U.S. Department of Education | JSON API | Homeless student counts by district; statewide counts by nighttime residence; child poverty (SAIPE) |
+| [Education Data Portal: NCES Common Core of Data enrollment and Census SAIPE population](https://educationdata.urban.org/documentation/) | Urban Institute (NCES and U.S. Census Bureau data) | JSON API | District enrollment and area population for the rates |
+| [NC Homeless Education Program](https://hepnc.uncg.edu/) | NC Homeless Education Program (UNC Greensboro) | Web page | Where families can get help in North Carolina |
+| [Kannapolis City Schools: Homeless Support Services](https://www.kcs.k12.nc.us/departments/student-services/homeless-support-services) | Kannapolis City Schools | Web page | Kannapolis City's McKinney-Vento liaison and phone |
+| [Cabarrus County Schools: McKinney-Vento](https://cabarrus.k12.nc.us/7011_3) | Cabarrus County Schools | Web page | Cabarrus County's McKinney-Vento liaison, phone and email |
+| [Rowan-Salisbury Schools: McKinney-Vento Resources and Information](https://rssed.org/mckinney-vento-resources-and-info) | Rowan-Salisbury School System | Web page | Rowan-Salisbury's homeless & foster care liaison and phone |
+| [NCHEP Homeless Liaison Contact List](https://hepnc.uncg.edu/homeless-liaisons/) | NC Homeless Education Program (UNC Greensboro) | Spreadsheet | Liaison emails; confirms each district's liaison |
+| [kannapolis-city-roads: kannapolis_city_roads.py](https://github.com/bradspry/kannapolis-city-roads) | Brad Spry (GitHub) | Python (GitHub) | Which road types count as state-maintained; the boundary layer |
+| [NCDOT municipal boundaries (Powell Bill Program), NCDOT_CityBdy_Poly](https://www.arcgis.com/home/item.html?id=ee098aeaf28d44138d63446fbdaac1ee) | NC Department of Transportation | ArcGIS REST | Kannapolis city limits as filed for Powell Bill street aid |
+| [OpenStreetMap: Kannapolis drivable roads (Overpass API)](https://www.openstreetmap.org/copyright) | OpenStreetMap contributors | GeoJSON (Overpass) | Road lines, names and types; miles by type |
 <!-- sources:end -->
 
 The news and meetings harvesters are adapted from [kspider](https://github.com/bradspry/kannapolis-news-wire).
@@ -304,7 +330,8 @@ Everything else is built into the page. From the internet it loads only: the cha
 
 In the repository, open **Settings → Pages** and set **Source: GitHub Actions**. Then:
 - **Deploy site** builds and publishes on every push to `main`.
-- **Refresh data** runs weekly for everything, and daily for the time-sensitive widgets (meetings, Council videos, news, events, weather, the Gem, the Swanee, Editions and drought); it commits new data and triggers a redeploy.
+- **Refresh data** runs weekly for everything, and daily for the time-sensitive widgets (meetings, Council videos, news, events, weather, the Gem, the Swanee, Editions, drought, lake levels and KANDEX); it commits new data and triggers a redeploy.
+- **Refresh jobs** runs weekly, and **Refresh gas** daily; each installs the one package it needs.
 
 Add `KDASH_CONTACT` (and `CENSUS_API_KEY`, if used) under **Settings → Secrets and variables → Actions**.
 

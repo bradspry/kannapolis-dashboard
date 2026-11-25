@@ -1,5 +1,5 @@
 // Home-screen tiles: one glanceable summary per widget. Each returns content for os.js to wrap.
-import { h } from "./ui.js";
+import { h, fill } from "./ui.js";
 import { tokens } from "./theme.js";
 import { gauge } from "./gauge.js";
 import { chip } from "./os.js";
@@ -23,6 +23,11 @@ import { searchBox as libSearch, upcoming as libUpcoming, eventRow as libRow, cl
 import { nextTrains, trainRow, nextCard as trNext, stationStatus as trStatus, ticketButton as trTickets, trackButton as trTrack, phoneButton as trPhone, logo as trLogo } from "./sections/train.js";
 import { countText as jobCount, staleNote as jobStale, careersButton as jobCareers, jobList, sectorColor as jobColor, fmtDay as jobDay, brandVars, brandHead } from "./sections/jobs.js";
 import { latest as ktLatest, logo as ktLogo, meta as ktMeta, thumb as ktThumb, buttons as ktButtons, list as ktList, epLabel as ktEp } from "./sections/ktown.js";
+import { headline as kxHead, rows as kxRows, movers as kxMovers, change as kxChange, sinceStart as kxSince, pctText as kxPct, dayText as kxDay } from "./sections/stocks.js";
+import { bigPrice as gsBig, list as gsList, avList as gsAv, stationMap as gsMap, trendText as gsTrend, areaLine as gsArea, usd as gsUsd, GAS_COLOR } from "./sections/gas.js";
+import { lakeRows as wlLakes, streamRows as wlStreams, tileWaterMap as wlTileMap, allLakes as wlAll, belowText as wlBelow, condition as wlCond, WATER_COLOR } from "./sections/water.js";
+import { districtRows as hmRows, changeLine as hmChange, miniChart as hmChart, latestOf as hmLatest, syShort as hmSy, HOMELESS_COLOR } from "./sections/homeless.js";
+import { roadMap as rdMap, headline as rdHead, topList as rdTop, share as rdShare, ROADS_COLOR } from "./sections/roads.js";
 import { districtsOf as sbDistricts, total as sbTotal, districtRows as sbRows, titleList as sbTitles, SCHOOL_BUS_YELLOW } from "./sections/schoolbus.js";
 import { routeMap as flMap, airlineLegend as flLegend, newLine as flNew, destList as flDests } from "./sections/flights.js";
 import { serviceStatus as trSvc, shuttleStatus as shStatus, statusLine as trStatusLine, systemMap, shuttleMap, routeLegend, liveCount, alertList as trAlerts, callButton as trCall, upcomingHoliday as trHoliday, clock as trClock } from "./sections/transit.js";
@@ -148,8 +153,8 @@ const contactLinks = (p) => [
 const shortDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
 export function tileDefs(data, COLORS) {
-  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos, waste, drought, library, train, jobs, transit, flights, ktown } = data;
-  const jobSize = jobSizes(jobs);
+  const { census, budget, property, zoning, council, org, meetings, news, events, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos, waste, drought, library, train, jobs, transit, flights, ktown, stocks, gas, water, homeless, roads, boundaries } = data;
+  const jobSize = jobSizes(jobs, stocks?.companies?.length ? 2 : 0); // KANDEX (medium) is on the Jobs tab too
   const t = tokens();
   const geo = census.geographies;
   const k = geo.Kannapolis, nc = geo["North Carolina"], cab = geo["Cabarrus County"], us = geo["United States"];
@@ -378,6 +383,45 @@ export function tileDefs(data, COLORS) {
         return h("div", { class: "tile-body" }, ...top,
           h("div", { class: "tile-split top" }, h("div", {}, dial, h("p", { class: "tile-meta dr-goal" }, lv.goal), tips),
             h("div", {}, monitor, year, h("div", { class: "mini-head" }, "Rowan County, past year"), drStrip(dr, dr.counties[1], 52))));
+      },
+    },
+    homeless?.districts && {
+      id: "homeless", opens: "homeless", size: "m", label: "Homeless Students",
+      build: (size) => {
+        const hm = homeless, k = hm.districts[0], ky = hmLatest(k), top = head("school", HOMELESS_COLOR, "Homeless Students");
+        const kcs = h("div", {}, h("div", { class: "bb-next-label" }, `Kannapolis City · ${hmSy(ky.year)}`),
+          h("div", { class: "hm-big" }, String(Math.round(ky.students)), h("small", {}, " students")),
+          h("div", { class: "tile-meta" }, `${ky.per_1000_enrolled} per 1,000 enrolled`));
+        const chart = (w, ht) => { const box = h("div", { class: "hm-mini" }); requestAnimationFrame(() => fill(box, hmChart(hm, box.clientWidth || w, ht))); return box; };
+        if (size === "s") return h("div", { class: "tile-body" }, top, kcs);
+        if (size === "m") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top hm-m" }, kcs,
+          h("div", {}, h("div", { class: "mini-head bb-mh" }, `All three · ${hmSy(ky.year)}`), hmRows(hm, { rate: false }))));
+        if (size === "l") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top hm-m" }, kcs, hmRows(hm)),
+          h("div", { class: "mini-head" }, "Per 1,000 enrolled, by school year"), chart(480, 210));
+        return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top hm-xl" },
+          h("div", {}, kcs, h("p", { class: "tile-meta" }, hmChange(k)), h("div", { class: "mini-head" }, "All three districts"), hmRows(hm),
+            h("p", { class: "tile-meta hm-def" }, "Homeless under federal law: no fixed, regular, adequate place to sleep, including doubled-up and motels."),
+            k.liaison ? h("p", { class: "tile-meta" }, `Need help? Kannapolis City's liaison: ${k.liaison.name}, ${k.liaison.phone}`) : null),
+          h("div", { class: "hm-xl-chart" }, h("div", { class: "mini-head bb-mh" }, "Per 1,000 enrolled, by school year"), chart(560, 300))));
+      },
+    },
+    water?.streams && {
+      id: "water", opens: "water", size: "m", label: "Lakes & Rivers",
+      build: (size) => {
+        // The City's Director of Water Resources in the header (like the police and fire chiefs), except on the small tile.
+        const w = water, top = size === "s" ? head("waves", WATER_COLOR, "Lakes & Rivers")
+          : headWithChief("waves", WATER_COLOR, "Lakes & Rivers", chiefOf(org, /^water resources$/i), "Director of Water Resources");
+        const lakes = wlAll(w).filter((l) => l.ft != null);
+        const hero = lakes[0] ? h("div", { class: "wl-hero" }, h("div", { class: "bb-next-label" }, lakes[0].name),
+          h("div", { class: "wl-big" }, wlBelow(lakes[0].ft))) : null;
+        if (size === "s") return h("div", { class: "tile-body" }, top, hero, h("p", { class: "tile-meta" }, `Second Creek: ${wlCond(w.streams[0]?.percentile).label.toLowerCase()}`));
+        if (size === "m") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top wl-m" },
+          h("div", {}, h("div", { class: "mini-head bb-mh" }, "Lakes"), wlLakes(w, 3)), h("div", {}, h("div", { class: "mini-head bb-mh" }, "Streams"), wlStreams(w))));
+        if (size === "l") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top wl-l" },
+          wlTileMap(w, boundaries, "wl-tile-l", { labels: false }), h("div", {}, h("div", { class: "mini-head bb-mh" }, "Lakes"), wlLakes(w, 6), h("div", { class: "mini-head" }, "Streams"), wlStreams(w))));
+        return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top wl-xl" },
+          wlTileMap(w, boundaries, "wl-tile-xl"),
+          h("div", {}, h("div", { class: "mini-head bb-mh" }, "Lakes"), wlLakes(w, 7), h("div", { class: "mini-head" }, "Streams"), wlStreams(w))));
       },
     },
     waste && {
@@ -933,6 +977,60 @@ export function tileDefs(data, COLORS) {
             h("div", {}, h("div", { class: "mini-head" }, "Freshness"), h("ul", { class: "fresh-mini small" }, sorted.slice(0, 9).map(fRow)))));
       },
     },
+    gas?.grades?.regular && {
+      id: "gas", opens: "gas", size: "m", label: "Gas Prices",
+      build: (size) => {
+        const g = gas, reg = g.grades.regular.stations, dsl = g.grades.diesel?.stations || [];
+        const top = head("fuel", GAS_COLOR, "Gas Prices");
+        const trend = gsTrend(g.grades.regular.trend);
+        const dieselLine = dsl[0] ? h("p", { class: "gs-mini-line" }, h("b", {}, gsUsd(dsl[0].effective)), ` diesel · ${dsl[0].name}`) : null;
+        const avLine = g.aviation[0] ? h("p", { class: "gs-mini-line" }, h("b", {}, gsUsd(g.aviation[0].price)), ` ${g.aviation[0].fuel} · ${g.aviation[0].code}`) : null;
+        if (size === "s") return h("div", { class: "tile-body" }, top, gsBig(reg[0], { compact: true }));
+        if (size === "m") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top gs-m" },
+          h("div", {}, gsBig(reg[0], { compact: true }), trend ? h("p", { class: "tile-meta" }, trend) : null),
+          h("div", {}, h("div", { class: "mini-head bb-mh" }, "Next cheapest"), gsList(reg, 3, { from: 1 }), dieselLine)));
+        if (size === "l") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top gs-m" },
+          h("div", {}, gsBig(reg[0], { compact: true }), trend ? h("p", { class: "tile-meta" }, trend) : null, gsArea(g)),
+          gsMap(g, boundaries, { cls: "mini" })),
+          h("div", { class: "tile-split top gs-l" }, h("div", {}, h("div", { class: "mini-head" }, "Regular"), gsList(reg, 5, { from: 1 })),
+            h("div", {}, h("div", { class: "mini-head" }, "Diesel"), gsList(dsl, 2, { numbered: false }), h("div", { class: "mini-head" }, "Aviation"), gsAv(g, 2))));
+        return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top gs-xl" },
+          h("div", {}, gsBig(reg[0], { compact: true }), trend ? h("p", { class: "tile-meta" }, trend) : null, gsArea(g), gsMap(g, boundaries, { cls: "mini" })),
+          h("div", {}, h("div", { class: "mini-head bb-mh" }, "Regular"), gsList(reg, 7, { from: 1 })),
+          h("div", {}, h("div", { class: "mini-head bb-mh" }, "Diesel"), gsList(dsl, 4, { numbered: false }), h("div", { class: "mini-head" }, "Aviation"), gsAv(g, 4))));
+      },
+    },
+    roads?.lines && {
+      id: "roads", opens: "roads", size: "m", label: "City Roads",
+      build: (size) => {
+        const r = roads, top = head("road", ROADS_COLOR, "City Roads");
+        if (size === "s") return h("div", { class: "tile-body" }, top, rdHead(r, { compact: true }));
+        if (size === "m") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top rd-m" }, rdHead(r, { compact: true }), rdMap(r, { cls: "mini", thin: true })));
+        if (size === "l") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top rd-l" },
+          h("div", {}, rdHead(r), h("div", { class: "mini-head" }, "Longest City streets"), rdTop(r.top_city, 5)), rdMap(r, { cls: "mini", thin: true })));
+        return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top rd-xl" },
+          h("div", {}, rdHead(r), h("div", { class: "mini-head" }, "Longest City streets"), rdTop(r.top_city, 6)),
+          rdMap(r, { cls: "mini", thin: true }),
+          h("div", {}, h("div", { class: "mini-head bb-mh" }, "Longest state roads"), rdTop(r.top_state, 7))));
+      },
+    },
+    stocks?.companies?.length && {
+      id: "stocks", opens: "stocks", size: "m", label: "KANDEX",
+      build: (size) => {
+        const s = stocks, top = head("growth", "var(--icon-3)", "KANDEX");
+        const line = sparkline(s.index.slice(-66), tokens().series[0]); // about three months of trading days
+        const since = h("p", { class: "tile-meta" }, `${kxPct(kxSince(s))} since 1,000 on ${kxDay(s.dates[0], { month: "short", day: "numeric", year: "numeric" })}`);
+        const m = kxMovers(s);
+        if (size === "s") return h("div", { class: "tile-body" }, top, kxHead(s, { compact: true }));
+        if (size === "m") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top kx-m" },
+          h("div", {}, kxHead(s, { compact: true }), since), h("div", {}, h("div", { class: "mini-head bb-mh" }, "Biggest moves"), kxRows(s, 3, { price: false, list: [m[0], m[1], m.at(-1)] }))));
+        if (size === "l") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top kx-m" }, kxHead(s, { compact: true }), h("div", { class: "kx-spark-box" }, line, since)),
+          h("div", { class: "kx-l-rows" }, kxRows(s, 10)));
+        return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top kx-xl" },
+          h("div", {}, kxHead(s), h("div", { class: "mini-head" }, "Past three months"), h("div", { class: "kx-spark-box big" }, line), since),
+          h("div", {}, kxRows(s, 10))));
+      },
+    },
     jobs?.school_bus && {
       // Pinned to the Jobs tab's top-right corner by default (see DEFAULT_PINNED).
       id: "school-bus", opens: "school-bus", size: "m", label: "School Bus Drivers", home: false,
@@ -988,12 +1086,12 @@ export function tileDefs(data, COLORS) {
 }
 
 /** Default size of each employer's Jobs widget: by openings, then whole rows (see tileDefs). */
-function jobSizes(jobs) {
+function jobSizes(jobs, extraCells = 0) {
   const sizes = new Map(), cells = { s: 1, m: 2, l: 4 };
   if (!jobs) return sizes;
   for (const e of jobs.employers) sizes.set(e.slug, e.jobs.length >= 50 ? "l" : e.jobs.length >= 10 ? "m" : "s");
-  // The School Bus Drivers widget (medium, pinned) shares the Jobs tab, so count its 2 cells too.
-  let total = [...sizes.values()].reduce((n, s) => n + cells[s], 0) + (jobs.school_bus ? cells.m : 0);
+  // The School Bus Drivers widget (medium, pinned) and KANDEX (medium) share the Jobs tab, so count their cells too.
+  let total = [...sizes.values()].reduce((n, s) => n + cells[s], 0) + (jobs.school_bus ? cells.m : 0) + extraCells;
   const promote = jobs.employers.filter((e) => sizes.get(e.slug) === "s" && e.jobs.length).sort((a, b) => b.jobs.length - a.jobs.length);
   while (total % 4 && promote.length) { sizes.set(promote.shift().slug, "m"); total += 1; }
   return sizes;

@@ -33,6 +33,11 @@ import build_train
 import build_transit
 import build_ktown
 import build_flights
+import build_gas
+import build_homeless
+import build_roads
+import build_stocks
+import build_water
 import build_weather
 import build_zoning
 from common import log
@@ -54,6 +59,9 @@ STEPS = [
     ("train", build_train.main),
     ("transit", build_transit.main),
     ("flights", build_flights.main),  # needs a kannapolis-travel checkout (.kannapolis-travel)
+    ("gas", build_gas.main),  # needs py-gasbuddy (the "Refresh gas" workflow); without it, last prices are kept
+    ("roads", build_roads.main),
+    ("stocks", build_stocks.main),
     ("weather", build_weather.main),
     ("news", build_news.main),
     ("org", build_org.main),
@@ -63,6 +71,8 @@ STEPS = [
     ("utility", build_utility.main),
     ("waste", build_waste.main),
     ("drought", build_drought.main),
+    ("water", build_water.main),
+    ("homeless", build_homeless.main),
     ("parks", build_parks.main),
     ("zoning", build_zoning.main),
     ("property", build_property.main),  # slowest: ~26k parcels + ~18 yearly snapshots
