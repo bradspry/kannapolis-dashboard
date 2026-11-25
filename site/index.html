@@ -57,7 +57,7 @@
         <a id="feedback-btn" class="pill-btn primary" href="mailto:bradspry@gmail.com?subject=Kannapolis%20Civic%20Dashboard%20feedback" title="Email feedback about the dashboard" aria-label="Dashboard Feedback (email)">
           <span class="fb-long" aria-hidden="true">Dashboard Feedback</span><span class="fb-short" aria-hidden="true">Feedback</span>
         </a>
-        <button id="edit-toggle" class="pill-btn" type="button" aria-pressed="false" title="Hide or restore widgets">
+        <button id="edit-toggle" class="pill-btn" type="button" aria-pressed="false" hidden title="Hide or restore widgets">
           <span class="label">Edit</span>
         </button>
         <button id="theme-toggle" class="pill-btn" type="button" aria-label="Switch color theme">
@@ -80,6 +80,7 @@
     </div>
     <nav id="folder-tabs" class="folder-tabs" role="tablist" aria-label="Dashboard tabs"></nav>
     <div id="folder" class="folder" role="tabpanel">
+      <section id="now" class="now" aria-label="Right now" hidden></section>
       <div id="home" class="home-grid" aria-label="Widgets"></div>
       <div id="hidden-tray" class="hidden-tray" hidden></div>
     </div>

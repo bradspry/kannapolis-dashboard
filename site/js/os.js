@@ -8,6 +8,7 @@ import { h } from "./ui.js";
 import { icon } from "./icons.js";
 import { enableDrag, moveBy } from "./drag.js";
 import { TABS, defaultMembers, categoryOf, tabById, DEFAULT_PINNED } from "./tabs.js";
+import { BASE, STORIES } from "./pulse.js";
 
 const KEY = "kdash-home-layout";          // Home tab: { order: [tile ids], hidden: [tile ids], sizes, spacers }
 const keyFor = (t) => (t === "home" ? KEY : `kdash-tab-${t}`); // other tabs: same shape; order = the tab's widgets
@@ -24,9 +25,16 @@ const windows = new Map();   // id -> { title, sub, icon, color, render }
 const rendered = new Set();  // windows rendered at the current theme/width
 let openId = null, openerTile = null, pushed = false;
 let tileDefs = [];           // [{ id, opens, size, build }]
+let pulseFn = null;          // () => { tileId: { score, reason } } (pulse.js)
+const OPENS_KEY = "kdash-opens";      // window id -> times this browser opened it ("Right now" favors these)
+const modeKey = (t) => `kdash-mode-${t}`; // per tab with a story: "mine" = the saved layout; otherwise Smart (arranged by the moment)
 let dialog, winBody, winTitle, winSub, winIcon;
 
 const phone = () => window.matchMedia?.("(max-width: 720px)").matches;
+/** Brad's local preview (./serve.sh on localhost or the LAN, or the built file opened directly), the same rule
+ *  the Google Analytics snippet uses. Only there: the Edit button and the Smart | Mine switch. The published
+ *  site (GitHub Pages) is always Smart. */
+export const LOCAL = !location.protocol.startsWith("http") || /^(localhost|127\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)|\.local$/.test(location.hostname);
 const reducedMotion = () => window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 function readLocal(t = tab) {
   try {
@@ -104,6 +112,24 @@ export function chip(name, color, ink) {
 /** Register a window. `render` fills its <section>. */
 export function defineWindow(id, def) { windows.set(id, def); }
 
+/** Register the timeliness scorer (pulse.js): () => { tileId: { score, reason } }. */
+export function definePulse(fn) { pulseFn = fn; }
+const readJSON = (k, d) => { try { return JSON.parse(localStorage.getItem(k) || "null") ?? d; } catch { return d; } };
+const storied = () => !!pulseFn && !!STORIES[tab]; // this tab has a Smart story (pulse.js STORIES)
+const mineMode = () => LOCAL && readJSON(modeKey(tab), null) === "mine"; // published: always Smart
+/** Smart: Home arranged and sized by the moment. Mine: the saved layout. Edit mode always shows Mine. */
+const smart = () => storied() && !mineMode() && !document.body.classList.contains("editing");
+function setMode(mode) {
+  try { mode === "mine" ? localStorage.setItem(modeKey(tab), JSON.stringify("mine")) : localStorage.removeItem(modeKey(tab)); } catch { /* private mode */ }
+  renderHome();
+  announce(mode === "mine" ? `${tabById(tab).name} shows your own layout.` : `${tabById(tab).name} is arranged for right now.`);
+}
+function countOpen(id) {
+  const o = readJSON(OPENS_KEY, {});
+  o[id] = (o[id] || 0) + 1;
+  try { localStorage.setItem(OPENS_KEY, JSON.stringify(o)); } catch { /* private mode */ }
+}
+
 /** Register home tiles in order. build() returns the tile's inner content. */
 export function defineTiles(defs) { tileDefs = defs; }
 
@@ -117,53 +143,33 @@ export function renderHome() {
   const defs = ordered(currentDefs);
   const homeSizes = tab === "home" ? {} : (effective("home")?.sizes || {}); // a widget new to a tab starts at its Home size
   const okSize = (s) => SIZES.some(([k]) => k === s);
-  for (const t of defs) {
-    if (hidden.has(t.id)) continue;
-    let size = okSize(sizes[t.id]) ? sizes[t.id] : okSize(homeSizes[t.id]) ? homeSizes[t.id] : (t.size || "s");
-    if (size === "xl" && phone()) size = "l"; // a phone grid is only 2 tiles wide
-    let content;
-    try { content = t.build(size); } catch (e) { console.error(`tile ${t.id}`, e); continue; }
-    if (!content) continue;
-    const w = windows.get(t.opens);
-    const name = t.label || w?.title || t.id;
-    const isPinned = pinned === t.id;
-    const tile = h("article", { class: `tile-w size-${size}${t.kind ? ` kind-${t.kind}` : ""}${t.spacer ? " spacer" : ""}${isPinned ? " pinned" : ""}`, "data-tile": t.id, "data-opens": t.opens, "data-size": size },
-      t.spacer ? null : h("button", { class: "tile-open", type: "button", "aria-haspopup": "dialog",
-        "aria-label": `Open ${w?.title || t.opens}${t.label ? `: ${t.label}` : ""}`,
-        onclick: (e) => openWindow(t.opens, e.currentTarget.closest(".tile-w")) }),
-      t.spacer ? null : h("span", { class: `tile-ear ear-${categoryOf(t.id)}`, "aria-hidden": "true" }),
-      content,
-      h("button", { class: "tile-top", type: "button", title: "Move to top", "aria-label": `Move the ${t.label || w?.title} widget to the top`,
-        onclick: (e) => {
-          const el = e.currentTarget.closest(".tile-w");
-          if (el === el.parentElement.firstElementChild) { announce(`${t.label || w?.title} is already at the top.`); return; }
-          moveBy(el, -999, (ids) => {
-            commitOrder(ids);
-            announce(`${t.label || w?.title} moved to the top.`);
-            window.scrollTo({ top: 0, behavior: reducedMotion() ? "auto" : "smooth" });
-          });
-        } }, icon("toTop", 16)),
-      t.spacer ? null : h("button", { class: "tile-pin", type: "button", "aria-pressed": String(isPinned),
-        title: isPinned ? "Unpin" : "Pin to the top-right corner",
-        "aria-label": isPinned ? `Unpin the ${name} widget` : `Pin the ${name} widget to the top-right corner of ${tabById(tab).name}`,
-        onclick: () => togglePin(t.id, name) }, icon("pin", 16)),
-      h("button", { class: "tile-grip", type: "button", "aria-label": `Move the ${t.label || w?.title} widget. Use arrow keys, or drag.`,
-        onkeydown: (e) => {
-          const step = { ArrowLeft: -1, ArrowUp: -1, ArrowRight: 1, ArrowDown: 1 }[e.key];
-          if (!step) return;
-          e.preventDefault();
-          moveBy(e.currentTarget.closest(".tile-w"), step, (ids, pos) => {
-            commitOrder(ids);
-            announce(`${t.label || w?.title} moved to position ${pos} of ${ids.length}`);
-          });
-        } }, icon("grip", 16)),
-      h("div", { class: "size-picker", role: "group", "aria-label": `Size of the ${name} widget` },
-        SIZES.map(([k, label]) => h("button", { type: "button", class: `size-opt opt-${k}`, "aria-pressed": String(k === size), title: label,
-          "aria-label": `${label}`, onclick: () => setSize(t.id, k, name) }, k.toUpperCase()))),
-      h("button", { class: "tile-remove", type: "button", "aria-label": t.spacer ? "Delete this blank space" : `Remove the ${name} widget from ${tabById(tab).name}`,
-        onclick: () => (t.spacer ? removeSpacer(t.id) : removeTile(t.id, name)) }, icon("minus", 14)));
-    for (const [k, v] of Object.entries(t.vars || {})) tile.style.setProperty(k, v); // e.g. an employer's --brand color
-    tiles.push(tile);
+  const ranked = rank(defs);
+  const why = new Map(ranked.filter((r) => r.reason).map((r) => [r.t.id, r.reason]));
+  if (smart()) {
+    // Smart: every widget placed and sized by how much it matters right now.
+    // Smart: the story, chapter by chapter, each its own grid with a heading.
+    let cur = null;
+    for (const r of ranked) {
+      if (!cur || cur.ch.index !== r.chapter.index) {
+        const top = ranked.filter((x) => x.chapter.index === r.chapter.index && x.reason && x.timely >= 30).sort((a, b) => b.timely - a.timely)[0];
+        const grid = h("div", { class: "home-grid chapter-grid" });
+        const cat = categoryOf(ranked.find((x) => x.chapter.index === r.chapter.index && !x.t.spacer)?.t.id || "");
+        tiles.push(h("section", { class: "chapter", "aria-label": r.chapter.name },
+          h("header", { class: "chapter-head" }, h("span", { class: `chapter-dot ear-${cat}`, "aria-hidden": "true" }),
+            h("h2", { class: "chapter-name" }, r.chapter.name), h("span", { class: "chapter-lede" }, top ? top.reason : r.chapter.blurb)), grid));
+        cur = { ch: r.chapter, grid };
+      }
+      const tile = makeTile(r.t, r.size, r.reason);
+      if (tile) cur.grid.append(tile);
+    }
+  } else {
+    for (const t of defs) {
+      if (hidden.has(t.id)) continue;
+      let size = okSize(sizes[t.id]) ? sizes[t.id] : okSize(homeSizes[t.id]) ? homeSizes[t.id] : (t.size || "s");
+      if (size === "xl" && phone()) size = "l"; // a phone grid is only 2 tiles wide
+      const tile = makeTile(t, size, why.get(t.id));
+      if (tile) tiles.push(tile);
+    }
   }
   const editing = document.body.classList.contains("editing");
   if (!tiles.length) {
@@ -171,9 +177,11 @@ export function renderHome() {
       editing ? "Add widgets from the list below." : h("span", {}, "Tap ", h("b", {}, "Edit"), " to add any widget to this tab.")));
   }
   // A pinned widget goes first, and CSS holds it in the top-right corner (.pinned); the rest flow around it.
-  const pi = tiles.findIndex((el) => el.classList?.contains("pinned"));
+  const pi = smart() ? -1 : tiles.findIndex((el) => el.classList?.contains("pinned"));
   if (pi > 0) tiles.unshift(...tiles.splice(pi, 1));
   home.replaceChildren(...tiles);
+  home.classList.toggle("smart", smart());
+  renderBrief(ranked);
   // "Add a widget": every widget not on this tab, grouped by subject.
   const shown = new Set(defs.filter((t) => !hidden.has(t.id)).map((t) => t.id));
   const off = currentDefs.filter((t) => !t.spacer && !shown.has(t.id));
@@ -187,6 +195,195 @@ export function renderHome() {
       h("span", { class: `tray-group-name ear-${g.id}` }, g.id === "home" ? "General" : g.name),
       ...list.sort((a, b) => nameOf(a).localeCompare(nameOf(b))).map((t) => h("button", { class: "tray-chip", type: "button",
         onclick: () => restore(t.id, nameOf(t)) }, icon("plus", 14), nameOf(t))))));
+}
+
+/** One tile: the widget's content plus its open button and Edit-mode controls. Null if it has nothing to show. */
+function makeTile(t, size, note = null) {
+  let content;
+  try { content = t.build(size); } catch (e) { console.error(`tile ${t.id}`, e); return null; }
+  if (!content) return null;
+  const w = windows.get(t.opens);
+  const name = t.label || w?.title || t.id;
+  const isPinned = pinned === t.id;
+  const tile = h("article", { class: `tile-w size-${size}${t.kind ? ` kind-${t.kind}` : ""}${t.spacer ? " spacer" : ""}${isPinned ? " pinned" : ""}${note ? " timely" : ""}`, "data-tile": t.id, "data-opens": t.opens, "data-size": size },
+    t.spacer ? null : h("button", { class: "tile-open", type: "button", "aria-haspopup": "dialog", title: note || null,
+      "aria-label": `Open ${w?.title || t.opens}${t.label ? `: ${t.label}` : ""}${note ? `. Right now: ${note}` : ""}`,
+      onclick: (e) => openWindow(t.opens, e.currentTarget.closest(".tile-w")) }),
+    t.spacer ? null : h("span", { class: `tile-ear ear-${categoryOf(t.id)}`, "aria-hidden": "true" }),
+    content,
+    h("button", { class: "tile-top", type: "button", title: "Move to top", "aria-label": `Move the ${t.label || w?.title} widget to the top`,
+      onclick: (e) => {
+        const el = e.currentTarget.closest(".tile-w");
+        if (el === el.parentElement.firstElementChild) { announce(`${t.label || w?.title} is already at the top.`); return; }
+        moveBy(el, -999, (ids) => {
+          commitOrder(ids);
+          announce(`${t.label || w?.title} moved to the top.`);
+          window.scrollTo({ top: 0, behavior: reducedMotion() ? "auto" : "smooth" });
+        });
+      } }, icon("toTop", 16)),
+    t.spacer ? null : h("button", { class: "tile-pin", type: "button", "aria-pressed": String(isPinned),
+      title: isPinned ? "Unpin" : "Pin to the top-right corner",
+      "aria-label": isPinned ? `Unpin the ${name} widget` : `Pin the ${name} widget to the top-right corner of ${tabById(tab).name}`,
+      onclick: () => togglePin(t.id, name) }, icon("pin", 16)),
+    h("button", { class: "tile-grip", type: "button", "aria-label": `Move the ${t.label || w?.title} widget. Use arrow keys, or drag.`,
+      onkeydown: (e) => {
+        const step = { ArrowLeft: -1, ArrowUp: -1, ArrowRight: 1, ArrowDown: 1 }[e.key];
+        if (!step) return;
+        e.preventDefault();
+        moveBy(e.currentTarget.closest(".tile-w"), step, (ids, pos) => {
+          commitOrder(ids);
+          announce(`${t.label || w?.title} moved to position ${pos} of ${ids.length}`);
+        });
+      } }, icon("grip", 16)),
+    h("div", { class: "size-picker", role: "group", "aria-label": `Size of the ${name} widget` },
+      SIZES.map(([k, label]) => h("button", { type: "button", class: `size-opt opt-${k}`, "aria-pressed": String(k === size), title: label,
+        "aria-label": `${label}`, onclick: () => setSize(t.id, k, name) }, k.toUpperCase()))),
+    h("button", { class: "tile-remove", type: "button", "aria-label": t.spacer ? "Delete this blank space" : `Remove the ${name} widget from ${tabById(tab).name}`,
+      onclick: () => (t.spacer ? removeSpacer(t.id) : removeTile(t.id, name)) }, icon("minus", 14)));
+  for (const [k, v] of Object.entries(t.vars || {})) tile.style.setProperty(k, v); // e.g. an employer's --brand color
+  return tile;
+}
+
+/** Home's widgets ranked for this moment. Score = timely (pulse.js rules) + everyday usefulness (BASE) + a
+ *  little for widgets this browser opens often + a little for an early place in the saved layout. A widget
+ *  taken off Home only comes back for something timely. Chapters, sizes and placement: story(). Returns [{ t, score, size, reason, chapter }]. */
+function rank(defs) {
+  if (!storied()) return [];
+  let timely = {};
+  try { timely = pulseFn() || {}; } catch (e) { console.warn("pulse", e); }
+  const opens = readJSON(OPENS_KEY, {});
+  const saved = ordered(currentDefs).map((d) => d.id), at = new Map(saved.map((id, i) => [id, i]));
+  // Home: every widget (new ones too). Other tabs: the tab's own widgets plus every widget in its story.
+  const inStory = new Set(STORIES[tab].flatMap((c) => c.ids));
+  const pool = currentDefs.filter((t) => !t.spacer && (tab === "home" ? t.home !== false || at.has(t.id) : at.has(t.id) || inStory.has(t.id)));
+  const list = pool.map((t) => {
+    const p = timely[t.id], n = opens[t.opens] || 0;
+    const used = n ? Math.min(22, 7 * Math.log2(1 + n)) : 0;
+    const place = at.has(t.id) ? 10 * (1 - at.get(t.id) / Math.max(1, saved.length)) : 0;
+    const off = tab === "home" ? hidden.has(t.id) || !at.has(t.id) : false;
+    const reason = p?.score >= 30 ? p.reason : used >= 14 ? "You open this often" : null;
+    return { t, reason, timely: p?.score || 0, off, score: (p?.score || 0) + (BASE[t.id] ?? 10) + used + place };
+  }).filter((r) => !r.off || r.timely >= 50).sort((a, b) => b.score - a.score);
+  // Blank spaces you put on Home become deliberate pauses in the Smart layout too.
+  return story(list, currentDefs.filter((t) => t.spacer).map((t) => ({ t, size: "s", reason: null, timely: 0 })));
+}
+
+const PHI = (1 + Math.sqrt(5)) / 2;
+/** Band templates for a 4-column grid. Each fills whole rows (no holes): sizes in left-hand order, and the
+ *  order to place them when the band's big tile goes on the right. */
+const BANDS = {
+  X: { sizes: ["xl"], right: [0] },
+  B1: { sizes: ["l", "l"], right: [0, 1] },                  // opening spread
+  B2: { sizes: ["l", "m", "s", "s"], right: [1, 0, 2, 3] },  // the golden band: one of each step, plus a pair
+  B3: { sizes: ["l", "m", "m"], right: [1, 0, 2] },
+  B4: { sizes: ["l", "s", "s", "s", "s"], right: [1, 2, 0, 3, 4] },
+  R1: { sizes: ["m", "m"], right: [0, 1] },
+  R2: { sizes: ["m", "s", "s"], right: [1, 2, 0] },
+  M1: { sizes: ["m"], right: [0] },
+};
+const WEIGHT = { xl: 4, l: 3, m: 2, s: 1 };
+/** Bands for a chapter of n widgets: one large feature (golden proportions: about 1 large : 1.6 medium : 2.6
+ *  small), then rows. The lead chapter opens with two large tiles side by side. */
+function bandsFor(n, lead) {
+  const out = [];
+  const rows = (k) => { while (k > 0) { if (k === 1) { out.push("M1"); k = 0; } else if (k === 2 || k === 4) { out.push("R1"); k -= 2; } else { out.push("R2"); k -= 3; } } };
+  if (lead && n >= 2 && n !== 3) { out.push("B1"); rows(n - 2); return out; } // three: one feature + two mediums (below), no half-empty row
+  while (n > 0) {
+    if (n <= 2) { out.push(n === 1 ? "M1" : "R1"); n = 0; }
+    else if (n === 3) { out.push("B3"); n = 0; }
+    else if (n === 5) { out.push("B4"); n = 0; }
+    else if (n === 6) { out.push("B2", "R1"); n = 0; }
+    else if (n === 7) { out.push("B2", "R2"); n = 0; }
+    else { out.push("B2"); n -= 4; }
+  }
+  return out;
+}
+/** A tab as a story: widgets grouped into the tab's chapters (pulse.js STORIES), the chapter with the most timely widget
+ *  first and the rest in story order. Within a chapter the best-scored widgets take the biggest slots, and big
+ *  tiles alternate left and right from band to band. A lone widget joins the chapter before it. Blank spaces
+ *  become pauses at chapter ends, spread by the golden ratio (k·φ mod 1). Phones: a full-width medium or two
+ *  per chapter, then pairs of smalls. Each item gets .size and .chapter. */
+function story(list, blanks = []) {
+  const chapters = STORIES[tab];
+  const chOf = new Map(chapters.flatMap((c) => c.ids.map((id) => [id, c])));
+  const more = { id: "more", name: "More", blurb: "Everything else", ids: [] }, work = chapters.find((c) => c.id === "work") || more;
+  const groups = new Map();
+  for (const r of list) { const c = chOf.get(r.t.id) || (r.t.id.startsWith("job-") ? work : more); if (!groups.has(c)) groups.set(c, []); groups.get(c).push(r); }
+  const pos = (c) => (c === more ? chapters.length : chapters.indexOf(c));
+  let chs = [...groups.entries()].map(([c, items]) => ({ c, items })).sort((a, b) => pos(a.c) - pos(b.c));
+  const lead = chs.reduce((best, ch) => (!best || ch.items[0].score > best.items[0].score ? ch : best), null);
+  chs = lead ? [lead, ...chs.filter((ch) => ch !== lead)] : chs;
+  for (let i = 0; i < chs.length && chs.length > 1; i++) {
+    if (chs[i].items.length === 1 && i > 0) { chs[i - 1].items.push(...chs[i].items); chs.splice(i--, 1); }
+  }
+  // The tab's pinned widget (Jobs: School Bus Drivers) stays top-right: it joins the lead chapter, in a medium slot.
+  const pinCh = chs.find((ch) => ch.items.some((r) => r.t.id === pinned));
+  if (pinCh && chs.length) {
+    const pin = pinCh.items.splice(pinCh.items.findIndex((r) => r.t.id === pinned), 1)[0];
+    if (!pinCh.items.length) chs.splice(chs.indexOf(pinCh), 1);
+    chs[0].items.push({ ...pin, pin: true, score: Infinity });
+  }
+  if (!phone()) blanks.forEach((b, k) => chs[Math.floor((((k + 1) * PHI) % 1) * chs.length)]?.items.push({ ...b, score: -1 }));
+  const out = [];
+  let right = false;
+  chs.forEach((ch, ci) => {
+    const big = new Set(ch.c.big || []), isBig = (r) => (big.has(r.t.id) ? 1 : 0);
+    const items = ch.items.sort((a, b) => isBig(b) - isBig(a) || b.score - a.score); // `big` widgets first: they take the large slots
+    const chapter = { ...ch.c, index: ci };
+    if (phone()) {
+      const n = items.filter((r) => !r.t.spacer).length, big = n <= 2 ? n : n % 2 ? 1 : 2;
+      items.filter((r) => !r.t.spacer).forEach((r, i) => out.push({ ...r, size: i < big ? "m" : "s", chapter }));
+      return;
+    }
+    const hero = ci === 0 && items[0].timely >= 95;
+    let names = [...(hero ? ["X"] : []), ...bandsFor(items.length - (hero ? 1 : 0), ci === 0 && !hero)];
+    const larges = names.reduce((n, nm) => n + BANDS[nm].sizes.filter((x) => x === "l").length, 0);
+    if (larges < items.filter(isBig).length && items.length - (hero ? 1 : 0) >= 2) // room for every `big` widget: open with two large
+      names = [...(hero ? ["X"] : []), "B1", ...bandsFor(items.length - (hero ? 1 : 0) - 2, false)];
+    const slots = names.flatMap((nm, b) => BANDS[nm].sizes.map((size, k) => ({ b, k, size })));
+    const pinItem = items.find((r) => r.pin), pinSlot = pinItem && (slots.find((x) => x.size === "m") || slots.at(-1));
+    if (pinSlot) pinSlot.r = pinItem;
+    const rest = items.filter((r) => !r.pin);
+    slots.filter((x) => x !== pinSlot).sort((x, y) => WEIGHT[y.size] - WEIGHT[x.size]).forEach((slot, i) => { slot.r = rest[i]; });
+    names.forEach((nm, b) => {
+      const band = slots.filter((x) => x.b === b);
+      const order = right ? BANDS[nm].right : band.map((_, k) => k);
+      order.forEach((k) => out.push({ ...band[k].r, size: band[k].size, chapter }));
+      if (BANDS[nm].sizes.includes("l")) right = !right;
+    });
+  });
+  return out;
+}
+
+let homeKey = "";
+const keyOf = (ranked) => (smart() ? "S" : "M") + ranked.map((r) => `${r.t.id}:${r.size}:${r.reason || ""}`).join("|");
+/** Re-render Home when the moment has moved on (a new reason, or a new order in Smart). */
+export function refreshNow() {
+  if (!storied() || document.body.classList.contains("is-dragging") || document.body.classList.contains("editing")) return;
+  if (keyOf(rank(ordered(currentDefs))) !== homeKey) renderHome();
+}
+
+/** The briefing above Home: today's reasons in one line (each opens its widget), and Smart | Mine. */
+function renderBrief(ranked) {
+  homeKey = keyOf(ranked);
+  const box = document.getElementById("now");
+  if (!box) return;
+  const show = storied() && !document.body.classList.contains("editing");
+  box.hidden = !show;
+  if (!show) { box.replaceChildren(); return; }
+  const items = ranked.filter((r) => r.timely >= 30 && r.reason).slice(0, phone() ? 3 : 5);
+  const hr = new Date().getHours(), part = hr < 5 ? "tonight" : hr < 12 ? "this morning" : hr < 17 ? "this afternoon" : "this evening";
+  const seg = (mode, label) => h("button", { type: "button", class: "now-seg", "aria-pressed": String((mode === "mine") === mineMode()),
+    onclick: () => setMode(mode) }, label);
+  box.replaceChildren(
+    h("div", { class: "now-bar" },
+      h("h2", { class: "now-title" }, "Right now"),
+      items.length ? h("ul", { class: "now-items", role: "list" }, items.map((r) => h("li", {},
+        h("button", { type: "button", class: "now-item", onclick: () => openWindow(r.t.opens, document.querySelector(`[data-tile="${r.t.id}"]`)) },
+          h("span", { class: `now-dot ear-${categoryOf(r.t.id)}`, "aria-hidden": "true" }), r.reason))))
+        : h("p", { class: "now-quiet" }, `Nothing out of the ordinary ${part}.`),
+      LOCAL ? h("div", { class: "now-mode", role: "group", "aria-label": `Arrange ${tabById(tab).name}` },
+        h("span", { class: "now-mode-label" }, "Arranged:"), seg("smart", "Smart"), seg("mine", "Mine")) : null));
 }
 
 function togglePin(id, name) {
@@ -326,6 +523,7 @@ export function openWindow(id, fromTile, { push = true } = {}) {
   if (openId && openId !== id) closeWindow({ animate: false, pop: false });
   openId = id;
   openerTile = fromTile || null;
+  countOpen(id);
   winTitle.textContent = w.title;
   winSub.textContent = w.sub || "";
   const ic = chip(w.icon, w.color);
@@ -438,11 +636,12 @@ export function initOS({ defaultLayout = null } = {}) {
     else if (openId) { pushed = false; closeWindow({ pop: false }); }
   });
   const edit = document.getElementById("edit-toggle");
+  edit.hidden = !LOCAL; // arranging tabs is for the local preview only
   edit.addEventListener("click", () => {
     const on = document.body.classList.toggle("editing");
     edit.setAttribute("aria-pressed", String(on));
     edit.querySelector(".label").textContent = on ? "Done" : "Edit";
-    if (on) announce("");
+    if (on) announce(storied() && !mineMode() ? `Editing your own layout (Mine). ${tabById(tab).name} goes back to Smart when you're done.` : "");
     renderHome();
   });
   document.getElementById("reset-layout").addEventListener("click", () => {

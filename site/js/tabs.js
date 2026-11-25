@@ -13,7 +13,9 @@ export const DEFAULT_PINNED = { jobs: "school-bus" };
 
 export const DEFAULT_MEMBERS = {
   city: ["weather", "waste", "utility", "drought", "water", "police", "fire", "news", "meetings", "council", "videos", "org",
-    "people", "homeless", "budget", "debt-service", "growth", "g-tax-rate", "g-debt-policy", "g-debt-limit", "land", "g-owners", "about"],
+    "people", "homeless", "budget", "debt-service", "growth", "g-tax-rate", "g-debt-policy", "g-debt-limit", "land", "g-owners", "about",
+    // Also City-run (City of Kannapolis publishes their data): its events, parks, theaters, shuttle and jobs.
+    "events", "parks", "gem", "swanee", "shuttle", "job-city"],
   fun: ["weather", "gem", "swanee", "baseball", "parks", "events", "ktown", "editions", "made", "whataburger", "library"],
   jobs: ["school-bus", "stocks"], // plus every employer widget (job-*): see defaultMembers
   transportation: ["weather", "rider", "train", "flights", "paratransit", "shuttle", "gas", "roads"],
@@ -24,12 +26,13 @@ export function defaultMembers(tab, ids) {
   return [...(DEFAULT_MEMBERS[tab] || []), ...(tab === "jobs" ? ids.filter((id) => id.startsWith("job-")) : [])];
 }
 
-/** The subject a widget belongs to (its folder-tab color and its group in "Add a widget"):
- *  the first non-Home tab that starts with it, ignoring Weather's spot on every tab. */
+/** The subject a widget belongs to (its folder-tab color and its group in "Add a widget"), ignoring Weather's
+ *  spot on every tab. City is checked last: the City-run venues, parks, events and shuttle it also carries keep
+ *  their own subjects (Entertainment, Transportation). */
 export function categoryOf(id) {
   if (id === "weather") return "home";
   if (id.startsWith("job-")) return "jobs";
-  for (const [tab, ids] of Object.entries(DEFAULT_MEMBERS)) if (ids.includes(id)) return tab;
+  for (const tab of ["fun", "transportation", "jobs", "city"]) if (DEFAULT_MEMBERS[tab].includes(id)) return tab;
   return "home";
 }
 

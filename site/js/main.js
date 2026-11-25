@@ -3,7 +3,8 @@
 // dashboard is a single file that works offline-from-disk, on any web host, or over Wi-Fi.
 import { initTheme, onThemeChange, tokens } from "./theme.js";
 import { h } from "./ui.js";
-import { initOS, defineWindow, defineTiles, renderHome, invalidate, openFromHash, refreshWindow, setSources } from "./os.js";
+import { initOS, defineWindow, defineTiles, definePulse, refreshNow, renderHome, invalidate, openFromHash, refreshWindow, setSources } from "./os.js";
+import { pulses, STORIES, jobsStory } from "./pulse.js";
 import { startWeather, onWeather, weather } from "./weather.js";
 import { renderWeather } from "./sections/weather.js";
 import { renderPolice } from "./sections/police.js";
@@ -152,6 +153,9 @@ function main() {
     e.currentTarget.href = `mailto:bradspry@gmail.com?subject=${encodeURIComponent("Kannapolis Civic Dashboard feedback")}&body=${encodeURIComponent(body)}`;
   });
   defineTiles(() => tileDefs(D, colors())); // before initOS: a tab's starting widgets come from the tile list
+  STORIES.jobs = jobsStory(D.jobs); // Jobs' chapters come from the employer list
+  definePulse(() => pulses(D)); // Smart tabs: what's timely right now
+  setInterval(refreshNow, 10 * 60e3); // the picks follow the clock (morning weather, tonight's event)
   initOS({ defaultLayout: load("home_layout.json", { optional: true }) });
   renderHome();
   openFromHash();

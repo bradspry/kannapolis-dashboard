@@ -502,6 +502,39 @@ html.win-open { overflow: hidden; }
   .brand .eyebrow { display: none; }
 }
 
+/* Right now: Home's briefing line and the Smart | Mine switch (os.js renderBrief); Smart arranges every
+   widget by the moment (os.js rank, pulse.js). Timely tiles glow. */
+.now { margin-bottom: 18px; }
+.now-bar { display: flex; align-items: center; gap: 10px 14px; flex-wrap: wrap; padding: 10px 14px; border: 1px solid var(--border); border-radius: 18px;
+  background: color-mix(in oklab, var(--surface-1) 85%, var(--accent) 15%); }
+.now-title { margin: 0; font-size: 15px; font-weight: 650; white-space: nowrap; }
+.now-title::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-right: 8px; vertical-align: 1px;
+  animation: now-pulse 2.4s ease-out infinite; }
+@keyframes now-pulse { 0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--accent) 55%, transparent); } 70%, 100% { box-shadow: 0 0 0 8px transparent; } }
+.now-items { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; flex: 1 1 320px; min-width: 0; }
+.now-item { display: inline-flex; align-items: center; gap: 7px; max-width: 100%; border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary);
+  font: inherit; font-size: 13px; font-weight: 550; padding: 5px 11px; border-radius: 999px; cursor: pointer; text-align: left; }
+.now-item:hover { border-color: var(--accent); }
+.now-item:focus-visible, .now-seg:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.now-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; background: var(--c, var(--accent)); }
+.now-quiet { margin: 0; flex: 1 1 auto; font-size: 13px; color: var(--text-muted); }
+.now-mode { display: inline-flex; align-items: center; gap: 2px; margin-left: auto; padding: 2px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface-1); }
+.now-mode-label { font-size: 12px; color: var(--text-muted); padding: 0 6px 0 8px; }
+.now-seg { border: 0; background: transparent; color: var(--text-secondary); font: inherit; font-size: 13px; font-weight: 600; padding: 4px 12px; border-radius: 999px; cursor: pointer; }
+.now-seg[aria-pressed="true"] { background: var(--accent); color: #fff; }
+.tile-w.timely { border-color: color-mix(in oklab, var(--accent) 55%, var(--border)); box-shadow: 0 0 0 1px color-mix(in oklab, var(--accent) 35%, transparent),
+  0 12px 32px -16px rgba(0, 0, 0, .45), 0 0 28px -8px color-mix(in oklab, var(--accent) 45%, transparent); }
+@media (prefers-reduced-motion: reduce) { .now-title::before { animation: none; } }
+@media (max-width: 720px) { .now-bar { padding: 10px 12px; } .now-mode { margin-left: 0; } }
+body.editing .now { display: none; }
+/* Smart Home: chapters (os.js story) */
+.home-grid.smart { display: block; }
+.chapter + .chapter { margin-top: 28px; }
+.chapter-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin: 0 4px 12px; }
+.chapter-dot { width: 10px; height: 10px; border-radius: 3px; background: var(--c, var(--accent)); flex: none; align-self: center; }
+.chapter-name { margin: 0; font-size: 19px; font-weight: 700; letter-spacing: -.01em; }
+.chapter-lede { font-size: 14px; color: var(--text-muted); min-width: 0; }
+
 /* tile */
 .tile-w {
   position: relative; min-width: 0; overflow: hidden; border-radius: 24px; padding: 16px;

@@ -119,7 +119,13 @@
         "g-debt-limit",
         "land",
         "g-owners",
-        "about"
+        "about",
+        "events",
+        "parks",
+        "gem",
+        "swanee",
+        "shuttle",
+        "job-city"
       ],
       "hidden": [],
       "sizes": {},
