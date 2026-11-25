@@ -30,6 +30,7 @@ Several widgets follow Brad's own scripts: KANDEX ([kannapolis-stocks](https://g
 |---|---|
 | `KDASH_CONTACT` | Your name and email, sent in the User-Agent of every data request so publishers know who is harvesting |
 | `CENSUS_API_KEY` | Optional, [free](https://api.census.gov/data/key_signup.html); adds an income-over-time chart |
+| `DRIVENC_API_KEY` | Optional, free [DriveNC developer key](https://www.drivenc.gov/developers/doc); powers NCDOT Incidents |
 
 ## Using the dashboard
 
@@ -83,6 +84,7 @@ It prints the address to open on your phone (for example `http://192.168.1.20:51
 | Rider ADA Paratransit | Rider's [accessibility page](https://ckrider.com/accessibility/): who qualifies, booking, fares and phones, with the ¾-mile service area drawn around every bus route and an "am I in the service area?" check | **Machine-parsed** (`data/manual/transit.json`); service area from the GTFS routes, weekly |
 | West Avenue Express Shuttle | The City's [announcement](https://www.kannapolisnc.gov/news/ID/348/Free-West-Avenue-Express-Shuttles-Return-to-Downtown-Kannapolis) and [parking page](https://www.kannapolisnc.gov/Community/Parking): the free downtown loop's stops (placed from the City's parking map, streets from OpenStreetMap), days, hours and season, with "running now / next run" worked out on the device | **Machine-parsed** (`data/manual/transit.json`) |
 | Flights | Every nonstop from Concord-Padgett Regional Airport, gathered by [kannapolis-travel](https://github.com/bradspry/kannapolis-travel) (`fetch_routes.py --flights-only`) from the airport's [Airlines page](https://concordairportnc.com/Airline-Information/Airlines), with [OurAirports](https://ourairports.com/data/) locations; a great-circle route map; [parking](https://concordairportnc.com/Airline-Information/Parking) and [terminal directions](https://concordairportnc.com/Airline-Information/Directions) | Routes: automatic, weekly. Airport facts: **machine-parsed** (`data/manual/flights.json`) |
+| NCDOT Incidents | NCDOT [DriveNC events API](https://www.drivenc.gov/developers/doc) (needs a free developer key, `DRIVENC_API_KEY`): crashes, closures and roadwork in a box around Kannapolis (I-85 from exit 54 to exit 65 and the streets in and around the city; the same box as kannapolis-spider), on a map, with what's happening now and what's coming up; a crash or full closure leads the Smart tabs | Automatic, every 15 minutes (fetched by Deploy site at build time) |
 | Jobs (one widget per employer) | Current openings at 31 employers in and around Kannapolis (governments, school districts, colleges, health care, distribution, manufacturing, grocery and retail), harvested from each employer's own careers site with the [kannapolis-jobs](https://github.com/bradspry/kannapolis-jobs) scrapers; every listing links to the posting | Automatic, **weekly** (Mondays), in its own workflow because the scrapers need `requests` and Playwright. Employers: **machine-parsed** (`data/manual/jobs.json`) |
 | School Bus Drivers | Openings to drive school buses and vans for Kannapolis City, Cabarrus County and Rowan-Salisbury Schools, picked from those districts' weekly openings with kannapolis-jobs' `--school-bus` rules (read from its `run.py`, so the two stay in step); pinned to the Jobs tab's top-right corner | Automatic, **weekly**, with the Jobs harvest |
 | Weather | [National Weather Service](https://www.weather.gov/) API: forecast, hourly, alerts, and observations from Concord Regional Airport; [NOAA's national radar mosaic](https://opengeo.ncep.noaa.gov/geoserver/conus/conus_bref_qcd/ows?service=WMS&request=GetCapabilities) behind the tile and as an animated past-hour radar map in the window | **Live** in the browser every 15 min (daily backup copy of the forecast) |
@@ -103,7 +105,7 @@ It prints the address to open on your phone (for example `http://192.168.1.20:51
 Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a `source_url` that opens the official PDF at the cited page (for example `…FY%2027%20Adopted%20Budget.pdf#page=114`). The build fails if a row's citation is missing. The full registry is [`data/manual/sources.csv`](data/manual/sources.csv); its `widgets` column ties each source to the widgets it feeds, and every widget window ends with an automatic **Sources** line built from it. The table below is generated from the same registry on every build, so the README always cites every source:
 
 <!-- sources:start -->
-218 sources, generated from `data/manual/sources.csv`.
+219 sources, generated from `data/manual/sources.csv`.
 
 | Source | Publisher | Format | Used for |
 |---|---|---|---|
@@ -325,6 +327,7 @@ Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a
 | [OpenStreetMap: Kannapolis drivable roads (Overpass API)](https://www.openstreetmap.org/copyright) | OpenStreetMap contributors | GeoJSON (Overpass) | Road lines, names and types; miles by type |
 | [Kannapolis Christmas Parade](https://www.kannapolisnc.gov/christmasparade) | City of Kannapolis | Web page | Parade date and time, route, road closures, viewing, entries and contacts |
 | [Kannapolis Christmas Parade parking map (2026)](https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Parking/2026%20(3).png?ver=X_exondcp0e_HWLhQQSeYA%3d%3d) | City of Kannapolis | Image (PNG) | Parade route, staging area, parking, restrooms, first aid and food vendors |
+| [DriveNC events API (traffic incidents](JSON API) | closures and roadwork) | NC Department of Transportation | https://www.drivenc.gov/developers/doc |
 <!-- sources:end -->
 
 The news and meetings harvesters are adapted from [kspider](https://github.com/bradspry/kannapolis-news-wire).
@@ -354,8 +357,9 @@ In the repository, open **Settings → Pages** and set **Source: GitHub Actions*
 - **Deploy site** builds and publishes on every push to `main`.
 - **Refresh data** runs weekly for everything, and daily for the time-sensitive widgets (meetings, Council videos, news, events, weather, the Gem, the Swanee, Editions, drought, lake levels and KANDEX); it commits new data and triggers a redeploy.
 - **Refresh jobs** runs weekly, and **Refresh gas** daily; each installs the one package it needs.
+- **Deploy site** also runs every 15 minutes and fetches NCDOT incidents fresh at build time, so they're never more than about a quarter hour old (GitHub can start scheduled runs a few minutes late). They aren't committed, so there's no history churn. Without the `DRIVENC_API_KEY` secret it keeps the last committed snapshot, and after two hours the widget says it has no recent check instead of "All clear".
 
-Add `KDASH_CONTACT` (and `CENSUS_API_KEY`, if used) under **Settings → Secrets and variables → Actions**.
+Add `KDASH_CONTACT` (and `CENSUS_API_KEY` and `DRIVENC_API_KEY`, if used) under **Settings → Secrets and variables → Actions**.
 
 ## License
 

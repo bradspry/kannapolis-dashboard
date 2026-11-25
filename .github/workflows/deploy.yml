@@ -7,6 +7,8 @@ on:
     workflows: ["Refresh data", "Refresh jobs", "Refresh gas"]
     types: [completed]
   workflow_dispatch:
+  schedule:
+    - cron: "*/15 * * * *" # NCDOT incidents (DriveNC) are fetched fresh at every build
 
 permissions:
   contents: read
@@ -25,8 +27,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Build the single-file dashboard
-        run: python etl/run_all.py site
+      - name: Fetch NCDOT incidents (DriveNC) and build the single-file dashboard
+        env:
+          DRIVENC_API_KEY: ${{ secrets.DRIVENC_API_KEY }}
+          KDASH_CONTACT: ${{ secrets.KDASH_CONTACT }}
+        run: python etl/run_all.py incidents site
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

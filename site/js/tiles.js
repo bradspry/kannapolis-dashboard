@@ -33,6 +33,7 @@ import { districtsOf as sbDistricts, total as sbTotal, districtRows as sbRows, t
 import { routeMap as flMap, airlineLegend as flLegend, newLine as flNew, destList as flDests } from "./sections/flights.js";
 import { serviceStatus as trSvc, shuttleStatus as shStatus, statusLine as trStatusLine, systemMap, shuttleMap, routeLegend, liveCount, alertList as trAlerts, callButton as trCall, upcomingHoliday as trHoliday, clock as trClock } from "./sections/transit.js";
 import { levelGauge as drGauge, countyLine as drCounty, strip as drStrip } from "./sections/drought.js";
+import { sortEvents as icSort, statusLine as icStatus, updated as icUpdated, list as icList, tileMap as icMap, legend as icLegend, INCIDENTS_COLOR } from "./sections/incidents.js";
 import { prepGames, nextHome, homeStands, standLabel, nextGameCard, fmtDay as bbDay, fmtTime as bbTime } from "./sections/baseball.js";
 
 const NS = "http://www.w3.org/2000/svg";
@@ -154,7 +155,7 @@ const contactLinks = (p) => [
 const shortDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
 export function tileDefs(data, COLORS) {
-  const { census, budget, property, zoning, council, org, meetings, news, events, parade, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos, waste, drought, library, train, jobs, transit, flights, ktown, stocks, gas, water, homeless, roads, boundaries } = data;
+  const { census, budget, property, zoning, council, org, meetings, news, events, parade, incidents, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos, waste, drought, library, train, jobs, transit, flights, ktown, stocks, gas, water, homeless, roads, boundaries } = data;
   const jobSize = jobSizes(jobs, stocks?.companies?.length ? 2 : 0); // KANDEX (medium) is on the Jobs tab too
   const t = tokens();
   const geo = census.geographies;
@@ -1032,6 +1033,28 @@ export function tileDefs(data, COLORS) {
           h("div", {}, gsBig(reg[0], { compact: true }), trend ? h("p", { class: "tile-meta" }, trend) : null, gsArea(g), gsMap(g, boundaries, { cls: "mini" })),
           h("div", {}, h("div", { class: "mini-head bb-mh" }, "Regular"), gsList(reg, 7, { from: 1 })),
           h("div", {}, h("div", { class: "mini-head bb-mh" }, "Diesel"), gsList(dsl, 4, { numbered: false }), h("div", { class: "mini-head" }, "Aviation"), gsAv(g, 4))));
+      },
+    },
+    incidents?.events && {
+      // NCDOT DriveNC: crashes, closures and roadwork around Kannapolis, as of the last deploy (every 15 minutes).
+      id: "incidents", opens: "incidents", size: "m", label: "NCDOT Incidents",
+      build: (size) => {
+        const now = new Date(), { now: on, soon } = icSort(incidents, now);
+        const top = head("cone", INCIDENTS_COLOR, "NCDOT Incidents");
+        const meta = h("p", { class: "tile-meta" }, icUpdated(incidents, now));
+        const rows = (n, o) => {
+          const all = [...on, ...soon];
+          if (!all.length) return h("p", { class: "tile-meta" }, "Nothing reported on I-85 or the roads around Kannapolis.");
+          return h("div", {}, on.length ? null : h("div", { class: "mini-head" }, "Coming up"), icList(all, n, { compact: true, now, ...o }));
+        };
+        if (size === "s") return h("div", { class: "tile-body" }, top, icStatus(incidents, now), meta);
+        if (size === "m") return h("div", { class: "tile-body" }, top, icStatus(incidents, now), rows(2), meta);
+        const all = [...on, ...soon];
+        if (size === "l") return h("div", { class: "tile-body" }, top, icStatus(incidents, now),
+          h("div", { class: "ic-tile-map" }, icMap(incidents, all, "ic-tile-l"), icLegend()), rows(4), meta);
+        return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top ic-xl" },
+          h("div", { class: "ic-tile-map" }, icMap(incidents, all, "ic-tile-xl"), icLegend()),
+          h("div", {}, icStatus(incidents, now), rows(6), meta)));
       },
     },
     roads?.lines && {

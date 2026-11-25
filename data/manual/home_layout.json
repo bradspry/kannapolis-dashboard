@@ -5,6 +5,7 @@
         "train",
         "homeless",
         "gas",
+        "incidents",
         "gem",
         "waste",
         "weather",
@@ -201,6 +202,7 @@
     },
     "transportation": {
       "order": [
+        "incidents",
         "train",
         "rider",
         "flights",

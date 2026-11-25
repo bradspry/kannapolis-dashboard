@@ -2608,3 +2608,37 @@ body::before {
   .tile-w.size-s .pr-tile-when .tile-meta { font-size: 11.5px; }
   .tile-w.size-s .pr-first { display: none; }
 }
+
+/* ---------- NCDOT Incidents (DriveNC) ---------- */
+.ic-status { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 650; margin: 2px 0; }
+.ic-status i { flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--text-muted); }
+.ic-status.ok i { background: var(--good-text); }
+.ic-status.warn i { background: #ca8a04; }
+.ic-status.bad { color: var(--bad-text); }
+.ic-status.bad i { background: var(--bad-text); box-shadow: 0 0 0 4px color-mix(in oklab, var(--bad-text) 25%, transparent); }
+.ic-status.unknown { color: var(--text-muted); font-weight: 500; }
+.ic-list { list-style: none; margin: 0; padding: 0; }
+.ic-row { display: grid; grid-template-columns: 10px minmax(0, 1fr); gap: 10px; padding: 9px 0; border-top: 1px solid var(--grid); }
+.ic-row:first-child { border-top: 0; }
+.ic-row.compact { padding: 6px 0; gap: 8px; }
+.ic-dot { width: 10px; height: 10px; border-radius: 50%; margin-top: 5px; }
+.ic-what { font-size: 14px; line-height: 1.35; }
+.ic-row.compact .ic-what { font-size: 13px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ic-desc { font-size: 13.5px; color: var(--text-secondary); margin: 2px 0; line-height: 1.4; }
+.ic-tag { display: inline-block; margin-left: 6px; padding: 0 7px; border-radius: 999px; font-size: 11px; font-weight: 650; background: color-mix(in oklab, var(--bad-text) 18%, var(--surface-1)); color: var(--bad-text); }
+.ic-tile-map { display: flex; flex-direction: column; gap: 6px; min-height: 0; }
+.ic-tilemap { position: relative; border-radius: 12px; overflow: hidden; height: 150px; flex: none; }
+.ic-xl > .ic-tile-map { height: 100%; }
+.ic-xl > .ic-tile-map > .ic-tilemap { flex: 1; height: auto; }
+.ic-tilemap .ic-pin { pointer-events: none; }
+.ic-live { height: 380px; border-radius: 12px; overflow: hidden; margin: 8px 0; }
+.ic-pin { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; color: #fff; font-size: 13px; border: 2px solid #fff; box-shadow: 0 2px 6px rgb(0 0 0 / .4); }
+.ic-legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--text-muted); }
+.ic-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.ic-legend i { width: 10px; height: 10px; border-radius: 50%; }
+.ic-hero { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between; }
+.ic-hero .ic-status { font-size: 20px; }
+@media (max-width: 720px) { .ic-tilemap { height: 120px; } .ic-live { height: 300px; } }
+.tile-w .ic-tile-map + div > .mini-head:first-child { margin-top: 10px; }
+.tile-w .ic-tile-map .ic-legend { margin-bottom: 4px; }
+@media (max-width: 720px) { .tile-w.size-m .ic-row.compact .ic-what { -webkit-line-clamp: 1; } }

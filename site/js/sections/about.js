@@ -28,6 +28,7 @@ export function datasets(D) {
     ["KANDEX stock prices", "stocks", D.stocks, "Daily (last market close)", 4],
     ["Rider bus schedule", "rider", D.transit, "Weekly; live buses in your browser", 9],
     ["Flights", "flights", D.flights, WEEKLY, 9],
+    ["Traffic incidents (DriveNC)", "incidents", D.incidents, "Every 15 minutes", 1],
     ["City roads", "roads", D.roads, WEEKLY, 9],
     ["Homeless students", "homeless", D.homeless, "Weekly (federal data runs about two years behind)", 9],
     ["Job openings", firstJob ? `job-${firstJob}` : "about", D.jobs, WEEKLY, 9, "?tab=jobs"],

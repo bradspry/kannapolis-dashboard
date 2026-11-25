@@ -18,7 +18,7 @@ export const DEFAULT_MEMBERS = {
     "events", "parade", "parks", "gem", "swanee", "shuttle", "job-city"],
   fun: ["weather", "gem", "swanee", "baseball", "parks", "events", "parade", "ktown", "editions", "made", "whataburger", "library"],
   jobs: ["school-bus", "stocks"], // plus every employer widget (job-*): see defaultMembers
-  transportation: ["weather", "rider", "train", "flights", "paratransit", "shuttle", "gas", "roads"],
+  transportation: ["weather", "incidents", "rider", "train", "flights", "paratransit", "shuttle", "gas", "roads"],
 };
 
 /** A tab's starting widgets, given every widget id. Jobs starts with all the employer widgets. */
