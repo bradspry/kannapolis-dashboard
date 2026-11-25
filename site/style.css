@@ -2251,7 +2251,7 @@ body::before {
 .kx-spark.up path { stroke: var(--good-text); }
 .kx-spark.down path { stroke: var(--bad-text); }
 .kx-spark.flat path { stroke: var(--text-secondary); }
-.kx-table td small.kx-about { display: block; color: var(--text-muted); }
+.kx-table td small.kx-about { display: block; color: var(--text-muted); white-space: normal; max-width: 60ch; }
 .kx-hero .gem-p { margin-top: 8px; }
 @media (max-width: 720px) { .kx-m, .kx-xl { grid-template-columns: minmax(0, 1fr); gap: 6px; } }
 

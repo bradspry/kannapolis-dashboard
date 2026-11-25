@@ -98,7 +98,7 @@ It prints the address to open on your phone (for example `http://192.168.1.20:51
 Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a `source_url` that opens the official PDF at the cited page (for example `…FY%2027%20Adopted%20Budget.pdf#page=114`). The build fails if a row's citation is missing. The full registry is [`data/manual/sources.csv`](data/manual/sources.csv); its `widgets` column ties each source to the widgets it feeds, and every widget window ends with an automatic **Sources** line built from it. The table below is generated from the same registry on every build, so the README always cites every source:
 
 <!-- sources:start -->
-201 sources, generated from `data/manual/sources.csv`.
+216 sources, generated from `data/manual/sources.csv`.
 
 | Source | Publisher | Format | Used for |
 |---|---|---|---|
@@ -281,6 +281,21 @@ Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a
 | [us-atlas states-10m (U.S. Census Bureau cartographic boundaries)](https://cdn.jsdelivr.net/npm/us-atlas@3.0.1/states-10m.json) | U.S. Census Bureau, packaged by us-atlas | TopoJSON | State lines on the Flights route map |
 | [kannapolis-stocks: kandex.py (KANDEX)](https://github.com/bradspry/kannapolis-stocks) | Brad Spry (GitHub) | Python (GitHub) | The ten companies and the composite's method and 1,000 baseline |
 | [Yahoo Finance chart data (daily closes for each company)](https://finance.yahoo.com/quote/LLY/) | Yahoo Finance | JSON API | Daily closing prices, 52-week range; the KANDEX composite is computed from them |
+| [Google Facility Planned in City of Kannapolis](https://www.kannapolisnc.gov/news/ID/369/Google-Facility-Planned-in-City-of-Kannapolis) | City of Kannapolis | Web page | Alphabet's tie to Kannapolis (KANDEX) |
+| [Overlook 85 at Kannapolis Crossing](https://www.overlook85.com/) | Foundry Commercial | Web page | Which Overlook 85 building Google leased (KC100, 729,872 sq ft) (KANDEX) |
+| [Google leases industrial space in Rowan County, Kannapolis](https://www.bizjournals.com/charlotte/news/2026/04/23/google-leases-industrial-space-rowan-kannapolis-nc.html) | Charlotte Business Journal | News article | Google's 88-month lease and first rights to an adjacent 1 million sq ft building (KANDEX) |
+| [AMZN: Kannapolis-area tie (City of Kannapolis, 2017)](https://www.kannapolisnc.gov/Community/News/ID/220/Kannapolis-Welcomes-Amazon-Distribution-Center) | City of Kannapolis | Web page | Where AMZN employs people near Kannapolis (KANDEX) |
+| [AMZN: Kannapolis-area tie (City of Kannapolis, 2025)](https://www.kannapolisnc.gov/news/ID/131/Kannapolis-Welcomes-Amazon-(Second-Location-/-100-Jobs-in-City-Announced)) | City of Kannapolis | Web page | Where AMZN employs people near Kannapolis (KANDEX) |
+| [CHWY: Kannapolis-area tie (Governor's office, 2019)](https://governor.nc.gov/news/governor-cooper-announces-1200-jobs-rowan-county) | Office of the Governor of North Carolina | Web page | Where CHWY employs people near Kannapolis (KANDEX) |
+| [GLW: Kannapolis-area tie (WFAE, 2017)](https://www.wfae.org/business/2017-02-20/corning-to-add-410-jobs-in-catawba-cabarrus-olde-meck-brewery-buys-cornelius-site) | WFAE | Web page | Where GLW employs people near Kannapolis (KANDEX) |
+| [LLY: Kannapolis-area tie (City of Concord)](https://concordnc.gov/Services/Community/News/ID/105/Lilly-Bringing-) | City of Concord | Web page | Where LLY employs people near Kannapolis (KANDEX) |
+| [LLY: Kannapolis-area tie (NC Biotech Center)](https://www.ncbiotech.org/news/lilly-goes-back-back-second-nc-pharma-manufacturing-site-time-1b-600-jobs-near-charlotte) | NC Biotech Center | Web page | Where LLY employs people near Kannapolis (KANDEX) |
+| [SYY: Kannapolis-area tie (Sysco)](https://sysco.com/Charlotte) | Sysco | Web page | Where SYY employs people near Kannapolis (KANDEX) |
+| [M: Kannapolis-area tie (Digital Commerce 360)](https://www.digitalcommerce360.com/2025/10/17/macys-opens-north-carolina-fulfillment-center-automation-technology/) | Digital Commerce 360 | Web page | Where M employs people near Kannapolis (KANDEX) |
+| [WEST: Kannapolis-area tie (SEC filing)](https://www.sec.gov/Archives/edgar/data/1806347/000110465923067096/tm2312705-3_424b3.htm) | U.S. Securities and Exchange Commission (Westrock Coffee filing) | Web page | Where WEST employs people near Kannapolis (KANDEX) |
+| [LOW: Kannapolis-area tie (Lowe's store)](https://www.lowes.com/store/NC-Kannapolis/2368) | Lowe's | Web page | Where LOW employs people near Kannapolis (KANDEX) |
+| [LOW: Kannapolis-area tie (Lowe's fact sheet)](https://corporate.lowes.com/sites/lowes-corp/files/2025-04/Lowes_Fact_Sheet_2025.pdf) | Lowe's | PDF | Where LOW employs people near Kannapolis (KANDEX) |
+| [AEO: Kannapolis-area tie (Governor's office, 2026)](https://governor.nc.gov/news/press-releases/2026/07/17/governor-stein-announces-american-eagle-outfitters-inc-selects-rowan-county-41-million-southeast) | Office of the Governor of North Carolina | Web page | Where AEO employs people near Kannapolis (KANDEX) |
 | [kannapolis-gas: gas_prices.py (Friday Fill-up)](https://github.com/bradspry/kannapolis-gas) | Brad Spry (GitHub) | Python (GitHub) | ZIP code, station count, 24-hour freshness rule, pinned stations, AirNav airports |
 | [GasBuddy station prices near 28083 (via the py-gasbuddy package)](https://www.gasbuddy.com/home?search=28083) | GasBuddy | JSON API | Regular and diesel prices, stations, addresses and map positions; NC and U.S. averages |
 | [Dash In, 970 Vinehaven Drive NE: store page](https://locations.dashin.com/l/nc/970-vinehaven-drive-northeast-28025/6266057) | Dash In | Web page | Regular and diesel prices and map position (not on GasBuddy) |

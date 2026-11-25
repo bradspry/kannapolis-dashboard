@@ -90,7 +90,7 @@ export function renderStocks(s) {
       h("div", { class: "table-wrap" }, h("table", { class: "kx-table" },
         h("thead", {}, h("tr", {}, ["Company", "Close", "Day", "Week", `Since ${dayText(s.dates[0])}`, ""].map((x, i) => h("th", { scope: "col", class: i && i < 5 ? "num" : null }, x)))),
         h("tbody", {}, s.companies.map((c) => h("tr", {},
-          h("td", {}, ext(c.url, h("b", {}, c.symbol)), " ", c.name, c.about ? h("small", { class: "kx-about" }, c.about) : null),
+          h("td", {}, ext(c.url, h("b", {}, c.symbol)), " ", c.name, c.about ? h("small", { class: "kx-about" }, c.about.text ?? c.about, (c.about.sources || (c.about.url ? [{ label: "source", url: c.about.url }] : [])).flatMap((x) => [" · ", ext(x.url, x.label)])) : null),
           h("td", { class: "num" }, money(c.close)),
           h("td", { class: "num" }, change(c.change_pct)),
           h("td", { class: "num" }, change(c.week_pct)),

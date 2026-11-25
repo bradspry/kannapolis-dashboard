@@ -3,5 +3,113 @@
   "index_start": "2026-01-02",
   "index_note": "Equal-weighted and seeded at 1,000 on the first trading day of 2026: each trading day it compounds the average of the ten stocks' daily percent changes, the way kandex.py does.",
   "disclaimer": "For information and entertainment only, not financial advice. Prices are Yahoo Finance's daily closes.",
-  "about": {}
+  "about": {
+    "GOOGL": {
+      "text": "Google warehouse and logistics center in the 729,872 sq ft KC100 building at Overlook 85 Industrial Park (I-85 Exit 65), on an 88-month lease, with first rights to lease an adjacent 1 million sq ft building",
+      "sources": [
+        {
+          "label": "City of Kannapolis",
+          "url": "https://www.kannapolisnc.gov/news/ID/369/Google-Facility-Planned-in-City-of-Kannapolis"
+        },
+        {
+          "label": "Charlotte Business Journal",
+          "url": "https://www.bizjournals.com/charlotte/news/2026/04/23/google-leases-industrial-space-rowan-kannapolis-nc.html"
+        }
+      ]
+    },
+    "AMZN": {
+      "text": "1 million sq ft fulfillment center at 6501 Macedonia Church Rd, Kannapolis, and a same-day delivery site at 6255 Shumard St (85 Exchange)",
+      "sources": [
+        {
+          "label": "City of Kannapolis, 2017",
+          "url": "https://www.kannapolisnc.gov/Community/News/ID/220/Kannapolis-Welcomes-Amazon-Distribution-Center"
+        },
+        {
+          "label": "City of Kannapolis, 2025",
+          "url": "https://www.kannapolisnc.gov/news/ID/131/Kannapolis-Welcomes-Amazon-(Second-Location-/-100-Jobs-in-City-Announced)"
+        }
+      ]
+    },
+    "CHWY": {
+      "text": "700,000 sq ft fulfillment center in Salisbury, announced with 1,200 jobs",
+      "sources": [
+        {
+          "label": "Governor's office, 2019",
+          "url": "https://governor.nc.gov/news/governor-cooper-announces-1200-jobs-rowan-county"
+        }
+      ]
+    },
+    "GLW": {
+      "text": "Optical-fiber plant in Midland (Cabarrus County)",
+      "sources": [
+        {
+          "label": "WFAE, 2017",
+          "url": "https://www.wfae.org/business/2017-02-20/corning-to-add-410-jobs-in-catawba-cabarrus-olde-meck-brewery-buys-cornelius-site"
+        }
+      ]
+    },
+    "LLY": {
+      "text": "Injectable-medicine plant at The Grounds at Concord, the former Philip Morris site",
+      "sources": [
+        {
+          "label": "City of Concord",
+          "url": "https://concordnc.gov/Services/Community/News/ID/105/Lilly-Bringing-"
+        },
+        {
+          "label": "NC Biotech Center",
+          "url": "https://www.ncbiotech.org/news/lilly-goes-back-back-second-nc-pharma-manufacturing-site-time-1b-600-jobs-near-charlotte"
+        }
+      ]
+    },
+    "SYY": {
+      "text": "Sysco Charlotte food-distribution center at 4500 Corporate Dr NW, Concord (252,000 sq ft)",
+      "sources": [
+        {
+          "label": "Sysco",
+          "url": "https://sysco.com/Charlotte"
+        }
+      ]
+    },
+    "M": {
+      "text": "2.5 million sq ft automated fulfillment center in China Grove (I-85 Exit 68), opened October 2025",
+      "sources": [
+        {
+          "label": "Digital Commerce 360",
+          "url": "https://www.digitalcommerce360.com/2025/10/17/macys-opens-north-carolina-fulfillment-center-automation-technology/"
+        }
+      ]
+    },
+    "WEST": {
+      "text": "Coffee, tea and extract plants in Concord",
+      "sources": [
+        {
+          "label": "SEC filing",
+          "url": "https://www.sec.gov/Archives/edgar/data/1806347/000110465923067096/tm2312705-3_424b3.htm"
+        }
+      ]
+    },
+    "LOW": {
+      "text": "Kannapolis store at 3025 Dale Earnhardt Blvd; headquartered in nearby Mooresville",
+      "sources": [
+        {
+          "label": "Lowe's store",
+          "url": "https://www.lowes.com/store/NC-Kannapolis/2368"
+        },
+        {
+          "label": "Lowe's fact sheet",
+          "url": "https://corporate.lowes.com/sites/lowes-corp/files/2025-04/Lowes_Fact_Sheet_2025.pdf"
+        }
+      ]
+    },
+    "AEO": {
+      "text": "$41 million Southeast distribution hub at 1415 Peeler Rd, Salisbury, 200+ jobs, opening early 2027",
+      "sources": [
+        {
+          "label": "Governor's office, 2026",
+          "url": "https://governor.nc.gov/news/press-releases/2026/07/17/governor-stein-announces-american-eagle-outfitters-inc-selects-rowan-county-41-million-southeast"
+        }
+      ]
+    }
+  },
+  "about_note": "Each company's tie to Kannapolis, with its sources: {\"SYMBOL\": {\"text\": ..., \"sources\": [{\"label\": ..., \"url\": ...}]}}."
 }
