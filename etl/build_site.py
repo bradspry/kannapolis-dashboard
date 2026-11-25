@@ -102,7 +102,60 @@ def build() -> str:
     return html
 
 
+BASE_URL = "https://bradspry.github.io/kannapolis-dashboard/"
+# Shareable tab links with their own link previews (Open Graph tags; Facebook doesn't run the app's JavaScript,
+# so ?tab=jobs alone would preview as the home page). Each is a tiny page that forwards to the tab.
+SHARE_PAGES = {
+    "jobs": {"tab": "jobs", "image": "share/jobs.jpg", "title": "Kannapolis-Area Jobs",
+             "description": "Openings at {employers} Kannapolis-area employers in one place, from the City and the schools to Atrium, Lilly and Macy's. "
+                            "Includes school bus driver jobs. Updated weekly."},
+}
+
+
+def share_pages() -> None:
+    import html as H
+    import shutil
+    src = SITE / "share"
+    if src.exists():
+        shutil.copytree(src, DIST / "share", dirs_exist_ok=True)
+    jobs_file = OUT / "jobs.json"
+    n_emp = len(json.loads(jobs_file.read_text())["employers"]) if jobs_file.exists() else 0
+    for slug, p in SHARE_PAGES.items():
+        p = {**p, "description": p["description"].replace("{employers}", str(n_emp or "dozens of"))}
+        url, img, target = f"{BASE_URL}{slug}/", f"{BASE_URL}{p['image']}", f"../?tab={p['tab']}"
+        e = lambda v: H.escape(v, quote=True)  # noqa: E731
+        page = f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{e(p['title'])} | Kannapolis Civic Dashboard</title>
+<meta name="description" content="{e(p['description'])}" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Kannapolis Civic Dashboard" />
+<meta property="og:title" content="{e(p['title'])}" />
+<meta property="og:description" content="{e(p['description'])}" />
+<meta property="og:url" content="{url}" />
+<meta property="og:image" content="{img}" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="The {e(p['title'])} tab of the Kannapolis Civic Dashboard" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="canonical" href="{url}" />
+<meta http-equiv="refresh" content="0; url={target}" />
+<script>location.replace({json.dumps(target)} + location.hash);</script>
+<style>body{{background:#141414;color:#eee;font:16px system-ui,sans-serif;padding:24px}}a{{color:#6aa7ff}}</style>
+</head>
+<body><p>Opening <a href="{target}">{e(p['title'])} on the Kannapolis Civic Dashboard</a>…</p></body>
+</html>
+"""
+        (DIST / slug).mkdir(parents=True, exist_ok=True)
+        (DIST / slug / "index.html").write_text(page)
+    log(f"site: share pages {', '.join(f'/{s}/' for s in SHARE_PAGES)}")
+
+
 def main() -> None:
+    share_pages()
     html = build()
     DIST.mkdir(parents=True, exist_ok=True)
     out = DIST / "index.html"
