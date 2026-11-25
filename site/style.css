@@ -2057,6 +2057,15 @@ body::before {
 .job-head-s .job-logo { position: absolute; top: -2px; right: 0; width: 64px; height: 30px; padding: 4px 6px; margin: 0; box-shadow: 0 2px 6px rgb(0 0 0 / .2); display: grid; place-items: center; max-width: none; }
 .job-head-s .job-logo img { max-width: 52px; max-height: 22px; }
 .job-head-s .tile-head { padding-right: 70px; }
+/* The smallest phones: a small job tile is ~130px wide, too narrow for a corner logo beside the name. Stack them:
+   the employer's name (3 lines at most), then its logo (it identifies the employer, so the generic briefcase icon goes). */
+@media (max-width: 400px) {
+  .tile-w.size-s .job-head-s .tile-head { padding-right: 0; }
+  .tile-w.size-s .job-head-s .chip-icon { display: none; }
+  .tile-w.size-s .job-head-s .job-logo { position: static; margin: 6px 0 0; box-shadow: none; }
+  .tile-w.size-s .job-head-s .tile-title { font-size: 13px; line-height: 1.25; }
+  .job-tile .tile-head .tile-title { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; } /* long names: 3 lines max */
+}
 .job-hero-logo img { width: auto; height: auto; max-width: 136px; max-height: 64px; }
 @media (max-width: 720px) { .job-hero-logo img { max-width: 100px; max-height: 46px; } }
 /* ---------- Transportation: Rider Transit, paratransit, West Avenue Express ---------- */
