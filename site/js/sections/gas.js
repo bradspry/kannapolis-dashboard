@@ -1,6 +1,6 @@
 // Gas Prices (Transportation tab): bradspry/kannapolis-gas's "Friday Fill-up", read daily. The cheapest regular
-// and diesel near Kannapolis (GasBuddy, plus stations read from their own sites), ranked after rewards
-// discounts, and aviation fuel at Concord-Padgett and Mid-Carolina Regional (AirNav).
+// and diesel near Kannapolis (GasBuddy, plus stations read from their own sites), ranked by posted price
+// (like gas_prices.py --no-rewards), and aviation fuel at Concord-Padgett and Mid-Carolina Regional (AirNav).
 import { h, fill } from "../ui.js";
 import { miniMap } from "../minimap.js";
 
@@ -27,20 +27,19 @@ export function trendText(t) {
   return `${t.direction === "up" ? "▲ Up" : "▼ Down"} ${cents(Math.abs(t.delta))} since ${dayText(t.since)}`;
 }
 
-/** Big price for one station: effective price, station, and the discount if any. */
+/** Big price for one station: posted price and station. */
 export function bigPrice(s, { label = "Regular", compact = false } = {}) {
   return h("div", { class: `gs-big${compact ? " compact" : ""}` },
     h("div", { class: "bb-next-label" }, `Cheapest ${label.toLowerCase()}`),
-    h("div", { class: "gs-price" }, h("b", {}, usd(s.effective)), h("small", {}, "/gal")),
-    h("div", { class: "gs-where" }, h("b", {}, s.name), " · ", short(s.address)),
-    s.discount ? h("div", { class: "tile-meta" }, `${usd(s.price)} listed, −${cents(s.discount)} with ${s.discount_label === "rewards" ? `${s.name} rewards` : s.discount_label}`) : null);
+    h("div", { class: "gs-price" }, h("b", {}, usd(s.price)), h("small", {}, "/gal")),
+    h("div", { class: "gs-where" }, h("b", {}, s.name), " · ", short(s.address)));
 }
 
-/** Ranked list rows: effective price, station, street. */
+/** Ranked list rows: posted price, station, street. */
 export function list(stations, n, { from = 0, numbered = true } = {}) {
   return h("ol", { class: "gs-list", start: from + 1 }, stations.slice(from, from + n).map((s, i) =>
-    h("li", {}, numbered ? h("span", { class: "gs-n" }, from + i + 1) : null, h("b", { class: "gs-p" }, usd(s.effective)),
-      h("span", { class: "gs-name" }, s.name, h("small", {}, short(s.address))), s.discount ? h("small", { class: "gs-disc" }, `−${cents(s.discount)}`) : h("small", { class: "gs-disc" }, ""))));
+    h("li", {}, numbered ? h("span", { class: "gs-n" }, from + i + 1) : null, h("b", { class: "gs-p" }, usd(s.price)),
+      h("span", { class: "gs-name" }, s.name, h("small", {}, short(s.address))))));
 }
 
 /** Aviation rows: price, airport, fuel and service. */
@@ -62,19 +61,17 @@ export function stationMap(g, boundaries, { cls = "", grade = "regular", n = 10,
   const fit = [[Math.min(...lons) - m, Math.min(...lats) - m], [Math.max(...lons) + m, Math.max(...lats) + m]];
   return miniMap({ boundaries, fit, aspect, pad: 0.04, cls: `gs-map ${cls}`, label: `Map of the ${st.length} cheapest ${grade} stations near Kannapolis, numbered by price`,
     points: st.map((s, i) => ({ lon: s.lon, lat: s.lat, r: i ? 30 : 38, num: i + 1, fill: i ? "var(--gs-dot)" : GAS_COLOR, cls: i ? "" : "best",
-      title: `${i + 1}. ${s.name}, ${s.address}: ${usd(s.effective)}` })).reverse() });
+      title: `${i + 1}. ${s.name}, ${s.address}: ${usd(s.price)}` })).reverse() });
 }
 
 function table(stations, grade) {
   return h("div", { class: "table-wrap" }, h("table", { class: "gs-table" },
-    h("thead", {}, h("tr", {}, ["#", "Price", "Station", "Listed", "Rewards", "Reported"].map((x, i) => h("th", { scope: "col", class: [1, 3].includes(i) ? "num" : null }, x)))),
+    h("thead", {}, h("tr", {}, ["#", "Price", "Station", "Reported"].map((x, i) => h("th", { scope: "col", class: i === 1 ? "num" : null }, x)))),
     h("tbody", {}, stations.map((s, i) => h("tr", {},
-      h("td", {}, i + 1), h("td", { class: "num" }, h("b", {}, usd(s.effective))),
+      h("td", {}, i + 1), h("td", { class: "num" }, h("b", {}, usd(s.price))),
       h("td", {}, ext(s.url, s.name), h("small", { class: "gs-addr" }, `${s.address}${s.city ? `, ${s.city}` : ""}`)),
-      h("td", { class: "num" }, usd(s.price)),
-      h("td", {}, s.discount ? `−${cents(s.discount)} ${s.discount_label === "rewards" ? "rewards" : s.discount_label}` : "—"),
       h("td", {}, s.updated ? ago(s.updated) : "from its own site"))))),
-    h("p", { class: "tile-meta" }, `${grade} ranked by price after the rewards discount.`));
+    h("p", { class: "tile-meta" }, `${grade} ranked by posted price.`));
 }
 
 export function renderGas(g, boundaries) {
@@ -98,9 +95,7 @@ export function renderGas(g, boundaries) {
         h("thead", {}, h("tr", {}, ["Price", "Fuel", "Service", "Airport"].map((x, i) => h("th", { scope: "col", class: i === 0 ? "num" : null }, x)))),
         h("tbody", {}, g.aviation.map((a) => h("tr", {}, h("td", { class: "num" }, h("b", {}, usd(a.price))), h("td", {}, a.fuel), h("td", {}, a.service),
           h("td", {}, ext(a.url, `${a.airport_name || a.airport} (${a.code})`))))))),
-      h("p", { class: "tile-meta" }, "Posted by each airport's fuel business (FBO) on AirNav; no rewards discounts.")) : null,
-    h("section", { class: "card" }, h("h3", {}, "Rewards discounts used"),
-      h("ul", { class: "gs-rewards" }, g.rewards.map((r) => h("li", {}, h("b", {}, cents(r.amount)), ` ${r.match.replace(/\b\w/g, (c) => c.toUpperCase())}${r.label !== "rewards" ? ` (${r.label})` : ""}`)))),
+      h("p", { class: "tile-meta" }, "Posted by each airport's fuel business (FBO) on AirNav.")) : null,
     h("p", { class: "note" }, g.note, " Rules and stations from Brad Spry's ", ext(g.repo, "kannapolis-gas"),
       ` (gas_prices.py): ZIP ${g.zips.join(", ")}, read daily. Sources: GasBuddy, Dash In's own site, AirNav.`));
 }

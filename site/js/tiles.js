@@ -983,7 +983,7 @@ export function tileDefs(data, COLORS) {
         const g = gas, reg = g.grades.regular.stations, dsl = g.grades.diesel?.stations || [];
         const top = head("fuel", GAS_COLOR, "Gas Prices");
         const trend = gsTrend(g.grades.regular.trend);
-        const dieselLine = dsl[0] ? h("p", { class: "gs-mini-line" }, h("b", {}, gsUsd(dsl[0].effective)), ` diesel · ${dsl[0].name}`) : null;
+        const dieselLine = dsl[0] ? h("p", { class: "gs-mini-line" }, h("b", {}, gsUsd(dsl[0].price)), ` diesel · ${dsl[0].name}`) : null;
         const avLine = g.aviation[0] ? h("p", { class: "gs-mini-line" }, h("b", {}, gsUsd(g.aviation[0].price)), ` ${g.aviation[0].fuel} · ${g.aviation[0].code}`) : null;
         if (size === "s") return h("div", { class: "tile-body" }, top, gsBig(reg[0], { compact: true }));
         if (size === "m") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top gs-m" },

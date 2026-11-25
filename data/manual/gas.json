@@ -1,7 +1,7 @@
 {
   "_source": "Airport names and coordinates from OurAirports (airports.csv), Nov 24 2026. Everything else comes from bradspry/kannapolis-gas (gas_prices.py) and the live sources it reads; see etl/build_gas.py.",
   "title": "Gas Prices",
-  "note": "Prices are crowd-sourced on GasBuddy and change through the day; a listing older than 24 hours is left out. Rewards discounts assume you're in that station's program (app, membership or card).",
+  "note": "Prices are crowd-sourced on GasBuddy and change through the day; a listing older than 24 hours is left out.",
   "airports": {
     "KJQF": { "airport_name": "Concord-Padgett Regional Airport", "lat": 35.387798, "lon": -80.709099 },
     "KRUQ": { "airport_name": "Mid-Carolina Regional Airport", "lat": 35.645901, "lon": -80.520302 }

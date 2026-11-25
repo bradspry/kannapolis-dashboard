@@ -2,13 +2,13 @@
 the two nearest airports, from Brad Spry's bradspry/kannapolis-gas (gas_prices.py, "Friday Fill-up").
 
 The rules come from gas_prices.py itself (repo_constants): the ZIP codes, how many stations, the 24-hour
-freshness cutoff, the rewards-program discounts, the stations scraped from their own sites (PINNED_STATIONS)
+freshness cutoff, the stations scraped from their own sites (PINNED_STATIONS)
 and the AirNav airport pages with their row pattern. Like the script:
 - GasBuddy's crowd-sourced prices, through the py-gasbuddy package (the one part that isn't standard library;
   the "Refresh gas" workflow installs it); listings older than MAX_PRICE_AGE_HOURS are dropped;
 - pinned stations read live from their own pages;
-- ranked by the effective price (listed minus the rewards discount), with the discount shown;
-- aviation fuel (100LL, Jet A) from AirNav, no discounts;
+- ranked by the posted price, as `gas_prices.py --no-rewards` does (no rewards-program discounts);
+- aviation fuel (100LL, Jet A) from AirNav;
 - the week-over-week trend from listed prices: each run's average is kept in the history here (the script
   keeps its own in SQLite on Brad's computer).
 If GasBuddy refuses a run (Cloudflare), the last good list is kept and marked with its date. Read daily."""
@@ -24,7 +24,7 @@ import urllib.request
 from common import MANUAL, OUT, USER_AGENT, log, repo_constants, write_json
 
 REPO = "kannapolis-gas"
-NAMES = {"ZIP_CODES", "LIMIT", "MAX_PRICE_AGE_HOURS", "FUEL_GRADES", "AIRPORTS", "REWARDS", "REWARDS_LABEL", "PINNED_STATIONS", "_AIRNAV_ROW"}
+NAMES = {"ZIP_CODES", "LIMIT", "MAX_PRICE_AGE_HOURS", "FUEL_GRADES", "AIRPORTS", "PINNED_STATIONS", "_AIRNAV_ROW"}
 FUEL_FILTER = {"regular_gas": 1, "diesel": 4}  # GasBuddy's fuel filter ids (py-gasbuddy FUEL_FILTER_IDS)
 BROWSER = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0 Safari/537.36"
 HISTORY_DAYS = 400
@@ -46,15 +46,6 @@ def get(url: str) -> str:
 def fmt_address(a: str) -> str:
     """Title case, keeping NE/NW/SE/SW/NC upper case (gas_prices.py's _fmt_address)."""
     return re.sub(r"\b(Ne|Nw|Se|Sw|Nc)\b", lambda m: m.group().upper(), a.title())
-
-
-def discount(name: str, cfg: dict) -> tuple[float, str | None]:
-    low = name.lower()
-    for key, amt in cfg["REWARDS"].items():
-        if key in low and amt:
-            label = next((v for k, v in cfg["REWARDS_LABEL"].items() if k in low), "rewards")
-            return amt, label
-    return 0.0, None
 
 
 async def gasbuddy(cfg: dict, field: str) -> tuple[list[dict], list[dict]]:
@@ -106,12 +97,7 @@ def rank(stations: list[dict], cfg: dict) -> list[dict]:
             seen.add(key)
             merged.append(s)
     merged.sort(key=lambda s: s["price"])
-    merged = merged[: cfg["LIMIT"]]
-    for s in merged:
-        amt, label = discount(s["name"], cfg)
-        s["discount"], s["discount_label"], s["effective"] = amt, label, round(s["price"] - amt, 3)
-    merged.sort(key=lambda s: s["effective"])
-    return merged
+    return merged[: cfg["LIMIT"]]
 
 
 def aviation(cfg: dict, airports: dict) -> list[dict]:
@@ -185,11 +171,11 @@ def main() -> None:
         g["trend"] = week_trend(history, k, today, None if g["stale"] else g["average"]) if not g["stale"] else g.get("trend")
     area = {a["area"]: a for a in trend_area} if trend_area else prev.get("area", {})
     for k, g in grades.items():
-        log(f"gas: {k}: {len(g['stations'])} stations, cheapest ${g['stations'][0]['effective']:.2f} at {g['stations'][0]['name']}, avg ${g['average']:.3f}"
+        log(f"gas: {k}: {len(g['stations'])} stations, cheapest ${g['stations'][0]['price']:.2f} at {g['stations'][0]['name']}, avg ${g['average']:.3f}"
             + (f", week {g['trend']['delta']:+.3f}" if g.get("trend") else ""))
     log(f"gas: aviation: {len(av)} prices")
     write_json("gas.json", {**info, "zips": cfg["ZIP_CODES"], "max_age_hours": cfg["MAX_PRICE_AGE_HOURS"], "grades": grades, "aviation": av,
-                            "area": area, "history": history, "rewards": [{"match": k, "amount": v, "label": cfg["REWARDS_LABEL"].get(k, "rewards")} for k, v in cfg["REWARDS"].items() if v],
+                            "area": area, "history": history,
                             "repo": "https://github.com/bradspry/kannapolis-gas"})
 
 

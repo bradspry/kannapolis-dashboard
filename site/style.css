@@ -2272,15 +2272,14 @@ body::before {
 .gs-where { font-size: 13px; color: var(--text-secondary); }
 .gs-where b { color: var(--text-primary); }
 .gs-list { list-style: none; margin: 0; padding: 0; font-size: 13px; }
-.gs-list li { display: grid; grid-template-columns: 18px 48px minmax(0, 1fr) auto; gap: 8px; align-items: baseline; padding: 3px 0; border-bottom: 1px solid var(--border); }
+.gs-list li { display: grid; grid-template-columns: 18px 48px minmax(0, 1fr); gap: 8px; align-items: baseline; padding: 3px 0; border-bottom: 1px solid var(--border); }
 .gs-list li:last-child { border-bottom: 0; }
-.gs-list li:not(:has(.gs-n)) { grid-template-columns: 48px minmax(0, 1fr) auto; }
+.gs-list li:not(:has(.gs-n)) { grid-template-columns: 48px minmax(0, 1fr); }
 .gs-list.av li { grid-template-columns: 48px minmax(0, 1fr); }
 .gs-n { color: var(--text-muted); font-size: 11px; text-align: right; }
 .gs-p { font-variant-numeric: tabular-nums; }
 .gs-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .gs-name small { color: var(--text-muted); margin-left: 6px; }
-.gs-disc { color: var(--good-text); font-variant-numeric: tabular-nums; }
 .gs-mini-line { margin: 6px 0 0; font-size: 13px; color: var(--text-secondary); }
 .gs-mini-line b { color: var(--text-primary); }
 .gs-m { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 16px; align-items: start; }
@@ -2296,7 +2295,6 @@ body::before {
 .gs-two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 18px; align-items: start; }
 .gs-two .gs-map { max-height: 380px; }
 .gs-table small.gs-addr { display: block; color: var(--text-muted); }
-.gs-rewards { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; }
 @media (max-width: 720px) { .gs-m, .gs-l, .gs-xl, .gs-two { grid-template-columns: minmax(0, 1fr); height: auto !important; } .gs-m .gs-map { display: none; } }
 
 /* ---------- Lakes & Rivers ---------- */
