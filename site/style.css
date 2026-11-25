@@ -2265,6 +2265,7 @@ body::before {
 .kt-play.big { width: 68px; height: 68px; font-size: 26px; }
 .kt-thumb.wide { height: 190px; width: auto; aspect-ratio: 16 / 9; align-self: flex-start; flex: none; }
 .kt-title { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.25; }
+.size-s .kt-title { -webkit-line-clamp: 4; }
 .kt-m { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 14px; align-items: start; }
 .kt-m > .kt-thumb { align-self: start; max-height: 100%; }
 .kt-m-side { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
@@ -2295,7 +2296,11 @@ body::before {
 .kt-ep { display: flex; flex-direction: column; gap: 8px; padding: 12px; }
 .kt-ep-text { display: flex; flex-direction: column; gap: 6px; }
 .kt-ep-text b { line-height: 1.3; }
-@media (max-width: 720px) { .kt-latest-grid { grid-template-columns: minmax(0, 1fr); } .kt-hero-logo { width: 160px; height: 90px; } .kt-m { grid-template-columns: minmax(0, 1fr); } .kt-m > .kt-thumb { display: none; } }
+@media (max-width: 720px) { .kt-latest-grid { grid-template-columns: minmax(0, 1fr); } .kt-hero-logo { width: 160px; height: 90px; } .kt-m { grid-template-columns: minmax(0, 1fr); } .kt-m > .kt-thumb { display: none; }
+  .size-m .tile-split.top.kt-m > .kt-m-side { display: flex; } /* the phone rule hides a medium tile's right column; here that's the episode */ }
+/* Tiny phones: the small tile is too narrow for the logo badge beside the title */
+@media (max-width: 400px) { .size-s .kt-logo-badge { display: none; } .size-s .lib-tile-head:has(.kt-logo-badge) .tile-head { padding-right: 0; }
+  .tile-w.size-s .lib-tile-head:has(.kt-logo-badge) .tile-head > :first-child { display: none; } /* "Connection" needs the icon's room */ }
 
 /* ---------- KANDEX (stocks) ---------- */
 .kx-chg { white-space: nowrap; font-variant-numeric: tabular-nums; font-weight: 600; }
