@@ -604,6 +604,9 @@ body.editing .now { display: none; }
 .avatars { display: flex; margin: 8px 0 2px; }
 .avatars img, .avatar-fallback { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--surface-1); margin-left: -10px; background: var(--grid); }
 .avatars > :first-child { margin-left: 0; }
+.avatars.tight img, .avatars.tight .avatar-fallback { width: 36px; height: 36px; margin-left: -13px; }
+.avatars.tight > :first-child { margin-left: 0; }
+@media (max-width: 720px) { .avatars.tight img, .avatars.tight .avatar-fallback { width: 30px; height: 30px; margin-left: -14px; } .avatars.tight > :first-child { margin-left: 0; } }
 .avatar-fallback { display: grid; place-items: center; font-weight: 600; }
 .tile-action {
   margin-top: auto; align-self: flex-start; font-size: 13px; font-weight: 600; padding: 7px 14px; border-radius: 999px;
@@ -891,6 +894,9 @@ body.editing .size-picker { display: flex; }
 .council-m-left .avatars { margin-top: 6px; }
 .council-m-left .avatars img, .council-m-left .avatar-fallback { width: 38px; height: 38px; margin-left: -9px; }
 .council-m-left .avatars > :first-child { margin-left: 0; }
+.avatars.tight img, .avatars.tight .avatar-fallback { width: 36px; height: 36px; margin-left: -13px; }
+.avatars.tight > :first-child { margin-left: 0; }
+@media (max-width: 720px) { .avatars.tight img, .avatars.tight .avatar-fallback { width: 30px; height: 30px; margin-left: -14px; } .avatars.tight > :first-child { margin-left: 0; } }
 .council-m-right { display: flex; flex-direction: column; gap: 8px; min-width: 0; border-left: 1px solid var(--grid); padding-left: 16px; }
 .council-next { display: flex; gap: 10px; align-items: flex-start; }
 .council-next .mini-head { margin: 0; }

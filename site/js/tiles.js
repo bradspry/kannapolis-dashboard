@@ -898,7 +898,7 @@ export function tileDefs(data, COLORS) {
         const mayor = council.members.find((m) => m.role === "Mayor");
         const email = h("a", { class: "tile-action", href: `mailto:${council.group_email}` }, size === "s" ? "Email all" : "Email all of Council");
         if (size === "s") return h("div", { class: "tile-body" }, head("council", COLORS.council, "City Council"),
-          h("div", { class: "avatars" }, council.members.slice(0, 4).map(avatar)),
+          h("div", { class: "avatars tight" }, council.members.map(avatar)), // all seven, overlapped to fit
           h("div", { class: "tile-meta" }, `${council.members.length} members`), email);
         if (size === "m") {
           // Right side: the next Council meeting, and the two Council leaders.
