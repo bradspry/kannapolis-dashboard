@@ -179,7 +179,7 @@ export const STORIES = {
     { id: "out", name: "Out & About", blurb: "Things to do", ids: ["events", "parade", "gem", "swanee", "baseball", "parks", "library"] },
     { id: "local", name: "Local Flavor", blurb: "Eat, drink and shop local", ids: ["editions", "whataburger", "made"] },
     { id: "hall", name: "City Hall", blurb: "News, meetings and decisions", ids: ["news", "meetings", "council", "videos", "org", "people", "budget",
-      "debt-service", "growth", "land", "g-tax-rate", "g-debt-policy", "g-debt-limit", "g-owners"] },
+      "debt-service", "growth", "land", "g-tax-rate", "g-debt-policy", "g-debt-limit", "g-owners"], big: ["council"], small: ["videos"] },
     { id: "safety", name: "Safety", blurb: "Police and fire", ids: ["police", "fire"] },
     { id: "community", name: "Community", blurb: "Neighbors, schools and local voices", ids: ["ktown", "homeless"] },
     { id: "work", name: "Work & Money", blurb: "Jobs and local companies", ids: ["stocks", "school-bus"] },
@@ -190,7 +190,7 @@ export const STORIES = {
   city: [
     { id: "services", name: "City Services", blurb: "Trash, water, bills and the weather", ids: ["waste", "utility", "drought", "water", "weather"] },
     { id: "safety", name: "Public Safety", blurb: "Police and fire", ids: ["police", "fire"] },
-    { id: "hall", name: "City Hall", blurb: "News, meetings, your council and City jobs", ids: ["news", "meetings", "council", "videos", "org", "job-city"] },
+    { id: "hall", name: "City Hall", blurb: "News, meetings, your council and City jobs", ids: ["news", "meetings", "council", "videos", "org", "job-city"], big: ["council"], small: ["videos"] },
     { id: "downtown", name: "Downtown & Parks", blurb: "City-run events, parks, theaters and the shuttle", ids: ["events", "parade", "parks", "gem", "swanee", "shuttle"] },
     { id: "money", name: "Budget & Taxes", blurb: "Where the money comes from and goes", ids: ["budget", "debt-service", "g-tax-rate", "g-debt-policy", "g-debt-limit"] },
     { id: "growth", name: "People & Growth", blurb: "Who lives here and how the city is changing", ids: ["people", "growth", "land", "g-owners"] },

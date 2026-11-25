@@ -329,8 +329,8 @@ function story(list, blanks = []) {
   const out = [];
   let right = false;
   chs.forEach((ch, ci) => {
-    const big = new Set(ch.c.big || []), isBig = (r) => (big.has(r.t.id) ? 1 : 0);
-    const items = ch.items.sort((a, b) => isBig(b) - isBig(a) || b.score - a.score); // `big` widgets first: they take the large slots
+    const big = new Set(ch.c.big || []), small = new Set(ch.c.small || []), isBig = (r) => (big.has(r.t.id) ? 1 : small.has(r.t.id) ? -1 : 0);
+    const items = ch.items.sort((a, b) => isBig(b) - isBig(a) || b.score - a.score); // `big` widgets first (the large slots), `small` ones last (the smallest)
     const chapter = { ...ch.c, index: ci };
     if (phone()) {
       const n = items.filter((r) => !r.t.spacer).length, big = n <= 2 ? n : n % 2 ? 1 : 2;
@@ -342,7 +342,7 @@ function story(list, blanks = []) {
     const hero = ci === 0 && items[0].timely >= 95;
     let names = [...(hero ? ["X"] : []), ...bandsFor(items.length - (hero ? 1 : 0), ci === 0 && !hero)];
     const larges = names.reduce((n, nm) => n + BANDS[nm].sizes.filter((x) => x === "l").length, 0);
-    if (larges < items.filter(isBig).length && items.length - (hero ? 1 : 0) >= 2) // room for every `big` widget: open with two large
+    if (larges < items.filter((r) => isBig(r) > 0).length && items.length - (hero ? 1 : 0) >= 2) // room for every `big` widget: open with two large
       names = [...(hero ? ["X"] : []), "B1", ...bandsFor(items.length - (hero ? 1 : 0) - 2, false)];
     const slots = names.flatMap((nm, b) => BANDS[nm].sizes.map((size, k) => ({ b, k, size })));
     const pinItem = items.find((r) => r.pin), pinSlot = pinItem && (slots.find((x) => x.size === "m") || slots.at(-1));
