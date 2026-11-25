@@ -7,7 +7,7 @@ import { fy, num, pct, usd, usdCompact } from "./format.js";
 import { upcomingEvents, whenLabel, fmtTime } from "./sections/events.js";
 import { datasets, ago, fmtDate, byPublisher, formatCounts, fmtCount, statusDot } from "./sections/about.js";
 import { weather, wxIcon } from "./weather.js";
-import { alertBanner } from "./sections/weather.js";
+import { alertBanner, alertDetails } from "./sections/weather.js";
 import { callButtons, activeNotices, noticeCard, crimeRows, quarterLabel } from "./sections/police.js";
 import { freeList, stationList } from "./sections/fire.js";
 import { payButtons, feeLine } from "./sections/utility.js";
@@ -217,11 +217,14 @@ export function tileDefs(data, COLORS) {
             h("span", { class: "wx-range" }, h("i", { style: { left: `${(100 * (l - lo)) / span}%`, width: `${Math.max(6, (100 * (u - l)) / span)}%` } })),
             h("b", {}, d.hi != null ? `${d.hi}°` : ""));
         }));
-        const top = [radarBackdrop(data.boundaries), head("weather", COLORS.weather, "Kannapolis Weather"), alertBanner(w.alerts, { compact: true })];
+        const alert = w.alerts?.length > 0, big = size === "l" || size === "xl";
+        // Large tiles spell the alert out (when, what, impacts, what to do); smaller ones show its name and end time.
+        const top = [radarBackdrop(data.boundaries), head("weather", COLORS.weather, "Kannapolis Weather"), alert && big ? null : alertBanner(w.alerts, { compact: true })];
         if (size === "s") return h("div", { class: "tile-body wx-tile" }, ...top, now);
         if (size === "m") return h("div", { class: "tile-body wx-tile" }, ...top, h("div", { class: "tile-split wx-m" }, now, fiveDay));
-        if (size === "l") return h("div", { class: "tile-body wx-tile" }, ...top, now, days(5));
-        return h("div", { class: "tile-body wx-tile" }, ...top, h("div", { class: "tile-split wx-xl" }, now, days(5)));
+        // An alert goes first, above the current conditions.
+        if (size === "l") return h("div", { class: "tile-body wx-tile" }, ...top, alert ? [alertDetails(w.alerts, { short: true }), now, days(2)] : [now, days(5)]);
+        return h("div", { class: "tile-body wx-tile" }, ...top, alert ? alertDetails(w.alerts) : null, h("div", { class: "tile-split wx-xl" }, now, days(5)));
       },
     },
     police && {
@@ -392,11 +395,17 @@ export function tileDefs(data, COLORS) {
         const kcs = h("div", {}, h("div", { class: "bb-next-label" }, `Kannapolis City · ${hmSy(ky.year)}`),
           h("div", { class: "hm-big" }, String(Math.round(ky.students)), h("small", {}, " students")),
           h("div", { class: "tile-meta" }, `${ky.per_1000_enrolled} per 1,000 enrolled`));
-        const chart = (w, ht) => { const box = h("div", { class: "hm-mini" }); requestAnimationFrame(() => fill(box, hmChart(hm, box.clientWidth || w, ht))); return box; };
+        // The chart fills whatever height is left in the tile (once the tile is on the page), up to ht.
+        const chart = (w, ht) => {
+          const box = h("div", { class: "hm-mini" });
+          const draw = (tries) => (box.isConnected ? fill(box, hmChart(hm, box.clientWidth || w, box.clientHeight >= 80 ? Math.min(ht, box.clientHeight - 2) : ht)) : tries && requestAnimationFrame(() => draw(tries - 1)));
+          requestAnimationFrame(() => draw(120));
+          return box;
+        };
         if (size === "s") return h("div", { class: "tile-body" }, top, kcs);
         if (size === "m") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top hm-m" }, kcs,
           h("div", {}, h("div", { class: "mini-head bb-mh" }, `All three · ${hmSy(ky.year)}`), hmRows(hm, { rate: false }))));
-        if (size === "l") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top hm-m" }, kcs, hmRows(hm)),
+        if (size === "l") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top hm-m hm-l-top" }, kcs, hmRows(hm)),
           h("div", { class: "mini-head" }, "Per 1,000 enrolled, by school year"), chart(480, 210));
         return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top hm-xl" },
           h("div", {}, kcs, h("p", { class: "tile-meta" }, hmChange(k)), h("div", { class: "mini-head" }, "All three districts"), hmRows(hm),

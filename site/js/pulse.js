@@ -18,7 +18,10 @@ const isWeekend = (d) => [0, 5, 6].includes(d.getDay()) && !(d.getDay() === 5 &&
 const RULES = {
   weather(D, now) {
     const w = weather();
-    if (w?.alerts?.length) return { score: 95, reason: `Weather alert: ${w.alerts[0].event || w.alerts[0].headline}` };
+    if (w?.alerts?.length) {
+      const a = w.alerts[0], until = a.ends ? ` until ${a.ends.toLocaleString("en-US", { weekday: "short", hour: "numeric", ...(a.ends.getMinutes() ? { minute: "2-digit" } : {}) })}` : "";
+      return { score: 95, reason: `${a.event || a.headline}${until}` };
+    }
     const d = w?.days?.[0];
     if (d?.pop >= 60) return { score: 62, reason: `Rain likely today (${d.pop}%)` };
     if (d?.hi >= 95) return { score: 58, reason: `Hot today: high of ${d.hi}°` };
@@ -152,19 +155,21 @@ export const BASE = {
 /** Smart mode's stories, one per tab that has one: chapters in reading order. The chapter holding the most
  *  timely widget leads; the rest keep this order. A tab's Smart view shows every widget in its story plus any
  *  you added to the tab; Mine shows exactly the tab's saved layout. A chapter's `big` widgets always get a large
- *  slot (a full-width tile first on a phone), whatever their score. Employer widgets (job-*) join a "work"
+ *  slot (a full-width tile first on a phone), whatever their score; its `xl` widgets take the full width. A
+ *  `last` chapter always stays at the bottom, even when something in it is timely. Employer widgets (job-*) join a "work"
  *  chapter if the story has one; anything unlisted goes at the end. */
 export const STORIES = {
   home: [
     { id: "home", name: "At Home", blurb: "Weather, trash, water and bills", ids: ["weather", "waste", "utility", "drought", "water"] },
     { id: "around", name: "Getting Around", blurb: "Trains, buses, gas and roads", ids: ["train", "gas", "rider", "paratransit", "shuttle", "flights", "roads"] },
-    { id: "out", name: "Out & About", blurb: "Things to do", ids: ["events", "gem", "swanee", "baseball", "parks", "library", "ktown"] },
+    { id: "out", name: "Out & About", blurb: "Things to do", ids: ["events", "gem", "swanee", "baseball", "parks", "library"] },
     { id: "local", name: "Local Flavor", blurb: "Eat, drink and shop local", ids: ["editions", "whataburger", "made"] },
     { id: "hall", name: "City Hall", blurb: "News, meetings and decisions", ids: ["news", "meetings", "council", "videos", "org", "people", "budget",
       "debt-service", "growth", "land", "g-tax-rate", "g-debt-policy", "g-debt-limit", "g-owners"] },
     { id: "safety", name: "Safety", blurb: "Police and fire", ids: ["police", "fire"] },
-    { id: "community", name: "Community", blurb: "Schools, neighbors and the data behind this site", ids: ["homeless", "about"] },
+    { id: "community", name: "Community", blurb: "Neighbors, schools and local voices", ids: ["ktown", "homeless"] },
     { id: "work", name: "Work & Money", blurb: "Jobs and local companies", ids: ["stocks", "school-bus"] },
+    { id: "site", name: "About This Site", blurb: "Where every number comes from", ids: ["about"], last: true, xl: ["about"] },
   ],
   // City: what the City of Kannapolis does for you, from the curb to the budget. Every widget here is powered
   // at least in part by City data (sources.csv), plus the weather and community context the City tab carries.

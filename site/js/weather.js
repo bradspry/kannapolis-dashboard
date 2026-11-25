@@ -23,6 +23,16 @@ export function wxIcon(text = "", isDay = true) {
   return isDay ? "🌤️" : "🌙";
 }
 
+/** NWS alert text comes in sections: "* WHAT...", "* WHERE...", "* WHEN...", "* IMPACTS...", sometimes
+ *  "* ADDITIONAL DETAILS...". Returns { what, where, when, impacts, ... } with the line breaks joined. */
+export function alertParts(desc = "") {
+  const parts = {};
+  for (const m of (desc || "").matchAll(/\*\s*([A-Z][A-Z ]*?)\.\.\.([\s\S]*?)(?=\n\s*\*\s*[A-Z][A-Z ]*?\.\.\.|$)/g)) {
+    parts[m[1].trim().toLowerCase()] = m[2].replace(/\s+/g, " ").trim();
+  }
+  return parts;
+}
+
 export function normalize(meta, raw, source) {
   const fc = raw.forecast || [];
   const hr = (raw.hourly || []).map((p) => ({
@@ -65,7 +75,7 @@ export function normalize(meta, raw, source) {
   const alerts = (raw.alerts || []).map((a) => ({
     event: a.event, headline: a.headline, severity: a.severity, urgency: a.urgency,
     ends: a.ends || a.expires ? new Date(a.ends || a.expires) : null, description: a.description, instruction: a.instruction,
-    sender: a.senderName,
+    sender: a.senderName, onset: a.onset ? new Date(a.onset) : null, parts: alertParts(a.description),
   }));
   return { source, fetched: source === "live" ? now : null, meta, current, hourly: upcoming, days, periods, alerts };
 }

@@ -517,6 +517,7 @@ html.win-open { overflow: hidden; }
 .now-item:hover { border-color: var(--accent); }
 .now-item:focus-visible, .now-seg:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 .now-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; background: var(--c, var(--accent)); }
+.now-dot.alert { background: var(--bad-text); box-shadow: 0 0 0 3px color-mix(in oklab, var(--bad-text) 30%, transparent); }
 .now-quiet { margin: 0; flex: 1 1 auto; font-size: 13px; color: var(--text-muted); }
 .now-mode { display: inline-flex; align-items: center; gap: 2px; margin-left: auto; padding: 2px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface-1); }
 .now-mode-label { font-size: 12px; color: var(--text-muted); padding: 0 6px 0 8px; }
@@ -986,14 +987,31 @@ body.editing .size-picker { display: flex; }
 /* status: weather alerts (never color alone: icon + event name) */
 .wx-alert { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 10px; font-size: 13px; position: relative; z-index: 2; }
 .wx-alert.compact { padding: 3px 8px; font-size: 12px; }
-.wx-alert.critical, .wx-alert-card.critical { background: color-mix(in oklab, var(--bad-text) 16%, var(--surface-1)); border: 1px solid color-mix(in oklab, var(--bad-text) 45%, transparent); }
-.wx-alert.warning, .wx-alert-card.warning { background: color-mix(in oklab, var(--series-4) 18%, var(--surface-1)); border: 1px solid color-mix(in oklab, var(--series-4) 50%, transparent); }
+/* Every weather alert is red: advisories (moderate/minor) a lighter red, severe and extreme warnings a deeper one. */
+.wx-alert.critical, .wx-alert-card.critical { background: color-mix(in oklab, var(--bad-text) 32%, var(--surface-1)); border: 1px solid color-mix(in oklab, var(--bad-text) 90%, transparent); }
+.wx-alert.warning, .wx-alert-card.warning { background: color-mix(in oklab, var(--bad-text) 22%, var(--surface-1)); border: 1px solid color-mix(in oklab, var(--bad-text) 70%, transparent); }
 .wx-alert.info, .wx-alert-card.info { background: color-mix(in oklab, var(--accent) 12%, var(--surface-1)); border: 1px solid color-mix(in oklab, var(--accent) 40%, transparent); }
 .wx-alerts { display: grid; gap: 10px; margin-bottom: 14px; }
 .wx-alert-card { border-radius: 14px; padding: 12px 14px; }
 .wx-alert-card summary { cursor: pointer; display: flex; gap: 8px; align-items: center; }
 .wx-alert-head { font-weight: 600; margin: 8px 0 4px; }
 .wx-alert-text { margin: 6px 0 0; font-size: 14px; white-space: pre-line; color: var(--text-secondary); }
+/* An alert spelled out (NWS sections): the large weather tiles and the window */
+.wx-alert-detail { position: relative; z-index: 2; border-radius: 14px; padding: 10px 14px; margin: 4px 0 8px; font-size: 13px; }
+.wx-ad-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; font-size: 14px; }
+.wx-ad-when { color: var(--text-secondary); }
+.wx-ad-more { margin-left: auto; font-size: 12px; color: var(--text-muted); }
+.wx-alert-detail dl, .wx-alert-rows { margin: 6px 0 0; display: grid; gap: 4px; }
+.wx-ad-row { display: grid; grid-template-columns: 7.5em minmax(0, 1fr); gap: 10px; }
+.wx-ad-row dt { color: var(--text-muted); font-weight: 600; }
+.wx-ad-row dd { margin: 0; color: var(--text-primary); }
+.wx-alert-rows { font-size: 14px; gap: 8px; margin-top: 10px; }
+.wx-alert-from { margin: 10px 0 0; font-size: 13px; }
+.wx-alert-detail.critical { background: color-mix(in oklab, var(--bad-text) 32%, var(--surface-1)); border: 1px solid color-mix(in oklab, var(--bad-text) 90%, transparent); }
+.wx-alert-detail.warning { background: color-mix(in oklab, var(--bad-text) 22%, var(--surface-1)); border: 1px solid color-mix(in oklab, var(--bad-text) 70%, transparent); }
+.wx-alert-detail .wx-alert-icon, .wx-alert-card .wx-alert-icon, .wx-alert .wx-alert-icon { color: var(--bad-text); }
+.wx-alert-detail.info { background: color-mix(in oklab, var(--accent) 12%, var(--surface-1)); border: 1px solid color-mix(in oklab, var(--accent) 40%, transparent); }
+@media (max-width: 720px) { .wx-ad-row { grid-template-columns: minmax(0, 1fr); gap: 0; } }
 .wx-ok { margin: 0 0 14px; font-size: 14px; color: var(--good-text); }
 #weather-body .muted { color: var(--text-muted); }
 
@@ -2419,6 +2437,7 @@ body::before {
 .hm-res small { color: var(--text-muted); text-align: right; font-variant-numeric: tabular-nums; }
 @media (max-width: 720px) { .hm-m, .hm-xl { grid-template-columns: minmax(0, 1fr); } .hm-res li { grid-template-columns: minmax(0, 1fr) 40px 60px; } .hm-bar { display: none; } }
 .hm-mini { min-height: 0; }
+.hm-l-top { flex: none; } /* large tile: the numbers take their natural height; the chart gets the rest */
 .hm-contacts { list-style: none; margin: 10px 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; font-size: 14px; }
 .hm-contacts li { display: grid; gap: 2px; align-content: start; overflow-wrap: anywhere; }
 .hm-contacts .bb-next-label { display: flex; align-items: center; }

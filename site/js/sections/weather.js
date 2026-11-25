@@ -92,13 +92,29 @@ const dayShort = (d) => (/^(tonight|overnight)$/i.test(d.name) ? "Tonight" : /^(
   : (d.day || d.night).start.toLocaleDateString("en-US", { weekday: "short" }));
 const severityClass = (s) => ({ Extreme: "critical", Severe: "critical", Moderate: "warning" }[s] || "info");
 
+/** "Thu 10 AM" (minutes only when not on the hour). */
+export const alertTime = (d) => d.toLocaleString("en-US", { weekday: "short", hour: "numeric", ...(d.getMinutes() ? { minute: "2-digit" } : {}) });
+
 export function alertBanner(alerts, { compact = false } = {}) {
   if (!alerts?.length) return null;
   const a = alerts[0];
   return h("div", { class: `wx-alert ${severityClass(a.severity)}${compact ? " compact" : ""}`, role: "alert" },
     h("span", { class: "wx-alert-icon", "aria-hidden": "true" }, "⚠"),
-    h("span", {}, h("b", {}, a.event), compact ? null : a.ends ? ` until ${a.ends.toLocaleString("en-US", { weekday: "short", hour: "numeric", minute: "2-digit" })}` : "",
+    h("span", {}, h("b", {}, a.event), a.ends ? ` until ${alertTime(a.ends)}` : "",
       alerts.length > 1 ? ` (+${alerts.length - 1} more)` : ""));
+}
+
+/** The alert itself, from the NWS text's sections: when, what, impacts, what to do. For the large weather tiles. */
+export function alertDetails(alerts, { short = false } = {}) {
+  if (!alerts?.length) return null;
+  const a = alerts[0], p = a.parts || {};
+  const row = (label, text) => (text ? h("div", { class: "wx-ad-row" }, h("dt", {}, label), h("dd", {}, text)) : null);
+  const todo = (a.instruction || "").replace(/\s+/g, " ").trim();
+  return h("div", { class: `wx-alert-detail ${severityClass(a.severity)}`, role: "alert" },
+    h("div", { class: "wx-ad-head" }, h("span", { class: "wx-alert-icon", "aria-hidden": "true" }, "⚠"), h("b", {}, a.event),
+      h("span", { class: "wx-ad-when" }, p.when ? p.when.replace(/\.$/, "").replace(/ E[SD]T/g, "") : a.ends ? `Until ${alertTime(a.ends)}` : ""),
+      alerts.length > 1 ? h("span", { class: "wx-ad-more" }, `+${alerts.length - 1} more`) : null),
+    h("dl", {}, row("What", p.what || (p.when ? null : a.headline)), short ? null : row("Impacts", p.impacts), row("What to do", todo)));
 }
 
 export function renderWeather(w, boundaries) {
@@ -110,10 +126,15 @@ export function renderWeather(w, boundaries) {
   const alertsBlock = w.alerts.length
     ? h("div", { class: "wx-alerts" }, w.alerts.map((a) => h("details", { class: `wx-alert-card ${severityClass(a.severity)}`, open: w.alerts.length === 1 },
       h("summary", {}, h("span", { class: "wx-alert-icon", "aria-hidden": "true" }, "⚠"), h("b", {}, a.event),
-        a.ends ? h("span", { class: "muted" }, ` until ${a.ends.toLocaleString("en-US", { weekday: "short", hour: "numeric", minute: "2-digit" })}`) : null),
+        a.ends ? h("span", { class: "muted" }, ` until ${alertTime(a.ends)}`) : null),
       h("p", { class: "wx-alert-head" }, a.headline),
-      a.description ? h("p", { class: "wx-alert-text" }, a.description) : null,
-      a.instruction ? h("p", { class: "wx-alert-text" }, h("b", {}, "What to do: "), a.instruction) : null)))
+      Object.keys(a.parts || {}).length
+        ? h("dl", { class: "wx-alert-rows" }, Object.entries(a.parts).map(([k, v]) => h("div", { class: "wx-ad-row" },
+          h("dt", {}, k.replace(/\b\w/g, (c) => c.toUpperCase()).replace(/\bAdditional Details\b/, "More")), h("dd", {}, v))),
+          a.instruction ? h("div", { class: "wx-ad-row" }, h("dt", {}, "What to do"), h("dd", {}, a.instruction.replace(/\s+/g, " ").trim())) : null)
+        : [a.description ? h("p", { class: "wx-alert-text" }, a.description) : null,
+          a.instruction ? h("p", { class: "wx-alert-text" }, h("b", {}, "What to do: "), a.instruction) : null],
+      a.sender ? h("p", { class: "muted wx-alert-from" }, `Issued by ${a.sender}.`) : null)))
     : h("p", { class: "wx-ok" }, h("span", { "aria-hidden": "true" }, "✓ "), "No active weather alerts for Kannapolis.");
 
   const hero = c ? h("div", { class: "card wx-hero" },

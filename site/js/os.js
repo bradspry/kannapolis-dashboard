@@ -37,6 +37,7 @@ const phone = () => window.matchMedia?.("(max-width: 720px)").matches;
 export const LOCAL = !location.protocol.startsWith("http") || /^(localhost|127\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)|\.local$/.test(location.hostname);
 const reducedMotion = () => window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 function readLocal(t = tab) {
+  if (!LOCAL) return null; // published site: everyone sees the site's default layouts (no Edit there to change or reset one)
   try {
     const v = JSON.parse(localStorage.getItem(keyFor(t)) || "null");
     if (v) return v;
@@ -300,7 +301,7 @@ function bandsFor(n, lead) {
 }
 /** A tab as a story: widgets grouped into the tab's chapters (pulse.js STORIES), the chapter with the most timely widget
  *  first and the rest in story order. Within a chapter the best-scored widgets take the biggest slots, and big
- *  tiles alternate left and right from band to band. A lone widget joins the chapter before it. Blank spaces
+ *  tiles alternate left and right from band to band. A chapter with one widget shows it full width. Blank spaces
  *  become pauses at chapter ends, spread by the golden ratio (k·φ mod 1). Phones: a full-width medium or two
  *  per chapter, then pairs of smalls. Each item gets .size and .chapter. */
 function story(list, blanks = []) {
@@ -311,11 +312,10 @@ function story(list, blanks = []) {
   for (const r of list) { const c = chOf.get(r.t.id) || (r.t.id.startsWith("job-") ? work : more); if (!groups.has(c)) groups.set(c, []); groups.get(c).push(r); }
   const pos = (c) => (c === more ? chapters.length : chapters.indexOf(c));
   let chs = [...groups.entries()].map(([c, items]) => ({ c, items })).sort((a, b) => pos(a.c) - pos(b.c));
-  const lead = chs.reduce((best, ch) => (!best || ch.items[0].score > best.items[0].score ? ch : best), null);
+  const lead = chs.filter((ch) => !ch.c.last).reduce((best, ch) => (!best || ch.items[0].score > best.items[0].score ? ch : best), null);
   chs = lead ? [lead, ...chs.filter((ch) => ch !== lead)] : chs;
-  for (let i = 0; i < chs.length && chs.length > 1; i++) {
-    if (chs[i].items.length === 1 && i > 0) { chs[i - 1].items.push(...chs[i].items); chs.splice(i--, 1); }
-  }
+  chs = [...chs.filter((ch) => !ch.c.last), ...chs.filter((ch) => ch.c.last)]; // a `last` chapter (About This Site) closes the page
+  // A chapter with a single widget keeps its heading; the widget takes the full width (below).
   // The tab's pinned widget (Jobs: School Bus Drivers) stays top-right: it joins the lead chapter, in a medium slot.
   const pinCh = chs.find((ch) => ch.items.some((r) => r.t.id === pinned));
   if (pinCh && chs.length) {
@@ -335,6 +335,8 @@ function story(list, blanks = []) {
       items.filter((r) => !r.t.spacer).forEach((r, i) => out.push({ ...r, size: i < big ? "m" : "s", chapter }));
       return;
     }
+    const wide = new Set(ch.c.xl || []);
+    if (items.length && (items.every((r) => wide.has(r.t.id)) || items.filter((r) => !r.t.spacer).length === 1)) { items.forEach((r) => out.push({ ...r, size: phone() ? "m" : "xl", chapter })); return; } // full-width chapter
     const hero = ci === 0 && items[0].timely >= 95;
     let names = [...(hero ? ["X"] : []), ...bandsFor(items.length - (hero ? 1 : 0), ci === 0 && !hero)];
     const larges = names.reduce((n, nm) => n + BANDS[nm].sizes.filter((x) => x === "l").length, 0);
@@ -380,7 +382,7 @@ function renderBrief(ranked) {
       h("h2", { class: "now-title" }, "Right now"),
       items.length ? h("ul", { class: "now-items", role: "list" }, items.map((r) => h("li", {},
         h("button", { type: "button", class: "now-item", onclick: () => openWindow(r.t.opens, document.querySelector(`[data-tile="${r.t.id}"]`)) },
-          h("span", { class: `now-dot ear-${categoryOf(r.t.id)}`, "aria-hidden": "true" }), r.reason))))
+          h("span", { class: `now-dot ear-${categoryOf(r.t.id)}${r.t.id === "weather" && r.timely >= 95 ? " alert" : ""}`, "aria-hidden": "true" }), r.reason))))
         : h("p", { class: "now-quiet" }, `Nothing out of the ordinary ${part}.`),
       LOCAL ? h("div", { class: "now-mode", role: "group", "aria-label": `Arrange ${tabById(tab).name}` },
         h("span", { class: "now-mode-label" }, "Arranged:"), seg("smart", "Smart"), seg("mine", "Mine")) : null));
