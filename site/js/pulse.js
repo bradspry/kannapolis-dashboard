@@ -264,7 +264,7 @@ export const STORIES = {
   // City: what the City of Kannapolis does for you, from the curb to the budget. Every widget here is powered
   // at least in part by City data (sources.csv), plus the weather and community context the City tab carries.
   city: [
-    { id: "services", name: "City Services", blurb: "Trash, water, bills and the weather", ids: ["waste", "utility", "drought", "water", "weather"] },
+    { id: "services", name: "City Services", blurb: "Trash, water, bills and streets", ids: ["waste", "utility", "drought", "water", "roads"] },
     { id: "safety", name: "Public Safety", blurb: "Police and fire", ids: ["police", "fire"] },
     { id: "hall", name: "City Hall", blurb: "News, meetings, your council and City jobs", ids: ["news", "meetings", "council", "videos", "org", "job-city"], big: ["council"], small: ["videos"] },
     { id: "downtown", name: "Downtown & Parks", blurb: "City-run events, parks, theaters and the shuttle", ids: ["events", "parade", "parks", "gem", "swanee", "shuttle"] },

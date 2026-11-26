@@ -109,6 +109,7 @@
         "utility",
         "drought",
         "water",
+        "roads",
         "police",
         "fire",
         "news",
@@ -136,7 +137,9 @@
         "job-city"
       ],
       "hidden": [],
-      "sizes": {},
+      "sizes": {
+        "roads": "m"
+      },
       "spacers": []
     },
     "fun": {

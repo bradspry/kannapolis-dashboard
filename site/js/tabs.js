@@ -13,8 +13,8 @@ export const TABS = [
 export const DEFAULT_PINNED = { jobs: "school-bus" };
 
 export const DEFAULT_MEMBERS = {
-  city: ["weather", "waste", "utility", "drought", "water", "police", "fire", "news", "meetings", "council", "videos", "org",
-    "people", "homeless", "budget", "debt-service", "growth", "g-tax-rate", "g-debt-policy", "g-debt-limit", "land", "g-owners", "about",
+  city: ["waste", "utility", "drought", "water", "police", "fire", "news", "meetings", "council", "videos", "org",
+    "people", "homeless", "budget", "debt-service", "growth", "g-tax-rate", "g-debt-policy", "g-debt-limit", "land", "g-owners", "about", "roads",
     // Also City-run (City of Kannapolis publishes their data): its events, parks, theaters, shuttle and jobs.
     "events", "parade", "parks", "gem", "swanee", "shuttle", "job-city"],
   fun: ["weather", "gem", "swanee", "baseball", "parks", "events", "parade", "ktown", "editions", "made", "whataburger", "library", "provisions"],
