@@ -5,7 +5,7 @@
 import { h, fill } from "../ui.js";
 import { hoursTable, fmtClock } from "./made.js";
 
-export const SHOPS = ["ellestique", "sweetest", "cardiacs"]; // tile and window order
+export const SHOPS = ["ellestique", "sweetest", "cardiacs", "cookcattle"]; // tile and window order
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const mins = (t) => { const [hh, mm] = t.split(":").map(Number); return hh * 60 + mm; };
 const ext = (href, label, cls) => h("a", { href, target: "_blank", rel: "noopener", class: cls }, label);
@@ -81,7 +81,7 @@ export const shopButton = (s, { compact = false, label = "Shop online ↗" } = {
   h("a", { class: `btn-primary el-shop${compact ? " compact" : ""}`, href: s.site, target: "_blank", rel: "noopener" }, label);
 
 /** "📍 109 West Ave · downtown" */
-export const where = (s) => h("p", { class: "tile-meta el-where" }, "📍 ", s.address.split(",")[0], s.area ? ` · ${s.area}` : "");
+export const where = (s) => h("p", { class: "tile-meta el-where" }, "📍 ", s.address_short || s.address.split(",")[0], s.area ? ` · ${s.area}` : "");
 
 /** The tile for one shop, at any size. */
 export function shopTile(s, size, head) {
@@ -108,14 +108,21 @@ export function shopTile(s, size, head) {
 export function hoursSummary(s) {
   const order = [1, 2, 3, 4, 5, 6, 0], short = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const key = (d) => { const r = s.hours.find((x) => x.days.includes(d)); return r ? `${fmtClock(r.open)} – ${fmtClock(r.close)}` : "closed"; };
-  const runs = [];
-  for (const d of order) {
-    const k = key(d), last = runs.at(-1);
-    if (last && last.k === k) last.to = d; else runs.push({ k, from: d, to: d });
-  }
-  const open = runs.filter((r) => r.k !== "closed"), shut = runs.filter((r) => r.k === "closed");
-  const span = (r) => (r.from === r.to ? short[r.from] : `${short[r.from]}–${short[r.to]}`);
-  return [...open.map((r) => `${span(r)} ${r.k}`), ...shut.map((r) => `${span(r)} closed`)].join(" · ");
+  // Group the days with the same hours wherever they fall in the week, then write each group's days as runs:
+  // "Tue, Thu–Fri 4 PM – 7 PM · Sat 9 AM – 1 PM · Mon, Wed, Sun closed".
+  const groups = new Map();
+  for (const d of order) groups.set(key(d), [...(groups.get(key(d)) || []), d]);
+  const days = (list) => {
+    const runs = [];
+    for (const d of list) {
+      const last = runs.at(-1);
+      if (last && order.indexOf(d) === order.indexOf(last.to) + 1) last.to = d; else runs.push({ from: d, to: d });
+    }
+    return runs.map((r) => (r.from === r.to ? short[r.from] : `${short[r.from]}–${short[r.to]}`)).join(", ");
+  };
+  const parts = [...groups].filter(([k]) => k !== "closed").map(([k, list]) => `${days(list)} ${k}`);
+  if (groups.has("closed")) parts.push(`${days(groups.get("closed"))} closed`);
+  return parts.join(" · ");
 }
 
 export function renderShop(s) {

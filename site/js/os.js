@@ -27,6 +27,7 @@ const rendered = new Set();  // windows rendered at the current theme/width
 let openId = null, openerTile = null, pushed = false;
 let tileDefs = [];           // [{ id, opens, size, build }]
 let pulseFn = null;          // () => { tileId: { score, reason } } (pulse.js)
+let quietFn = null;          // (tab) => { text, opens } or null: what "Right now" says when nothing is timely (pulse.js quiet)
 const OPENS_KEY = "kdash-opens";      // window id -> times this browser opened it ("Right now" favors these)
 const modeKey = (t) => `kdash-mode-${t}`; // per tab with a story: "mine" = the saved layout; otherwise Smart (arranged by the moment)
 let dialog, winBody, winTitle, winSub, winIcon;
@@ -115,7 +116,7 @@ export function chip(name, color, ink) {
 export function defineWindow(id, def) { windows.set(id, def); }
 
 /** Register the timeliness scorer (pulse.js): () => { tileId: { score, reason } }. */
-export function definePulse(fn) { pulseFn = fn; }
+export function definePulse(fn, quiet = null) { pulseFn = fn; quietFn = quiet; }
 const readJSON = (k, d) => { try { return JSON.parse(localStorage.getItem(k) || "null") ?? d; } catch { return d; } };
 const storied = () => !!pulseFn && !!STORIES[tab]; // this tab has a Smart story (pulse.js STORIES)
 const mineMode = () => LOCAL && readJSON(modeKey(tab), null) === "mine"; // published: always Smart
@@ -387,7 +388,14 @@ function renderBrief(ranked) {
       items.length ? h("ul", { class: "now-items", role: "list" }, items.map((r) => h("li", {},
         h("button", { type: "button", class: "now-item", onclick: () => openWindow(r.t.opens, document.querySelector(`[data-tile="${r.t.id}"]`)) },
           h("span", { class: `now-dot ear-${categoryOf(r.t.id)}${r.t.id === "weather" && r.timely >= 95 ? " alert" : ""}`, "aria-hidden": "true" }), r.reason))))
-        : h("p", { class: "now-quiet" }, `Nothing out of the ordinary ${part}.`),
+        : (() => { // a quiet moment: the tab's own suggestion if it has one (Shopping: what's for dinner), else the usual line
+          let q = null;
+          try { q = quietFn?.(tab); } catch (e) { console.warn("quiet", e); }
+          return q && windows.has(q.opens)
+            ? h("ul", { class: "now-items", role: "list" }, h("li", {}, h("button", { type: "button", class: "now-item", onclick: () => openWindow(q.opens, document.querySelector(`[data-tile="${q.opens}"]`)) },
+              h("span", { class: `now-dot ear-${categoryOf(q.opens)}`, "aria-hidden": "true" }), q.text)))
+            : h("p", { class: "now-quiet" }, `Nothing out of the ordinary ${part}.`);
+        })(),
       LOCAL ? h("div", { class: "now-mode", role: "group", "aria-label": `Arrange ${tabById(tab).name}` },
         h("span", { class: "now-mode-label" }, "Arranged:"), seg("smart", "Smart"), seg("mine", "Mine")) : null));
 }

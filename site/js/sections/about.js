@@ -22,6 +22,7 @@ export function datasets(D) {
     ["Elle's Tique new arrivals", "ellestique", D.ellestique, DAILY, 2],
     ["Sweetest Beginnings products", "sweetest", D.sweetest, DAILY, 2],
     ["CARDIACS new releases", "cardiacs", D.cardiacs, DAILY, 2],
+    ["Cook Cattle Farm store", "cookcattle", D.cookcattle, DAILY, 2],
     ["K-Town Connection episodes", "ktown", D.ktown, DAILY, 2],
     ["Library events", "library", D.library, DAILY, 2],
     ["NC By Train schedule", "train", D.train, DAILY, 2],

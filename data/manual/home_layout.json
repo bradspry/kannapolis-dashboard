@@ -20,6 +20,7 @@
         "ellestique",
         "sweetest",
         "cardiacs",
+        "cookcattle",
         "library",
         "events",
         "parade",
@@ -227,13 +228,15 @@
       "order": [
         "ellestique",
         "cardiacs",
-        "sweetest"
+        "sweetest",
+        "cookcattle"
       ],
       "hidden": [],
       "sizes": {
         "ellestique": "xl",
         "sweetest": "xl",
-        "cardiacs": "xl"
+        "cardiacs": "xl",
+        "cookcattle": "xl"
       },
       "spacers": []
     }

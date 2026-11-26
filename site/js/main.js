@@ -4,7 +4,7 @@
 import { initTheme, onThemeChange, tokens } from "./theme.js";
 import { h } from "./ui.js";
 import { initOS, defineWindow, defineTiles, definePulse, refreshNow, renderHome, invalidate, openFromHash, refreshWindow, setSources } from "./os.js";
-import { pulses, STORIES, jobsStory } from "./pulse.js";
+import { pulses, quiet, STORIES, jobsStory } from "./pulse.js";
 import { startWeather, onWeather, weather } from "./weather.js";
 import { renderWeather } from "./sections/weather.js";
 import { renderPolice } from "./sections/police.js";
@@ -76,7 +76,7 @@ function main() {
     police: load("police.json", { optional: true }), fire: load("fire.json", { optional: true }),
     baseball: load("baseball.json", { optional: true }), utility: load("utility.json", { optional: true }),
     parks: load("parks.json", { optional: true }), gem: load("gem.json", { optional: true }),
-    swanee: load("swanee.json", { optional: true }), parade: load("parade.json", { optional: true }), incidents: load("incidents.json", { optional: true }), ellestique: load("ellestique.json", { optional: true }), sweetest: load("sweetest.json", { optional: true }), cardiacs: load("cardiacs.json", { optional: true }), made: load("made.json", { optional: true }),
+    swanee: load("swanee.json", { optional: true }), parade: load("parade.json", { optional: true }), incidents: load("incidents.json", { optional: true }), ellestique: load("ellestique.json", { optional: true }), sweetest: load("sweetest.json", { optional: true }), cardiacs: load("cardiacs.json", { optional: true }), cookcattle: load("cookcattle.json", { optional: true }), made: load("made.json", { optional: true }),
     editions: load("editions.json", { optional: true }), whataburger: load("whataburger.json", { optional: true }),
     videos: load("videos.json", { optional: true }), waste: load("waste.json", { optional: true }),
     drought: load("drought.json", { optional: true }), library: load("library.json", { optional: true }),
@@ -160,7 +160,7 @@ function main() {
   });
   defineTiles(() => tileDefs(D, colors())); // before initOS: a tab's starting widgets come from the tile list
   STORIES.jobs = jobsStory(D.jobs); // Jobs' chapters come from the employer list
-  definePulse(() => pulses(D)); // Smart tabs: what's timely right now
+  definePulse(() => pulses(D), (tab) => quiet(D, tab)); // Smart tabs: what's timely right now, and what to say when nothing is
   setInterval(refreshNow, 10 * 60e3); // the picks follow the clock (morning weather, tonight's event)
   initOS({ defaultLayout: load("home_layout.json", { optional: true }) });
   renderHome();

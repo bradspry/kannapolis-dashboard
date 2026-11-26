@@ -1,0 +1,108 @@
+{
+  "id": "cookcattle",
+  "name": "Cook Cattle Farm",
+  "kind": "Family farm",
+  "area": "Concord",
+  "area_long": "Old Concord/Salisbury Road, Concord",
+  "tagline": "A 7th-generation, 300-acre family farm (est. 1860): naturally raised beef and fresh eggs, plus pork, chicken, lamb and dairy from other local farmers, honey, coffee and more",
+  "about": "The Cook Cattle Farm has raised cattle in Concord for seven generations. The family works the farm with their in-laws just across the pasture, and partners with other local farms for pork, chicken, lamb, dairy, honey and baked goods. Order online, then pick up at the farm on your scheduled day, or shop the meat store during its hours. Bulk meats too: quarter, half and whole cows, half and whole pigs, and whole lambs (call Hannah to get on the list).",
+  "address": "1331 Old Concord/Salisbury Road, Concord, NC 28025",
+  "phone": "(980) 521-0415",
+  "map": "https://www.google.com/maps/search/?api=1&query=Cook+Cattle+Farm+1331+Old+Concord+Salisbury+Road+Concord+NC+28025",
+  "site": "https://cookcattlefarm.com",
+  "products_path": "/store",
+  "logo": "photos/local/cookcattle-logo.jpg",
+  "color": "#b8692e",
+  "hours": [
+    {
+      "days": [
+        2,
+        4,
+        5
+      ],
+      "open": "16:00",
+      "close": "19:00"
+    },
+    {
+      "days": [
+        6
+      ],
+      "open": "09:00",
+      "close": "13:00"
+    }
+  ],
+  "hours_note": "Meat store hours. Online orders are picked up at the farm on your scheduled day.",
+  "feature": [
+    "Ground Beef",
+    "Farm Fresh Eggs",
+    "Ribeye",
+    "Strip",
+    "Filet",
+    "Sirloin",
+    "Brisket",
+    "Chuck Roast",
+    "Chicken WHOLE",
+    "Beef Bacon",
+    "Flat Iron",
+    "Short Ribs",
+    "Pork",
+    "Honey"
+  ],
+  "arrivals_label": "From the farm store",
+  "arrivals_url": "https://cookcattlefarm.com/store",
+  "arrivals_more": "The whole store ↗",
+  "shop": [
+    {
+      "label": "All-natural beef",
+      "url": "https://cookcattlefarm.com/store/all-natural-beef"
+    },
+    {
+      "label": "Pork",
+      "url": "https://cookcattlefarm.com/store/pork"
+    },
+    {
+      "label": "Poultry",
+      "url": "https://cookcattlefarm.com/store/poultry"
+    },
+    {
+      "label": "Lamb",
+      "url": "https://cookcattlefarm.com/store/lamb"
+    },
+    {
+      "label": "Dairy",
+      "url": "https://cookcattlefarm.com/store/dairy"
+    },
+    {
+      "label": "Monthly bundles",
+      "url": "https://cookcattlefarm.com/store/monthly-bundles"
+    },
+    {
+      "label": "Honey",
+      "url": "https://cookcattlefarm.com/store/honeysuckle-hill-bee-farm"
+    },
+    {
+      "label": "Coffee",
+      "url": "https://cookcattlefarm.com/store/carin-coffee-roasters"
+    },
+    {
+      "label": "Apparel",
+      "url": "https://cookcattlefarm.com/store/apparel"
+    }
+  ],
+  "links": [
+    {
+      "label": "Create an account to order",
+      "url": "https://cookcattlefarm.com/register"
+    },
+    {
+      "label": "Contact",
+      "url": "https://cookcattlefarm.com/contact"
+    }
+  ],
+  "social": [],
+  "notes_static": [
+    "Bulk meats: ¼, ½ and whole cows, ½ and whole pigs, whole lambs. Call Hannah at 980-521-0415 to get on the list"
+  ],
+  "source": "Machine-parsed from cookcattlefarm.com (home page: about, meat store hours, bulk meats; Contact page: address and phone), November 25, 2026",
+  "address_short": "1331 Old Concord/Salisbury Rd"
+}

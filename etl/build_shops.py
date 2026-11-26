@@ -6,8 +6,10 @@ links, the About blurb and any dated event are a machine-parsed snapshot in data
               product cards (women's apparel, Quincy Mae, goat milk soaps)
   cardiacs    CARDIACS Sports & Memorabilia, 133 West Ave (thecardiacs.com): Just Released, notices, and any posted
               holiday hours (which become the shop's special hours)
+  cookcattle  Cook Cattle Farm, 1331 Old Concord/Salisbury Rd, Concord (cookcattlefarm.com): its GrazeCart store page
+              (/store; schema.org Product markup), in stock and signature items first
 
-Politeness: one request a day per shop, for the home page only (robots.txt allows it), with the kdash User-Agent.
+Politeness: one request a day per shop, for one page (the home page, or a shop's store page) (robots.txt allows it), with the kdash User-Agent.
 Both are Shopify stores whose products.json and collection pages answer automated clients with "429", so those
 aren't used. If a page can't be read, that shop's last products are kept."""
 from __future__ import annotations
@@ -30,8 +32,8 @@ def absolute(site: str, u: str) -> str:
     return "https:" + u if u.startswith("//") else site + u if u.startswith("/") else u
 
 
-def fetch(site: str) -> str:
-    req = urllib.request.Request(site + "/", headers={"User-Agent": USER_AGENT, "Accept": "text/html"})
+def fetch(site: str, path: str = "/") -> str:
+    req = urllib.request.Request(site + path, headers={"User-Agent": USER_AGENT, "Accept": "text/html"})
     with urllib.request.urlopen(req, timeout=30) as r:
         return r.read().decode("utf-8", "replace")
 
@@ -158,7 +160,35 @@ def parse_cardiacs(page: str, site: str) -> tuple[list[dict], list[str], list[di
     return out, notes, parse_special(t)
 
 
-PARSERS = {"ellestique": parse_ellestique, "sweetest": parse_sweetest, "cardiacs": parse_cardiacs}
+# ---------- Cook Cattle Farm (GrazeCart store page with schema.org Product markup) ----------
+
+def parse_cookcattle(page: str, site: str) -> tuple[list[dict], list[str]]:
+    out = []
+    for block in page.split('itemtype="https://schema.org/Product"')[1:]:
+        block = block.split("</section>")[0]
+        url = re.search(r'itemid="([^"]+)"', block)
+        name = re.search(r'itemprop="name">\s*(.*?)\s*</h3>', block, re.S)
+        if not (url and name):
+            continue
+        img = re.search(r'<img src="([^"]+)"[^>]*itemprop="image"', block)
+        price = re.search(r'itemprop="price" content="([\d.]+)"', block)
+        unit = re.search(r'productListing__price_unit">\s*([^<]+?)\s*<', block)
+        avail = re.search(r'itemprop="availability" href="https://schema.org/(\w+)"', block)
+        p = f"${float(price.group(1)):,.2f}" + (unit.group(1).rstrip(".") if unit else "") if price else None
+        out.append({"name": text(name.group(1)), "url": url.group(1), "price": p, "was": None,
+                    "sold_out": bool(avail and avail.group(1) != "InStock"), "image": img.group(1) if img else None})
+    return out, []
+
+
+def featured(items: list[dict], words: list[str]) -> list[dict]:
+    """In stock first, then the shop's signature items (data/manual feature words, in order), then the rest."""
+    def rank(a: dict) -> tuple:
+        hit = next((i for i, w in enumerate(words) if w.lower() in a["name"].lower()), len(words))
+        return (a.get("sold_out", False), hit)
+    return sorted(items, key=rank)
+
+
+PARSERS = {"ellestique": parse_ellestique, "sweetest": parse_sweetest, "cardiacs": parse_cardiacs, "cookcattle": parse_cookcattle}
 
 
 def main() -> None:
@@ -166,7 +196,9 @@ def main() -> None:
         info = json.loads((MANUAL / f"{sid}.json").read_text())
         special = None
         try:
-            items, notes, *rest = parse(fetch(info["site"]), info["site"])
+            items, notes, *rest = parse(fetch(info["site"], info.get("products_path", "/")), info["site"])
+            if info.get("feature"):
+                items = featured(items, info["feature"])
             special = rest[0] if rest else None
             if not items:
                 raise RuntimeError("no products found on the home page (did the theme change?)")
@@ -180,6 +212,7 @@ def main() -> None:
         if special:  # posted holiday hours join the snapshot's; a posted date wins
             dates = {x["date"] for x in special}
             info["special"] = sorted([x for x in info.get("special", []) if x["date"] not in dates] + special, key=lambda x: x["date"])
+        notes = list(dict.fromkeys([*info.get("notes_static", []), *notes]))  # the snapshot's standing notes, then the page's
         write_json(f"{sid}.json", {**info, "arrivals": items, "notes": notes})
 
 
