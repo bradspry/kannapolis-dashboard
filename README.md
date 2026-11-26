@@ -114,7 +114,7 @@ It prints the address to open on your phone (for example `http://192.168.1.20:51
 Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a `source_url` that opens the official PDF at the cited page (for example `…FY%2027%20Adopted%20Budget.pdf#page=114`). The build fails if a row's citation is missing. The full registry is [`data/manual/sources.csv`](data/manual/sources.csv); its `widgets` column ties each source to the widgets it feeds, and every widget window ends with an automatic **Sources** line built from it. The table below is generated from the same registry on every build, so the README always cites every source:
 
 <!-- sources:start -->
-243 sources, generated from `data/manual/sources.csv`.
+244 sources, generated from `data/manual/sources.csv`.
 
 | Source | Publisher | Format | Used for |
 |---|---|---|---|
@@ -361,6 +361,7 @@ Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a
 | [City of Kannapolis Streets (Transportation and Environmental Services)](https://www.kannapolisnc.gov/Government-Departments/Streets) | City of Kannapolis | Web page | Report a problem, official street and sidewalk miles, director, 25-MPH request, forms |
 | [City of Kannapolis City Projects list](https://www.kannapolisnc.gov/CityProjects) | City of Kannapolis | Web page | Street, sidewalk and NCDOT projects in Kannapolis |
 | [Duke Energy outdoor light outage map](https://salor-web.duke-energy.app/#/home/map) | Duke Energy | Web app | Report a streetlight out |
+| [Cook Cattle Farm family photo (provided to the dashboard)](https://cookcattlefarm.com) | Cook Cattle Farm | Image | Family photo |
 <!-- sources:end -->
 
 The news and meetings harvesters are adapted from [kspider](https://github.com/bradspry/kannapolis-news-wire).

@@ -106,5 +106,10 @@
   "source": "Machine-parsed from cookcattlefarm.com (home page: about, meat store hours, bulk meats; Contact page: address and phone), November 25, 2026",
   "address_short": "1331 Old Concord/Salisbury Rd",
   "owner": "Hannah",
-  "owner_photo": "photos/local/cookcattle-owner.jpg"
+  "owner_photo": "photos/local/cookcattle-owner.jpg",
+  "family_photo": {
+    "src": "photos/local/cookcattle-family.jpg",
+    "alt": "The Cook family, three generations, in a harvested cornfield beside their Gleaner F2 combine",
+    "caption": "The family behind Cook Cattle Farm, with their Gleaner F2 combine"
+  }
 }

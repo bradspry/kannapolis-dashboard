@@ -206,6 +206,8 @@ export function renderShop(s) {
         s.links?.length ? h("p", { class: "el-links" }, s.links.flatMap((l, i) => [i ? " · " : null, ext(l.url, l.label)])) : null)),
     ktownCard(s),
     h("section", { class: "card" }, h("h3", {}, "About the shop"),
+      s.family_photo ? h("figure", { class: "el-family" }, h("img", { src: s.family_photo.src, alt: s.family_photo.alt, loading: "lazy" }),
+        s.family_photo.caption ? h("figcaption", {}, s.family_photo.caption) : null) : null,
       s.owner_photo ? h("div", { class: "el-owner-card" }, h("img", { src: s.owner_photo, alt: `${s.owner}, owner of ${s.name}`, loading: "lazy" }),
         h("div", {}, h("b", {}, s.owner), h("span", {}, `Owner, ${s.short || s.name}`))) : null,
       h("p", {}, s.about),
