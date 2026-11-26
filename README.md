@@ -72,6 +72,7 @@ It prints the address to open on your phone (for example `http://192.168.1.20:51
 | The Gem Theatre | [gem-theatre.com](https://gem-theatre.com/Tickets) ticket page (scraped; adapted from kannapolis-movies): now showing, coming soon, special screenings, prices, policies | Automatic, daily |
 | The Swanee Theatre | Swanee's public [events feed](https://swaneetheatre.com/events/) (WordPress Events Calendar API), [weekly happenings](https://swaneetheatre.com/weekly-happenings/), [rental info](https://swaneetheatre.com/rent-the-swanee/) | Shows: automatic, daily. Weekly/rental: **machine-parsed** (`data/manual/swanee.json`) |
 | Made in Kannapolis | Featured maker: [Old Armor Beer Company](https://www.oldarmorbeer.net) (veteran-owned brewery, 211 West Ave): beers, taproom hours with open-now (on device), Pay It Forward board, contact; upcoming live music from the [calendar on its Weekly Schedule page](https://www.oldarmorbeer.net/events-1) | Live music: automatic, daily. Everything else: **machine-parsed** (`data/manual/made.json`) |
+| Elle's Tique (Shopping tab) | The women's boutique at 109 West Ave: new arrivals (name, price, picture, link) and the shop's announcements from the [ellestique.com](https://ellestique.com) home page (a Shopify store; one request a day, since its products.json rate-limits automated clients); hours with open-now, address, category links, payment plans, shipping and the owner's About blurb | New arrivals: automatic, daily. Hours and details: **machine-parsed** (`data/manual/ellestique.json`; the posted hours are checked daily and a change is logged) |
 | K-Town Connection | The Kannapolis podcast's newest episodes: its [YouTube channel](https://www.youtube.com/@KTownConnection/videos) feed matched by episode number to its [podcast feed](https://feed.podbean.com/ktownconnection/feed.xml) (Podbean, the one [Apple Podcasts](https://podcasts.apple.com/us/podcast/k-town-connection/id6819690593) lists); watch in place, listen, or open either app | Episodes: automatic, daily. Show details: **machine-parsed** (`data/manual/ktown.json`) |
 | Kannapolis Reads and Yarns | [Editions Coffee Shop & Bookstore](https://www.editionsbookstore.com): [new arrivals](https://www.editionsbookstore.com/page/NewArrivals), [events](https://www.editionsbookstore.com/page/events), [coffee](https://www.editionsbookstore.com/page/CoffeeShop), [yarn](https://www.editionsbookstore.com/page/yarn); store and drive-thru open-now (on device) | Books, events: automatic, daily (10 s between requests, per the site's robots.txt). Coffee, yarn, hours: **machine-parsed** (`data/manual/editions.json`) |
 | What-A-Burger #1 | [what-a-burger1.com](https://www.what-a-burger1.com) and its [online menu](https://www.What-A-Burger1.com/order): open-now (on device), local favorites, searchable menu with prices | **Machine-parsed**: `data/manual/whataburger.json` (menu is drawn by JavaScript; recheck prices when updating) |
@@ -105,7 +106,7 @@ It prints the address to open on your phone (for example `http://192.168.1.20:51
 Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a `source_url` that opens the official PDF at the cited page (for example `…FY%2027%20Adopted%20Budget.pdf#page=114`). The build fails if a row's citation is missing. The full registry is [`data/manual/sources.csv`](data/manual/sources.csv); its `widgets` column ties each source to the widgets it feeds, and every widget window ends with an automatic **Sources** line built from it. The table below is generated from the same registry on every build, so the README always cites every source:
 
 <!-- sources:start -->
-220 sources, generated from `data/manual/sources.csv`.
+223 sources, generated from `data/manual/sources.csv`.
 
 | Source | Publisher | Format | Used for |
 |---|---|---|---|
@@ -329,6 +330,9 @@ Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a
 | [Kannapolis Christmas Parade parking map (2026)](https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Parking/2026%20(3).png?ver=X_exondcp0e_HWLhQQSeYA%3d%3d) | City of Kannapolis | Image (PNG) | Parade route, staging area, parking, restrooms, first aid and food vendors |
 | [DriveNC events API (traffic incidents](JSON API) | closures and roadwork) | NC Department of Transportation | https://www.drivenc.gov/developers/doc |
 | [NCDOT logo (Seal of the North Carolina Department of Transportation)](https://commons.wikimedia.org/wiki/File:Seal_of_the_North_Carolina_Department_of_Transportation.svg) | Government of North Carolina (public domain; via Wikimedia Commons) | SVG | Logo |
+| [Elle's Tique home page (new arrivals; Visit Us hours and address; announcements)](https://ellestique.com) | Elle's Tique | Web page | New arrivals, announcements, hours, address (read daily) |
+| [Elle's Tique About page](https://ellestique.com/pages/about) | Elle's Tique | Web page | Owner and shop description |
+| [Elle's Tique logo](https://ellestique.com/cdn/shop/files/header-logo-square.png) | Elle's Tique | JPEG | Logo |
 <!-- sources:end -->
 
 The news and meetings harvesters are adapted from [kspider](https://github.com/bradspry/kannapolis-news-wire).

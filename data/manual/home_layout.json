@@ -17,6 +17,7 @@
         "parks",
         "editions",
         "made",
+        "ellestique",
         "library",
         "events",
         "parade",
@@ -217,6 +218,16 @@
         "shuttle": "l",
         "paratransit": "l",
         "train": "m"
+      },
+      "spacers": []
+    },
+    "shopping": {
+      "order": [
+        "ellestique"
+      ],
+      "hidden": [],
+      "sizes": {
+        "ellestique": "l"
       },
       "spacers": []
     }

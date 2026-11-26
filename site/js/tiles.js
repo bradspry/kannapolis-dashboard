@@ -34,6 +34,7 @@ import { routeMap as flMap, airlineLegend as flLegend, newLine as flNew, destLis
 import { serviceStatus as trSvc, shuttleStatus as shStatus, statusLine as trStatusLine, systemMap, shuttleMap, routeLegend, liveCount, alertList as trAlerts, callButton as trCall, upcomingHoliday as trHoliday, clock as trClock } from "./sections/transit.js";
 import { levelGauge as drGauge, countyLine as drCounty, strip as drStrip } from "./sections/drought.js";
 import { sortEvents as icSort, statusLine as icStatus, updated as icUpdated, list as icList, tileMap as icMap, legend as icLegend, logo as icLogo, INCIDENTS_COLOR } from "./sections/incidents.js";
+import { elLogo, elStatus, arrivals as elArrivals, shopButton as elShop, where as elWhere } from "./sections/ellestique.js";
 import { prepGames, nextHome, homeStands, standLabel, nextGameCard, fmtDay as bbDay, fmtTime as bbTime } from "./sections/baseball.js";
 
 const NS = "http://www.w3.org/2000/svg";
@@ -155,7 +156,7 @@ const contactLinks = (p) => [
 const shortDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
 export function tileDefs(data, COLORS) {
-  const { census, budget, property, zoning, council, org, meetings, news, events, parade, incidents, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos, waste, drought, library, train, jobs, transit, flights, ktown, stocks, gas, water, homeless, roads, boundaries } = data;
+  const { census, budget, property, zoning, council, org, meetings, news, events, parade, incidents, ellestique, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos, waste, drought, library, train, jobs, transit, flights, ktown, stocks, gas, water, homeless, roads, boundaries } = data;
   const jobSize = jobSizes(jobs, stocks?.companies?.length ? 2 : 0); // KANDEX (medium) is on the Jobs tab too
   const t = tokens();
   const geo = census.geographies;
@@ -554,6 +555,23 @@ export function tileDefs(data, COLORS) {
         return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top kt-xl" },
           h("div", { class: "kt-xl-main" }, ktThumb(e, "wide"), title, sub, ktButtons(e, { compact: true })),
           h("div", {}, h("div", { class: "mini-head bb-mh" }, "Earlier episodes"), ktList(k, 1, 7))));
+      },
+    },
+    ellestique && {
+      // Elle's Tique, the women's boutique at 109 West Ave: open now, and the newest arrivals (read daily).
+      id: "ellestique", opens: "ellestique", size: "m", label: "Elle's Tique",
+      build: (size) => {
+        const el = ellestique;
+        const top = h("div", { class: "lib-tile-head" }, head("bag", el.color, "Elle's Tique"), elLogo(el, `el-logo ${size}`));
+        const info = h("div", { class: "el-info" }, h("div", { class: "bb-next-label" }, "Women's boutique"), elStatus(el, { compact: true }), elWhere(el));
+        if (size === "s") return h("div", { class: "tile-body" }, top, info);
+        if (size === "m") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top el-m" },
+          h("div", {}, info, elShop(el, { compact: true })), h("div", {}, elArrivals(el, 2, { compact: true }))));
+        if (size === "l") return h("div", { class: "tile-body" }, top, info,
+          h("div", { class: "mini-head" }, "New arrivals"), elArrivals(el, 4, { compact: true }), elShop(el, { compact: true }));
+        return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top el-xl" },
+          h("div", {}, info, el.notes?.[0] ? h("p", { class: "tile-meta el-note" }, el.notes[0]) : null, elShop(el, { compact: true })),
+          h("div", {}, h("div", { class: "mini-head bb-mh" }, "New arrivals"), elArrivals(el, 6, { compact: true }))));
       },
     },
     made && {

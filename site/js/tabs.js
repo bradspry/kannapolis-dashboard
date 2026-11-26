@@ -6,6 +6,7 @@ export const TABS = [
   { id: "fun", name: "Entertainment", short: "Fun" },
   { id: "jobs", name: "Jobs" },
   { id: "transportation", name: "Transportation", short: "Transit" },
+  { id: "shopping", name: "Shopping", short: "Shop" },
 ];
 
 /** Widgets pinned to a tab's top-right corner until someone unpins them (one per tab). */
@@ -18,6 +19,7 @@ export const DEFAULT_MEMBERS = {
     "events", "parade", "parks", "gem", "swanee", "shuttle", "job-city"],
   fun: ["weather", "gem", "swanee", "baseball", "parks", "events", "parade", "ktown", "editions", "made", "whataburger", "library"],
   jobs: ["school-bus", "stocks"], // plus every employer widget (job-*): see defaultMembers
+  shopping: ["ellestique"],
   transportation: ["weather", "incidents", "rider", "train", "flights", "paratransit", "shuttle", "gas", "roads"],
 };
 
@@ -32,7 +34,7 @@ export function defaultMembers(tab, ids) {
 export function categoryOf(id) {
   if (id === "weather") return "home";
   if (id.startsWith("job-")) return "jobs";
-  for (const tab of ["fun", "transportation", "jobs", "city"]) if (DEFAULT_MEMBERS[tab].includes(id)) return tab;
+  for (const tab of ["fun", "transportation", "jobs", "shopping", "city"]) if (DEFAULT_MEMBERS[tab].includes(id)) return tab;
   return "home";
 }
 

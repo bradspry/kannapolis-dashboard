@@ -2012,11 +2012,13 @@ body::before {
 .ear-fun { --c: var(--series-2); }
 .ear-jobs { --c: var(--series-6); }
 .ear-transportation { --c: var(--series-7); }
+.ear-shopping { --c: var(--series-5); }
 .folder-home { --c: var(--tab-home); --folder-bg: color-mix(in oklab, var(--manila) 55%, var(--page)); }
 .folder-city { --c: var(--series-1); }
 .folder-fun { --c: var(--series-2); }
 .folder-jobs { --c: var(--series-6); }
 .folder-transportation { --c: var(--series-7); }
+.folder-shopping { --c: var(--series-5); }
 .folder { --folder-bg: color-mix(in oklab, var(--c) 7%, var(--page));
   position: relative; background: var(--folder-bg); border: 1px solid color-mix(in oklab, var(--c) 50%, var(--border));
   border-radius: 0 20px 20px 20px; padding: 16px; box-shadow: 0 1px 0 color-mix(in oklab, var(--c) 30%, transparent), 0 18px 40px -28px rgba(0, 0, 0, .5); }
@@ -2650,3 +2652,43 @@ body::before {
 .ic-hero-text { flex: 1 1 220px; min-width: 0; }
 @media (max-width: 400px) { .tile-w.size-s .ic-logo { display: none; } .tile-w.size-s .lib-tile-head:has(.ic-logo) .tile-head { padding-right: 0; } }
 .tile-w .ic-tile-map { flex: none; margin-bottom: 4px; } /* never squeezed: the legend would slide under the list */
+
+/* ---------- Elle's Tique (Shopping) ---------- */
+.el-logo { position: absolute; top: -6px; right: 14px; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 10px; background: #fff; padding: 2px; box-shadow: 0 2px 8px rgb(0 0 0 / .3); pointer-events: none; overflow: hidden; }
+.el-logo img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.lib-tile-head:has(.el-logo) .tile-head { padding-right: 68px; }
+.el-logo.lg { position: static; flex: none; width: 120px; height: 120px; border-radius: 16px; box-shadow: none; padding: 4px; }
+.el-info { display: flex; flex-direction: column; gap: 3px; }
+.el-where { margin: 0; }
+.el-shop.compact { align-self: flex-start; margin-top: 8px; padding: 6px 12px; font-size: 13px; }
+.el-grid { list-style: none; margin: 6px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+.el-grid.compact { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.el-xl .el-grid.compact { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.el-item-link { display: flex; flex-direction: column; gap: 4px; color: inherit; text-decoration: none; }
+.el-item img, .el-noimg { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 10px; background: var(--surface-2, #eee); display: grid; place-items: center; font-size: 28px; }
+.el-item.compact img, .el-item.compact .el-noimg { aspect-ratio: 1; }
+.el-item-name { font-size: 13.5px; font-weight: 600; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.el-item.compact .el-item-name { font-size: 12px; -webkit-line-clamp: 1; }
+.el-item-price { font-size: 12.5px; color: var(--text-secondary); }
+.el-item-price s { color: var(--text-muted); }
+.el-item-link:hover .el-item-name { text-decoration: underline; }
+.el-hero { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; border-top: 4px solid var(--el-color, #5f7891); }
+.el-hero-text { flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.el-hero-text p { margin: 0; }
+.el-tagline { color: var(--text-secondary); }
+.el-hero-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.el-notes ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 22px; }
+.el-notes li::before { content: "✦ "; color: var(--el-color, #5f7891); }
+.el-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.el-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.el-chips a { text-decoration: none; }
+.el-links { margin: 12px 0 0; }
+.el-note { margin: 6px 0 0; }
+@media (max-width: 720px) { .el-logo.lg { width: 84px; height: 84px; } .size-m .el-m > :last-child { display: none; } }
+@media (max-width: 400px) { .tile-w.size-s .el-logo { display: none; } .tile-w.size-s .lib-tile-head:has(.el-logo) .tile-head { padding-right: 0; } }
+.el-item.compact img, .el-item.compact .el-noimg { aspect-ratio: auto; height: 104px; }
+.tile-w.size-l .el-grid.compact { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.tile-w.size-l .el-item.compact img { height: 150px; }
+.el-xl .el-item.compact img { height: 170px; }
+@media (max-width: 720px) { .tile-w.size-l .el-grid.compact { grid-template-columns: repeat(2, minmax(0, 1fr)); } .tile-w.size-l .el-item.compact img { height: 110px; } }
+.el-m .el-item.compact img { height: 88px; }
