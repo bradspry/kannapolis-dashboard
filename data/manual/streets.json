@@ -1,0 +1,53 @@
+{
+  "name": "Transportation and Environmental Services (Streets)",
+  "about": "The Streets Department plans traffic systems and handles street maintenance, traffic engineering, sidewalk, curb and gutter construction and repair, street lighting, and traffic signs and markings.",
+  "maintains": { "streets_mi": 250, "sidewalks_mi": 100 },
+  "ncdot_corridors": ["Cannon Boulevard", "Dale Earnhardt Boulevard", "Kannapolis Parkway", "Main Street", "all state highways"],
+  "phone": "704-920-4444",
+  "mail": "401 Laureate Way, Kannapolis, NC 28081",
+  "physical": "1401 Bethpage Road",
+  "director": { "name": "Michael Rattler", "title": "Director of Transportation and Environmental Services", "email": "mrattler@kannapolisnc.gov", "photo": "photos/staff/rattler.jpg" },
+  "report": [
+    { "icon": "🕳", "what": "Potholes" },
+    { "icon": "🚦", "what": "Traffic lights not working" },
+    { "icon": "💡", "what": "Streetlight or outdoor light out or damaged", "duke": true },
+    { "icon": "🧱", "what": "Cracked or damaged sidewalk or curb" },
+    { "icon": "👁", "what": "Line-of-sight issues" },
+    { "icon": "🦌", "what": "Dead animal in the road" },
+    { "icon": "🛣", "what": "Cracked or badly damaged street" },
+    { "icon": "🌳", "what": "Tree blocking a road or sidewalk" },
+    { "icon": "🪧", "what": "Damaged or missing street sign" },
+    { "icon": "🌉", "what": "Damaged bridges" }
+  ],
+  "duke_outage": "https://salor-web.duke-energy.app/#/home/map",
+  "speed": {
+    "title": "25 MPH on your street",
+    "detail": "To ask for a 25 MPH speed limit on a City street, fill out the Neighborhood Speed Modification request and City policy documents and mail them to Public Works, 401 Laureate Way.",
+    "url": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Streets/Documents/25%20Speed%20Limit%20Modification%20Request_3.pdf"
+  },
+  "forms": [
+    { "label": "Neighborhood 25-MPH Request", "url": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Streets/Documents/25%20Speed%20Limit%20Modification%20Request_3.pdf" },
+    { "label": "Adopt-A-Street policy and application", "url": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Streets/Documents/Adopt-a-Street%20Policy%20and%20Application_2.pdf" },
+    { "label": "Street or alley closure petition", "url": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Streets/Documents/STREET%20OR%20ALLEY%20CLOSURE%20PETITION%20-%20REVISED%20APRIL%202019.docx.pdf" },
+    { "label": "Kannapolis Bicycle Plan", "url": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Parks%20and%20Rec/Documents/Kannapolis%20Bike%20Plan%20080814%20SHORT%20VERSION.pdf" },
+    { "label": "NCDOT Adopt-A-Highway", "url": "https://www.ncdot.gov/initiatives-policies/environmental/adoptahighway/Pages/default.aspx" }
+  ],
+  "projects": [
+    { "who": "City", "name": "Little Texas Road sidewalk", "status": "Construction 2026–27", "detail": "About 1.5 miles of sidewalk on the east side of Little Texas Road and Ruth Avenue, Dale Earnhardt Blvd to Lane Street, with intersection and roadway improvements. Right-of-way is being bought; delayed by Duke utility easements; 16–18 months once under way." },
+    { "who": "City", "name": "Bethpage Road sidewalk", "status": "Right-of-way 2026", "detail": "A 7-foot sidewalk with curb, gutter and drainage on the south side of Bethpage Road, from South Main to Leonard Avenue and from Westgreen Drive to Klondale Avenue." },
+    { "who": "City", "name": "North Main Street sidewalk", "status": "Started 2025", "detail": "New sidewalk on North Main Street." },
+    { "who": "NCDOT", "name": "East First Street bridge", "status": "Due 2026", "detail": "Replacing the bridge on East First Street over U.S. 29." },
+    { "who": "NCDOT", "name": "North Kannapolis rail crossing", "status": "Under way", "detail": "A grade-separated rail crossing at Rogers Lake Road, Main Street and Ridge Avenue." },
+    { "who": "NCDOT", "name": "NC 3 and US 29/601", "status": "TBD", "detail": "U-turn bulbs on Cannon Boulevard to remove left turns at NC 3, with sidewalk and storm drainage in Eastwood." },
+    { "who": "NCDOT", "name": "U.S. 29/601 interchange", "status": "TBD", "detail": "Converting the interchange to a diverging diamond." },
+    { "who": "NCDOT", "name": "Kannapolis train station", "status": "Delayed", "detail": "A new passenger platform, pedestrian overpass and parking at the station." },
+    { "who": "NCDOT", "name": "Lake Fisher bridge", "status": "TBD", "detail": "Replacing the bridge on Brantley Road." }
+  ],
+  "links": {
+    "page": "https://www.kannapolisnc.gov/Government-Departments/Streets",
+    "projects": "https://www.kannapolisnc.gov/CityProjects",
+    "directory": "https://www.kannapolisnc.gov/Government-Departments/Streets/Staff-Directory",
+    "ncdot": "https://www.ncdot.gov"
+  },
+  "source": "Machine-parsed from the City's Streets page and City Projects list (kannapolisnc.gov), November 26, 2026"
+}

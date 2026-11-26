@@ -28,7 +28,7 @@ import { headline as kxHead, rows as kxRows, movers as kxMovers, change as kxCha
 import { noticeLine, bigPrice as gsBig, list as gsList, avList as gsAv, stationMap as gsMap, trendText as gsTrend, areaLine as gsArea, usd as gsUsd, GAS_COLOR } from "./sections/gas.js";
 import { lakeRows as wlLakes, streamRows as wlStreams, tileWaterMap as wlTileMap, allLakes as wlAll, belowText as wlBelow, condition as wlCond, WATER_COLOR } from "./sections/water.js";
 import { districtRows as hmRows, changeLine as hmChange, miniChart as hmChart, latestOf as hmLatest, syShort as hmSy, HOMELESS_COLOR } from "./sections/homeless.js";
-import { roadMap as rdMap, headline as rdHead, topList as rdTop, share as rdShare, ROADS_COLOR } from "./sections/roads.js";
+import { reportButtons as rdReport, projectList as rdProjects, official as rdOfficial, roadMap as rdMap, headline as rdHead, topList as rdTop, share as rdShare, ROADS_COLOR } from "./sections/roads.js";
 import { districtsOf as sbDistricts, total as sbTotal, districtRows as sbRows, titleList as sbTitles, SCHOOL_BUS_YELLOW } from "./sections/schoolbus.js";
 import { routeMap as flMap, airlineLegend as flLegend, newLine as flNew, destList as flDests } from "./sections/flights.js";
 import { serviceStatus as trSvc, shuttleStatus as shStatus, statusLine as trStatusLine, systemMap, shuttleMap, routeLegend, liveCount, alertList as trAlerts, callButton as trCall, upcomingHoliday as trHoliday, clock as trClock } from "./sections/transit.js";
@@ -1065,15 +1065,17 @@ export function tileDefs(data, COLORS) {
     roads?.lines && {
       id: "roads", opens: "roads", size: "m", label: "City Roads",
       build: (size) => {
-        const r = roads, top = head("road", ROADS_COLOR, "City Roads");
-        if (size === "s") return h("div", { class: "tile-body" }, top, rdHead(r, { compact: true }));
-        if (size === "m") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top rd-m" }, rdHead(r, { compact: true }), rdMap(r, { cls: "mini", thin: true })));
+        const r = roads, d = r.dept;
+        const top = size === "s" || !d ? head("road", ROADS_COLOR, "City Roads") : headWithChief("road", ROADS_COLOR, "City Roads", d.director, "Streets Director");
+        if (size === "s") return h("div", { class: "tile-body" }, top, rdHead(r, { compact: true }), rdReport(r, { compact: true }));
+        if (size === "m") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top rd-m" },
+          h("div", {}, rdHead(r, { compact: true }), rdReport(r, { compact: true })), rdMap(r, { cls: "mini", thin: true })));
         if (size === "l") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top rd-l" },
-          h("div", {}, rdHead(r), h("div", { class: "mini-head" }, "Longest City streets"), rdTop(r.top_city, 5)), rdMap(r, { cls: "mini", thin: true })));
+          h("div", {}, rdHead(r), rdReport(r, { compact: true }), h("div", { class: "mini-head" }, "In the works"), rdProjects(r, 3, { compact: true })), rdMap(r, { cls: "mini", thin: true })));
         return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top rd-xl" },
-          h("div", {}, rdHead(r), h("div", { class: "mini-head" }, "Longest City streets"), rdTop(r.top_city, 6)),
+          h("div", {}, rdHead(r), rdOfficial(r), rdReport(r, { compact: true }), h("div", { class: "mini-head" }, "Longest City streets"), rdTop(r.top_city, 4)),
           rdMap(r, { cls: "mini", thin: true }),
-          h("div", {}, h("div", { class: "mini-head bb-mh" }, "Longest state roads"), rdTop(r.top_state, 7))));
+          h("div", {}, h("div", { class: "mini-head bb-mh" }, "In the works"), rdProjects(r, 5, { compact: true }))));
       },
     },
     stocks?.companies?.length && {

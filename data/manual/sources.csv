@@ -239,3 +239,6 @@ spicetea_logo,The Spice & Tea Exchange logo (provided to the dashboard),The Spic
 provisions_home,Provisions on Main Market & Deli home page,Provisions on Main Market & Deli,Web page,https://www.provisionsonmain.com,"Events (read daily), hours, drink specials, founders' story, logo and photos",provisions
 provisions_menu,Provisions on Main Deli Menu,Provisions on Main Market & Deli,Web page,https://www.provisionsonmain.com/deli-menu,"Sandwiches and small plates with prices (read daily), sides, charcuterie, meats and cheeses",provisions
 provisions_holiday,Provisions on Main Thanksgiving holiday hours (Facebook post),Provisions on Main Market & Deli,Image,https://www.facebook.com/people/Provisions-on-Main-Market-Deli/61587313841538/,Holiday hours Nov 25–29,provisions
+city_streets,City of Kannapolis Streets (Transportation and Environmental Services),City of Kannapolis,Web page,https://www.kannapolisnc.gov/Government-Departments/Streets,"Report a problem, official street and sidewalk miles, director, 25-MPH request, forms",roads
+city_projects,City of Kannapolis City Projects list,City of Kannapolis,Web page,https://www.kannapolisnc.gov/CityProjects,"Street, sidewalk and NCDOT projects in Kannapolis",roads
+duke_light_outage,Duke Energy outdoor light outage map,Duke Energy,Web app,https://salor-web.duke-energy.app/#/home/map,Report a streetlight out,roads

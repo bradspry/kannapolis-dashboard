@@ -344,7 +344,7 @@ function story(list, blanks = []) {
   let right = false;
   chs.forEach((ch, ci) => {
     const big = new Set(ch.c.big || []), small = new Set(ch.c.small || []), isBig = (r) => (big.has(r.t.id) ? 1 : small.has(r.t.id) ? -1 : 0);
-    const items = ch.items.sort((a, b) => isBig(b) - isBig(a) || b.score - a.score); // `big` widgets first (the large slots), `small` ones last (the smallest)
+    let items = ch.items.sort((a, b) => isBig(b) - isBig(a) || b.score - a.score); // `big` widgets first (the large slots), `small` ones last (the smallest)
     const chapter = { ...ch.c, index: ci };
     if (phone()) {
       const n = items.filter((r) => !r.t.spacer).length, big = n <= 2 ? n : n % 2 ? 1 : 2;
@@ -352,7 +352,10 @@ function story(list, blanks = []) {
       return;
     }
     const wide = new Set(ch.c.xl || []);
-    if (items.length && (items.every((r) => wide.has(r.t.id)) || items.filter((r) => !r.t.spacer).length === 1)) { items.forEach((r) => out.push({ ...r, size: phone() ? "m" : "xl", chapter })); return; } // full-width chapter
+    if (items.length && (items.every((r) => wide.has(r.t.id)) || items.filter((r) => !r.t.spacer).length === 1)) { items.forEach((r) => out.push({ ...r, size: phone() ? "m" : "xl", chapter })); return; }
+    // Some of the chapter's widgets are `xl` (City Services: City Roads): each takes the full width after the others.
+    const wides = items.filter((r) => wide.has(r.t.id));
+    items = items.filter((r) => !wide.has(r.t.id));
     const hero = ci === 0 && items[0].timely >= 95;
     const bands = (k, lead) => (ch.c.noSmall ? bandsNoSmall(k) : bandsFor(k, lead));
     let names = [...(hero ? ["X"] : []), ...bands(items.length - (hero ? 1 : 0), ci === 0 && !hero)];
@@ -370,6 +373,7 @@ function story(list, blanks = []) {
       order.forEach((k) => out.push({ ...band[k].r, size: band[k].size, chapter }));
       if (BANDS[nm].sizes.includes("l")) right = !right;
     });
+    wides.forEach((r) => out.push({ ...r, size: "xl", chapter }));
   });
   return out;
 }

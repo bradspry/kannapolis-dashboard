@@ -2833,3 +2833,28 @@ body.editing .tile-w :is(.el-logo, .kt-logo-badge, .tr-logo, .ic-logo, .bb-logo)
 .share-btn { font: inherit; font-size: 14px; cursor: pointer; }
 .share-msg { color: var(--good-text); font-size: 13px; min-width: 1ch; }
 @media (max-width: 720px) { .share-row { justify-content: flex-start; } }
+/* City Roads: the Streets Department */
+.rd-report { margin-top: 8px; }
+.rd-official { margin: 4px 0 0; }
+.rd-projects { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 8px; }
+.rd-projects.compact { gap: 5px; }
+.rd-proj-top { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+.rd-proj-top b { font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.rd-proj-top em { margin-left: auto; font-style: normal; font-size: 12px; color: var(--text-muted); white-space: nowrap; }
+.rd-who { flex: none; font-size: 10.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; padding: 1px 7px; border-radius: 999px; }
+.rd-who.city { background: color-mix(in oklab, #58a6ff 22%, transparent); color: #58a6ff; }
+.rd-who.state { background: color-mix(in oklab, #e06c75 22%, transparent); color: #e06c75; }
+.rd-projects p { margin: 2px 0 0; font-size: 13.5px; color: var(--text-secondary); }
+.rd-dept { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: start; border-left: 5px solid #3f7fd9; }
+.rd-dept h3 { margin-top: 0; } .rd-dept p { margin: 0 0 8px; }
+.rd-report-list { list-style: none; margin: 0 0 12px; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 18px; font-size: 14px; }
+.rd-report-list li { display: flex; gap: 8px; align-items: baseline; }
+.rd-director div { display: grid; gap: 2px; } .rd-director a { font-size: 13px; }
+.rd-forms { margin: 0 0 8px; padding-left: 18px; display: grid; gap: 6px; }
+@media (max-width: 720px) { .rd-dept { grid-template-columns: minmax(0, 1fr); } .rd-report-list { grid-template-columns: minmax(0, 1fr); } }
+.rd-projects.compact .rd-proj-top { flex-wrap: wrap; row-gap: 0; }
+.rd-projects.compact .rd-proj-top b { flex: 1 1 0; }
+.rd-projects.compact .rd-proj-top em { flex-basis: 100%; margin-left: 0; padding-left: 2px; }
+.rd-l > div, .rd-xl > div { min-width: 0; }
+@media (max-width: 720px) { .tile-w.size-s .rd-report { display: none; } }
+.rd-dept a[href^="tel:"] { white-space: nowrap; }

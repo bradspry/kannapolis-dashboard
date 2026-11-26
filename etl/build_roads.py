@@ -18,7 +18,7 @@ import time
 import urllib.parse
 import urllib.request
 
-from common import USER_AGENT, log, repo_constants, write_json
+from common import MANUAL, USER_AGENT, log, repo_constants, write_json
 
 REPO = "kannapolis-city-roads"
 OVERPASS = "https://overpass-api.de/api/interpreter"
@@ -146,7 +146,8 @@ def main() -> None:
     total = mi["city"] + mi["state"]
     log(f"roads: {mi['city']:.0f} city-maintained miles, {mi['state']:.0f} state ({100 * mi['city'] / total:.0f}% city); "
         f"{len(out['city'])} + {len(out['state'])} lines")
-    write_json("roads.json", {"title": "City Roads", "origin": [w, s], "scale": Q, "boundary": rings,
+    dept = json.loads((MANUAL / "streets.json").read_text())  # the Streets Department: report a problem, projects, forms
+    write_json("roads.json", {"dept": dept, "title": "City Roads", "origin": [w, s], "scale": Q, "boundary": rings,
                               "miles": {k: round(v, 1) for k, v in mi.items()}, "by_type": {k: round(v, 1) for k, v in sorted(by_type.items(), key=lambda kv: -kv[1])},
                               "top_city": [{**x, "miles": round(x["miles"], 1)} for x in top], "top_state": [{**x, "miles": round(x["miles"], 1)} for x in top_state],
                               "lines": out, "state_types": sorted(state_types), "repo": "https://github.com/bradspry/kannapolis-city-roads",
