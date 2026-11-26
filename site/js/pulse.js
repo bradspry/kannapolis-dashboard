@@ -255,9 +255,9 @@ export const STORIES = {
     { id: "eat", name: "Eat & Drink", blurb: "Burgers, coffee and local beer", ids: ["whataburger", "editions", "made"] },
     { id: "read", name: "Read, Watch & Listen", blurb: "The library and a local podcast", ids: ["library", "ktown"] },
   ],
-  // Shopping: local shops, downtown first, then around the area. Weather rides along (small) for the trip.
+  // Shopping: local shops, downtown first, then around the area.
   shopping: [
-    { id: "downtown", name: "Downtown on West Avenue", blurb: "Boutiques and collectibles a few doors apart", ids: ["ellestique", "cardiacs", "weather"], small: ["weather"] },
+    { id: "downtown", name: "Downtown on West Avenue", blurb: "Boutiques and collectibles a few doors apart", ids: ["ellestique", "cardiacs"] },
     { id: "around", name: "Around the Area", blurb: "Local shops a short drive away", ids: ["sweetest"] },
   ],
   // Transportation: from your own street outward, to the next town and the next state.

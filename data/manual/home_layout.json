@@ -227,15 +227,13 @@
       "order": [
         "ellestique",
         "cardiacs",
-        "sweetest",
-        "weather"
+        "sweetest"
       ],
       "hidden": [],
       "sizes": {
         "ellestique": "l",
         "sweetest": "l",
-        "cardiacs": "l",
-        "weather": "s"
+        "cardiacs": "l"
       },
       "spacers": []
     }
