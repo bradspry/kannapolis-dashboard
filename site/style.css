@@ -2731,3 +2731,29 @@ body.editing .tile-w :is(.el-logo, .kt-logo-badge, .tr-logo, .ic-logo, .bb-logo)
 .el-chips.compact .chip { padding: 2px 9px; font-size: 11.5px; }
 .el-xl .el-grid.compact { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px 8px; }
 .el-xl .el-item.compact img { height: 100px; }
+/* Shops with no product list: the storefront photo */
+.el-photo { display: block; width: 100%; object-fit: cover; border-radius: 12px; background: var(--grid); }
+.el-photo.m { height: 118px; }
+.el-photo.l { height: 118px; margin-top: 8px; }
+.el-photo.xl { height: 210px; }
+.el-photo.win { height: auto; max-height: 420px; }
+.el-photo-card { padding: 0; overflow: hidden; }
+.el-photo-card .el-photo { border-radius: 0; }
+.el-photo-col { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.el-photo-col .mini-head { margin-top: 6px; }
+.el-special.compact li { padding: 4px 0; font-size: 13px; }
+@media (max-width: 720px) { .el-photo.l { height: 120px; } }
+.el-photo { object-position: center 18%; } /* keep the shop sign in view */
+.el-owner { margin: 0; font-style: italic; }
+.el-owner.win { margin: 0; color: var(--text-secondary); font-style: italic; }
+@media (max-width: 400px) { .tile-w.size-s .el-owner { display: none; } } /* tiny phones: room for open-now and the address */
+.el-owner-card { display: flex; align-items: center; gap: 14px; margin: 4px 0 12px; }
+.el-owner-card img { width: 84px; height: 84px; border-radius: 50%; object-fit: cover; object-position: center 20%; border: 2px solid var(--border); flex: none; }
+.el-owner-card div { display: grid; gap: 2px; } .el-owner-card b { font-size: 17px; } .el-owner-card span { color: var(--text-muted); font-size: 13.5px; }
+.tile-w.size-s .tile-head-chief .tile-chief { display: none; } /* small: the shop name needs the room */
+.el-btns { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; }
+.el-btns .el-shop.compact { margin-top: 0; }
+.el-call.compact { padding: 6px 12px; font-size: 13px; }
+.el-hero-actions .el-btns { margin-top: 0; }
+.el-shop-2.compact { padding: 5px 12px; font-size: 13px; }
+.tile-w.size-m .el-social { display: none; } /* medium: Call and Shop online only */

@@ -229,3 +229,10 @@ cardiacs_locations,CARDIACS Locations page,CARDIACS Sports & Memorabilia,Web pag
 cardiacs_logo,CARDIACS logo,CARDIACS Sports & Memorabilia,PNG,https://cdn.shopify.com/s/files/1/0586/3758/2489/files/CARDIACS_Logo_Horiz_FINAL_Blue_V2_fdd2d509-7cb5-46c4-8458-6a70d24843f4.png,Logo,cardiacs
 cookcattle_store,Cook Cattle Farm store (GrazeCart),Cook Cattle Farm,Web page,https://cookcattlefarm.com/store,"Products, prices per pound, pictures, in stock (read daily)",cookcattle
 cookcattle_home,Cook Cattle Farm home and Contact pages,Cook Cattle Farm,Web page,https://cookcattlefarm.com/contact,"About, meat store hours, bulk meats, address, phone, logo",cookcattle
+spicetea_store,The Spice & Tea Exchange of Kannapolis store page,The Spice & Tea Exchange,Web page,https://www.spiceandtea.com/a/store-locator/kannapolis.html,"Owner, description, address, phone, email, weekly and holiday hours (read daily), storefront photo",spicetea
+ellestique_owner,Elle's Tique About page (owner Lauren's photo),Elle's Tique,Web page,https://ellestique.com/pages/about,Owner photo,ellestique
+spicetea_owner,Photo of owner Claire (provided to the dashboard),The Spice & Tea Exchange of Kannapolis,Image,https://www.spiceandtea.com/a/store-locator/kannapolis.html,Owner photo,spicetea
+cardiacs_owner,Photo of owner Jonny in the Kannapolis store (provided to the dashboard),CARDIACS Sports & Memorabilia,Image,https://www.thecardiacs.com,Owner photo,cardiacs
+sweetest_owner,Photo of owner Susan (provided to the dashboard),Sweetest Beginnings,Image,https://shopsweetestbeginnings.com,Owner photo,sweetest
+cookcattle_owner,Cook Cattle Farm home page photo (owner Hannah with the herd),Cook Cattle Farm,Image,https://s3.amazonaws.com/grazecart/cookcattlefarm/images/1704303564_65959bcc9023b.jpeg,Owner photo,cookcattle
+spicetea_logo,The Spice & Tea Exchange logo (provided to the dashboard),The Spice & Tea Exchange,Image,https://www.spiceandtea.com,Logo; widget color sampled from it,spicetea

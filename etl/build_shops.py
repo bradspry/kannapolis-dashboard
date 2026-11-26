@@ -8,6 +8,8 @@ links, the About blurb and any dated event are a machine-parsed snapshot in data
               holiday hours (which become the shop's special hours)
   cookcattle  Cook Cattle Farm, 1331 Old Concord/Salisbury Rd, Concord (cookcattlefarm.com): its GrazeCart store page
               (/store; schema.org Product markup), in stock and signature items first
+  spicetea    The Spice & Tea Exchange of Kannapolis, 102 S Main St: its store-locator page (hours check, holiday hours,
+              which become special hours); no products (the chain's product pages answer automated clients with 429)
 
 Politeness: one request a day per shop, for one page (the home page, or a shop's store page) (robots.txt allows it), with the kdash User-Agent.
 Both are Shopify stores whose products.json and collection pages answer automated clients with "429", so those
@@ -188,7 +190,72 @@ def featured(items: list[dict], words: list[str]) -> list[dict]:
     return sorted(items, key=rank)
 
 
-PARSERS = {"ellestique": parse_ellestique, "sweetest": parse_sweetest, "cardiacs": parse_cardiacs, "cookcattle": parse_cookcattle}
+# ---------- The Spice & Tea Exchange of Kannapolis (its store-locator page; Shopify) ----------
+
+HOLIDAYS = {"thanksgiving day": None, "thanksgiving": None, "christmas eve": (12, 24), "christmas day": (12, 25), "christmas": (12, 25),
+            "new year's eve": (12, 31), "new year's day": (1, 1), "independence day": (7, 4), "july 4th": (7, 4)}
+
+
+def holiday_date(phrase: str, today) -> str | None:
+    """'Thanksgiving Day' / 'December 12th' / 'January 1st 2027' -> the next such date (from 60 days ago on)."""
+    import datetime as dt
+    p = phrase.lower().strip()
+    m = re.match(rf"({MONTHS.lower()})\s+(\d{{1,2}})(?:st|nd|rd|th)?(?:\s+(\d{{4}}))?$", p)
+    for year in (today.year, today.year + 1):
+        if m:
+            y = int(m.group(3)) if m.group(3) else year
+            d = dt.date(y, [x.lower() for x in MONTHS.split("|")].index(m.group(1)) + 1, int(m.group(2)))
+        elif p.startswith("thanksgiving"):
+            nov1 = dt.date(year, 11, 1)
+            d = nov1 + dt.timedelta(days=(3 - nov1.weekday()) % 7 + 21)  # 4th Thursday
+        elif p in HOLIDAYS:
+            d = dt.date(year, *HOLIDAYS[p])
+        else:
+            return None
+        if m and m.group(3) or d >= today - dt.timedelta(days=60):
+            return d.isoformat()
+    return None
+
+
+def parse_holiday_hours(t: str) -> list[dict]:
+    """'Holiday Hours: Closed all day on Thanksgiving Day, December 12th open 10am-9pm for the Holiday Parade, ...'"""
+    import datetime as dt
+    m = re.search(r"Holiday Hours:\s*(.*?)(?:\.\s|\.$|Street View|Store information)", t)
+    if not m:
+        return []
+    body = re.sub(r"(\d)(?:st|nd|rd|th)?,\s*(\d{4})", r"\1 \2", m.group(1))  # "January 1st, 2027" keeps its year
+    today, out = dt.date.today(), []
+    date_re = rf"(Thanksgiving(?: Day)?|Christmas Eve|Christmas Day|New Year's (?:Eve|Day)|(?:{MONTHS}) \d{{1,2}}(?:st|nd|rd|th)?(?: \d{{4}})?)"
+    for part in body.split(","):
+        dm = re.search(date_re, part, re.I)
+        if not dm:
+            continue
+        date = holiday_date(re.sub(r"(st|nd|rd|th)\b", "", dm.group(1)) if re.match(MONTHS, dm.group(1)) else dm.group(1), today)
+        if not date:
+            continue
+        hrs = re.search(r"open\s+(\d{1,2}(?::\d{2})?\s*[ap]m)\s*[-–]\s*(\d{1,2}(?::\d{2})?\s*[ap]m)", part, re.I)
+        why = re.search(r"\bfor the ([A-Z][\w' ]+)", part)
+        named = {"01-01": "New Year's Day", "07-04": "Independence Day", "12-24": "Christmas Eve", "12-25": "Christmas Day", "12-31": "New Year's Eve"}
+        label = why.group(1).strip() if why else (dm.group(1).title() if not re.match(MONTHS, dm.group(1)) else named.get(date[5:]))
+        if hrs:
+            out.append({"date": date, "open": clock24(hrs.group(1).upper()), "close": clock24(hrs.group(2).upper()), **({"label": label} if label else {})})
+        elif re.search(r"\bclosed\b", part, re.I):
+            out.append({"date": date, "closed": True, **({"label": label} if label else {})})
+    return out
+
+
+def parse_spicetea(page: str, site: str) -> tuple[list[dict], list[str], list[dict]]:
+    t = text(page)
+    m = re.search(r"Store Operation Hours\s*(.*?)\s*×", t)
+    posted = m.group(1).strip() if m else None
+    if posted and posted != "Monday 11:00 AM - 06:00 PM Tuesday 11:00 AM - 06:00 PM Wednesday 11:00 AM - 06:00 PM Thursday 11:00 AM - 06:00 PM Friday 11:00 AM - 06:00 PM Saturday 10:00 AM - 06:00 PM Sunday 11:00 AM - 06:00 PM":
+        log(f"shops: The Spice & Tea Exchange's posted hours changed ({posted!r}); update data/manual/spicetea.json")
+    if "102 S. Main Street" not in t:
+        log("shops: The Spice & Tea Exchange's posted address changed; update data/manual/spicetea.json")
+    return [], [], parse_holiday_hours(t)
+
+
+PARSERS = {"ellestique": parse_ellestique, "sweetest": parse_sweetest, "cardiacs": parse_cardiacs, "cookcattle": parse_cookcattle, "spicetea": parse_spicetea}
 
 
 def main() -> None:
@@ -200,7 +267,7 @@ def main() -> None:
             if info.get("feature"):
                 items = featured(items, info["feature"])
             special = rest[0] if rest else None
-            if not items:
+            if not items and not info.get("no_products"):
                 raise RuntimeError("no products found on the home page (did the theme change?)")
             log(f"shops: {info['name']}: {len(items)} products, {len(notes)} notices")
         except Exception as e:  # keep yesterday's

@@ -76,7 +76,7 @@ function main() {
     police: load("police.json", { optional: true }), fire: load("fire.json", { optional: true }),
     baseball: load("baseball.json", { optional: true }), utility: load("utility.json", { optional: true }),
     parks: load("parks.json", { optional: true }), gem: load("gem.json", { optional: true }),
-    swanee: load("swanee.json", { optional: true }), parade: load("parade.json", { optional: true }), incidents: load("incidents.json", { optional: true }), ellestique: load("ellestique.json", { optional: true }), sweetest: load("sweetest.json", { optional: true }), cardiacs: load("cardiacs.json", { optional: true }), cookcattle: load("cookcattle.json", { optional: true }), made: load("made.json", { optional: true }),
+    swanee: load("swanee.json", { optional: true }), parade: load("parade.json", { optional: true }), incidents: load("incidents.json", { optional: true }), ellestique: load("ellestique.json", { optional: true }), sweetest: load("sweetest.json", { optional: true }), cardiacs: load("cardiacs.json", { optional: true }), cookcattle: load("cookcattle.json", { optional: true }), spicetea: load("spicetea.json", { optional: true }), made: load("made.json", { optional: true }),
     editions: load("editions.json", { optional: true }), whataburger: load("whataburger.json", { optional: true }),
     videos: load("videos.json", { optional: true }), waste: load("waste.json", { optional: true }),
     drought: load("drought.json", { optional: true }), library: load("library.json", { optional: true }),
@@ -99,6 +99,7 @@ function main() {
   if (D.gem) win("gem", { title: "The Gem Theatre", icon: "film", color: "var(--icon-5)", render: () => renderGem(D.gem) });
   if (D.swanee) win("swanee", { title: "The Swanee Theatre", icon: "mic", color: "var(--icon-7)", render: () => renderSwanee(D.swanee) });
   if (D.made) win("made", { title: "Made in Kannapolis", icon: "mug", color: "var(--icon-2)", render: () => renderMade(D.made) });
+  if (D.editions) D.editions.books = (D.editions.books || []).filter((b) => b.cover); // new books always show a cover: skip any without one
   if (D.editions) win("editions", { title: "Kannapolis Reads and Yarns", icon: "book", color: "var(--icon-4)", render: () => renderEditions(D.editions) });
   if (D.whataburger) win("whataburger", { title: "What-A-Burger #1", icon: "burger", color: "var(--icon-8)", render: () => renderWhatABurger(D.whataburger) });
   if (D.videos) win("videos", { title: "City Council Meeting Videos", icon: "video", color: "var(--icon-5)", render: () => renderVideos(D.videos) });

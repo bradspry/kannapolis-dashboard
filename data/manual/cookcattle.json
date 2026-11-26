@@ -104,5 +104,7 @@
     "Bulk meats: ¼, ½ and whole cows, ½ and whole pigs, whole lambs. Call Hannah at 980-521-0415 to get on the list"
   ],
   "source": "Machine-parsed from cookcattlefarm.com (home page: about, meat store hours, bulk meats; Contact page: address and phone), November 25, 2026",
-  "address_short": "1331 Old Concord/Salisbury Rd"
+  "address_short": "1331 Old Concord/Salisbury Rd",
+  "owner": "Hannah",
+  "owner_photo": "photos/local/cookcattle-owner.jpg"
 }

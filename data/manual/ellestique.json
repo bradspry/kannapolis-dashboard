@@ -3,7 +3,7 @@
   "name": "Elle's Tique",
   "kind": "Women's boutique",
   "tagline": "Women's apparel and accessories: everyday tops, dresses, jeans and bottoms, and easy-to-style wardrobe favorites",
-  "owner": "Lauren (\"L\")",
+  "owner": "Lauren",
   "about": "Owner Lauren (\"L\") calls the shop her heart and soul. She loves the outdoors, the beach and the mountains, and stocks lifestyle pieces for adventure and everyday life.",
   "address": "109 West Ave, Kannapolis, NC 28081",
   "map": "https://www.google.com/maps/search/?api=1&query=Elle%27s+Tique+109+West+Ave+Kannapolis+NC+28081",
@@ -100,5 +100,6 @@
   "area_long": "West Avenue",
   "arrivals_label": "New arrivals",
   "arrivals_url": "https://ellestique.com/collections/new-arrivals-1",
-  "arrivals_more": "All new arrivals ↗"
+  "arrivals_more": "All new arrivals ↗",
+  "owner_photo": "photos/local/ellestique-owner.jpg"
 }

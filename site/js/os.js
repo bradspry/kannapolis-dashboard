@@ -304,6 +304,14 @@ function bandsFor(n, lead) {
   }
   return out;
 }
+/** Bands for a chapter that shows no small tiles (`noSmall`, e.g. Shopping): two large side by side, then rows of
+ *  mediums; three is one large and two mediums. Different sizes, every tile with room for its content. */
+function bandsNoSmall(n) {
+  if (n === 3) return ["B3"];
+  const out = n >= 2 ? ["B1"] : [];
+  for (let k = n >= 2 ? n - 2 : n; k > 0; k -= 2) out.push(k === 1 ? "M1" : "R1");
+  return out;
+}
 /** A tab as a story: widgets grouped into the tab's chapters (pulse.js STORIES), the chapter with the most timely widget
  *  first and the rest in story order. Within a chapter the best-scored widgets take the biggest slots, and big
  *  tiles alternate left and right from band to band. A chapter with one widget shows it full width. Blank spaces
@@ -343,10 +351,11 @@ function story(list, blanks = []) {
     const wide = new Set(ch.c.xl || []);
     if (items.length && (items.every((r) => wide.has(r.t.id)) || items.filter((r) => !r.t.spacer).length === 1)) { items.forEach((r) => out.push({ ...r, size: phone() ? "m" : "xl", chapter })); return; } // full-width chapter
     const hero = ci === 0 && items[0].timely >= 95;
-    let names = [...(hero ? ["X"] : []), ...bandsFor(items.length - (hero ? 1 : 0), ci === 0 && !hero)];
+    const bands = (k, lead) => (ch.c.noSmall ? bandsNoSmall(k) : bandsFor(k, lead));
+    let names = [...(hero ? ["X"] : []), ...bands(items.length - (hero ? 1 : 0), ci === 0 && !hero)];
     const larges = names.reduce((n, nm) => n + BANDS[nm].sizes.filter((x) => x === "l").length, 0);
     if (larges < items.filter((r) => isBig(r) > 0).length && items.length - (hero ? 1 : 0) >= 2) // room for every `big` widget: open with two large
-      names = [...(hero ? ["X"] : []), "B1", ...bandsFor(items.length - (hero ? 1 : 0) - 2, false)];
+      names = [...(hero ? ["X"] : []), "B1", ...bands(items.length - (hero ? 1 : 0) - 2, false)];
     const slots = names.flatMap((nm, b) => BANDS[nm].sizes.map((size, k) => ({ b, k, size })));
     const pinItem = items.find((r) => r.pin), pinSlot = pinItem && (slots.find((x) => x.size === "m") || slots.at(-1));
     if (pinSlot) pinSlot.r = pinItem;

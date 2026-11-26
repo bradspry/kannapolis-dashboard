@@ -20,6 +20,7 @@
         "ellestique",
         "sweetest",
         "cardiacs",
+        "spicetea",
         "cookcattle",
         "library",
         "events",
@@ -228,15 +229,19 @@
       "order": [
         "ellestique",
         "cardiacs",
+        "spicetea",
+        "editions",
         "sweetest",
         "cookcattle"
       ],
       "hidden": [],
       "sizes": {
-        "ellestique": "xl",
-        "sweetest": "xl",
-        "cardiacs": "xl",
-        "cookcattle": "xl"
+        "ellestique": "l",
+        "sweetest": "l",
+        "cardiacs": "l",
+        "cookcattle": "l",
+        "spicetea": "m",
+        "editions": "m"
       },
       "spacers": []
     }

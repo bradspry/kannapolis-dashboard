@@ -5,7 +5,7 @@
 import { h, fill } from "../ui.js";
 import { hoursTable, fmtClock } from "./made.js";
 
-export const SHOPS = ["ellestique", "sweetest", "cardiacs", "cookcattle"]; // tile and window order
+export const SHOPS = ["ellestique", "sweetest", "cardiacs", "spicetea", "cookcattle"]; // tile and window order
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const mins = (t) => { const [hh, mm] = t.split(":").map(Number); return hh * 60 + mm; };
 const ext = (href, label, cls) => h("a", { href, target: "_blank", rel: "noopener", class: cls }, label);
@@ -37,12 +37,13 @@ export function shopOpen(s, now = new Date()) {
 }
 
 /** Special hours in the next two weeks: "Thursday, Nov 26: Closed (Thanksgiving)". */
-export function specialList(s, now = new Date()) {
-  const from = ymd(now), to = ymd(new Date(now.getTime() + 14 * 864e5));
-  const list = (s.special || []).filter((x) => x.date >= from && x.date <= to).sort((a, b) => a.date.localeCompare(b.date));
+export function specialList(s, now = new Date(), { days = 14, max = 99, compact = false } = {}) {
+  const from = ymd(now), to = ymd(new Date(now.getTime() + days * 864e5));
+  const list = (s.special || []).filter((x) => x.date >= from && x.date <= to).sort((a, b) => a.date.localeCompare(b.date)).slice(0, max);
   if (!list.length) return null;
-  return h("ul", { class: "gem-prices el-special", role: "list" }, list.map((x) => h("li", { class: x.date === from ? "today" : "" },
-    h("span", {}, new Date(`${x.date}T12:00`).toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" }), x.label ? ` (${x.label})` : ""),
+  return h("ul", { class: `gem-prices el-special${compact ? " compact" : ""}`, role: "list" }, list.map((x) => h("li", { class: x.date === from ? "today" : "" },
+    h("span", {}, new Date(`${x.date}T12:00`).toLocaleDateString("en-US", compact ? { weekday: "short", month: "short", day: "numeric" } : { weekday: "long", month: "short", day: "numeric" }),
+      x.label ? ` (${x.label})` : ""),
     h("b", {}, x.closed ? "Closed" : `${fmtClock(x.open)} – ${fmtClock(x.close)}`))));
 }
 
@@ -77,16 +78,34 @@ export function item(a, { compact = false } = {}) {
 }
 export const items = (s, n, o) => h("ul", { class: `el-grid${o?.compact ? " compact" : ""}`, role: "list" }, (s.arrivals || []).slice(0, n).map((a) => item(a, o)));
 
+/** "Shop online" plus, for a shop that takes phone orders (`call_button`), a Call button beside it. */
+export const shopButtons = (s, o = {}) => (s.call_button && s.phone
+  ? h("div", { class: "el-btns" }, h("a", { class: `btn-primary el-call${o.compact ? " compact" : ""}`, href: `tel:${s.phone.replace(/\D/g, "")}`, "aria-label": `Call ${s.name}, ${s.phone}` }, "📞 Call"),
+    h("a", { class: `pill-btn el-shop-2${o.compact ? " compact" : ""}`, href: s.site, target: "_blank", rel: "noopener" }, "Shop online ↗"),
+    ...(s.social_buttons ? (s.social || []).map((x) => h("a", { class: `pill-btn el-shop-2 el-social${o.compact ? " compact" : ""}`, href: x.url, target: "_blank", rel: "noopener", "aria-label": `${s.name} on ${x.label}` }, `${x.label} ↗`)) : []))
+  : shopButton(s, o));
+
 export const shopButton = (s, { compact = false, label = "Shop online ↗" } = {}) =>
   h("a", { class: `btn-primary el-shop${compact ? " compact" : ""}`, href: s.site, target: "_blank", rel: "noopener" }, label);
 
 /** "📍 109 West Ave · downtown" */
+/** "Owned by Claire" */
+export const owner = (s, cls = "tile-meta el-owner") => (s.owner ? h("p", { class: cls }, `Owned by ${s.owner}`) : null);
+
 export const where = (s) => h("p", { class: "tile-meta el-where" }, "📍 ", s.address_short || s.address.split(",")[0], s.area ? ` · ${s.area}` : "");
 
 /** The tile for one shop, at any size. */
 export function shopTile(s, size, head) {
-  const top = h("div", { class: "lib-tile-head" }, head("bag", s.color, s.short || s.name), shopLogo(s, `el-logo ${size}`));
-  const info = h("div", { class: "el-info" }, h("div", { class: "bb-next-label" }, s.kind), shopStatus(s, { compact: true }), where(s));
+  // An owner with a photo sits at the right of the header, like the police and fire chiefs; otherwise a line under the kind.
+  const hd = head("bag", s.color, s.short || s.name);
+  if (s.owner_photo) {
+    hd.classList.add("tile-head-chief");
+    hd.append(h("div", { class: "tile-chief" }, h("div", { class: "tile-chief-text" }, h("b", {}, s.owner), h("span", {}, "Owner")),
+      h("img", { src: s.owner_photo, alt: `${s.owner}, owner`, loading: "lazy" })));
+  }
+  const top = h("div", { class: "lib-tile-head" }, hd, shopLogo(s, `el-logo ${size}`));
+  const info = h("div", { class: "el-info" }, h("div", { class: "bb-next-label" }, s.kind), s.owner_photo ? null : owner(s), shopStatus(s, { compact: true }), where(s));
+  if (!s.arrivals?.length && s.photo && size !== "s") return photoTile(s, size, top, info);
   const label = s.arrivals_label || "New arrivals";
   if (size === "s") return h("div", { class: "tile-body" }, top, info, eventLine(s, { compact: true }));
   if (size === "m") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top el-m" },
@@ -100,8 +119,25 @@ export function shopTile(s, size, head) {
       s.notes?.length ? h("ul", { class: "el-xl-notes", role: "list" }, s.notes.slice(0, 2).map((n) => h("li", {}, n))) : null,
       h("p", { class: "tile-meta el-xl-hours" }, "🕒 ", hoursSummary(s)),
       h("div", { class: "el-chips compact" }, s.shop.slice(0, 6).map((c) => h("a", { href: c.url, target: "_blank", rel: "noopener", class: "chip" }, c.label))),
-      shopButton(s, { compact: true })),
+      shopButtons(s, { compact: true })),
     h("div", {}, h("div", { class: "mini-head bb-mh" }, label), items(s, 10, { compact: true }))));
+}
+
+/** A shop with no product list a page carries (its chain's catalog answers automated clients with 429): the
+ *  storefront photo, its notices, and the special hours coming up (holidays, the parade). */
+const photo = (s, cls = "el-photo") => h("img", { class: cls, src: s.photo, alt: s.photo_alt || `${s.name} storefront`, loading: "lazy" });
+function photoTile(s, size, top, info) {
+  const coming = specialList(s, new Date(), { days: 45, max: size === "xl" ? 5 : 3, compact: true });
+  const notes = s.notes?.length ? h("ul", { class: "el-xl-notes", role: "list" }, s.notes.slice(0, 2).map((n) => h("li", {}, n))) : null;
+  if (size === "m") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top el-m" },
+    h("div", {}, info, shopButtons(s, { compact: true })), h("div", {}, photo(s, "el-photo m"))));
+  if (size === "l") return h("div", { class: "tile-body" }, top, info, photo(s, "el-photo l"),
+    coming ? [h("div", { class: "mini-head" }, "Holiday hours"), coming] : notes, shopButtons(s, { compact: true }));
+  return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top el-xl" },
+    h("div", { class: "el-xl-side" }, info, notes, h("p", { class: "tile-meta el-xl-hours" }, "🕒 ", hoursSummary(s)),
+      h("div", { class: "el-chips compact" }, s.shop.slice(0, 6).map((c) => h("a", { href: c.url, target: "_blank", rel: "noopener", class: "chip" }, c.label))),
+      shopButtons(s, { compact: true })),
+    h("div", { class: "el-photo-col" }, photo(s, "el-photo xl"), coming ? [h("div", { class: "mini-head" }, "Holiday hours"), coming] : null)));
 }
 
 /** The week in one line: "Tue–Fri 11 AM – 6 PM · Sat 10 AM – 6 PM · Sun 1 – 4 PM · Mon closed". */
@@ -134,23 +170,31 @@ export function renderShop(s) {
       h("div", { class: "el-hero-text" },
         h("div", { class: "bb-next-label" }, [s.kind, s.area_long || s.area].filter(Boolean).join(" · ")),
         h("p", { class: "el-tagline" }, s.tagline),
+        s.owner_photo ? null : owner(s, "el-owner win"),
         shopStatus(s),
         h("p", { class: "tile-meta" }, ext(s.map, `${s.address} ↗`), s.directions ? ` · ${s.directions}` : "")),
-      h("div", { class: "el-hero-actions" }, shopButton(s), ext(s.map, "Directions ↗", "pill-btn"))),
+      h("div", { class: "el-hero-actions" }, shopButtons(s), ext(s.map, "Directions ↗", "pill-btn"))),
     ev ? h("section", { class: "card el-event-card" }, h("h3", {}, `${ev.when}: ${ev.title}`), h("p", {}, ev.detail),
       ev.url ? h("p", {}, ext(ev.url, "Details ↗")) : null) : null,
     s.notes?.length ? h("section", { class: "card el-notes" }, h("ul", { role: "list" }, s.notes.map((n) => h("li", {}, n)))) : null,
+    !s.arrivals?.length && s.photo ? h("section", { class: "card el-photo-card" }, photo(s, "el-photo win")) : null,
     s.arrivals?.length ? h("section", { class: "card" }, h("h3", {}, label), items(s, 12),
       s.arrivals_url ? h("p", { class: "tile-meta" }, ext(s.arrivals_url, s.arrivals_more || "See more ↗")) : null) : null,
     h("div", { class: "el-two" },
       h("section", { class: "card" }, h("h3", {}, "Hours"), hoursTable(s), s.hours_note ? h("p", { class: "tile-meta" }, s.hours_note) : null,
-        specialList(s) ? [h("h3", { class: "el-special-h" }, "Special hours"), specialList(s)] : null,
-        s.phone ? h("p", { class: "tile-meta" }, h("a", { href: `tel:${s.phone.replace(/\D/g, "")}` }, `☎ ${s.phone}`)) : null),
+        specialList(s, new Date(), { days: s.no_products ? 60 : 14 }) ? [h("h3", { class: "el-special-h" }, s.no_products ? "Holiday hours" : "Special hours"), specialList(s, new Date(), { days: s.no_products ? 60 : 14 })] : null,
+        s.phone ? h("p", { class: "tile-meta" }, h("a", { href: `tel:${s.phone.replace(/\D/g, "")}` }, `☎ ${s.phone}`), s.email ? [" · ", h("a", { href: `mailto:${s.email}` }, `✉ ${s.email}`)] : null) : null),
       h("section", { class: "card" }, h("h3", {}, "Shop by category"),
         h("div", { class: "el-chips" }, s.shop.map((c) => ext(c.url, c.label, "chip"))),
         s.links?.length ? h("p", { class: "el-links" }, s.links.flatMap((l, i) => [i ? " · " : null, ext(l.url, l.label)])) : null)),
-    h("section", { class: "card" }, h("h3", {}, "About the shop"), h("p", {}, s.about),
+    h("section", { class: "card" }, h("h3", {}, "About the shop"),
+      s.owner_photo ? h("div", { class: "el-owner-card" }, h("img", { src: s.owner_photo, alt: `${s.owner}, owner of ${s.name}`, loading: "lazy" }),
+        h("div", {}, h("b", {}, s.owner), h("span", {}, `Owner, ${s.short || s.name}`))) : null,
+      h("p", {}, s.about),
       s.social?.length ? h("p", { class: "el-links" }, "Follow along: ", s.social.flatMap((x, i) => [i ? " · " : null, ext(x.url, `${x.label} ↗`)])) : null),
-    h("p", { class: "note" }, `${label} and the shop's notices are read once a day from `, ext(s.site, s.site.replace(/^https?:\/\//, "")),
-      "; hours and details are machine-parsed from the same site. Prices and stock change: check the shop before you go."));
+    s.no_products
+      ? h("p", { class: "note" }, "Hours, holiday hours and details are read once a day from the shop's ", ext(s.page || s.site, "store page"),
+        ". Hours can change: call before you go.")
+      : h("p", { class: "note" }, `${label} and the shop's notices are read once a day from `, ext(s.site, s.site.replace(/^https?:\/\//, "")),
+        "; hours and details are machine-parsed from the same site. Prices and stock change: check the shop before you go."));
 }
