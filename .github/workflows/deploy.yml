@@ -8,7 +8,7 @@ on:
     types: [completed]
   workflow_dispatch:
   schedule:
-    - cron: "*/15 * * * *" # NCDOT incidents (DriveNC) are fetched fresh at every build
+    - cron: "7,22,37,52 * * * *" # every 15 minutes, off the hour (GitHub's busiest minute): NCDOT incidents (DriveNC) are fetched fresh at every build
 
 permissions:
   contents: read
