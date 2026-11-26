@@ -2858,3 +2858,4 @@ body.editing .tile-w :is(.el-logo, .kt-logo-badge, .tr-logo, .ic-logo, .bb-logo)
 .rd-l > div, .rd-xl > div { min-width: 0; }
 @media (max-width: 720px) { .tile-w.size-s .rd-report { display: none; } }
 .rd-dept a[href^="tel:"] { white-space: nowrap; }
+.tile-w.size-m .el-m:has(.el-event) .el-shop, .tile-w.size-m .el-m:has(.el-event) .el-btns { display: none; } /* medium: the event line takes the button's room */

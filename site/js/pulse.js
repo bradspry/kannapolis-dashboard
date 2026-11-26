@@ -250,10 +250,10 @@ export const BASE = {
  *  chapter if the story has one; anything unlisted goes at the end. */
 export const STORIES = {
   home: [
-    { id: "home", name: "At Home", blurb: "Weather, trash, water and bills", ids: ["weather", "waste", "utility", "drought", "water"] },
-    { id: "local", name: "Shop & Eat Local", blurb: "Local shops, a market and a farm, and where to eat and drink", leads: { from: "2026-11-26", to: "2026-11-29" }, ids: ["ellestique", "cardiacs", "spicetea", "provisions", "sweetest", "cookcattle", "editions", "made", "whataburger"] },
+    { id: "home", name: "At Home", blurb: "Weather, trash, water and bills", ids: ["weather", "waste", "utility", "drought", "water"], noSmall: true },
+    { id: "local", name: "Shop & Eat Local", blurb: "Local shops, a market and a farm, and where to eat and drink", leads: { from: "2026-11-26", to: "2026-11-29" }, ids: ["ellestique", "cardiacs", "spicetea", "provisions", "sweetest", "cookcattle", "editions", "made", "whataburger"], noSmall: true },
     { id: "around", name: "Getting Around", blurb: "Traffic, trains, buses, gas and roads", ids: ["incidents", "train", "gas", "rider", "paratransit", "shuttle", "flights", "roads"] },
-    { id: "out", name: "Out & About", blurb: "Things to do", ids: ["events", "parade", "gem", "swanee", "baseball", "parks", "library"] },
+    { id: "out", name: "Out & About", blurb: "Things to do", ids: ["events", "parade", "gem", "swanee", "baseball", "parks", "library"], noSmall: true },
     { id: "hall", name: "City Hall", blurb: "News, meetings and decisions", ids: ["news", "meetings", "council", "videos", "org", "people", "budget",
       "debt-service", "growth", "land", "g-tax-rate", "g-debt-policy", "g-debt-limit", "g-owners"], big: ["council"], small: ["videos"] },
     { id: "safety", name: "Safety", blurb: "Police and fire", ids: ["police", "fire"] },
@@ -267,7 +267,7 @@ export const STORIES = {
     { id: "services", name: "City Services", blurb: "Trash, water, bills and streets", ids: ["waste", "utility", "drought", "water", "roads"], xl: ["roads"] },
     { id: "safety", name: "Public Safety", blurb: "Police and fire", ids: ["police", "fire"] },
     { id: "hall", name: "City Hall", blurb: "News, meetings, your council and City jobs", ids: ["news", "meetings", "council", "videos", "org", "job-city"], big: ["council"], small: ["videos"] },
-    { id: "downtown", name: "Downtown & Parks", blurb: "City-run events, parks, theaters and the shuttle", ids: ["events", "parade", "parks", "gem", "swanee", "shuttle"] },
+    { id: "downtown", name: "Downtown & Parks", blurb: "City-run events, parks, theaters and the shuttle", ids: ["events", "parade", "parks", "gem", "swanee", "shuttle"], noSmall: true },
     { id: "money", name: "Budget & Taxes", blurb: "Where the money comes from and goes", ids: ["budget", "debt-service", "g-tax-rate", "g-debt-policy", "g-debt-limit"] },
     { id: "growth", name: "People & Growth", blurb: "Who lives here and how the city is changing", ids: ["people", "growth", "land", "g-owners"] },
     { id: "community", name: "Community", blurb: "Neighbors in need and the data behind this site", ids: ["homeless", "about"] },
@@ -276,7 +276,7 @@ export const STORIES = {
   fun: [
     { id: "shows", name: "Shows & Events", blurb: "Movies, live shows and what's on around town", ids: ["events", "parade", "gem", "swanee"] },
     { id: "outside", name: "Get Outside", blurb: "Parks, trails and Cannon Ballers games", ids: ["parks", "baseball"] },
-    { id: "eat", name: "Eat & Drink", blurb: "Burgers, deli sandwiches, coffee and local beer", ids: ["whataburger", "provisions", "editions", "made"] },
+    { id: "eat", name: "Eat & Drink", blurb: "Burgers, deli sandwiches, coffee and local beer", ids: ["whataburger", "provisions", "editions", "made"], noSmall: true },
     { id: "read", name: "Read, Watch & Listen", blurb: "The library and a local podcast", ids: ["library", "ktown"] },
   ],
   // Shopping: local shops, downtown first, then around the area.

@@ -307,9 +307,13 @@ function bandsFor(n, lead) {
 /** Bands for a chapter that shows no small tiles (`noSmall`, e.g. Shopping): two large side by side, then rows of
  *  mediums; three is one large and two mediums. Different sizes, every tile with room for its content. */
 function bandsNoSmall(n) {
+  if (n <= 1) return n ? ["M1"] : [];
   if (n === 3) return ["B3"];
-  const out = n >= 2 ? ["B1"] : [];
-  for (let k = n >= 2 ? n - 2 : n; k > 0; k -= 2) out.push(k === 1 ? "M1" : "R1");
+  // Two large, then (for an odd count) one large beside two mediums so no tile sits alone, then pairs of mediums.
+  const out = ["B1"];
+  let k = n - 2;
+  if (k % 2) { out.push("B3"); k -= 3; }
+  for (; k > 0; k -= 2) out.push("R1");
   return out;
 }
 /** A tab as a story: widgets grouped into the tab's chapters (pulse.js STORIES), the chapter with the most timely widget
