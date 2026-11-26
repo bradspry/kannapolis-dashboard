@@ -2,7 +2,7 @@
 // up, and the deli board, from data/generated/provisions.json (events and menu read daily; etl/build_provisions.py).
 import { h, fill } from "../ui.js";
 import { hoursTable } from "./made.js";
-import { shopOpen as openStatus, specialList, hoursOn } from "./shop.js"; // open now, with holiday hours
+import { shopOpen as openStatus, specialList, hoursOn, ktownLine, ktownCard } from "./shop.js"; // open now, with holiday hours
 
 const ext = (href, label, cls) => h("a", { href, target: "_blank", rel: "noopener", class: cls }, label);
 const ymd = (d) => d.toLocaleDateString("en-CA");
@@ -91,7 +91,7 @@ export function provisionsTile(p, size, head) {
       nextLine ? h("div", { class: "pom-phone" }, nextLine) : null),
     h("div", {}, board(p, 6), buttons(p, { compact: true }))));
   return h("div", { class: "tile-body pom-tile", style: { "--pom": p.color, "--pom-accent": p.accent } }, top, h("div", { class: "tile-split top pom-xl" },
-    h("div", { class: "el-xl-side" }, info, special(p), h("div", { class: "mini-head" }, "Coming up at the POM"), eventList(p, 3), buttons(p, { compact: true })),
+    h("div", { class: "el-xl-side" }, info, special(p), h("div", { class: "mini-head" }, "Coming up at the POM"), eventList(p, 2), ktownLine(p), buttons(p, { compact: true })),
     h("div", {}, board(p, 8)),
     h("div", { class: "pom-photo" }, h("img", { src: p.photos[0].src, alt: p.photos[0].alt, loading: "lazy" }))));
 }
@@ -140,7 +140,8 @@ export function renderProvisions(p) {
         h("div", { class: "el-owner-card" }, h("img", { src: p.owner_photo, alt: `${p.owner}, owners of ${p.short}`, loading: "lazy" }),
           h("div", {}, h("b", {}, p.owner), h("span", {}, `Owners, ${p.short}`))),
         h("p", {}, p.about),
-        p.ktown ? h("p", { class: "pom-ktown" }, "🎙 Heard on K-Town Connection, EP ", p.ktown.ep, ": ", ext(p.ktown.url, `${p.ktown.title} ↗`)) : null)),
+        null)),
+    ktownCard(p),
     h("p", { class: "note" }, "Events and the deli menu are read once a day from ", ext(p.site, "provisionsonmain.com"),
       "; hours, specials and the owners' story are machine-parsed from the same site. Plans change: call before you go."));
 }

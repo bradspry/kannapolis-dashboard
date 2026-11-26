@@ -119,7 +119,7 @@ export function shopTile(s, size, head) {
       s.notes?.length ? h("ul", { class: "el-xl-notes", role: "list" }, s.notes.slice(0, 2).map((n) => h("li", {}, n))) : null,
       h("p", { class: "tile-meta el-xl-hours" }, "🕒 ", hoursSummary(s)),
       h("div", { class: "el-chips compact" }, s.shop.slice(0, 6).map((c) => h("a", { href: c.url, target: "_blank", rel: "noopener", class: "chip" }, c.label))),
-      shopButtons(s, { compact: true })),
+      ktownLine(s), shopButtons(s, { compact: true })),
     h("div", {}, h("div", { class: "mini-head bb-mh" }, label), items(s, 10, { compact: true }))));
 }
 
@@ -138,6 +138,23 @@ function photoTile(s, size, top, info) {
       h("div", { class: "el-chips compact" }, s.shop.slice(0, 6).map((c) => h("a", { href: c.url, target: "_blank", rel: "noopener", class: "chip" }, c.label))),
       shopButtons(s, { compact: true })),
     h("div", { class: "el-photo-col" }, photo(s, "el-photo xl"), coming ? [h("div", { class: "mini-head" }, "Holiday hours"), coming] : null)));
+}
+
+/** K-Town Connection episodes about the shop (build_shops ktown_for): a thumbnail with a play mark, the episode, the title. */
+export function ktownLine(s, { compact = true } = {}) {
+  const e = s.ktown?.[0]; if (!e) return null;
+  return h("a", { class: `el-ktown${compact ? " compact" : ""}`, href: e.url, target: "_blank", rel: "noopener" },
+    h("span", { class: "el-ktown-thumb" }, h("img", { src: e.thumb, alt: "", loading: "lazy" }), h("i", { "aria-hidden": "true" }, "▶")),
+    h("span", { class: "el-ktown-text" }, h("small", {}, `🎙 On K-Town Connection · EP ${e.ep}`), h("b", {}, e.title)));
+}
+export function ktownCard(s) {
+  if (!s.ktown?.length) return null;
+  return h("section", { class: "card" }, h("h3", {}, `${s.short || s.name} on K-Town Connection`),
+    h("ul", { class: "el-ktown-list", role: "list" }, s.ktown.map((e) => h("li", {},
+      h("a", { class: "el-ktown-thumb big", href: e.url, target: "_blank", rel: "noopener", "aria-label": `Watch EP ${e.ep}: ${e.title}` }, h("img", { src: e.thumb, alt: "", loading: "lazy" }), h("i", { "aria-hidden": "true" }, "▶")),
+      h("div", {}, h("small", {}, `EP ${e.ep} · ${new Date(`${e.date}T12:00`).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}`),
+        h("b", {}, h("a", { href: e.url, target: "_blank", rel: "noopener" }, e.title)), e.summary ? h("p", {}, e.summary) : null)))),
+    h("p", { class: "tile-meta" }, "From the K-Town Connection podcast, the Kannapolis show on YouTube."));
 }
 
 /** The week in one line: "Tue–Fri 11 AM – 6 PM · Sat 10 AM – 6 PM · Sun 1 – 4 PM · Mon closed". */
@@ -187,6 +204,7 @@ export function renderShop(s) {
       h("section", { class: "card" }, h("h3", {}, "Shop by category"),
         h("div", { class: "el-chips" }, s.shop.map((c) => ext(c.url, c.label, "chip"))),
         s.links?.length ? h("p", { class: "el-links" }, s.links.flatMap((l, i) => [i ? " · " : null, ext(l.url, l.label)])) : null)),
+    ktownCard(s),
     h("section", { class: "card" }, h("h3", {}, "About the shop"),
       s.owner_photo ? h("div", { class: "el-owner-card" }, h("img", { src: s.owner_photo, alt: `${s.owner}, owner of ${s.name}`, loading: "lazy" }),
         h("div", {}, h("b", {}, s.owner), h("span", {}, `Owner, ${s.short || s.name}`))) : null,

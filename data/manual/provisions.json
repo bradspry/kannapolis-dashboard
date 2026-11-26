@@ -138,11 +138,6 @@
     "Goat"
   ],
   "menu_note": "Online ordering coming soon. Order your sandwich at checkout; stay awhile or take it to go.",
-  "ktown": {
-    "ep": 79,
-    "title": "What's Cooking at Provisions on Main?",
-    "url": "https://www.youtube.com/watch?v=EAhH3GHUF0I"
-  },
   "social": [
     {
       "label": "Facebook",
@@ -183,5 +178,8 @@
       "close": "20:00"
     }
   ],
-  "special_source": "Thanksgiving holiday hours posted on the POM's Facebook page, Nov 23, 2026 (the graphic's day numbers are one day off; its weekdays and holidays were used)"
+  "special_source": "Thanksgiving holiday hours posted on the POM's Facebook page, Nov 23, 2026 (the graphic's day numbers are one day off; its weekdays and holidays were used)",
+  "ktown_episodes": [
+    "https://www.youtube.com/watch?v=EAhH3GHUF0I"
+  ]
 }

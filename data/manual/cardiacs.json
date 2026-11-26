@@ -119,5 +119,9 @@
   ],
   "source": "Machine-parsed from thecardiacs.com (Locations page: Kannapolis address, hours, phone; home page: About, Toys for Tots, menu), November 25, 2026",
   "owner": "Jonny",
-  "owner_photo": "photos/local/cardiacs-owner.jpg"
+  "owner_photo": "photos/local/cardiacs-owner.jpg",
+  "ktown_episodes": [
+    "https://www.youtube.com/watch?v=epPSVBjjiCQ",
+    "https://www.youtube.com/watch?v=oWnZaGBF6TY"
+  ]
 }

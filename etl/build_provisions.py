@@ -104,7 +104,8 @@ def main() -> None:
     except Exception as e:
         menu = {"sandwiches": prev.get("sandwiches", []), "small_plates": prev.get("small_plates", [])}
         log(f"provisions: couldn't read the Deli Menu ({e}); keeping the last {len(menu['sandwiches'])} sandwiches")
-    write_json("provisions.json", {**info, "events": events, **menu})
+    from build_shops import ktown_for  # K-Town Connection episodes about the POM
+    write_json("provisions.json", {**info, "events": events, **menu, "ktown": ktown_for(info)})
 
 
 if __name__ == "__main__":

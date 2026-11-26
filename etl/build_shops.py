@@ -258,6 +258,18 @@ def parse_spicetea(page: str, site: str) -> tuple[list[dict], list[str], list[di
 PARSERS = {"ellestique": parse_ellestique, "sweetest": parse_sweetest, "cardiacs": parse_cardiacs, "cookcattle": parse_cookcattle, "spicetea": parse_spicetea}
 
 
+def ktown_for(info: dict) -> list[dict]:
+    """The K-Town Connection episodes listed for this shop (`ktown_episodes`: YouTube links, chosen by hand, never
+    guessed), newest first, with titles and thumbnails from the podcast widget's data (the ktown step runs first)."""
+    ids = {re.sub(r".*[?&]v=([\w-]+).*", r"\1", u) for u in info.get("ktown_episodes") or []}
+    path = OUT / "ktown.json"
+    if not ids or not path.exists():
+        return []
+    eps = [e for e in json.loads(path.read_text()).get("episodes", []) if e.get("video", {}).get("id") in ids]
+    return [{"ep": e["ep"], "title": e["title"], "date": e["published"], "url": e["video"]["url"], "thumb": e["video"]["thumb"],
+             "summary": e.get("summary", "")} for e in sorted(eps, key=lambda e: e["published"], reverse=True)]
+
+
 def main() -> None:
     for sid, parse in PARSERS.items():
         info = json.loads((MANUAL / f"{sid}.json").read_text())
@@ -280,7 +292,7 @@ def main() -> None:
             dates = {x["date"] for x in special}
             info["special"] = sorted([x for x in info.get("special", []) if x["date"] not in dates] + special, key=lambda x: x["date"])
         notes = list(dict.fromkeys([*info.get("notes_static", []), *notes]))  # the snapshot's standing notes, then the page's
-        write_json(f"{sid}.json", {**info, "arrivals": items, "notes": notes})
+        write_json(f"{sid}.json", {**info, "arrivals": items, "notes": notes, "ktown": ktown_for(info)})
 
 
 if __name__ == "__main__":
