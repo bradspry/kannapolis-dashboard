@@ -2649,4 +2649,4 @@ body::before {
 .ic-hero { justify-content: flex-start; }
 .ic-hero-text { flex: 1 1 220px; min-width: 0; }
 @media (max-width: 400px) { .tile-w.size-s .ic-logo { display: none; } .tile-w.size-s .lib-tile-head:has(.ic-logo) .tile-head { padding-right: 0; } }
-.tile-w .ic-tile-map { margin-bottom: 8px; }
+.tile-w .ic-tile-map { flex: none; margin-bottom: 4px; } /* never squeezed: the legend would slide under the list */
