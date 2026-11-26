@@ -93,9 +93,29 @@ export function shopTile(s, size, head) {
     h("div", {}, info, eventLine(s, { compact: true }), shopButton(s, { compact: true })), h("div", {}, items(s, 2, { compact: true }))));
   if (size === "l") return h("div", { class: "tile-body" }, top, info, eventLine(s, { compact: true }),
     h("div", { class: "mini-head" }, label), items(s, 4, { compact: true }), shopButton(s, { compact: true }));
+  // Extra-large: the shop's story on the left (event, notices, the week's hours, categories), and two rows of
+  // products on the right (fit.js trims the grid if a row won't fit).
   return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top el-xl" },
-    h("div", {}, info, eventLine(s) || (s.notes?.[0] ? h("p", { class: "tile-meta el-note" }, s.notes[0]) : null), shopButton(s, { compact: true })),
-    h("div", {}, h("div", { class: "mini-head bb-mh" }, label), items(s, 6, { compact: true }))));
+    h("div", { class: "el-xl-side" }, info, eventLine(s, { compact: true }),
+      s.notes?.length ? h("ul", { class: "el-xl-notes", role: "list" }, s.notes.slice(0, 2).map((n) => h("li", {}, n))) : null,
+      h("p", { class: "tile-meta el-xl-hours" }, "🕒 ", hoursSummary(s)),
+      h("div", { class: "el-chips compact" }, s.shop.slice(0, 6).map((c) => h("a", { href: c.url, target: "_blank", rel: "noopener", class: "chip" }, c.label))),
+      shopButton(s, { compact: true })),
+    h("div", {}, h("div", { class: "mini-head bb-mh" }, label), items(s, 10, { compact: true }))));
+}
+
+/** The week in one line: "Tue–Fri 11 AM – 6 PM · Sat 10 AM – 6 PM · Sun 1 – 4 PM · Mon closed". */
+export function hoursSummary(s) {
+  const order = [1, 2, 3, 4, 5, 6, 0], short = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const key = (d) => { const r = s.hours.find((x) => x.days.includes(d)); return r ? `${fmtClock(r.open)} – ${fmtClock(r.close)}` : "closed"; };
+  const runs = [];
+  for (const d of order) {
+    const k = key(d), last = runs.at(-1);
+    if (last && last.k === k) last.to = d; else runs.push({ k, from: d, to: d });
+  }
+  const open = runs.filter((r) => r.k !== "closed"), shut = runs.filter((r) => r.k === "closed");
+  const span = (r) => (r.from === r.to ? short[r.from] : `${short[r.from]}–${short[r.to]}`);
+  return [...open.map((r) => `${span(r)} ${r.k}`), ...shut.map((r) => `${span(r)} closed`)].join(" · ");
 }
 
 export function renderShop(s) {

@@ -231,9 +231,9 @@
       ],
       "hidden": [],
       "sizes": {
-        "ellestique": "l",
-        "sweetest": "l",
-        "cardiacs": "l"
+        "ellestique": "xl",
+        "sweetest": "xl",
+        "cardiacs": "xl"
       },
       "spacers": []
     }

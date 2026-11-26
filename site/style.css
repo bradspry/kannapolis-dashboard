@@ -2710,3 +2710,24 @@ body::before {
 .el-special-h { margin: 16px 0 4px; font-size: 15px; }
 @media (max-width: 720px) { .el-logo.lg.wide { width: 180px; height: 57px; } }
 @media (max-width: 400px) { .tile-w.size-m .el-logo.wide, .tile-w.size-l .el-logo.wide { width: 72px; height: 23px; } .tile-w .lib-tile-head:has(.el-logo.wide) .tile-head { padding-right: 84px; } }
+
+/* ---------- Edit mode: controls you can hit ----------
+   The wiggle rotates a tile about its center, so its corner controls swing farther the bigger the tile: a large
+   tile's corners moved ~8px several times a second, and a click could start on "–" and end beside it. Big tiles
+   wiggle by less, a tile holds still while the pointer is on one of its controls, and the corner logos step aside. */
+@keyframes wiggle-big { from { transform: rotate(-.15deg); } to { transform: rotate(.15deg); } }
+body.editing .tile-w.size-l, body.editing .tile-w.size-xl { animation-name: wiggle-big; }
+body.editing .tile-w:has(> .tile-remove:hover, > .size-picker:hover, > .tile-top:hover, > .tile-pin:hover, > .tile-grip:hover),
+body.editing .tile-w:has(> .tile-remove:focus-visible, > .size-picker :focus-visible, > .tile-top:focus-visible, > .tile-pin:focus-visible) { animation-play-state: paused; }
+body.editing .tile-w :is(.el-logo, .kt-logo-badge, .tr-logo, .ic-logo, .bb-logo) { visibility: hidden; }
+/* Extra-large shop tiles: a narrower story column, and two rows of five products */
+.el-xl { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.6fr); }
+.el-xl-side { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.el-xl-side .el-shop.compact { margin-top: 2px; }
+.el-xl-notes { list-style: none; margin: 0; padding: 0; font-size: 12.5px; color: var(--text-secondary); display: flex; flex-direction: column; gap: 3px; }
+.el-xl-notes li::before { content: "✦ "; color: var(--series-5); }
+.el-xl-hours { margin: 0; }
+.el-chips.compact { gap: 5px; }
+.el-chips.compact .chip { padding: 2px 9px; font-size: 11.5px; }
+.el-xl .el-grid.compact { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px 8px; }
+.el-xl .el-item.compact img { height: 100px; }
