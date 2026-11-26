@@ -7,6 +7,7 @@ Python 3.9-compatible so serve.py can run it under macOS's built-in Python.
 from __future__ import annotations
 
 import base64
+import csv
 import json
 import posixpath
 import re
@@ -82,6 +83,12 @@ def build() -> str:
         data[f.name] = inline_photos(json.loads(f.read_text()))
     if not data:
         log("site: warning — no data in data/generated/; run the other steps first")
+    # About the Data lists every source in data/manual/sources.csv: read it at every build, so a source added
+    # today shows today (the budget step that also carries it runs weekly).
+    if "budget.json" in data:
+        with open(MANUAL / "sources.csv", newline="") as fh:
+            data["budget.json"]["sources"] = {r["id"]: {**{k: r[k] for k in ("title", "publisher", "format", "url", "used_for")},
+                                                        "widgets": r["widgets"].split()} for r in csv.DictReader(fh)}
     layout = MANUAL / "home_layout.json"  # default home-screen arrangement ("Save as default")
     if layout.exists():
         data["home_layout.json"] = json.loads(layout.read_text())

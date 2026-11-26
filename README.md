@@ -338,7 +338,7 @@ Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a
 | [OpenStreetMap: Kannapolis drivable roads (Overpass API)](https://www.openstreetmap.org/copyright) | OpenStreetMap contributors | GeoJSON (Overpass) | Road lines, names and types; miles by type |
 | [Kannapolis Christmas Parade](https://www.kannapolisnc.gov/christmasparade) | City of Kannapolis | Web page | Parade date and time, route, road closures, viewing, entries and contacts |
 | [Kannapolis Christmas Parade parking map (2026)](https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Parking/2026%20(3).png?ver=X_exondcp0e_HWLhQQSeYA%3d%3d) | City of Kannapolis | Image (PNG) | Parade route, staging area, parking, restrooms, first aid and food vendors |
-| [DriveNC events API (traffic incidents](JSON API) | closures and roadwork) | NC Department of Transportation | https://www.drivenc.gov/developers/doc |
+| [DriveNC events API (traffic incidents, closures and roadwork)](https://www.drivenc.gov/developers/doc) | NC Department of Transportation | JSON API | Crashes, closures and roadwork around Kannapolis, every 15 minutes |
 | [NCDOT logo (Seal of the North Carolina Department of Transportation)](https://commons.wikimedia.org/wiki/File:Seal_of_the_North_Carolina_Department_of_Transportation.svg) | Government of North Carolina (public domain; via Wikimedia Commons) | SVG | Logo |
 | [Elle's Tique home page (new arrivals; Visit Us hours and address; announcements)](https://ellestique.com) | Elle's Tique | Web page | New arrivals, announcements, hours, address (read daily) |
 | [Elle's Tique About page](https://ellestique.com/pages/about) | Elle's Tique | Web page | Owner and shop description |
