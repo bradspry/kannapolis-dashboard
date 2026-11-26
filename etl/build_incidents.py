@@ -94,6 +94,7 @@ def main() -> None:
         "fetched": dt.datetime.now(dt.timezone.utc).isoformat(timespec="minutes"),
         "bbox": BBOX,
         "source": "https://www.drivenc.gov/",
+        "logo": "photos/local/ncdot-logo.svg",  # public domain (Wikimedia Commons); embedded by the site build
         "events": out,
     })
 

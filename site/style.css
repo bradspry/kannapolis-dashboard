@@ -2642,3 +2642,11 @@ body::before {
 .tile-w .ic-tile-map + div > .mini-head:first-child { margin-top: 10px; }
 .tile-w .ic-tile-map .ic-legend { margin-bottom: 4px; }
 @media (max-width: 720px) { .tile-w.size-m .ic-row.compact .ic-what { -webkit-line-clamp: 1; } }
+.ic-logo { position: absolute; top: -6px; right: 14px; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: #fff; padding: 3px; box-shadow: 0 2px 8px rgb(0 0 0 / .3); pointer-events: none; }
+.ic-logo img { width: 100%; height: 100%; display: block; }
+.lib-tile-head:has(.ic-logo) .tile-head { padding-right: 64px; }
+.ic-logo.lg { position: static; flex: none; width: 76px; height: 76px; padding: 4px; box-shadow: none; }
+.ic-hero { justify-content: flex-start; }
+.ic-hero-text { flex: 1 1 220px; min-width: 0; }
+@media (max-width: 400px) { .tile-w.size-s .ic-logo { display: none; } .tile-w.size-s .lib-tile-head:has(.ic-logo) .tile-head { padding-right: 0; } }
+.tile-w .ic-tile-map { margin-bottom: 8px; }

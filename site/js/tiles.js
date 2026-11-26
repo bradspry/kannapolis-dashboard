@@ -33,7 +33,7 @@ import { districtsOf as sbDistricts, total as sbTotal, districtRows as sbRows, t
 import { routeMap as flMap, airlineLegend as flLegend, newLine as flNew, destList as flDests } from "./sections/flights.js";
 import { serviceStatus as trSvc, shuttleStatus as shStatus, statusLine as trStatusLine, systemMap, shuttleMap, routeLegend, liveCount, alertList as trAlerts, callButton as trCall, upcomingHoliday as trHoliday, clock as trClock } from "./sections/transit.js";
 import { levelGauge as drGauge, countyLine as drCounty, strip as drStrip } from "./sections/drought.js";
-import { sortEvents as icSort, statusLine as icStatus, updated as icUpdated, list as icList, tileMap as icMap, legend as icLegend, INCIDENTS_COLOR } from "./sections/incidents.js";
+import { sortEvents as icSort, statusLine as icStatus, updated as icUpdated, list as icList, tileMap as icMap, legend as icLegend, logo as icLogo, INCIDENTS_COLOR } from "./sections/incidents.js";
 import { prepGames, nextHome, homeStands, standLabel, nextGameCard, fmtDay as bbDay, fmtTime as bbTime } from "./sections/baseball.js";
 
 const NS = "http://www.w3.org/2000/svg";
@@ -1040,7 +1040,7 @@ export function tileDefs(data, COLORS) {
       id: "incidents", opens: "incidents", size: "m", label: "NCDOT Incidents",
       build: (size) => {
         const now = new Date(), { now: on, soon } = icSort(incidents, now);
-        const top = head("cone", INCIDENTS_COLOR, "NCDOT Incidents");
+        const top = h("div", { class: "lib-tile-head" }, head("cone", INCIDENTS_COLOR, "NCDOT Incidents"), icLogo(incidents, `ic-logo ${size}`));
         const meta = h("p", { class: "tile-meta" }, icUpdated(incidents, now));
         const rows = (n, o) => {
           const all = [...on, ...soon];

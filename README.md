@@ -105,7 +105,7 @@ It prints the address to open on your phone (for example `http://192.168.1.20:51
 Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a `source_url` that opens the official PDF at the cited page (for example `…FY%2027%20Adopted%20Budget.pdf#page=114`). The build fails if a row's citation is missing. The full registry is [`data/manual/sources.csv`](data/manual/sources.csv); its `widgets` column ties each source to the widgets it feeds, and every widget window ends with an automatic **Sources** line built from it. The table below is generated from the same registry on every build, so the README always cites every source:
 
 <!-- sources:start -->
-219 sources, generated from `data/manual/sources.csv`.
+220 sources, generated from `data/manual/sources.csv`.
 
 | Source | Publisher | Format | Used for |
 |---|---|---|---|
@@ -328,6 +328,7 @@ Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a
 | [Kannapolis Christmas Parade](https://www.kannapolisnc.gov/christmasparade) | City of Kannapolis | Web page | Parade date and time, route, road closures, viewing, entries and contacts |
 | [Kannapolis Christmas Parade parking map (2026)](https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Parking/2026%20(3).png?ver=X_exondcp0e_HWLhQQSeYA%3d%3d) | City of Kannapolis | Image (PNG) | Parade route, staging area, parking, restrooms, first aid and food vendors |
 | [DriveNC events API (traffic incidents](JSON API) | closures and roadwork) | NC Department of Transportation | https://www.drivenc.gov/developers/doc |
+| [NCDOT logo (Seal of the North Carolina Department of Transportation)](https://commons.wikimedia.org/wiki/File:Seal_of_the_North_Carolina_Department_of_Transportation.svg) | Government of North Carolina (public domain; via Wikimedia Commons) | SVG | Logo |
 <!-- sources:end -->
 
 The news and meetings harvesters are adapted from [kspider](https://github.com/bradspry/kannapolis-news-wire).

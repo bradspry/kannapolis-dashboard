@@ -118,6 +118,9 @@ export function tileMap(inc, events, id) {
 export const legend = () => h("div", { class: "ic-legend", "aria-hidden": "true" },
   Object.values(KIND).map((k) => h("span", {}, h("i", { style: { background: k.color } }), k.short)));
 
+/** NCDOT's logo on a white badge: top-right on tiles, beside the status in the window. */
+export const logo = (inc, cls = "ic-logo") => (inc?.logo ? h("span", { class: cls }, h("img", { src: inc.logo, alt: "NCDOT logo" })) : null);
+
 export function statusLine(inc, now = new Date()) {
   const st = status(inc, now);
   return h("div", { class: `ic-status ${st.tone}` }, h("i", { "aria-hidden": "true" }), st.text);
@@ -128,8 +131,8 @@ export function renderIncidents(inc) {
   const now = new Date(), { now: on, soon } = sortEvents(inc, now);
   const mapBox = h("div", { class: "map ic-live", id: "ic-live-map", role: "img", "aria-label": `Map of ${on.length + soon.length} traffic events around Kannapolis` });
   fill(root,
-    h("section", { class: "card ic-hero" },
-      h("div", {}, statusLine(inc, now), h("p", { class: "tile-meta" }, `${updated(inc, now)} · checked every 15 minutes`)),
+    h("section", { class: "card ic-hero" }, logo(inc, "ic-logo lg"),
+      h("div", { class: "ic-hero-text" }, statusLine(inc, now), h("p", { class: "tile-meta" }, `${updated(inc, now)} · checked every 15 minutes`)),
       ext("https://www.drivenc.gov/", "Live map on DriveNC ↗", "btn-primary")),
     h("section", { class: "card" }, h("h3", {}, "Around Kannapolis"), mapBox, legend(),
       h("p", { class: "tile-meta" }, "I-85 from Kannapolis Parkway (exit 54) to Old Beatty Ford Road (exit 65), and the streets in and around the city.")),
