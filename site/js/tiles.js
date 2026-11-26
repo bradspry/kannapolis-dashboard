@@ -558,7 +558,7 @@ export function tileDefs(data, COLORS) {
       },
     },
     // Shopping: one widget per local shop (shop.js), in SHOPS order.
-    ...SHOPS.filter((id) => data[id]).map((id) => ({ id, opens: id, size: "m", label: data[id].name, build: (size) => shopTile(data[id], size, head) })),
+    ...SHOPS.filter((id) => data[id]).map((id) => ({ id, opens: id, size: "m", label: data[id].short || data[id].name, build: (size) => shopTile(data[id], size, head) })),
     made && {
       id: "made", opens: "made", size: "m", label: "Made in Kannapolis",
       build: (size) => {

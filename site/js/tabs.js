@@ -19,7 +19,7 @@ export const DEFAULT_MEMBERS = {
     "events", "parade", "parks", "gem", "swanee", "shuttle", "job-city"],
   fun: ["weather", "gem", "swanee", "baseball", "parks", "events", "parade", "ktown", "editions", "made", "whataburger", "library"],
   jobs: ["school-bus", "stocks"], // plus every employer widget (job-*): see defaultMembers
-  shopping: ["ellestique", "sweetest"],
+  shopping: ["weather", "ellestique", "sweetest", "cardiacs"],
   transportation: ["weather", "incidents", "rider", "train", "flights", "paratransit", "shuttle", "gas", "roads"],
 };
 

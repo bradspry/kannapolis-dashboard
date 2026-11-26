@@ -19,6 +19,7 @@
         "made",
         "ellestique",
         "sweetest",
+        "cardiacs",
         "library",
         "events",
         "parade",
@@ -225,12 +226,16 @@
     "shopping": {
       "order": [
         "ellestique",
-        "sweetest"
+        "cardiacs",
+        "sweetest",
+        "weather"
       ],
       "hidden": [],
       "sizes": {
         "ellestique": "l",
-        "sweetest": "l"
+        "sweetest": "l",
+        "cardiacs": "l",
+        "weather": "s"
       },
       "spacers": []
     }

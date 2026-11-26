@@ -1,0 +1,121 @@
+{
+  "id": "cardiacs",
+  "name": "CARDIACS Sports & Memorabilia",
+  "short": "CARDIACS",
+  "kind": "Sports cards & memorabilia",
+  "area": "downtown",
+  "area_long": "West Avenue",
+  "tagline": "Trading cards and fan gear: Pokémon and sports cards (NFL, NBA, MLB, NHL, soccer, racing), card supplies, memorabilia, wall art, lanyards, mini mascots, ornaments and tailgating gear",
+  "about": "North Carolina's sports-card and memorabilia shop since 2007, with stores in Kannapolis (133 West Ave) and Apex. Sell your cards to CARDIACS, book an appointment, or ask about grading. CARDIACS Cares gives back to the community, and this season both stores collect new, unwrapped toys for Toys for Tots (donation boxes by the front entrance).",
+  "address": "133 West Ave, Kannapolis, NC",
+  "phone": "(704) 935-3489",
+  "map": "https://www.google.com/maps/search/?api=1&query=CARDIACS+Sports+%26+Memorabilia+133+West+Ave+Kannapolis+NC",
+  "site": "https://www.thecardiacs.com",
+  "logo": "photos/local/cardiacs-logo.png",
+  "logo_wide": true,
+  "color": "#1f3a7a",
+  "hours": [
+    {
+      "days": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "open": "11:00",
+      "close": "19:00"
+    },
+    {
+      "days": [
+        6
+      ],
+      "open": "10:00",
+      "close": "18:00"
+    }
+  ],
+  "hours_note": "Closed Sundays",
+  "special": [],
+  "arrivals_label": "Just released",
+  "arrivals_url": "https://www.thecardiacs.com/collections/all-products",
+  "arrivals_more": "All products ↗",
+  "shop": [
+    {
+      "label": "Pokémon",
+      "url": "https://www.thecardiacs.com/collections/pokemon"
+    },
+    {
+      "label": "Sealed wax",
+      "url": "https://www.thecardiacs.com/collections/sealed-wax-boxes-packs"
+    },
+    {
+      "label": "Graded singles",
+      "url": "https://www.thecardiacs.com/collections/graded-single-cards"
+    },
+    {
+      "label": "Supplies",
+      "url": "https://www.thecardiacs.com/collections/supplies"
+    },
+    {
+      "label": "NFL",
+      "url": "https://www.thecardiacs.com/collections/nfl-1"
+    },
+    {
+      "label": "MLB",
+      "url": "https://www.thecardiacs.com/collections/mlb-1"
+    },
+    {
+      "label": "NBA & WNBA",
+      "url": "https://www.thecardiacs.com/collections/nba-wnba"
+    },
+    {
+      "label": "NHL",
+      "url": "https://www.thecardiacs.com/collections/nhl-wnhl"
+    },
+    {
+      "label": "College",
+      "url": "https://www.thecardiacs.com/collections/college-ncaa"
+    },
+    {
+      "label": "Memorabilia",
+      "url": "https://www.thecardiacs.com/collections/memorabilia"
+    },
+    {
+      "label": "Holiday gifts",
+      "url": "https://www.thecardiacs.com/collections/holiday-gifts"
+    },
+    {
+      "label": "Clearance",
+      "url": "https://www.thecardiacs.com/collections/clearance"
+    }
+  ],
+  "links": [
+    {
+      "label": "Book an appointment",
+      "url": "https://www.thecardiacs.com/collections/book-an-appointment"
+    },
+    {
+      "label": "Locations",
+      "url": "https://www.thecardiacs.com/pages/locations"
+    },
+    {
+      "label": "CARDIACS Cares",
+      "url": "https://www.thecardiacs.com/pages/cardiacs-cares"
+    },
+    {
+      "label": "FAQs",
+      "url": "https://www.thecardiacs.com/pages/faqs-1"
+    }
+  ],
+  "social": [
+    {
+      "label": "Facebook",
+      "url": "https://facebook.com/CardiacsSports"
+    },
+    {
+      "label": "Instagram",
+      "url": "https://instagram.com/cardiacssports"
+    }
+  ],
+  "source": "Machine-parsed from thecardiacs.com (Locations page: Kannapolis address, hours, phone; home page: About, Toys for Tots, menu), November 25, 2026"
+}

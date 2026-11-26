@@ -2703,3 +2703,10 @@ body::before {
   .tile-w.size-l:has(.el-event) .el-item.compact img { height: 92px; }
   .tile-w.size-s:has(.el-event) .el-where, .tile-w.size-m:has(.el-event) .el-shop { display: none; } /* room for the event */
 }
+.el-logo.wide { width: 96px; height: 31px; border-radius: 7px; padding: 0; top: 0; background: transparent; }
+.el-logo.wide img { object-fit: cover; }
+.lib-tile-head:has(.el-logo.wide) .tile-head { padding-right: 112px; }
+.el-logo.lg.wide { width: 240px; height: 76px; border-radius: 12px; }
+.el-special-h { margin: 16px 0 4px; font-size: 15px; }
+@media (max-width: 720px) { .el-logo.lg.wide { width: 180px; height: 57px; } }
+@media (max-width: 400px) { .tile-w.size-m .el-logo.wide, .tile-w.size-l .el-logo.wide { width: 72px; height: 23px; } .tile-w .lib-tile-head:has(.el-logo.wide) .tile-head { padding-right: 84px; } }

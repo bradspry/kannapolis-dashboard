@@ -1,17 +1,53 @@
 // Shopping tab: local shops, one widget each (Elle's Tique, Sweetest Beginnings, …). Products are read daily from
 // each shop's home page (data/generated/<id>.json, etl/build_shops.py); hours and "open now" are worked out on the
-// device (made.js helpers). A shop can carry one dated event (a Black Friday sale), shown up to and on its day.
+// device. A shop can carry one dated event (a Black Friday sale), shown up to and on its day, and special hours for
+// given dates (`special`: closed for Thanksgiving, open late on Black Friday), which override its weekly hours.
 import { h, fill } from "../ui.js";
-import { openStatus, hoursTable } from "./made.js";
+import { hoursTable, fmtClock } from "./made.js";
 
-export const SHOPS = ["ellestique", "sweetest"]; // tile and window order
+export const SHOPS = ["ellestique", "sweetest", "cardiacs"]; // tile and window order
+const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const mins = (t) => { const [hh, mm] = t.split(":").map(Number); return hh * 60 + mm; };
 const ext = (href, label, cls) => h("a", { href, target: "_blank", rel: "noopener", class: cls }, label);
 const ymd = (d) => d.toLocaleDateString("en-CA");
 
-export const shopLogo = (s, cls = "el-logo") => (s.logo ? h("span", { class: cls }, h("img", { src: s.logo, alt: `${s.name} logo` })) : null);
+export const shopLogo = (s, cls = "el-logo") => (s.logo ? h("span", { class: `${cls}${s.logo_wide ? " wide" : ""}` }, h("img", { src: s.logo, alt: `${s.name} logo` })) : null);
+
+/** A day's hours: { open, close } or null (closed), with a date's special hours winning over the weekly ones. */
+export function hoursOn(s, d) {
+  const sp = (s.special || []).find((x) => x.date === ymd(d));
+  if (sp) return sp.closed ? null : { open: sp.open, close: sp.close, special: sp.label || true };
+  return s.hours.find((r) => r.days.includes(d.getDay())) || null;
+}
+
+/** Open now? If not, when it opens next (special hours included). */
+export function shopOpen(s, now = new Date()) {
+  const t = now.getHours() * 60 + now.getMinutes(), today = hoursOn(s, now);
+  if (today && t >= mins(today.open) && t < mins(today.close)) {
+    const left = mins(today.close) - t;
+    return { open: true, label: left <= 60 ? `Open, closes soon (${fmtClock(today.close)})` : `Open until ${fmtClock(today.close)}` };
+  }
+  if (today && t < mins(today.open)) return { open: false, label: `Closed · opens ${fmtClock(today.open)} today` };
+  for (let i = 1; i <= 7; i++) {
+    const d = new Date(now); d.setDate(d.getDate() + i);
+    const r = hoursOn(s, d);
+    if (r) return { open: false, label: `Closed · opens ${i === 1 ? "tomorrow" : DAYS[d.getDay()]} ${fmtClock(r.open)}` };
+  }
+  return { open: false, label: "Closed" };
+}
+
+/** Special hours in the next two weeks: "Thursday, Nov 26: Closed (Thanksgiving)". */
+export function specialList(s, now = new Date()) {
+  const from = ymd(now), to = ymd(new Date(now.getTime() + 14 * 864e5));
+  const list = (s.special || []).filter((x) => x.date >= from && x.date <= to).sort((a, b) => a.date.localeCompare(b.date));
+  if (!list.length) return null;
+  return h("ul", { class: "gem-prices el-special", role: "list" }, list.map((x) => h("li", { class: x.date === from ? "today" : "" },
+    h("span", {}, new Date(`${x.date}T12:00`).toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" }), x.label ? ` (${x.label})` : ""),
+    h("b", {}, x.closed ? "Closed" : `${fmtClock(x.open)} – ${fmtClock(x.close)}`))));
+}
 
 export function shopStatus(s, { compact = false } = {}) {
-  const st = openStatus(s);
+  const st = shopOpen(s);
   return h("span", { class: `pk-status ${st.open ? "open" : ""}` }, st.open ? "● " : "○ ", compact ? st.label.replace(/^Closed · o/, "O") : st.label);
 }
 
@@ -49,7 +85,7 @@ export const where = (s) => h("p", { class: "tile-meta el-where" }, "📍 ", s.a
 
 /** The tile for one shop, at any size. */
 export function shopTile(s, size, head) {
-  const top = h("div", { class: "lib-tile-head" }, head("bag", s.color, s.name), shopLogo(s, `el-logo ${size}`));
+  const top = h("div", { class: "lib-tile-head" }, head("bag", s.color, s.short || s.name), shopLogo(s, `el-logo ${size}`));
   const info = h("div", { class: "el-info" }, h("div", { class: "bb-next-label" }, s.kind), shopStatus(s, { compact: true }), where(s));
   const label = s.arrivals_label || "New arrivals";
   if (size === "s") return h("div", { class: "tile-body" }, top, info, eventLine(s, { compact: true }));
@@ -80,7 +116,9 @@ export function renderShop(s) {
     s.arrivals?.length ? h("section", { class: "card" }, h("h3", {}, label), items(s, 12),
       s.arrivals_url ? h("p", { class: "tile-meta" }, ext(s.arrivals_url, s.arrivals_more || "See more ↗")) : null) : null,
     h("div", { class: "el-two" },
-      h("section", { class: "card" }, h("h3", {}, "Hours"), hoursTable(s), s.hours_note ? h("p", { class: "tile-meta" }, s.hours_note) : null),
+      h("section", { class: "card" }, h("h3", {}, "Hours"), hoursTable(s), s.hours_note ? h("p", { class: "tile-meta" }, s.hours_note) : null,
+        specialList(s) ? [h("h3", { class: "el-special-h" }, "Special hours"), specialList(s)] : null,
+        s.phone ? h("p", { class: "tile-meta" }, h("a", { href: `tel:${s.phone.replace(/\D/g, "")}` }, `☎ ${s.phone}`)) : null),
       h("section", { class: "card" }, h("h3", {}, "Shop by category"),
         h("div", { class: "el-chips" }, s.shop.map((c) => ext(c.url, c.label, "chip"))),
         s.links?.length ? h("p", { class: "el-links" }, s.links.flatMap((l, i) => [i ? " · " : null, ext(l.url, l.label)])) : null)),
