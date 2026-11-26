@@ -725,7 +725,7 @@ body.editing .tile-w:nth-child(2n) { animation-delay: -.14s; }
   border: 1px solid var(--border); background: var(--surface-1); color: var(--text-secondary);
 }
 .win-close:hover { color: var(--text-primary); background: var(--page); }
-.win-body { flex: 1; overflow: auto; padding: 20px; overscroll-behavior: contain; }
+.win-body { flex: 1; overflow: auto; padding: 20px; overscroll-behavior: contain; overflow-anchor: none; } /* late images and maps don't move the view */
 .win-body > section { margin: 0; }
 .win-body .section-head { display: none; }
 @media (max-width: 720px) {

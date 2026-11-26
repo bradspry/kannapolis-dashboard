@@ -569,11 +569,29 @@ export function openWindow(id, fromTile, { push = true } = {}) {
   dialog.append(document.getElementById("tooltip")); // the modal's top layer would cover a page-level tooltip
   document.documentElement.classList.add("win-open");
   if (!rendered.has(id)) renderWindow(id);
+  toTop();
   zoom(openerTile, false);
   if (push) {
     history.pushState({ win: id }, "", `#${id}`);
     pushed = true;
   }
+}
+
+/** A window always opens at its top. Phones (Safari especially) can land lower: focus jumping to a link inside,
+ *  or images and maps loading after the first draw. Focus the close button without scrolling, and put the body
+ *  back at the top over the next moments, until the reader touches or scrolls it. */
+let topTimers = [];
+function toTop() {
+  const body = winBody, panel = dialog.querySelector(".win-panel");
+  topTimers.forEach(clearTimeout); topTimers = [];
+  let touched = false;
+  const stop = () => { touched = true; };
+  for (const ev of ["touchstart", "wheel", "keydown", "pointerdown"]) body.addEventListener(ev, stop, { once: true, passive: true });
+  const reset = () => { if (touched || openId === null) return; body.scrollTop = 0; if (panel) panel.scrollTop = 0; dialog.scrollTop = 0; };
+  dialog.querySelector(".win-close")?.focus({ preventScroll: true });
+  reset();
+  requestAnimationFrame(() => { reset(); requestAnimationFrame(reset); });
+  topTimers = [150, 400, 900, 1600].map((ms) => setTimeout(reset, ms));
 }
 
 export function closeWindow({ animate = true, pop = true } = {}) {
