@@ -25,7 +25,7 @@ import { nextTrains, trainRow, nextCard as trNext, stationStatus as trStatus, ti
 import { countText as jobCount, staleNote as jobStale, careersButton as jobCareers, jobList, sectorColor as jobColor, fmtDay as jobDay, brandVars, brandHead } from "./sections/jobs.js";
 import { latest as ktLatest, logo as ktLogo, meta as ktMeta, thumb as ktThumb, buttons as ktButtons, list as ktList, epLabel as ktEp } from "./sections/ktown.js";
 import { headline as kxHead, rows as kxRows, movers as kxMovers, change as kxChange, sinceStart as kxSince, pctText as kxPct, dayText as kxDay } from "./sections/stocks.js";
-import { bigPrice as gsBig, list as gsList, avList as gsAv, stationMap as gsMap, trendText as gsTrend, areaLine as gsArea, usd as gsUsd, GAS_COLOR } from "./sections/gas.js";
+import { noticeLine, bigPrice as gsBig, list as gsList, avList as gsAv, stationMap as gsMap, trendText as gsTrend, areaLine as gsArea, usd as gsUsd, GAS_COLOR } from "./sections/gas.js";
 import { lakeRows as wlLakes, streamRows as wlStreams, tileWaterMap as wlTileMap, allLakes as wlAll, belowText as wlBelow, condition as wlCond, WATER_COLOR } from "./sections/water.js";
 import { districtRows as hmRows, changeLine as hmChange, miniChart as hmChart, latestOf as hmLatest, syShort as hmSy, HOMELESS_COLOR } from "./sections/homeless.js";
 import { roadMap as rdMap, headline as rdHead, topList as rdTop, share as rdShare, ROADS_COLOR } from "./sections/roads.js";
@@ -1021,21 +1021,21 @@ export function tileDefs(data, COLORS) {
       id: "gas", opens: "gas", size: "m", label: "Gas Prices",
       build: (size) => {
         const g = gas, reg = g.grades.regular.stations, dsl = g.grades.diesel?.stations || [];
-        const top = head("fuel", GAS_COLOR, "Gas Prices");
+        const top = head("fuel", GAS_COLOR, "Gas Prices"), tax = () => noticeLine(g, { compact: true });
         const trend = gsTrend(g.grades.regular.trend);
         const dieselLine = dsl[0] ? h("p", { class: "gs-mini-line" }, h("b", {}, gsUsd(dsl[0].price)), ` diesel · ${dsl[0].name}`) : null;
         const avLine = g.aviation[0] ? h("p", { class: "gs-mini-line" }, h("b", {}, gsUsd(g.aviation[0].price)), ` ${g.aviation[0].fuel} · ${g.aviation[0].code}`) : null;
-        if (size === "s") return h("div", { class: "tile-body" }, top, gsBig(reg[0], { compact: true }));
+        if (size === "s") return h("div", { class: "tile-body" }, top, gsBig(reg[0], { compact: true }), tax());
         if (size === "m") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top gs-m" },
-          h("div", {}, gsBig(reg[0], { compact: true }), trend ? h("p", { class: "tile-meta" }, trend) : null),
+          h("div", {}, gsBig(reg[0], { compact: true }), tax() || (trend ? h("p", { class: "tile-meta" }, trend) : null)),
           h("div", {}, h("div", { class: "mini-head bb-mh" }, "Next cheapest"), gsList(reg, 3, { from: 1 }), dieselLine)));
         if (size === "l") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top gs-m" },
-          h("div", {}, gsBig(reg[0], { compact: true }), trend ? h("p", { class: "tile-meta" }, trend) : null, gsArea(g)),
+          h("div", {}, gsBig(reg[0], { compact: true }), tax(), trend ? h("p", { class: "tile-meta" }, trend) : null, gsArea(g)),
           gsMap(g, boundaries, { cls: "mini" })),
           h("div", { class: "tile-split top gs-l" }, h("div", {}, h("div", { class: "mini-head" }, "Regular"), gsList(reg, 5, { from: 1 })),
             h("div", {}, h("div", { class: "mini-head" }, "Diesel"), gsList(dsl, 2, { numbered: false }), h("div", { class: "mini-head" }, "Aviation"), gsAv(g, 2))));
         return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top gs-xl" },
-          h("div", {}, gsBig(reg[0], { compact: true }), trend ? h("p", { class: "tile-meta" }, trend) : null, gsArea(g), gsMap(g, boundaries, { cls: "mini" })),
+          h("div", {}, gsBig(reg[0], { compact: true }), tax(), trend ? h("p", { class: "tile-meta" }, trend) : null, gsArea(g), gsMap(g, boundaries, { cls: "mini" })),
           h("div", {}, h("div", { class: "mini-head bb-mh" }, "Regular"), gsList(reg, 7, { from: 1 })),
           h("div", {}, h("div", { class: "mini-head bb-mh" }, "Diesel"), gsList(dsl, 4, { numbered: false }), h("div", { class: "mini-head" }, "Aviation"), gsAv(g, 4))));
       },

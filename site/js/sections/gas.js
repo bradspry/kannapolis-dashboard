@@ -1,6 +1,7 @@
 // Gas Prices (Transportation tab): bradspry/kannapolis-gas's "Friday Fill-up", read daily. The cheapest regular
 // and diesel near Kannapolis (GasBuddy, plus stations read from their own sites), ranked by posted price
 // (like gas_prices.py --no-rewards), and aviation fuel at Concord-Padgett and Mid-Carolina Regional (AirNav).
+import { shareBar } from "../share.js";
 import { h, fill } from "../ui.js";
 import { miniMap } from "../minimap.js";
 
@@ -74,12 +75,29 @@ function table(stations, grade) {
     h("p", { class: "tile-meta" }, `${grade} ranked by posted price.`));
 }
 
+/** A notice in force now (data/manual/gas.json notices): the NC gas tax suspension, with days left. */
+export function activeNotice(g, now = new Date()) {
+  const today = now.toLocaleDateString("en-CA");
+  const n = (g.notices || []).find((x) => today >= (x.show_from || "") && today <= x.until);
+  if (!n) return null;
+  const days = Math.round((new Date(`${n.until}T12:00`) - new Date(`${today}T12:00`)) / 864e5);
+  return { ...n, days, left: days === 0 ? "ends today" : days === 1 ? "ends tomorrow" : `${days} days left` };
+}
+export function noticeLine(g, { compact = false } = {}) {
+  const n = activeNotice(g);
+  return n ? h("p", { class: `gs-notice${compact ? " compact" : ""}` }, h("b", {}, "⚠ ", n.short), h("span", {}, ` · ${n.left}`)) : null;
+}
+
 export function renderGas(g, boundaries) {
   const root = document.getElementById("gas-body");
   const reg = g.grades.regular, dsl = g.grades.diesel;
   const stale = Object.values(g.grades).find((x) => x.stale);
   fill(root,
+    h("div", { class: "share-row" }, h("span", { class: "share-label" }, "Share today's prices"),
+      shareBar("gas", { title: `Gas in Kannapolis: $${reg.stations[0].price.toFixed(2)} at ${reg.stations[0].name}`, text: "Today's cheapest gas in Kannapolis" })),
     stale ? h("p", { class: "note" }, `GasBuddy didn't answer this morning; these are the prices from ${dayText(stale.checked, { month: "long", day: "numeric" })}.`) : null,
+    (() => { const n = activeNotice(g); return n ? h("section", { class: "card gs-notice-card" }, h("h3", {}, `⚠ ${n.title}`, h("span", { class: "gs-notice-left" }, ` · ${n.left}`)),
+      h("p", {}, n.detail), h("p", { class: "tile-meta" }, n.note), h("p", {}, h("a", { href: n.url, target: "_blank", rel: "noopener" }, n.link_label))) : null; })(),
     h("section", { class: "card gs-hero" },
       h("div", { class: "gs-hero-grid" },
         h("div", {}, bigPrice(reg.stations[0]), h("p", { class: "tile-meta" }, trendText(reg.trend) || "Week-over-week trend starts after a week of readings."), areaLine(g)),

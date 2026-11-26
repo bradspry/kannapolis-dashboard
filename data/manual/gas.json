@@ -3,7 +3,28 @@
   "title": "Gas Prices",
   "note": "Prices are crowd-sourced on GasBuddy and change through the day; a listing older than 24 hours is left out.",
   "airports": {
-    "KJQF": { "airport_name": "Concord-Padgett Regional Airport", "lat": 35.387798, "lon": -80.709099 },
-    "KRUQ": { "airport_name": "Mid-Carolina Regional Airport", "lat": 35.645901, "lon": -80.520302 }
-  }
+    "KJQF": {
+      "airport_name": "Concord-Padgett Regional Airport",
+      "lat": 35.387798,
+      "lon": -80.709099
+    },
+    "KRUQ": {
+      "airport_name": "Mid-Carolina Regional Airport",
+      "lat": 35.645901,
+      "lon": -80.520302
+    }
+  },
+  "notices": [
+    {
+      "id": "nc-gas-tax",
+      "show_from": "2026-10-09",
+      "until": "2026-11-30",
+      "short": "NC's 41¢ gas tax break ends Nov 30",
+      "title": "North Carolina's gas tax suspension ends November 30",
+      "detail": "Session Law 2026-62, signed October 9, 2026, suspends North Carolina's 41-cent-per-gallon state tax on gas and fuel through November 30, 2026, to give drivers relief from high fuel costs.",
+      "note": "Stations may not lower prices right away, and changes vary by station. If a station isn't passing on the savings, you can file a complaint with the NC Department of Justice.",
+      "url": "https://ncdoj.gov/protecting-consumers/ncfuelcheck/",
+      "link_label": "NC DOJ: NC Fuel Check ↗"
+    }
+  ]
 }

@@ -168,6 +168,12 @@ const RULES = {
   },
   gas(D, now) {
     const g = D.gas?.grades?.regular, s = g?.stations?.[0]; if (!s) return null;
+    // A notice with an end date (NC's gas tax suspension): top of the list in its last week.
+    const n = (D.gas.notices || []).find((x) => ymd(now) >= (x.show_from || "") && ymd(now) <= x.until);
+    if (n) {
+      const days = Math.round((new Date(`${n.until}T12:00`) - new Date(`${ymd(now)}T12:00`)) / 864e5);
+      if (days <= 7) return { score: days <= 2 ? 78 : 64, reason: `${n.short}${days === 0 ? " (today)" : days === 1 ? " (tomorrow)" : ` (${days} days)`}` };
+    }
     const t = g.trend;
     if (t && Math.abs(t.delta) >= 0.05) return { score: 46, reason: `Gas ${t.delta < 0 ? "down" : "up"} ${Math.round(Math.abs(t.delta) * 100)}¢ this week` };
     if (now.getDay() === 5 || now.getDay() === 4) return { score: 42, reason: `Fill-up: $${s.price.toFixed(2)} at ${s.name}` };

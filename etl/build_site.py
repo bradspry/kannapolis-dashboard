@@ -120,9 +120,17 @@ def share_pages() -> None:
         shutil.copytree(src, DIST / "share", dirs_exist_ok=True)
     jobs_file = OUT / "jobs.json"
     n_emp = len(json.loads(jobs_file.read_text())["employers"]) if jobs_file.exists() else 0
-    for slug, p in SHARE_PAGES.items():
-        p = {**p, "description": p["description"].replace("{employers}", str(n_emp or "dozens of"))}
-        url, img, target = f"{BASE_URL}{slug}/", f"{BASE_URL}{p['image']}", f"../?tab={p['tab']}"
+    pages = {slug: {**p, "description": p["description"].replace("{employers}", str(n_emp or "dozens of"))} for slug, p in SHARE_PAGES.items()}
+    # Widget share pages with a card drawn from today's data (etl/share_cards.py): /gas/ opens the Gas Prices window.
+    gas_file = OUT / "gas.json"
+    if gas_file.exists():
+        from share_cards import gas_share
+        g = gas_share(json.loads(gas_file.read_text()), DIST)
+        if g:
+            pages["gas"] = {**g, "window": "gas"}
+    for slug, p in pages.items():
+        url, img = f"{BASE_URL}{slug}/", f"{BASE_URL}{p['image']}"
+        target = f"../#{p['window']}" if p.get("window") else f"../?tab={p['tab']}"
         e = lambda v: H.escape(v, quote=True)  # noqa: E731
         page = f"""<!doctype html>
 <html lang="en">
@@ -139,11 +147,11 @@ def share_pages() -> None:
 <meta property="og:image" content="{img}" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="The {e(p['title'])} tab of the Kannapolis Civic Dashboard" />
+<meta property="og:image:alt" content="{e(p.get('alt') or f"The {p['title']} tab of the Kannapolis Civic Dashboard")}" />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="canonical" href="{url}" />
 <meta http-equiv="refresh" content="0; url={target}" />
-<script>location.replace({json.dumps(target)} + location.hash);</script>
+<script>location.replace({json.dumps(target)} + (location.hash && !{json.dumps(target)}.includes("#") ? location.hash : ""));</script>
 <style>body{{background:#141414;color:#eee;font:16px system-ui,sans-serif;padding:24px}}a{{color:#6aa7ff}}</style>
 </head>
 <body><p>Opening <a href="{target}">{e(p['title'])} on the Kannapolis Civic Dashboard</a>…</p></body>
@@ -151,7 +159,7 @@ def share_pages() -> None:
 """
         (DIST / slug).mkdir(parents=True, exist_ok=True)
         (DIST / slug / "index.html").write_text(page)
-    log(f"site: share pages {', '.join(f'/{s}/' for s in SHARE_PAGES)}")
+    log(f"site: share pages {', '.join(f'/{s}/' for s in pages)}")
 
 
 def main() -> None:

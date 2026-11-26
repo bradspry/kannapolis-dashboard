@@ -387,7 +387,7 @@ function renderBrief(ranked) {
   const show = storied() && !document.body.classList.contains("editing");
   box.hidden = !show;
   if (!show) { box.replaceChildren(); return; }
-  const items = ranked.filter((r) => r.timely >= 30 && r.reason).slice(0, phone() ? 3 : 5);
+  const items = ranked.filter((r) => r.timely >= 30 && r.reason).sort((a, b) => b.timely - a.timely).slice(0, phone() ? 3 : 5); // most timely first, whatever its chapter
   const hr = new Date().getHours(), part = hr < 5 ? "tonight" : hr < 12 ? "this morning" : hr < 17 ? "this afternoon" : "this evening";
   const seg = (mode, label) => h("button", { type: "button", class: "now-seg", "aria-pressed": String((mode === "mine") === mineMode()),
     onclick: () => setMode(mode) }, label);
