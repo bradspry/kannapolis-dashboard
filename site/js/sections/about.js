@@ -24,6 +24,7 @@ export function datasets(D) {
     ["CARDIACS new releases", "cardiacs", D.cardiacs, DAILY, 2],
     ["Cook Cattle Farm store", "cookcattle", D.cookcattle, DAILY, 2],
     ["The Spice & Tea Exchange hours", "spicetea", D.spicetea, DAILY, 2],
+    ["Provisions on Main events & menu", "provisions", D.provisions, DAILY, 2],
     ["K-Town Connection episodes", "ktown", D.ktown, DAILY, 2],
     ["Library events", "library", D.library, DAILY, 2],
     ["NC By Train schedule", "train", D.train, DAILY, 2],

@@ -22,6 +22,7 @@ import build_org
 import build_parade
 import build_incidents
 import build_shops
+import build_provisions
 import build_parks
 import build_police
 import build_property
@@ -64,7 +65,8 @@ STEPS = [
     ("flights", build_flights.main),  # needs a kannapolis-travel checkout (.kannapolis-travel)
     ("gas", build_gas.main),  # needs py-gasbuddy (the "Refresh gas" workflow); without it, last prices are kept
     ("roads", build_roads.main),
-    ("shops", build_shops.main),  # Shopping tab: Elle's Tique, Sweetest Beginnings
+    ("shops", build_shops.main),
+    ("provisions", build_provisions.main),  # Provisions on Main: events and deli menu  # Shopping tab: Elle's Tique, Sweetest Beginnings
     ("incidents", build_incidents.main),  # needs DRIVENC_API_KEY; the Deploy workflow runs it every 15 minutes
     ("stocks", build_stocks.main),
     ("weather", build_weather.main),

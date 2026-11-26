@@ -11,17 +11,18 @@
         "weather",
         "drought",
         "utility",
+        "ellestique",
+        "cardiacs",
+        "spicetea",
+        "provisions",
+        "sweetest",
+        "cookcattle",
         "police",
         "swanee",
         "fire",
         "parks",
         "editions",
         "made",
-        "ellestique",
-        "sweetest",
-        "cardiacs",
-        "spicetea",
-        "cookcattle",
         "library",
         "events",
         "parade",
@@ -146,6 +147,7 @@
         "baseball",
         "parks",
         "made",
+        "provisions",
         "library",
         "editions",
         "events",
@@ -160,7 +162,8 @@
         "editions": "l",
         "made": "l",
         "library": "l",
-        "ktown": "l"
+        "ktown": "l",
+        "provisions": "l"
       },
       "spacers": []
     },
@@ -231,6 +234,7 @@
         "cardiacs",
         "spicetea",
         "editions",
+        "provisions",
         "sweetest",
         "cookcattle"
       ],
@@ -241,7 +245,8 @@
         "cardiacs": "l",
         "cookcattle": "l",
         "spicetea": "m",
-        "editions": "m"
+        "editions": "m",
+        "provisions": "l"
       },
       "spacers": []
     }

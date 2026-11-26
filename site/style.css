@@ -2757,3 +2757,65 @@ body.editing .tile-w :is(.el-logo, .kt-logo-badge, .tr-logo, .ic-logo, .bb-logo)
 .el-hero-actions .el-btns { margin-top: 0; }
 .el-shop-2.compact { padding: 5px 12px; font-size: 13px; }
 .tile-w.size-m .el-social { display: none; } /* medium: Call and Shop online only */
+
+/* ---------- Provisions on Main Market & Deli ("the POM") ---------- */
+.pom-tile { --pom: #68816d; --pom-accent: #b3213f; }
+.pom-logo { border-radius: 50%; padding: 0; overflow: hidden; }
+.pom-logo img { object-fit: cover; }
+.pom-xl { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) minmax(0, .8fr); gap: 18px; }
+.pom-l { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 16px; }
+.pom-special { margin-top: 6px; padding: 8px 10px; border-radius: 12px; background: color-mix(in oklab, var(--pom) 22%, var(--surface-1)); border-left: 4px solid var(--pom-accent);
+  display: grid; gap: 1px; font-size: 13px; line-height: 1.35; }
+.pom-special b { font-size: 14px; }
+.pom-special span:not(.pom-special-tag) { color: var(--text-secondary); }
+.pom-special-tag { font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--pom-accent); }
+.pom-special.compact { display: flex; gap: 8px; align-items: baseline; }
+.pom-events { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 8px; }
+.pom-events li { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 10px; align-items: center; }
+.pom-date { display: grid; place-items: center; height: 44px; border-radius: 10px; background: var(--pom-accent); color: #fff; line-height: 1; }
+.pom-date span { font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; opacity: .9; }
+.pom-date b { font-size: 18px; }
+.pom-ev { display: grid; min-width: 0; } .pom-ev b { font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pom-ev span { font-size: 12px; color: var(--text-muted); }
+.pom-events.compact li { grid-template-columns: 38px minmax(0, 1fr); } .pom-events.compact .pom-date { height: 38px; }
+.pom-next { margin: 6px 0 0; font-size: 13px; color: var(--text-secondary); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.pom-next b { color: var(--text-primary); }
+/* the deli board: a sage chalkboard, cream lettering, dotted leaders to the price */
+.pom-board { background: linear-gradient(160deg, #2c3d32, #22302a); color: #f3ecd8; border-radius: 14px; padding: 12px 14px 10px; box-shadow: inset 0 0 0 2px rgb(243 236 216 / .12), 0 6px 18px -10px rgb(0 0 0 / .6); }
+.pom-board-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 6px; border-bottom: 1px dashed rgb(243 236 216 / .35); padding-bottom: 5px; }
+.pom-board-head span { font-family: Georgia, "Times New Roman", serif; font-size: 17px; font-style: italic; }
+.pom-board-head i { font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; opacity: .7; font-style: normal; }
+.pom-board ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.pom-line { display: flex; align-items: baseline; gap: 6px; min-width: 0; }
+.pom-line b { font-weight: 600; font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pom-dots { flex: 1; min-width: 12px; border-bottom: 2px dotted currentColor; opacity: .35; transform: translateY(-3px); }
+.pom-line em { font-style: normal; font-weight: 700; font-variant-numeric: tabular-nums; }
+.pom-board p { margin: 1px 0 4px; font-size: 12px; opacity: .75; line-height: 1.35; }
+.pom-photo { min-width: 0; } .pom-photo img { width: 100%; height: 100%; max-height: 300px; object-fit: cover; border-radius: 14px; display: block; }
+/* window */
+.pom-hero { border-top: 4px solid var(--pom); }
+.pom-photos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 0 0 16px; }
+.pom-photos img { width: 100%; height: 220px; object-fit: cover; border-radius: 14px; display: block; }
+.pom-specials { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.pom-specials li { display: grid; gap: 1px; } .pom-specials span { color: var(--text-secondary); font-size: 14px; }
+.pom-board.big { padding: 16px 18px; } .pom-board.big .pom-line b { font-size: 15px; } .pom-board.big p { font-size: 13px; }
+.pom-menu-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 28px !important; row-gap: 8px !important; }
+.pom-menu-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 16px; }
+.pom-menu-two h4 { margin: 12px 0 6px; } .pom-menu-two h4:first-child { margin-top: 0; }
+.pom-plain { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; } .pom-plain p { margin: 0; color: var(--text-secondary); font-size: 13px; }
+.pom-ktown { margin-top: 10px; color: var(--text-secondary); }
+@media (max-width: 720px) {
+  .pom-xl, .pom-l { grid-template-columns: minmax(0, 1fr); }
+  .pom-photo { display: none; }
+  .pom-photos { grid-template-columns: minmax(0, 1fr); } .pom-photos img:not(:first-child) { display: none; }
+  .pom-menu-grid, .pom-menu-two { grid-template-columns: minmax(0, 1fr); }
+  .tile-w.size-m .pom-tile .el-m > :last-child { display: none; }
+}
+.pom-phone { display: none; }
+@media (max-width: 720px) {
+  .pom-phone { display: block; } .pom-desk { display: none; }
+  .pom-board-head i { display: none; }
+  .tile-w.size-s .pom-tile .el-where { display: none; }
+  .tile-w.size-l .pom-l .pom-board li:nth-child(n+4) { display: none; }
+}
+@media (max-width: 720px) { .tile-w.size-l .pom-tile .el-where, .tile-w.size-l .pom-tile .el-social { display: none; } }

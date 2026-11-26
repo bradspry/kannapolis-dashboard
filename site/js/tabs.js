@@ -17,9 +17,9 @@ export const DEFAULT_MEMBERS = {
     "people", "homeless", "budget", "debt-service", "growth", "g-tax-rate", "g-debt-policy", "g-debt-limit", "land", "g-owners", "about",
     // Also City-run (City of Kannapolis publishes their data): its events, parks, theaters, shuttle and jobs.
     "events", "parade", "parks", "gem", "swanee", "shuttle", "job-city"],
-  fun: ["weather", "gem", "swanee", "baseball", "parks", "events", "parade", "ktown", "editions", "made", "whataburger", "library"],
+  fun: ["weather", "gem", "swanee", "baseball", "parks", "events", "parade", "ktown", "editions", "made", "whataburger", "library", "provisions"],
   jobs: ["school-bus", "stocks"], // plus every employer widget (job-*): see defaultMembers
-  shopping: ["ellestique", "sweetest", "cardiacs", "cookcattle", "spicetea", "editions"],
+  shopping: ["ellestique", "sweetest", "cardiacs", "cookcattle", "spicetea", "editions", "provisions"],
   transportation: ["weather", "incidents", "rider", "train", "flights", "paratransit", "shuttle", "gas", "roads"],
 };
 

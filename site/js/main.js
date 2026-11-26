@@ -17,6 +17,7 @@ import { renderSwanee } from "./sections/swanee.js";
 import { renderParade } from "./sections/parade.js";
 import { renderIncidents, INCIDENTS_COLOR } from "./sections/incidents.js";
 import { renderShop, SHOPS } from "./sections/shop.js";
+import { renderProvisions } from "./sections/provisions.js";
 import { renderMade } from "./sections/made.js";
 import { renderEditions } from "./sections/editions.js";
 import { renderWhatABurger } from "./sections/whataburger.js";
@@ -76,7 +77,7 @@ function main() {
     police: load("police.json", { optional: true }), fire: load("fire.json", { optional: true }),
     baseball: load("baseball.json", { optional: true }), utility: load("utility.json", { optional: true }),
     parks: load("parks.json", { optional: true }), gem: load("gem.json", { optional: true }),
-    swanee: load("swanee.json", { optional: true }), parade: load("parade.json", { optional: true }), incidents: load("incidents.json", { optional: true }), ellestique: load("ellestique.json", { optional: true }), sweetest: load("sweetest.json", { optional: true }), cardiacs: load("cardiacs.json", { optional: true }), cookcattle: load("cookcattle.json", { optional: true }), spicetea: load("spicetea.json", { optional: true }), made: load("made.json", { optional: true }),
+    swanee: load("swanee.json", { optional: true }), parade: load("parade.json", { optional: true }), incidents: load("incidents.json", { optional: true }), ellestique: load("ellestique.json", { optional: true }), sweetest: load("sweetest.json", { optional: true }), cardiacs: load("cardiacs.json", { optional: true }), cookcattle: load("cookcattle.json", { optional: true }), spicetea: load("spicetea.json", { optional: true }), provisions: load("provisions.json", { optional: true }), made: load("made.json", { optional: true }),
     editions: load("editions.json", { optional: true }), whataburger: load("whataburger.json", { optional: true }),
     videos: load("videos.json", { optional: true }), waste: load("waste.json", { optional: true }),
     drought: load("drought.json", { optional: true }), library: load("library.json", { optional: true }),
@@ -130,6 +131,7 @@ function main() {
   if (D.ktown?.episodes?.length) win("ktown", { title: "K-Town Connection", icon: "mic", color: D.ktown.color, render: () => renderKtown(D.ktown) });
   if (D.stocks?.companies?.length) win("stocks", { title: "KANDEX", icon: "growth", color: "var(--icon-3)", render: () => renderStocks(D.stocks) });
   if (D.gas?.grades?.regular) win("gas", { title: "Gas Prices", icon: "fuel", color: GAS_COLOR, render: () => renderGas(D.gas, D.boundaries) });
+  if (D.provisions) win("provisions", { title: "Provisions on Main Market & Deli", icon: "basket", color: D.provisions.color, render: () => renderProvisions(D.provisions) });
   for (const id of SHOPS) if (D[id]) win(id, { title: D[id].name, icon: "bag", color: D[id].color, render: () => renderShop(D[id]) });
   if (D.incidents?.events) win("incidents", { title: "NCDOT Incidents", icon: "cone", color: INCIDENTS_COLOR, render: () => renderIncidents(D.incidents) });
   if (D.roads?.lines) win("roads", { title: "City Roads", icon: "road", color: ROADS_COLOR, render: () => renderRoads(D.roads) });
