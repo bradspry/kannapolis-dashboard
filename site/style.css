@@ -2692,3 +2692,14 @@ body::before {
 .el-xl .el-item.compact img { height: 170px; }
 @media (max-width: 720px) { .tile-w.size-l .el-grid.compact { grid-template-columns: repeat(2, minmax(0, 1fr)); } .tile-w.size-l .el-item.compact img { height: 110px; } }
 .el-m .el-item.compact img { height: 88px; }
+.el-event { margin: 4px 0 0; font-size: 13px; line-height: 1.35; padding: 6px 9px; border-radius: 9px; background: color-mix(in oklab, var(--series-5) 14%, var(--surface-1)); }
+.el-event b { color: var(--series-5); }
+.el-event.compact .el-event-text { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.el-event-card { border-left: 4px solid var(--series-5); }
+.el-event-card h3 { margin-top: 0; }
+.el-event { flex: none; } /* never squeezed to a sliver */
+.tile-w.size-l:has(.el-event) .el-item.compact img { height: 118px; }
+@media (max-width: 720px) {
+  .tile-w.size-l:has(.el-event) .el-item.compact img { height: 92px; }
+  .tile-w.size-s:has(.el-event) .el-where, .tile-w.size-m:has(.el-event) .el-shop { display: none; } /* room for the event */
+}

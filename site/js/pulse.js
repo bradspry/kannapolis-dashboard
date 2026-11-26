@@ -15,7 +15,20 @@ const daysAgo = (iso, now) => (now - new Date(`${iso.slice(0, 10)}T12:00`)) / 86
 const clip = (s, n = 48) => (s.length > n ? `${s.slice(0, n - 1).trimEnd()}…` : s);
 const isWeekend = (d) => [0, 5, 6].includes(d.getDay()) && !(d.getDay() === 5 && d.getHours() < 15); // Fri evening – Sun
 
+/** A shop's dated event (a Black Friday sale): at the top on the day, high the day before, a nudge that week. */
+const shopPulse = (s, now) => {
+  const e = s?.event;
+  if (!e || ymd(now) > e.date) return null;
+  const days = Math.round((new Date(`${e.date}T12:00`) - new Date(`${ymd(now)}T12:00`)) / 864e5);
+  if (days === 0) return { score: 70, reason: `${s.name}: ${clip(e.title, 40)} today` };
+  if (days === 1) return { score: 50, reason: `${s.name}: ${clip(e.title, 40)} tomorrow` };
+  if (days < 7) return { score: 20, reason: `${s.name}: ${clip(e.title, 40)} ${new Date(`${e.date}T12:00`).toLocaleDateString("en-US", { weekday: "long" })}` };
+  return null;
+};
+
 const RULES = {
+  ellestique: (D, now) => shopPulse(D.ellestique, now),
+  sweetest: (D, now) => shopPulse(D.sweetest, now),
   weather(D, now) {
     const w = weather();
     if (w?.alerts?.length) {
@@ -178,7 +191,7 @@ export const BASE = {
   weather: 34, waste: 30, events: 30, news: 26, meetings: 22, train: 20, gas: 22, utility: 20, police: 18, fire: 14,
   parks: 18, library: 18, gem: 20, swanee: 16, parade: 15, drought: 16, water: 14, council: 16, videos: 14, ktown: 12, baseball: 14,
   editions: 14, whataburger: 14, made: 10, stocks: 12, rider: 12, shuttle: 9, paratransit: 13, flights: 12, homeless: 10,
-  roads: 8, incidents: 14, ellestique: 12, people: 12, growth: 10, budget: 12, "debt-service": 6, land: 8, org: 10, "g-tax-rate": 8, "g-debt-policy": 6,
+  roads: 8, incidents: 14, ellestique: 12, sweetest: 10, people: 12, growth: 10, budget: 12, "debt-service": 6, land: 8, org: 10, "g-tax-rate": 8, "g-debt-policy": 6,
   "g-debt-limit": 6, "g-owners": 6, about: 4, "school-bus": 6,
 };
 
@@ -193,7 +206,7 @@ export const STORIES = {
     { id: "home", name: "At Home", blurb: "Weather, trash, water and bills", ids: ["weather", "waste", "utility", "drought", "water"] },
     { id: "around", name: "Getting Around", blurb: "Traffic, trains, buses, gas and roads", ids: ["incidents", "train", "gas", "rider", "paratransit", "shuttle", "flights", "roads"] },
     { id: "out", name: "Out & About", blurb: "Things to do", ids: ["events", "parade", "gem", "swanee", "baseball", "parks", "library"] },
-    { id: "local", name: "Local Flavor", blurb: "Eat, drink and shop local", ids: ["editions", "whataburger", "made", "ellestique"] },
+    { id: "local", name: "Local Flavor", blurb: "Eat, drink and shop local", ids: ["editions", "whataburger", "made", "ellestique", "sweetest"] },
     { id: "hall", name: "City Hall", blurb: "News, meetings and decisions", ids: ["news", "meetings", "council", "videos", "org", "people", "budget",
       "debt-service", "growth", "land", "g-tax-rate", "g-debt-policy", "g-debt-limit", "g-owners"], big: ["council"], small: ["videos"] },
     { id: "safety", name: "Safety", blurb: "Police and fire", ids: ["police", "fire"] },

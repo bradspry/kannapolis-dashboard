@@ -20,6 +20,7 @@ export function datasets(D) {
     ["Editions books & events", "editions", D.editions, DAILY, 2],
     ["Old Armor live music", "made", D.made, DAILY, 2],
     ["Elle's Tique new arrivals", "ellestique", D.ellestique, DAILY, 2],
+    ["Sweetest Beginnings products", "sweetest", D.sweetest, DAILY, 2],
     ["K-Town Connection episodes", "ktown", D.ktown, DAILY, 2],
     ["Library events", "library", D.library, DAILY, 2],
     ["NC By Train schedule", "train", D.train, DAILY, 2],

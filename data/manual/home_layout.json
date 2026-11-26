@@ -18,6 +18,7 @@
         "editions",
         "made",
         "ellestique",
+        "sweetest",
         "library",
         "events",
         "parade",
@@ -223,11 +224,13 @@
     },
     "shopping": {
       "order": [
-        "ellestique"
+        "ellestique",
+        "sweetest"
       ],
       "hidden": [],
       "sizes": {
-        "ellestique": "l"
+        "ellestique": "l",
+        "sweetest": "l"
       },
       "spacers": []
     }
