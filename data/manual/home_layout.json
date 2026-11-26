@@ -118,7 +118,6 @@
         "videos",
         "org",
         "people",
-        "homeless",
         "budget",
         "debt-service",
         "growth",
@@ -127,18 +126,22 @@
         "g-debt-limit",
         "land",
         "g-owners",
-        "about",
         "events",
         "parade",
         "parks",
         "gem",
         "swanee",
         "shuttle",
-        "job-city"
+        "job-city",
+        "homeless",
+        "about"
       ],
       "hidden": [],
       "sizes": {
-        "roads": "xl"
+        "roads": "xl",
+        "org": "l",
+        "homeless": "xl",
+        "about": "xl"
       },
       "spacers": []
     },

@@ -266,11 +266,12 @@ export const STORIES = {
   city: [
     { id: "services", name: "City Services", blurb: "Trash, water, bills and streets", ids: ["waste", "utility", "drought", "water", "roads"], xl: ["roads"] },
     { id: "safety", name: "Public Safety", blurb: "Police and fire", ids: ["police", "fire"] },
-    { id: "hall", name: "City Hall", blurb: "News, meetings, your council and City jobs", ids: ["news", "meetings", "council", "videos", "org", "job-city"], big: ["council"], small: ["videos"] },
+    { id: "hall", name: "City Hall", blurb: "News, meetings, your council and City jobs", ids: ["news", "meetings", "council", "videos", "org", "job-city"], big: ["council", "org"], small: ["videos"] },
     { id: "downtown", name: "Downtown & Parks", blurb: "City-run events, parks, theaters and the shuttle", ids: ["events", "parade", "parks", "gem", "swanee", "shuttle"], noSmall: true },
     { id: "money", name: "Budget & Taxes", blurb: "Where the money comes from and goes", ids: ["budget", "debt-service", "g-tax-rate", "g-debt-policy", "g-debt-limit"] },
     { id: "growth", name: "People & Growth", blurb: "Who lives here and how the city is changing", ids: ["people", "growth", "land", "g-owners"] },
-    { id: "community", name: "Community", blurb: "Neighbors in need and the data behind this site", ids: ["homeless", "about"] },
+    { id: "community", name: "Community", blurb: "Neighbors in need", ids: ["homeless"], xl: ["homeless"] },
+    { id: "site", name: "About This Site", blurb: "Where every number comes from", ids: ["about"], last: true, xl: ["about"] },
   ],
   // Entertainment: a night or a weekend out, from what's on to where to eat after.
   fun: [
