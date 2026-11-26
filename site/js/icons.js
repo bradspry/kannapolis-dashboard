@@ -37,6 +37,7 @@ const PATHS = {
   bag: '<path d="M5 8h14l-1.2 12.1a1 1 0 0 1-1 .9H7.2a1 1 0 0 1-1-.9z"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/>',
   basket: '<path d="M3 10h18l-1.6 9.1a2 2 0 0 1-2 1.7H6.6a2 2 0 0 1-2-1.7z"/><path d="M8 10l3-6M16 10l-3-6M9 14v3M12 14v3M15 14v3"/>',
   cup: '<path d="M6 8h12l-1.4 12.2a1 1 0 0 1-1 .8H8.4a1 1 0 0 1-1-.8z"/><path d="M5 8h14M13 8l2-6"/><circle cx="10" cy="16" r=".8"/><circle cx="13.5" cy="17" r=".8"/><circle cx="12" cy="13.5" r=".8"/>',
+  flag: '<path d="M7 21V3"/><path d="M7 4h10l-3 3.5L17 11H7"/><ellipse cx="12" cy="21" rx="7" ry="1.6"/>',
   cone: '<path d="M10.2 4h3.6l4.7 15H5.5z"/><path d="M8.3 10h7.4M7 14.5h10"/><path d="M3 19h18"/>',
   road: '<path d="M9 3 5 21M15 3l4 18"/><path d="M12 4v2.5M12 10.5v3M12 17.5V20"/>',
   school: '<path d="M3 10.5 12 5l9 5.5"/><path d="M5 9.5V20h14V9.5"/><path d="M10 20v-5h4v5"/><path d="M12 5V2.5h3"/>',

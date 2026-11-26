@@ -37,6 +37,7 @@ import { sortEvents as icSort, statusLine as icStatus, updated as icUpdated, lis
 import { SHOPS, shopTile } from "./sections/shop.js";
 import { provisionsTile } from "./sections/provisions.js";
 import { bkTile } from "./sections/bktea.js";
+import { putthausTile } from "./sections/putthaus.js";
 import { prepGames, nextHome, homeStands, standLabel, nextGameCard, fmtDay as bbDay, fmtTime as bbTime } from "./sections/baseball.js";
 
 const NS = "http://www.w3.org/2000/svg";
@@ -561,6 +562,7 @@ export function tileDefs(data, COLORS) {
     },
     // Shopping: one widget per local shop (shop.js), in SHOPS order.
     ...SHOPS.filter((id) => data[id]).map((id) => ({ id, opens: id, size: "m", label: data[id].short || data[id].name, build: (size) => shopTile(data[id], size, head) })),
+    data.putthaus && { id: "putthaus", opens: "putthaus", size: "l", label: "Putthaus", build: (size) => putthausTile(data.putthaus, size, head) },
     data.bktea && { id: "bktea", opens: "bktea", size: "l", label: "B&K Tea Cafe", build: (size) => bkTile(data.bktea, size, head) },
     data.provisions && { id: "provisions", opens: "provisions", size: "l", label: "Provisions on Main", build: (size) => provisionsTile(data.provisions, size, head) },
     made && {

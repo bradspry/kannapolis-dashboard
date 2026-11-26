@@ -1,0 +1,101 @@
+{
+  "name": "Putthaus",
+  "tagline_short": "Putts & Pints",
+  "kind": "Indoor mini golf & golf simulators",
+  "area": "downtown",
+  "address": "239 West Ave, Kannapolis, NC 28081",
+  "address_short": "239 West Ave",
+  "phone": "(704) 935-0021",
+  "email": "Hannah@putthaus.net",
+  "map": "https://www.google.com/maps/search/?api=1&query=Putthaus+239+West+Ave+Kannapolis+NC+28081",
+  "site": "https://www.putthaus.net",
+  "book_sim": "https://bookedbays.com/client/putthaus",
+  "party": "https://www.toasttab.com/invoice/lead?rx=efae8ccd-f54b-4158-a8df-a4fcd674e777&ot=34097b9d-ead6-4599-899d-d6ccc54dec74",
+  "logo": "photos/local/putthaus-logo.jpg",
+  "color": "#3f9c35",
+  "photos": [
+    {
+      "src": "photos/local/putthaus-course.jpg",
+      "alt": "Putthaus's indoor 18-hole mini golf course: putting greens, sand traps and palm trees under a painted mountain sky"
+    },
+    {
+      "src": "photos/local/putthaus-simulator.jpg",
+      "alt": "Simulator bay #2 at Putthaus, with its screen and high-top tables"
+    }
+  ],
+  "hours": [
+    {
+      "days": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "open": "10:00",
+      "close": "22:00"
+    }
+  ],
+  "hours_note": "Open every day",
+  "rates": [
+    {
+      "label": "Mon–Thu",
+      "rows": [
+        [
+          "16 & under",
+          "$12"
+        ],
+        [
+          "Veterans, seniors, first responders",
+          "$15"
+        ],
+        [
+          "Adults",
+          "$17"
+        ]
+      ]
+    },
+    {
+      "label": "Fri–Sun",
+      "rows": [
+        [
+          "16 & under",
+          "$14"
+        ],
+        [
+          "Veterans, seniors, first responders",
+          "$17"
+        ],
+        [
+          "Adults",
+          "$19"
+        ]
+      ]
+    }
+  ],
+  "rates_note": "Mini golf rates. 3 and under always play free.",
+  "challenge": {
+    "title": "Challenge hole",
+    "detail": "$10 for 3 balls: three chances at a hole-in-one for the prize."
+  },
+  "games": [
+    {
+      "icon": "⛳",
+      "title": "Classic mini golf",
+      "detail": "The signature course: 18 holes of professional-grade design, for families and friends."
+    },
+    {
+      "icon": "🏌️",
+      "title": "Golf simulator",
+      "detail": "Play world-famous courses in any weather, with advanced ball tracking and analytics."
+    },
+    {
+      "icon": "🎉",
+      "title": "Party packages",
+      "detail": "Golf and a private lounge for birthdays or corporate team building."
+    }
+  ],
+  "source": "Machine-parsed from putthaus.net (home page: rates, games, hours, address, phone, photos), November 26, 2026"
+}

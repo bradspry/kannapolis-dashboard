@@ -28,6 +28,7 @@
         "events",
         "parade",
         "baseball",
+        "putthaus",
         "whataburger",
         "news",
         "meetings",
@@ -101,7 +102,8 @@
         "paratransit": "l",
         "water": "xl",
         "flights": "xl",
-        "bktea": "m"
+        "bktea": "m",
+        "putthaus": "m"
       },
       "spacers": []
     },
@@ -153,6 +155,7 @@
         "ktown",
         "swanee",
         "baseball",
+        "putthaus",
         "parks",
         "made",
         "provisions",
@@ -173,7 +176,8 @@
         "library": "l",
         "ktown": "l",
         "provisions": "l",
-        "bktea": "l"
+        "bktea": "l",
+        "putthaus": "l"
       },
       "spacers": []
     },

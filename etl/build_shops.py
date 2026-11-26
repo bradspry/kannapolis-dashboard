@@ -270,7 +270,7 @@ def ktown_for(info: dict) -> list[dict]:
              "summary": e.get("summary", "")} for e in sorted(eps, key=lambda e: e["published"], reverse=True)]
 
 
-STATIC_SNAPSHOTS = ["bktea"]  # shops written straight from data/manual (no page carries their menu as text)
+STATIC_SNAPSHOTS = ["bktea", "putthaus"]  # shops written straight from data/manual (no page carries their menu as text)
 
 
 def main() -> None:
