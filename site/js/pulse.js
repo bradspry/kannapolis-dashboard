@@ -251,7 +251,7 @@ export const BASE = {
 export const STORIES = {
   home: [
     { id: "home", name: "At Home", blurb: "Weather, trash, water and bills", ids: ["weather", "waste", "utility", "drought", "water"] },
-    { id: "local", name: "Shop & Eat Local", blurb: "Local shops, a market and a farm, and where to eat and drink", ids: ["ellestique", "cardiacs", "spicetea", "provisions", "sweetest", "cookcattle", "editions", "made", "whataburger"] },
+    { id: "local", name: "Shop & Eat Local", blurb: "Local shops, a market and a farm, and where to eat and drink", leads: { from: "2026-11-26", to: "2026-11-29" }, ids: ["ellestique", "cardiacs", "spicetea", "provisions", "sweetest", "cookcattle", "editions", "made", "whataburger"] },
     { id: "around", name: "Getting Around", blurb: "Traffic, trains, buses, gas and roads", ids: ["incidents", "train", "gas", "rider", "paratransit", "shuttle", "flights", "roads"] },
     { id: "out", name: "Out & About", blurb: "Things to do", ids: ["events", "parade", "gem", "swanee", "baseball", "parks", "library"] },
     { id: "hall", name: "City Hall", blurb: "News, meetings and decisions", ids: ["news", "meetings", "council", "videos", "org", "people", "budget",

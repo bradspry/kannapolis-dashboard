@@ -325,7 +325,10 @@ function story(list, blanks = []) {
   for (const r of list) { const c = chOf.get(r.t.id) || (r.t.id.startsWith("job-") ? work : more); if (!groups.has(c)) groups.set(c, []); groups.get(c).push(r); }
   const pos = (c) => (c === more ? chapters.length : chapters.indexOf(c));
   let chs = [...groups.entries()].map(([c, items]) => ({ c, items })).sort((a, b) => pos(a.c) - pos(b.c));
-  const lead = chs.filter((ch) => !ch.c.last).reduce((best, ch) => (!best || ch.items[0].score > best.items[0].score ? ch : best), null);
+  // A chapter with a `leads` window (Home's shops over the holiday shopping weekend) opens the tab while it's on.
+  const today = new Date().toLocaleDateString("en-CA");
+  const featured = chs.find((ch) => ch.c.leads && today >= ch.c.leads.from && today <= ch.c.leads.to);
+  const lead = featured || chs.filter((ch) => !ch.c.last).reduce((best, ch) => (!best || ch.items[0].score > best.items[0].score ? ch : best), null);
   chs = lead ? [lead, ...chs.filter((ch) => ch !== lead)] : chs;
   chs = [...chs.filter((ch) => !ch.c.last), ...chs.filter((ch) => ch.c.last)]; // a `last` chapter (About This Site) closes the page
   // A chapter with a single widget keeps its heading; the widget takes the full width (below).
