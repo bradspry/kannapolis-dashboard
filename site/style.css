@@ -2874,3 +2874,26 @@ body.editing .tile-w :is(.el-logo, .kt-logo-badge, .tr-logo, .ic-logo, .bb-logo)
 @media (max-width: 720px) { .el-ktown-list li { grid-template-columns: minmax(0, 1fr); } .el-ktown-thumb.big { width: 100%; } }
 .el-family { margin: 4px 0 14px; } .el-family img { width: 100%; max-height: 460px; object-fit: cover; border-radius: 14px; display: block; }
 .el-family figcaption { margin-top: 6px; font-size: 13px; color: var(--text-muted); }
+
+/* ---------- B&K Tea Cafe ---------- */
+.bk-logo { padding: 2px; }
+.bk-favs { list-style: none; margin: 6px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.bk-favs.compact { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.tile-w.size-l .bk-favs.compact { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.bk-favs li { display: grid; gap: 2px; min-width: 0; }
+.bk-favs img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 12px; background: #f2f2f0; }
+.bk-favs b { font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bk-favs span { font-size: 12px; color: var(--text-muted); }
+.bk-favs.compact b { font-size: 12.5px; } .bk-favs.compact span { display: none; }
+.bk-hearts { list-style: none; margin: 4px 0 6px; padding: 0; display: grid; gap: 4px; font-size: 13px; }
+.bk-hearts li { display: flex; justify-content: space-between; gap: 8px; }
+.bk-hearts li span::first-letter { color: #e8191c; }
+.bk-hero { border-top: 4px solid var(--bk, #2b73d6); }
+.bk-menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px 28px; margin-top: 10px; }
+.bk-sec h4 { margin: 0 0 6px; font-size: 15px; text-transform: uppercase; letter-spacing: .05em; color: var(--bk, #2b73d6); }
+.bk-sec ul { list-style: none; margin: 0; padding: 0; }
+.bk-sec li { display: grid; grid-template-columns: minmax(0, 1fr) 56px 56px; gap: 6px; padding: 4px 0; border-top: 1px solid var(--grid); font-size: 14px; }
+.bk-sec li b { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+.bk-sec li.fav span { font-weight: 650; } .bk-sec li i { color: #e8191c; font-style: normal; }
+@media (max-width: 720px) { .bk-favs { grid-template-columns: repeat(2, minmax(0, 1fr)); } .tile-w.size-l .bk-favs.compact { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.tile-w.size-l .bk-favs.compact img { aspect-ratio: auto; height: 112px; }

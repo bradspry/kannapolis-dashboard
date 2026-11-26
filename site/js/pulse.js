@@ -238,7 +238,7 @@ export const BASE = {
   weather: 34, waste: 30, events: 30, news: 26, meetings: 22, train: 20, gas: 22, utility: 20, police: 18, fire: 14,
   parks: 18, library: 18, gem: 20, swanee: 16, parade: 15, drought: 16, water: 14, council: 16, videos: 14, ktown: 12, baseball: 14,
   editions: 14, whataburger: 14, made: 10, stocks: 12, rider: 12, shuttle: 9, paratransit: 13, flights: 12, homeless: 10,
-  roads: 8, incidents: 14, ellestique: 12, sweetest: 10, cardiacs: 10, cookcattle: 10, spicetea: 10, provisions: 14, people: 12, growth: 10, budget: 12, "debt-service": 6, land: 8, org: 10, "g-tax-rate": 8, "g-debt-policy": 6,
+  roads: 8, incidents: 14, ellestique: 12, sweetest: 10, cardiacs: 10, cookcattle: 10, spicetea: 10, provisions: 14, bktea: 12, people: 12, growth: 10, budget: 12, "debt-service": 6, land: 8, org: 10, "g-tax-rate": 8, "g-debt-policy": 6,
   "g-debt-limit": 6, "g-owners": 6, about: 4, "school-bus": 6,
 };
 
@@ -251,7 +251,7 @@ export const BASE = {
 export const STORIES = {
   home: [
     { id: "home", name: "At Home", blurb: "Weather, trash, water and bills", ids: ["weather", "waste", "utility", "drought", "water"], noSmall: true },
-    { id: "local", name: "Shop & Eat Local", blurb: "Local shops, a market and a farm, and where to eat and drink", leads: { from: "2026-11-26", to: "2026-11-29" }, ids: ["ellestique", "cardiacs", "spicetea", "provisions", "sweetest", "cookcattle", "editions", "made", "whataburger"], noSmall: true },
+    { id: "local", name: "Shop & Eat Local", blurb: "Local shops, a market and a farm, and where to eat and drink", leads: { from: "2026-11-26", to: "2026-11-29" }, ids: ["ellestique", "cardiacs", "spicetea", "provisions", "bktea", "sweetest", "cookcattle", "editions", "made", "whataburger"], noSmall: true },
     { id: "around", name: "Getting Around", blurb: "Traffic, trains, buses, gas and roads", ids: ["incidents", "train", "gas", "rider", "paratransit", "shuttle", "flights", "roads"] },
     { id: "out", name: "Out & About", blurb: "Things to do", ids: ["events", "parade", "gem", "swanee", "baseball", "parks", "library"], noSmall: true },
     { id: "hall", name: "City Hall", blurb: "News, meetings and decisions", ids: ["news", "meetings", "council", "videos", "org", "people", "budget",
@@ -277,12 +277,12 @@ export const STORIES = {
   fun: [
     { id: "shows", name: "Shows & Events", blurb: "Movies, live shows and what's on around town", ids: ["events", "parade", "gem", "swanee"] },
     { id: "outside", name: "Get Outside", blurb: "Parks, trails and Cannon Ballers games", ids: ["parks", "baseball"] },
-    { id: "eat", name: "Eat & Drink", blurb: "Burgers, deli sandwiches, coffee and local beer", ids: ["whataburger", "provisions", "editions", "made"], noSmall: true },
+    { id: "eat", name: "Eat & Drink", blurb: "Burgers, deli sandwiches, coffee and local beer", ids: ["whataburger", "provisions", "bktea", "editions", "made"], noSmall: true },
     { id: "read", name: "Read, Watch & Listen", blurb: "The library and a local podcast", ids: ["library", "ktown"] },
   ],
   // Shopping: local shops, downtown first, then around the area.
   shopping: [
-    { id: "downtown", name: "Downtown Kannapolis", blurb: "Boutiques, books, collectibles, spices and tea a few doors apart", ids: ["ellestique", "cardiacs", "spicetea", "editions"], noSmall: true },
+    { id: "downtown", name: "Downtown Kannapolis", blurb: "Boutiques, books, collectibles, spices and tea a few doors apart", ids: ["ellestique", "cardiacs", "spicetea", "editions", "bktea"], noSmall: true },
     { id: "around", name: "Around the Area", blurb: "A Midway market, local shops and a family farm a short drive away", ids: ["provisions", "sweetest", "cookcattle"], noSmall: true },
   ],
   // Transportation: from your own street outward, to the next town and the next state.

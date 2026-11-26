@@ -36,6 +36,7 @@ import { levelGauge as drGauge, countyLine as drCounty, strip as drStrip } from 
 import { sortEvents as icSort, statusLine as icStatus, updated as icUpdated, list as icList, tileMap as icMap, legend as icLegend, logo as icLogo, INCIDENTS_COLOR } from "./sections/incidents.js";
 import { SHOPS, shopTile } from "./sections/shop.js";
 import { provisionsTile } from "./sections/provisions.js";
+import { bkTile } from "./sections/bktea.js";
 import { prepGames, nextHome, homeStands, standLabel, nextGameCard, fmtDay as bbDay, fmtTime as bbTime } from "./sections/baseball.js";
 
 const NS = "http://www.w3.org/2000/svg";
@@ -560,6 +561,7 @@ export function tileDefs(data, COLORS) {
     },
     // Shopping: one widget per local shop (shop.js), in SHOPS order.
     ...SHOPS.filter((id) => data[id]).map((id) => ({ id, opens: id, size: "m", label: data[id].short || data[id].name, build: (size) => shopTile(data[id], size, head) })),
+    data.bktea && { id: "bktea", opens: "bktea", size: "l", label: "B&K Tea Cafe", build: (size) => bkTile(data.bktea, size, head) },
     data.provisions && { id: "provisions", opens: "provisions", size: "l", label: "Provisions on Main", build: (size) => provisionsTile(data.provisions, size, head) },
     made && {
       id: "made", opens: "made", size: "m", label: "Made in Kannapolis",

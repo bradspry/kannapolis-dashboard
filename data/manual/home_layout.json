@@ -15,6 +15,7 @@
         "cardiacs",
         "spicetea",
         "provisions",
+        "bktea",
         "sweetest",
         "cookcattle",
         "police",
@@ -99,7 +100,8 @@
         "library": "l",
         "paratransit": "l",
         "water": "xl",
-        "flights": "xl"
+        "flights": "xl",
+        "bktea": "m"
       },
       "spacers": []
     },
@@ -154,6 +156,7 @@
         "parks",
         "made",
         "provisions",
+        "bktea",
         "library",
         "editions",
         "events",
@@ -169,7 +172,8 @@
         "made": "l",
         "library": "l",
         "ktown": "l",
-        "provisions": "l"
+        "provisions": "l",
+        "bktea": "l"
       },
       "spacers": []
     },
@@ -239,6 +243,7 @@
         "ellestique",
         "cardiacs",
         "spicetea",
+        "bktea",
         "editions",
         "provisions",
         "sweetest",
@@ -252,7 +257,8 @@
         "cookcattle": "l",
         "spicetea": "m",
         "editions": "m",
-        "provisions": "l"
+        "provisions": "l",
+        "bktea": "l"
       },
       "spacers": []
     }

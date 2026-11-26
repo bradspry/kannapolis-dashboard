@@ -243,3 +243,6 @@ city_streets,City of Kannapolis Streets (Transportation and Environmental Servic
 city_projects,City of Kannapolis City Projects list,City of Kannapolis,Web page,https://www.kannapolisnc.gov/CityProjects,"Street, sidewalk and NCDOT projects in Kannapolis",roads
 duke_light_outage,Duke Energy outdoor light outage map,Duke Energy,Web app,https://salor-web.duke-energy.app/#/home/map,Report a streetlight out,roads
 cookcattle_family,Cook Cattle Farm family photo (provided to the dashboard),Cook Cattle Farm,Image,https://cookcattlefarm.com,Family photo,cookcattle
+bktea_site,B&K Tea Cafe website and menu boards,B&K Tea Cafe,Web page,https://www.bkteacafe.com/regularmenu,"Menu and prices, most popular drinks and photos, logo, about",bktea
+bktea_order,B&K Tea Cafe online ordering (Square),B&K Tea Cafe,Web page,https://bk-tea-and-coffee-company.square.site/?location=LM70TE8CHMHC2,Order pickup link,bktea
+bktea_cabarrus,B&K Tea Cafe Kannapolis on Explore Cabarrus,Cabarrus County Convention & Visitors Bureau,Web page,https://www.explorecabarrus.com/businesses/bk-tea-cafe-kannapolis/,Address and phone,bktea

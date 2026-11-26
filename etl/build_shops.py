@@ -270,6 +270,9 @@ def ktown_for(info: dict) -> list[dict]:
              "summary": e.get("summary", "")} for e in sorted(eps, key=lambda e: e["published"], reverse=True)]
 
 
+STATIC_SNAPSHOTS = ["bktea"]  # shops written straight from data/manual (no page carries their menu as text)
+
+
 def main() -> None:
     for sid, parse in PARSERS.items():
         info = json.loads((MANUAL / f"{sid}.json").read_text())
@@ -293,6 +296,8 @@ def main() -> None:
             info["special"] = sorted([x for x in info.get("special", []) if x["date"] not in dates] + special, key=lambda x: x["date"])
         notes = list(dict.fromkeys([*info.get("notes_static", []), *notes]))  # the snapshot's standing notes, then the page's
         write_json(f"{sid}.json", {**info, "arrivals": items, "notes": notes, "ktown": ktown_for(info)})
+    for sid in STATIC_SNAPSHOTS:
+        write_json(f"{sid}.json", json.loads((MANUAL / f"{sid}.json").read_text()))
 
 
 if __name__ == "__main__":
