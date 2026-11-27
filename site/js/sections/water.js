@@ -1,4 +1,4 @@
-// Lakes & Rivers (City tab): water levels around Kannapolis and where the city's water comes from, from
+// Lakes & Rivers (inside City Water & Sewer): water levels around Kannapolis and where the city's water comes from, from
 // bradspry/kannapolis-water-levels (water_map.py). City lakes from the City of Concord, stream flow from USGS,
 // Catawba lakes from NOAA, Yadkin lakes from Cube Hydro Carolinas; read daily.
 import { h, fill, showTip, hideTip } from "../ui.js";
@@ -54,7 +54,8 @@ export function streamRows(w) {
   }));
 }
 
-const OWN_LABEL = { own: "Kannapolis' own", neighbor: "From neighbors", unverified: "Ownership unverified" };
+// shared: Lake Howell, a regional reservoir run by the Water and Sewer Authority of Cabarrus County (WSACC), which Kannapolis is a member of
+const OWN_LABEL = { own: "Kannapolis' own", shared: "Shared (WSACC)", neighbor: "From neighbors", unverified: "Ownership unverified" };
 
 /** Today's supply vs. after the planned connections: stacked MGD bars, colored by who owns the water. */
 export function supplyBars(w, { compact = false } = {}) {
@@ -81,11 +82,11 @@ export function supplyBars(w, { compact = false } = {}) {
   };
   return h("div", { class: `wl-supply${compact ? " compact" : ""}` },
     bar("Today", today), bar(`After ${planned.map((s) => `${s.name} (${s.year})`).join(", ")}`, future),
-    h("ul", { class: "legend wl-legend" }, ["own", "neighbor", "unverified"].map((k) => h("li", {}, h("span", { class: `swatch wl-sw ${k}` }), OWN_LABEL[k])),
+    h("ul", { class: "legend wl-legend" }, ["own", "shared", "neighbor", "unverified"].map((k) => h("li", {}, h("span", { class: `swatch wl-sw ${k}` }), OWN_LABEL[k])),
       h("li", {}, h("span", { class: "swatch wl-sw planned" }), "Planned")));
 }
 
-const FLOW = { own: "#2a78d6", neighbor: "#eb6834", unverified: "#8a8a8a" };
+const FLOW = { own: "#2a78d6", shared: "#1f9e89", neighbor: "#eb6834", unverified: "#8a8a8a" };
 
 /** The window's map: the same lakes, gauges and supply lines as the tile's drawing, on a street map you can zoom. */
 export function liveWaterMap(box, w, boundaries, { interactive = true, labels = true, sourceLabels = labels } = {}) {
@@ -152,8 +153,8 @@ function lakeTable(w) {
       h("td", {}, l.manual ? (l.updated ? `Reported ${dayText(l.updated)}${l.source ? ` by the ${l.source}` : ""}` : "No public sensor") : l.stale ? "Last reading (source didn't answer)" : l.updated ? `Updated ${dayText(l.updated)}` : "Hourly"))))));
 }
 
-export function renderWater(w, boundaries) {
-  const root = document.getElementById("water-body");
+/** Lakes & Rivers: the levels, map and supply. Drawn into the City Water & Sewer window's "Lakes & supply" tab. */
+export function renderWater(w, boundaries, root = document.getElementById("water-body")) {
   const missingCube = !w.reservoirs.some((r) => r.source !== "NOAA");
   const mapBox = h("div", { class: "map wl-live", id: "wl-live-map", role: "img", "aria-label": "Map of lakes and stream gauges around Kannapolis, with lines from each water source into the city" });
   fill(root,

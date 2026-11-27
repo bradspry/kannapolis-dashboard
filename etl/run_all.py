@@ -28,6 +28,8 @@ import build_police
 import build_property
 import build_site
 import build_swanee
+import build_stormwater
+import build_watersewer
 import build_utility
 import build_waste
 import build_videos
@@ -79,6 +81,8 @@ STEPS = [
     ("waste", build_waste.main),
     ("drought", build_drought.main),
     ("water", build_water.main),
+    ("watersewer", build_watersewer.main),
+    ("stormwater", build_stormwater.main),
     ("homeless", build_homeless.main),
     ("parks", build_parks.main),
     ("parade", build_parade.main),

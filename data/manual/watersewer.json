@@ -1,0 +1,448 @@
+{
+  "_source": "Hand-transcribed (machine-parsed text checked by hand) from the City of Kannapolis Water & Sewer page, its 2025 Annual Drinking Water Quality Report (NC ID 01-80-065), its FY 2025-26 Wastewater Collections System Annual Report, the 2024 Interbasin Transfer report and the City's current fee schedule (Tables 6.1, 6.4 and 8.1). etl/build_watersewer.py checks the City's page each week and flags a newer report. The quality report's UCMR5 table heads its column 'ppt' but labels each row 'ppb'; ppt (parts per trillion) is used here, the unit EPA's PFAS limits are written in.",
+  "name": "City Water & Sewer",
+  "department": "Water Resources",
+  "page": "https://www.kannapolisnc.gov/Water-Sewer-Stormwater",
+  "phone": "704-920-4444",
+  "address": "1401 Bethpage Road",
+  "directory": "https://www.kannapolisnc.gov/Government-Departments/Water-Sewer/Staff-Directory",
+  "quality": {
+    "year": 2025,
+    "url": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Water%20Sewer%20Stormwater/Current%20Water%20Quality%20Report/Water%20Quality%20Report.pdf?ver=UvSIrujbmjZwcXfWVXsd5w==",
+    "violations": 0,
+    "contact": "Gerald Faulkner, (704) 920-4252",
+    "results": [
+      {
+        "key": "lead",
+        "name": "Lead",
+        "what": "From old service lines and home plumbing",
+        "value": "Not detected",
+        "limit": "Action level 15 ppb",
+        "detail": "90th percentile of home taps, June 2024; no site above the action level",
+        "ok": true
+      },
+      {
+        "key": "copper",
+        "name": "Copper",
+        "what": "From home plumbing",
+        "value": "0.35 ppm",
+        "pct": 27,
+        "limit": "Action level 1.3 ppm",
+        "detail": "90th percentile of home taps, June 2024 (range 0–0.409); no site above the action level",
+        "ok": true
+      },
+      {
+        "key": "tthm",
+        "name": "Trihalomethanes (TTHM)",
+        "what": "A by-product of disinfecting with chlorine",
+        "value": "54 ppb",
+        "pct": 68,
+        "limit": "Limit 80 ppb",
+        "detail": "Highest running yearly average at the 8 test sites, 2025 (single samples 17–85)",
+        "ok": true
+      },
+      {
+        "key": "haa5",
+        "name": "Haloacetic acids (HAA5)",
+        "what": "A by-product of disinfecting with chlorine",
+        "value": "27–50 ppb",
+        "pct": 83,
+        "limit": "Limit 60 ppb",
+        "detail": "Range across the 8 test sites, 2025",
+        "ok": true
+      },
+      {
+        "key": "chlorine",
+        "name": "Chlorine",
+        "what": "Added to keep water free of germs",
+        "value": "1.02 ppm",
+        "pct": 26,
+        "limit": "Limit 4.0 ppm",
+        "detail": "Yearly average (range 0.2–2.09)",
+        "ok": true
+      },
+      {
+        "key": "fluoride",
+        "name": "Fluoride",
+        "what": "Natural, and added for strong teeth",
+        "value": "0.83 ppm",
+        "pct": 21,
+        "limit": "Limit 4 ppm",
+        "detail": "Sampled April 2, 2025",
+        "ok": true
+      },
+      {
+        "key": "turbidity",
+        "name": "Cloudiness (turbidity)",
+        "what": "Shows how well the filters work",
+        "value": "0.084 NTU",
+        "pct": 8,
+        "limit": "Must stay under 1 NTU",
+        "detail": "Highest single reading; 100% of monthly samples met the 0.3 NTU standard",
+        "ok": true
+      },
+      {
+        "key": "toc",
+        "name": "Organic carbon removal",
+        "what": "Treatment must remove enough natural organic matter",
+        "value": "1.08",
+        "limit": "Must be at least 1.0",
+        "detail": "Running annual average removal ratio (monthly 1.05–1.43)",
+        "ok": true
+      }
+    ],
+    "pfas": {
+      "date": "2025-12-15",
+      "note": "Sampled under EPA's fifth Unregulated Contaminant Monitoring Rule (UCMR5). EPA has set limits of 4.0 parts per trillion each for PFOA and PFOS, which water systems must meet within the next few years; the other three have no individual limit.",
+      "items": [
+        {
+          "name": "PFOS",
+          "value": 3.8,
+          "limit": 4.0
+        },
+        {
+          "name": "PFOA",
+          "value": 2.8,
+          "limit": 4.0
+        },
+        {
+          "name": "PFBS",
+          "value": 2.4
+        },
+        {
+          "name": "PFBA",
+          "value": 2.3
+        },
+        {
+          "name": "PFPeA",
+          "value": 2.3
+        }
+      ]
+    },
+    "other": [
+      {
+        "name": "pH",
+        "value": "6.8",
+        "range": "6.5–8.5 recommended"
+      },
+      {
+        "name": "Sodium",
+        "value": "17.3 ppm",
+        "range": "no limit"
+      },
+      {
+        "name": "Sulfate",
+        "value": "29.5 ppm",
+        "range": "250 ppm recommended max"
+      },
+      {
+        "name": "Iron",
+        "value": "Not detected",
+        "range": "0.3 ppm recommended max"
+      },
+      {
+        "name": "Manganese",
+        "value": "Not detected",
+        "range": "0.05 ppm recommended max"
+      }
+    ]
+  },
+  "supply": {
+    "lake": "Kannapolis Lake, a 289-acre reservoir from Pump Station Road to Cannon Farm Road, holds 1.35 billion gallons. The City's own treatment plant turns it into drinking water.",
+    "backups": "Lake Don T. Howell (Cabarrus County) and Second Creek (Rowan County) can refill Kannapolis Lake when needed.",
+    "interconnections": "Pipes connect Kannapolis with Concord, Salisbury and Landis. About 0.3 million gallons a day comes from Concord for the Shiloh Church Road area.",
+    "demand_mgd": 6,
+    "susceptibility": [
+      {
+        "source": "Kannapolis Lake",
+        "rating": "Moderate"
+      },
+      {
+        "source": "Second Creek/Back Creek",
+        "rating": "Moderate"
+      },
+      {
+        "source": "Coddle Creek",
+        "rating": "Moderate"
+      },
+      {
+        "source": "Lake Fisher/Coldwater Creek",
+        "rating": "Higher"
+      },
+      {
+        "source": "Lake Concord/Coldwater Creek",
+        "rating": "Moderate"
+      },
+      {
+        "source": "Yadkin River",
+        "rating": "Moderate"
+      }
+    ],
+    "susceptibility_note": "The state's Source Water Assessment (September 2020) rates how exposed each source is to possible pollution nearby, not the water's quality."
+  },
+  "ibt": {
+    "year": 2024,
+    "url": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Water%20Sewer%20Stormwater/Documents/2024%20Annual%20Report%20on%20Interbasin%20Transfers%20for%20The%20Cities%20of%20Concord%20and%20Kannapolis.pdf?ver=6anrD8LTkoNs9boREHlWgw==",
+    "summary": "Concord and Kannapolis may move up to 10 million gallons a day each from the Catawba and Yadkin river basins into the Rocky River basin (plus 6 from Second Creek). In 2024 they stayed within every condition; the most moved in a day was 5.36 million gallons from the Yadkin."
+  },
+  "sewer": {
+    "fy": "2025-26",
+    "url": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Water%20Sewer%20Stormwater/Documents/FY%20July%202025%20-%20June%202026%20WW%20Annual%20Collections%20Report.pdf?ver=BXCMAxgblRi60bPDhFnn6A==",
+    "miles": 355,
+    "lift_stations": 15,
+    "customers": 21000,
+    "plant": "Wastewater is treated at WSACC's Rocky River Regional plant in southern Cabarrus County (30 million gallons a day).",
+    "investigated": 907,
+    "lift_inspections": 780,
+    "lift_alarms": 333,
+    "overflows": [
+      {
+        "date": "2025-09-11",
+        "where": "6102 Vermillion Cedar Way",
+        "cause": "Debris, tissue and grease",
+        "gallons": 240,
+        "lat": 35.43562,
+        "lon": -80.67622
+      },
+      {
+        "date": "2025-11-15",
+        "where": "1901 Concord Lake Rd",
+        "cause": "Lift station float failure",
+        "gallons": 600,
+        "lat": 35.45936,
+        "lon": -80.60011
+      },
+      {
+        "date": "2025-12-19",
+        "where": "221 Nellie Yale Pl",
+        "cause": "Rags",
+        "gallons": 50,
+        "lat": 35.48449,
+        "lon": -80.60198
+      },
+      {
+        "date": "2025-12-22",
+        "where": "899 Fairview St / 800 Genoa St",
+        "cause": "Grease",
+        "gallons": 15,
+        "lat": 35.48717,
+        "lon": -80.60722
+      },
+      {
+        "date": "2025-12-23",
+        "where": "E 13th St at N Cannon Blvd",
+        "cause": "Rags",
+        "gallons": 180,
+        "lat": 35.51134,
+        "lon": -80.60885
+      },
+      {
+        "date": "2026-02-26",
+        "where": "1218 Northside St",
+        "cause": "Rags",
+        "gallons": 304,
+        "lat": 35.50085,
+        "lon": -80.64333
+      },
+      {
+        "date": "2026-03-09",
+        "where": "614 S Cannon Blvd",
+        "cause": "Roots and debris",
+        "gallons": 15,
+        "lat": 35.48676,
+        "lon": -80.61139
+      },
+      {
+        "date": "2026-04-25",
+        "where": "1590 Daybreak Ridge Rd",
+        "cause": "Roots and debris",
+        "gallons": 200,
+        "lat": 35.46701,
+        "lon": -80.64427
+      },
+      {
+        "date": "2026-06-05",
+        "where": "406 Cadillac St (outfall)",
+        "cause": "Pipe failure",
+        "gallons": 2292,
+        "lat": 35.48657,
+        "lon": -80.62355
+      },
+      {
+        "date": "2026-06-14",
+        "where": "1574 Daybreak Ridge Rd",
+        "cause": "Heavy roots and rags",
+        "gallons": 720,
+        "lat": 35.46693,
+        "lon": -80.64407
+      }
+    ],
+    "overflow_note": "Each spill that reached surface water was reported to the State; crews cleaned the lines up- and downstream, removed debris, video-inspected the pipe, flushed the area, limed, seeded and strawed it.",
+    "maintenance": [
+      {
+        "what": "Sewer mains cleaned",
+        "n": "222,146 ft"
+      },
+      {
+        "what": "Camera-inspected pipe",
+        "n": "30,025 ft"
+      },
+      {
+        "what": "Blocked laterals cleared",
+        "n": "641"
+      },
+      {
+        "what": "Lateral repairs",
+        "n": "142"
+      },
+      {
+        "what": "Cleanout caps installed",
+        "n": "68"
+      },
+      {
+        "what": "Manholes raised & upgraded",
+        "n": "24"
+      },
+      {
+        "what": "Cleanouts installed",
+        "n": "15"
+      },
+      {
+        "what": "Sewer main repairs",
+        "n": "5"
+      }
+    ],
+    "never": [
+      "Oil, grease or food scraps down any drain, even with a garbage disposal",
+      "Wipes (baby, cleaning, \"flushable\"), paper towels, cotton swabs or feminine products down the toilet",
+      "Hot water to melt grease down the drain"
+    ],
+    "always": [
+      "Let grease cool and harden, then put it in the trash in a closed container",
+      "Wipe greasy dishes with a paper towel before washing",
+      "Scrape food scraps into the trash"
+    ]
+  },
+  "report": {
+    "intro": "Call 704-920-4444 right away. The line is answered 24 hours a day, every day, holidays included.",
+    "groups": [
+      {
+        "title": "Water leaks",
+        "items": [
+          "Water pressure suddenly drops to almost nothing",
+          "Water coming up from under the street",
+          "A leaking fire hydrant",
+          "Water pooling around a water meter"
+        ]
+      },
+      {
+        "title": "Sewer problems",
+        "items": [
+          "Sewage spilling out of a manhole",
+          "A sewer back-up: tub or sink won't drain, toilet won't flush"
+        ]
+      },
+      {
+        "title": "Water pollution",
+        "items": [
+          "Muddy runoff from a construction site",
+          "Chemicals dumped into a storm drain, stream or other water"
+        ]
+      },
+      {
+        "title": "Vandalism & dumping",
+        "items": [
+          "Trucks emptying liquids into open sewer manholes",
+          "Damage to manholes, sewer lines, lift stations or hydrants"
+        ]
+      }
+    ]
+  },
+  "rates": {
+    "source": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/CURRENT%20FEE%20SCHEDULE/Current%20Fee%20Schedule.pdf?ver=MKSu3-3rZ51WD2smcivN-w==",
+    "inside": {
+      "water_base": 9.75,
+      "water_tier1": 7.84,
+      "water_tier2": 8.15,
+      "sewer_base": 12.0,
+      "sewer_per": 8.53
+    },
+    "outside": {
+      "water_base": 11.7,
+      "water_tier1": 9.41,
+      "water_tier2": 9.78,
+      "sewer_base": 14.4,
+      "sewer_per": 10.24
+    },
+    "tier1_gallons": 7000,
+    "stormwater": [
+      {
+        "tier": "Tier 1",
+        "area": "under 1,200 sq ft",
+        "fee": 6.75
+      },
+      {
+        "tier": "Tier 2",
+        "area": "1,200–3,250 sq ft",
+        "fee": 8.25
+      },
+      {
+        "tier": "Tier 3",
+        "area": "over 3,250 sq ft",
+        "fee": 9.75
+      }
+    ],
+    "note": "Water is billed per 1,000 gallons: the first 7,000 at the lower rate, the rest at the higher one. Sewer is billed on the same water use. Customers outside city limits pay about 20% more. Stormwater is a flat monthly fee set by your home's roof and pavement area."
+  },
+  "services": [
+    {
+      "title": "Smart water meters",
+      "text": "Every meter in the City is a smart meter that reports readings automatically. In the customer portal you can watch your daily use, compare it with past months, and set alerts and budgets that help catch leaks early.",
+      "url": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Water%20Sewer%20Stormwater/Documents/Smart%20Water%20Meters.pdf",
+      "link": "Smart meter guide"
+    },
+    {
+      "title": "Grease (FOG)",
+      "text": "Many sewer blockages are caused by grease. Never pour it down the drain: put it in a container with paper that will soak it up, put a lid on it, and place it in the trash. Restaurants should recycle grease and have grease traps cleaned often.",
+      "url": "https://www.kannapolisnc.gov/Government-Departments/Engineering/Fats-Oils-and-Grease-FOG",
+      "link": "Grease program",
+      "more": [
+        [
+          "Home guide",
+          "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Water%20Sewer%20Stormwater/Documents/FOG%20PDF.pdf"
+        ],
+        [
+          "Restaurant guide",
+          "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Water%20Sewer%20Stormwater/Documents/Commercial%20FOG%20Brochure.pdf?ver=2278QcNl1L-Uml5fjjtdTQ=="
+        ]
+      ]
+    },
+    {
+      "title": "Backflow & cross connections",
+      "text": "Irrigation systems, pools, boilers and fire lines tied into your water line need a backflow preventer so non-drinking water can't flow back into the City's pipes. BMP Compliance Group runs the City's backflow program (1-614-955-1091).",
+      "url": "https://www.kannapolisnc.gov/CrossConnection",
+      "link": "Cross-connection control",
+      "more": [
+        [
+          "Ordinance",
+          "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Water%20Sewer%20Stormwater/Documents/Cross%20Connection%20municode%202015.pdf"
+        ],
+        [
+          "BMP Compliance",
+          "https://bmpcomp.com/backflow/"
+        ]
+      ]
+    },
+    {
+      "title": "Save water",
+      "text": "The City's tips for using less water around the house and yard. Smart meters can also show you a leak that's running up your bill.",
+      "url": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Water%20Sewer%20Stormwater/Documents/Water%20conservation%20tips.pdf",
+      "link": "Conservation tips"
+    }
+  ],
+  "links": {
+    "fee_schedule": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/CURRENT%20FEE%20SCHEDULE/Current%20Fee%20Schedule.pdf?ver=MKSu3-3rZ51WD2smcivN-w==",
+    "sdf": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Water%20Sewer%20Stormwater/Documents/Kannapolis%20FY24%20SDF%20Study%20%285-5-23%29.pdf",
+    "reports_page": "https://www.kannapolisnc.gov/Water-Sewer-Stormwater"
+  }
+}

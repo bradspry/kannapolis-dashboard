@@ -26,7 +26,7 @@ from common import MANUAL, OUT, USER_AGENT, log, repo_constants, write_json
 
 REPO = "kannapolis-water-levels"
 NAMES = {"LAKES", "USGS_SITES", "CUBE_LAKES", "NOAA_LAKES", "KANNAPOLIS_HUB", "EXISTING_CAPACITY_MGD", "SUPPLY_SOURCES",
-         "OWN_COLOR", "NEIGHBOR_COLOR", "UNVERIFIED_COLOR", "LAKE_URL", "CUBE_HYDRO_URL", "NOAA_GAUGE_URL", "USGS_IV_URL"}
+         "OWN_COLOR", "SHARED_COLOR", "NEIGHBOR_COLOR", "UNVERIFIED_COLOR", "LAKE_URL", "CUBE_HYDRO_URL", "NOAA_GAUGE_URL", "USGS_IV_URL"}
 BROWSER = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36"
 HISTORY_DAYS = 400
 
@@ -233,7 +233,7 @@ def main() -> None:
     log(f"water: {len(city)} city lakes, {len(streams)} streams, {len(reservoirs)} reservoirs; stale: {', '.join(stale) or 'none'}")
     write_json("water.json", {**info, "hub": cfg["KANNAPOLIS_HUB"], "city_lakes": city, "streams": list(streams.values()), "reservoirs": reservoirs,
                               "cube_updated": cube_at, "supply": supply, "existing_mgd": cfg["EXISTING_CAPACITY_MGD"],
-                              "owner_colors": {"own": cfg["OWN_COLOR"], "neighbor": cfg["NEIGHBOR_COLOR"], "unverified": cfg["UNVERIFIED_COLOR"]},
+                              "owner_colors": {"own": cfg["OWN_COLOR"], "shared": cfg.get("SHARED_COLOR", "#1f9e89"), "neighbor": cfg["NEIGHBOR_COLOR"], "unverified": cfg["UNVERIFIED_COLOR"]},
                               "checked": checked, "history": history, "repo": "https://github.com/bradspry/kannapolis-water-levels",
                               "links": {"concord": cfg["LAKE_URL"], "cube": cfg["CUBE_HYDRO_URL"]}})
 

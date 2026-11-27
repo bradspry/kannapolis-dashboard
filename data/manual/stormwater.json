@@ -1,0 +1,149 @@
+{
+  "_source": "Hand-transcribed from the City of Kannapolis Stormwater page and its current fee schedule (Table 8.1). Flood zones are FEMA's National Flood Hazard Layer, read by etl/build_stormwater.py into data/generated/geo/floodzones.json; FRIS (the NC Flood Risk Information System) is the State's official address lookup.",
+  "name": "Stormwater & Flooding",
+  "department": "Transportation & Environmental Services",
+  "page": "https://www.kannapolisnc.gov/Government-Departments/Stormwater",
+  "directory": "https://www.kannapolisnc.gov/Government-Departments/Stormwater/Staff-Directory",
+  "phone": "704-920-4444",
+  "hotline_email": "mdodge@kannapolisnc.gov",
+  "outreach_email": "skeck@kannapolisnc.gov",
+  "what": "Stormwater is rain that runs off roofs, roads, driveways and parking lots. It picks up oil, grease, pet waste, lawn chemicals and grass clippings on the way.",
+  "two_systems": "Storm drains and sewers are separate systems in Kannapolis. Sinks, showers and toilets go to a treatment plant; storm drains carry rain, and anything else poured into them, straight to the nearest creek or lake without treatment.",
+  "report": [
+    {
+      "title": "Stormwater problems",
+      "text": "Clogged or broken storm drains, flooding from the drainage system"
+    },
+    {
+      "title": "Illegal discharges",
+      "text": "Anything other than rain going into a storm drain: oil, paint, chemicals, soapy wash water, sewage"
+    },
+    {
+      "title": "STOP MUD",
+      "text": "Mud or sediment washing off a construction site or eroding land"
+    }
+  ],
+  "tips": [
+    {
+      "icon": "🛢️",
+      "text": "Never pour oil, gasoline, paint or chemicals into a storm drain"
+    },
+    {
+      "icon": "🍂",
+      "text": "Keep leaves, yard debris and trash out of the storm drain near you"
+    },
+    {
+      "icon": "🐕",
+      "text": "Pick up pet waste and put it in the trash"
+    },
+    {
+      "icon": "🌱",
+      "text": "Use pesticides, weed killers and fertilizer sparingly, and follow the directions"
+    },
+    {
+      "icon": "🚗",
+      "text": "Fix car leaks; wash your car on the lawn or at a car wash that recycles water"
+    },
+    {
+      "icon": "🧹",
+      "text": "Sweep driveways and sidewalks instead of hosing them down"
+    },
+    {
+      "icon": "🪣",
+      "text": "A rain barrel on a downspout holds back runoff and waters your garden"
+    },
+    {
+      "icon": "🏡",
+      "text": "Point downspouts and driveway runoff toward lawns and gardens"
+    },
+    {
+      "icon": "🚽",
+      "text": "Keep a septic tank, if you have one, pumped and maintained"
+    }
+  ],
+  "permit": {
+    "intro": "The City's federal Phase II stormwater permit (NCS000413) requires a stormwater program with six parts:",
+    "measures": [
+      "Public education and outreach",
+      "Public involvement",
+      "Finding and stopping illegal discharges",
+      "Construction site runoff control",
+      "Runoff control after construction",
+      "Pollution prevention in City operations"
+    ]
+  },
+  "fee": {
+    "intro": "The federal government doesn't pay for local stormwater programs, so the City charges a monthly stormwater fee on every water and sewer bill. It's based on impervious area (roofs, driveways, patios and other hard surfaces rain can't soak into).",
+    "tiers": [
+      {
+        "tier": "Tier 1",
+        "area": "under 1,200 sq ft",
+        "fee": 6.75
+      },
+      {
+        "tier": "Tier 2",
+        "area": "1,200–3,250 sq ft",
+        "fee": 8.25
+      },
+      {
+        "tier": "Tier 3",
+        "area": "over 3,250 sq ft",
+        "fee": 9.75
+      },
+      {
+        "tier": "Businesses",
+        "area": "per 3,250 sq ft",
+        "fee": 8.25
+      }
+    ],
+    "source": "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Finance/CURRENT%20FEE%20SCHEDULE/Current%20Fee%20Schedule.pdf?ver=MKSu3-3rZ51WD2smcivN-w=="
+  },
+  "flood": {
+    "fris": "https://fris.nc.gov/fris/",
+    "fema_msc": "https://msc.fema.gov/portal/search",
+    "explain": [
+      {
+        "key": "floodway",
+        "name": "Floodway",
+        "text": "The creek channel and the land right beside it that must stay open to carry floodwater. Building here is tightly restricted."
+      },
+      {
+        "key": "100",
+        "name": "100-year floodplain",
+        "text": "A 1% chance of flooding in any year, about a 1-in-4 chance over a 30-year mortgage. Lenders require flood insurance here."
+      },
+      {
+        "key": "500",
+        "name": "500-year floodplain",
+        "text": "A 0.2% chance in any year: lower risk, but floods do reach it. Insurance is optional and usually cheaper."
+      }
+    ],
+    "insurance": "Homeowners insurance doesn't cover flooding. Flood insurance through the National Flood Insurance Program or a private insurer usually takes 30 days to start."
+  },
+  "documents": [
+    [
+      "Stormwater Management Plan",
+      "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Water%20Sewer%20Stormwater/Documents/Stormwater%20Management%20Plan%20%28NCS000413%29.pdf?ver=MVhmmCZaEHh6ZH_qGAjkKw=="
+    ],
+    [
+      "Stormwater system maintenance requirements",
+      "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Water%20Sewer%20Stormwater/Documents/STORMWATER-COLLECTION-SYSTEM-MAINTENANCE-REQUIREMENTS.pdf"
+    ],
+    [
+      "Stormwater maintenance agreement guidelines",
+      "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Water%20Sewer%20Stormwater/Documents/Guidelines-for-Stormwater-Agreement-.pdf"
+    ],
+    [
+      "Plan and permit revisions",
+      "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Water%20Sewer%20Stormwater/Documents/Stormwater%20Plan-Permit-Revisions.pdf"
+    ],
+    [
+      "Kannapolis rainfall frequency table",
+      "https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Water%20Sewer%20Stormwater/Documents/KANNAPOLIS-POINT-PRECIPITATION.pdf"
+    ],
+    [
+      "Kannapolis Development Ordinance",
+      "https://www.kannapolisnc.gov/Government-Departments/Planning/KDO"
+    ]
+  ]
+}

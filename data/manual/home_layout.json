@@ -51,6 +51,7 @@
         "ktown",
         "flights",
         "water",
+        "stormwater",
         "about",
         "roads",
         "stocks"
@@ -105,7 +106,8 @@
         "flights": "xl",
         "bktea": "m",
         "putthaus": "m",
-        "girlgrind": "m"
+        "girlgrind": "m",
+        "stormwater": "l"
       },
       "spacers": []
     },
@@ -115,6 +117,7 @@
         "utility",
         "drought",
         "water",
+        "stormwater",
         "roads",
         "police",
         "fire",
@@ -147,7 +150,9 @@
         "roads": "xl",
         "org": "l",
         "homeless": "xl",
-        "about": "xl"
+        "about": "xl",
+        "water": "l",
+        "stormwater": "l"
       },
       "spacers": []
     },

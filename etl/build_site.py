@@ -174,9 +174,12 @@ def main() -> None:
     share_pages()
     html = build()
     DIST.mkdir(parents=True, exist_ok=True)
-    if (OUT / "thumbs").is_dir():  # small copies of hotlinked images (common.Thumbs), loaded lazily by the page
-        shutil.rmtree(DIST / "thumbs", ignore_errors=True)
-        shutil.copytree(OUT / "thumbs", DIST / "thumbs")
+    # Published beside the page, loaded only when needed: small copies of hotlinked images (common.Thumbs) and
+    # map layers too big to inline (geo/: FEMA flood zones, build_stormwater).
+    for sub_dir in ("thumbs", "geo"):
+        if (OUT / sub_dir).is_dir():
+            shutil.rmtree(DIST / sub_dir, ignore_errors=True)
+            shutil.copytree(OUT / sub_dir, DIST / sub_dir)
     out = DIST / "index.html"
     out.write_text(html)
     log(f"site: wrote {out.relative_to(DIST.parent)} ({len(html.encode()) / 1024 / 1024:.1f} MB)")

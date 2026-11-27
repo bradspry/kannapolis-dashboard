@@ -34,6 +34,8 @@ import { renderKtown } from "./sections/ktown.js";
 import { renderStocks } from "./sections/stocks.js";
 import { renderGas, GAS_COLOR } from "./sections/gas.js";
 import { renderWater, WATER_COLOR } from "./sections/water.js";
+import { renderWaterSewer } from "./sections/watersewer.js";
+import { renderStormwater, refreshRainStatus, STORM_COLOR } from "./sections/stormwater.js";
 import { renderHomeless, HOMELESS_COLOR } from "./sections/homeless.js";
 import { renderRoads, ROADS_COLOR } from "./sections/roads.js";
 import { renderSchoolBus, SCHOOL_BUS_YELLOW } from "./sections/schoolbus.js";
@@ -64,7 +66,7 @@ function load(name, { optional = false } = {}) {
 // Icon colors are CSS variables (--icon-N), so icons can be restyled without touching charts.
 function colors() {
   const v = (n) => `var(--icon-${n})`;
-  return { people: v(1), growth: v(3), land: v(6), budget: v(7), debt: v(2), news: v(5), meetings: v(4), events: v(8), parade: v(2), weather: v(1), police: v(1), fire: v(2), baseball: v(6), utility: v(3), parks: v(6), gem: v(5), swanee: v(7), made: v(2), editions: v(4), whataburger: v(8), videos: v(5), waste: v(3), drought: v(1), library: v(6), train: v(1), council: v(1), org: v(3), about: "var(--muted-fill)", gauge: "var(--accent)" };
+  return { people: v(1), growth: v(3), land: v(6), budget: v(7), debt: v(2), news: v(5), meetings: v(4), events: v(8), parade: v(2), weather: v(1), police: v(1), fire: v(2), baseball: v(6), utility: v(3), parks: v(6), gem: v(5), swanee: v(7), made: v(2), stormwater: "#1f8a8a", editions: v(4), whataburger: v(8), videos: v(5), waste: v(3), drought: v(1), library: v(6), train: v(1), council: v(1), org: v(3), about: "var(--muted-fill)", gauge: "var(--accent)" };
 }
 
 /** The spinning-yarn logo animates SVG parts, which browsers run on the main thread: hold it still while the page
@@ -95,7 +97,7 @@ function main() {
     videos: load("videos.json", { optional: true }), waste: load("waste.json", { optional: true }),
     drought: load("drought.json", { optional: true }), library: load("library.json", { optional: true }),
     train: load("train.json", { optional: true }), jobs: load("jobs.json", { optional: true }), transit: load("transit.json", { optional: true }), flights: load("flights.json", { optional: true }), ktown: load("ktown.json", { optional: true }),
-    stocks: load("stocks.json", { optional: true }), gas: load("gas.json", { optional: true }), water: load("water.json", { optional: true }), homeless: load("homeless.json", { optional: true }), roads: load("roads.json", { optional: true }),
+    stocks: load("stocks.json", { optional: true }), gas: load("gas.json", { optional: true }), water: load("water.json", { optional: true }), watersewer: load("watersewer.json", { optional: true }), stormwater: load("stormwater.json", { optional: true }), homeless: load("homeless.json", { optional: true }), roads: load("roads.json", { optional: true }),
   };
   const sub = (id) => document.querySelector(`#${id} .section-sub`)?.textContent.trim() || "";
   const win = (id, def) => document.getElementById(id) && defineWindow(id, { ...def, sub: def.sub ?? sub(id) });
@@ -154,7 +156,10 @@ function main() {
   if (D.flights) win("flights", { title: "Flights", icon: "plane", color: D.flights.airport.color, render: () => renderFlights(D.flights) });
   if (D.train) win("train", { title: "NC By Train", icon: "train", color: "var(--icon-1)", render: () => renderTrain(D.train) });
   if (D.library) win("library", { title: "Cabarrus County Public Library", icon: "library", color: "var(--icon-6)", render: () => renderLibrary(D.library) });
-  if (D.water?.streams) win("water", { title: "Lakes & Rivers", icon: "waves", color: WATER_COLOR, render: () => renderWater(D.water, D.boundaries) });
+  const director = (re) => D.org?.people?.find((p) => re.test(p.title));
+  if (D.watersewer) win("water", { title: "City Water & Sewer", icon: "waves", color: WATER_COLOR, render: () => renderWaterSewer(D.watersewer, D.water, D.boundaries, director(/^water resources$/i)) });
+  else if (D.water?.streams) win("water", { title: "Lakes & Rivers", icon: "waves", color: WATER_COLOR, render: () => renderWater(D.water, D.boundaries) });
+  if (D.stormwater) win("stormwater", { title: "Stormwater & Flooding", icon: "drop", color: STORM_COLOR, render: () => renderStormwater(D.stormwater, D.water, D.boundaries, director(/^transportation/i)) });
   if (D.homeless?.districts) win("homeless", { title: "Homeless Students", icon: "school", color: HOMELESS_COLOR, render: () => renderHomeless(D.homeless) });
   if (D.drought) win("drought", { title: "Current Drought Conditions", icon: "drop", color: "var(--icon-1)", render: () => renderDrought(D.drought) });
   if (D.weatherMeta) win("weather", { title: "Weather", icon: "weather", color: "var(--icon-1)", render: () => renderWeather(weather(), D.boundaries) });
@@ -170,6 +175,7 @@ function main() {
   onWeather(() => {
     if (!document.body.classList.contains("is-dragging")) renderHome();
     refreshWindow("weather");
+    refreshRainStatus(); // Stormwater & Flooding: flood alerts and rain chances
   });
   // Dashboard Feedback: add which widget is open (if any) and the page address to the email.
   document.getElementById("feedback-btn")?.addEventListener("click", (e) => {

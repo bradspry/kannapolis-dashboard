@@ -26,6 +26,8 @@ import { countText as jobCount, staleNote as jobStale, careersButton as jobCaree
 import { latest as ktLatest, logo as ktLogo, meta as ktMeta, thumb as ktThumb, buttons as ktButtons, list as ktList, epLabel as ktEp } from "./sections/ktown.js";
 import { headline as kxHead, rows as kxRows, movers as kxMovers, change as kxChange, sinceStart as kxSince, pctText as kxPct, dayText as kxDay } from "./sections/stocks.js";
 import { noticeLine, bigPrice as gsBig, list as gsList, avList as gsAv, stationMap as gsMap, trendText as gsTrend, areaLine as gsArea, usd as gsUsd, GAS_COLOR } from "./sections/gas.js";
+import { qualityBadges as wsBadges, resultBars as wsResults, overflowRows as wsOverflows, callButton as wsCall, typicalBill as wsTypical } from "./sections/watersewer.js";
+import { STORM_COLOR, rainStatus as swStatus, reportButton as swReport, frisButton as swFris, creeks as swCreeks, tileFloodMap as swTileMap, legend as swLegend } from "./sections/stormwater.js";
 import { lakeRows as wlLakes, streamRows as wlStreams, tileWaterMap as wlTileMap, allLakes as wlAll, belowText as wlBelow, condition as wlCond, WATER_COLOR } from "./sections/water.js";
 import { districtRows as hmRows, changeLine as hmChange, miniChart as hmChart, latestOf as hmLatest, syShort as hmSy, HOMELESS_COLOR } from "./sections/homeless.js";
 import { reportButtons as rdReport, projectList as rdProjects, official as rdOfficial, roadMap as rdMap, headline as rdHead, topList as rdTop, share as rdShare, ROADS_COLOR } from "./sections/roads.js";
@@ -160,7 +162,7 @@ const contactLinks = (p) => [
 const shortDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
 export function tileDefs(data, COLORS) {
-  const { census, budget, property, zoning, council, org, meetings, news, events, parade, incidents, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos, waste, drought, library, train, jobs, transit, flights, ktown, stocks, gas, water, homeless, roads, boundaries } = data;
+  const { census, budget, property, zoning, council, org, meetings, news, events, parade, incidents, police, fire, baseball, utility, parks, gem, swanee, made, editions, whataburger, videos, waste, drought, library, train, jobs, transit, flights, ktown, stocks, gas, water, watersewer, stormwater, homeless, roads, boundaries } = data;
   const jobSize = jobSizes(jobs, stocks?.companies?.length ? 2 : 0); // KANDEX (medium) is on the Jobs tab too
   const t = tokens();
   const geo = census.geographies;
@@ -425,23 +427,54 @@ export function tileDefs(data, COLORS) {
           h("div", { class: "hm-xl-chart" }, h("div", { class: "mini-head bb-mh" }, "Per 1,000 enrolled, by school year"), chart(560, 300))));
       },
     },
-    water?.streams && {
-      id: "water", opens: "water", size: "m", label: "Lakes & Rivers",
+    (watersewer || water?.streams) && {
+      id: "water", opens: "water", size: "m", label: "City Water & Sewer",
       build: (size) => {
+        // City Water & Sewer: the quality report's headline, the 24/7 line, and the lakes (Lakes & Rivers) as the tile grows.
         // The City's Director of Water Resources in the header (like the police and fire chiefs), except on the small tile.
-        const w = water, top = size === "s" ? head("waves", WATER_COLOR, "Lakes & Rivers")
-          : headWithChief("waves", WATER_COLOR, "Lakes & Rivers", chiefOf(org, /^water resources$/i), "Director of Water Resources");
-        const lakes = wlAll(w).filter((l) => l.ft != null);
-        const hero = lakes[0] ? h("div", { class: "wl-hero" }, h("div", { class: "bb-next-label" }, lakes[0].name),
-          h("div", { class: "wl-big" }, wlBelow(lakes[0].ft))) : null;
-        if (size === "s") return h("div", { class: "tile-body" }, top, hero, h("p", { class: "tile-meta" }, `Second Creek: ${wlCond(w.streams[0]?.percentile).label.toLowerCase()}`));
-        if (size === "m") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top wl-m" },
-          h("div", {}, h("div", { class: "mini-head bb-mh" }, "Lakes"), wlLakes(w, 3)), h("div", {}, h("div", { class: "mini-head bb-mh" }, "Streams"), wlStreams(w))));
-        if (size === "l") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top wl-l" },
-          wlTileMap(w, boundaries, "wl-tile-l", { labels: false }), h("div", {}, h("div", { class: "mini-head bb-mh" }, "Lakes"), wlLakes(w, 6), h("div", { class: "mini-head" }, "Streams"), wlStreams(w))));
-        return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top wl-xl" },
-          wlTileMap(w, boundaries, "wl-tile-xl"),
-          h("div", {}, h("div", { class: "mini-head bb-mh" }, "Lakes"), wlLakes(w, 7), h("div", { class: "mini-head" }, "Streams"), wlStreams(w))));
+        const w = water?.streams ? water : null, ws = watersewer;
+        const title = "City Water & Sewer";
+        const top = size === "s" ? head("waves", WATER_COLOR, title) : headWithChief("waves", WATER_COLOR, title, chiefOf(org, /^water resources$/i), "Director of Water Resources");
+        const lakes = w ? h("div", {}, h("div", { class: "mini-head bb-mh" }, "Lakes"), wlLakes(w, size === "xl" ? 6 : size === "l" ? 4 : 3)) : null;
+        const streams = w ? [h("div", { class: "mini-head" }, "Streams"), wlStreams(w)] : null;
+        if (!ws) return h("div", { class: "tile-body" }, top, lakes);
+        const call = wsCall(ws, { compact: true, label: size === "s" ? "Report" : "Report a problem 24/7" });
+        if (size === "s") return h("div", { class: "tile-body" }, top, wsBadges(ws, { compact: true, one: true }), call);
+        if (size === "m") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top wsw-m" },
+          h("div", {}, wsBadges(ws, { compact: true }), call), lakes || h("div", {}, h("div", { class: "mini-head bb-mh" }, "Your water"), wsResults(ws, 3, { compact: true }))));
+        if (size === "l") return h("div", { class: "tile-body" }, top, wsBadges(ws), h("div", { class: "tile-split top wsw-l" },
+          h("div", {}, h("div", { class: "mini-head bb-mh" }, "Your water"), wsResults(ws, 4, { compact: true })),
+          h("div", {}, lakes, streams)), h("div", { class: "wsw-foot" }, call, wsTypical(ws)));
+        return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top wsw-xl" },
+          w ? wlTileMap(w, boundaries, "wl-tile-xl") : null,
+          h("div", {}, wsBadges(ws), h("div", { class: "tile-split top wsw-xl-cols" },
+            h("div", {}, h("div", { class: "mini-head bb-mh" }, "Your water"), wsResults(ws, 5, { compact: true })),
+            h("div", {}, lakes, streams)),
+            h("div", { class: "mini-head" }, "Latest sewer spills reported"), wsOverflows(ws, 2),
+            h("div", { class: "wsw-foot" }, call, wsTypical(ws)))));
+      },
+    },
+    stormwater && {
+      id: "stormwater", opens: "stormwater", size: "m", label: "Stormwater & Flooding",
+      build: (size) => {
+        // Flood alerts and rain (NWS, live), the report line, streams, and FEMA flood zones on the larger tiles.
+        const sw = stormwater, title = "Stormwater & Flooding";
+        const top = size === "s" ? head("drop", STORM_COLOR, title) : headWithChief("drop", STORM_COLOR, title, chiefOf(org, /^transportation/i), "Director of Transportation & Environmental Services");
+        const report = swReport(sw, { compact: true, label: size === "s" ? "Report" : "Report a problem" });
+        const streams = water?.streams ? [h("div", { class: "mini-head" }, "Streams"), swCreeks(water)] : null;
+        if (size === "s") return h("div", { class: "tile-body" }, top, swStatus({ compact: true }), report);
+        if (size === "m") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top sw-m" },
+          h("div", {}, swStatus({ compact: true }), h("div", { class: "el-btns" }, report)),
+          h("div", {}, streams || swLegend({ compact: true }))));
+        if (size === "l") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top sw-l" },
+          swTileMap(sw, boundaries, "sw-tile-l"),
+          h("div", {}, swStatus(), streams, h("div", { class: "el-btns sw-btns" }, report, swFris(sw, { compact: true })))));
+        return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top sw-xl" },
+          h("div", {}, swTileMap(sw, boundaries, "sw-tile-xl"), swLegend({ compact: true })),
+          h("div", {}, swStatus(), streams,
+            h("div", { class: "mini-head" }, "Only rain down the drain"),
+            h("ul", { class: "sw-tips compact", role: "list" }, sw.tips.slice(0, 4).map((t) => h("li", {}, h("span", { "aria-hidden": "true" }, t.icon), h("span", {}, t.text)))),
+            h("div", { class: "el-btns sw-btns" }, report, swFris(sw, { compact: true })))));
       },
     },
     waste && {

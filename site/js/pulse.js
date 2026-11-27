@@ -84,6 +84,15 @@ const RULES = {
     const h = now.getHours();
     return { score: h >= 5 && h < 10 ? 40 : 28, reason: d?.hi != null ? `Today: high of ${d.hi}°` : "Today's forecast" };
   },
+  // A flood watch or warning brings Stormwater & Flooding up (flood zones, what to do); heavy rain, a little.
+  stormwater(D) {
+    if (!D.stormwater) return null;
+    const w = weather(), a = w?.alerts?.find((x) => /flood/i.test(x.event));
+    if (a) return { score: 85, reason: `${a.event}: flood zones and what to do` };
+    const d = w?.days?.[0];
+    if (d?.pop >= 70) return { score: 20, reason: `Rain likely (${d.pop}%): flood zones and storm drains` };
+    return null;
+  },
   waste(D, now) {
     const ws = D.waste; if (!ws) return null;
     const today = ymd(now), tom = ymd(addDays(now, 1));
@@ -237,7 +246,7 @@ const RULES = {
  *  in the saved layout. Widgets not listed count 10. */
 export const BASE = {
   weather: 34, waste: 30, events: 30, news: 26, meetings: 22, train: 20, gas: 22, utility: 20, police: 18, fire: 14,
-  parks: 18, library: 18, gem: 20, swanee: 16, parade: 15, drought: 16, water: 14, council: 16, videos: 14, ktown: 12, baseball: 14,
+  parks: 18, library: 18, gem: 20, swanee: 16, parade: 15, drought: 16, water: 16, stormwater: 12, council: 16, videos: 14, ktown: 12, baseball: 14,
   editions: 14, whataburger: 14, made: 10, stocks: 12, rider: 12, shuttle: 9, paratransit: 13, flights: 12, homeless: 10,
   roads: 8, incidents: 14, ellestique: 12, sweetest: 10, cardiacs: 10, cookcattle: 10, spicetea: 10, provisions: 14, bktea: 12, girlgrind: 12, putthaus: 14, people: 12, growth: 10, budget: 12, "debt-service": 6, land: 8, org: 10, "g-tax-rate": 8, "g-debt-policy": 6,
   "g-debt-limit": 6, "g-owners": 6, about: 4, "school-bus": 6,
@@ -251,7 +260,7 @@ export const BASE = {
  *  chapter if the story has one; anything unlisted goes at the end. */
 export const STORIES = {
   home: [
-    { id: "home", name: "At Home", blurb: "Weather, trash, water and bills", ids: ["weather", "waste", "utility", "drought", "water"], noSmall: true },
+    { id: "home", name: "At Home", blurb: "Weather, trash, water and bills", ids: ["weather", "waste", "utility", "drought", "water", "stormwater"], noSmall: true },
     { id: "local", name: "Shop & Eat Local", blurb: "Local shops, a market and a farm, and where to eat and drink", leads: { from: "2026-11-26", to: "2026-11-29" }, ids: ["ellestique", "cardiacs", "spicetea", "provisions", "bktea", "girlgrind", "sweetest", "cookcattle", "editions", "made", "whataburger"], noSmall: true },
     { id: "around", name: "Getting Around", blurb: "Traffic, trains, buses, gas and roads", ids: ["incidents", "train", "gas", "rider", "paratransit", "shuttle", "flights", "roads"] },
     { id: "out", name: "Out & About", blurb: "Things to do", ids: ["events", "parade", "gem", "swanee", "baseball", "putthaus", "parks", "library"], noSmall: true },
@@ -265,7 +274,7 @@ export const STORIES = {
   // City: what the City of Kannapolis does for you, from the curb to the budget. Every widget here is powered
   // at least in part by City data (sources.csv), plus the weather and community context the City tab carries.
   city: [
-    { id: "services", name: "City Services", blurb: "Trash, water, bills and streets", ids: ["waste", "utility", "drought", "water", "roads"], xl: ["roads"] },
+    { id: "services", name: "City Services", blurb: "Trash, water, stormwater, bills and streets", ids: ["waste", "utility", "drought", "water", "stormwater", "roads"], big: ["water", "stormwater"], xl: ["roads"] },
     { id: "safety", name: "Public Safety", blurb: "Police and fire", ids: ["police", "fire"] },
     { id: "hall", name: "City Hall", blurb: "News, meetings, your council and City jobs", ids: ["news", "meetings", "council", "videos", "org", "job-city"], big: ["council", "org"], small: ["videos"] },
     { id: "downtown", name: "Downtown & Parks", blurb: "City-run events, parks, theaters and the shuttle", ids: ["events", "parade", "parks", "gem", "swanee", "shuttle"], noSmall: true },
