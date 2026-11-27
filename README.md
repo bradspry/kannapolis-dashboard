@@ -51,7 +51,53 @@ The dashboard is a set of color-coded folder tabs, each with its own layout (`?t
 
 Gas Prices has its own card, also in a Share row inside the window. **https://kannapolistalk.com/gas/** previews with a Price board drawn from that day's data at every build (`etl/share_cards.py`): the five cheapest regular, three diesel, aviation fuel, the week's trends and any notice such as the gas tax suspension. Its file name carries the date and price (`share/gas-2026-11-26-2.60.png`): a new price gets a fresh card, and a post keeps the card from the day it was shared.
 
-**Smart tabs.** Every tab arranges itself for the moment, each as a story. Each widget gets a score: how timely it is right now (rules in `site/js/pulse.js` that read only the widget's own data and the clock: a holiday pickup delay tomorrow, an event tonight, a meeting today, a weather alert, a new council video, gas down this week), plus its everyday usefulness (`BASE`), plus a little for widgets this browser opens often and for an early place in the saved layout. Widgets are grouped into chapters (`STORIES` in `pulse.js`, one story per tab). Home: At Home, Shop & Eat Local (which leads the page over the holiday shopping weekend, Nov 26–29: a chapter's `leads` dates), Getting Around, Out & About, City Hall, Safety, Community, Work & Money, and About This Site at the bottom. City, what the City of Kannapolis does for you: City Services, Public Safety, City Hall, Downtown & Parks, Budget & Taxes, People & Growth, Community, and About This Site at the bottom. The City tab carries every widget powered by City of Kannapolis data (per `sources.csv`), including the City-run events, parks, Gem and Swanee theaters, West Avenue Express and City jobs. Entertainment, a night or weekend out: Shows & Events, Games & Getting Out, Eat & Drink, Read, Watch & Listen. Transportation, from your street outward: Driving, Buses & Shuttles, Trains & Planes. Shopping, local shops: Downtown Kannapolis (Elle's Tique, CARDIACS, The Spice & Tea Exchange), Around the Area (Sweetest Beginnings, Cook Cattle Farm); a shop scores for its dated event (70 on the day, 50 the day before), a holiday closing today (55), opening early, staying late or closing early today (35–40), and a small edge for being open now (12). When nothing on Shopping is timely, its Right now suggests dinner instead of "Nothing out of the ordinary": an in-stock cut from Cook Cattle Farm's store, a different one each day (`quiet` in `pulse.js`), opening the farm's window. Jobs, built from the employer list (`jobsStory`): Public Service, Schools, Health Care, Colleges & Universities, Industry (with the KANDEX), Retail & More; there, an employer's score is how many openings it has, boosted by openings first seen in the last week (`build_jobs.py` records each opening's `first_seen` across weekly harvests; listings show a New tag and the window a New this week filter), and a tab's pinned widget (School Bus Drivers) keeps its top-right corner in Smart, in the lead chapter. The chapter holding the most timely widget leads and the rest keep that order, each with a heading and a one-line lede (its most timely reason, or what it covers). Within a chapter the best-scored widgets take the biggest slots, in golden-ratio proportions (about 1 large : 1.6 medium : 2.6 small), packed into 4×2 bands with no gaps, and the large feature alternates left and right from band to band; the lead chapter opens with two large tiles side by side, and only something like a weather alert takes the full width. On a phone each chapter opens with one or two full-width mediums, then pairs of smalls. Blank spaces you add to Home in Edit become pauses at chapter ends, spread by the golden ratio. A widget taken off Home only comes back for something timely. A **Right now** line above lists the top reasons (each opens its widget), and timely tiles glow. On the published site (GitHub Pages) every tab is always Smart, with no Edit button and no Smart | Mine switch. Both appear only on the local preview (`./serve.sh` on localhost or the LAN, the same rule that keeps Google Analytics off there): **Arranged: Smart | Mine** switches to the tab's saved layout, per tab and per browser, and Edit always works on Mine. Adding a story to another tab is one entry in `STORIES`. A chapter's `big` list keeps a widget large whatever its score (Flights, on Transportation; City Council, in City Hall), and its `small` list keeps one in the chapter's smallest spot (Council Videos). The arrangement rechecks every 10 minutes.
+### Smart tabs
+
+Every tab arranges itself for the moment, as a story told in chapters. The rules live in `site/js/pulse.js`.
+
+**How widgets are scored.** Each widget's score adds up:
+
+- **How timely it is right now.** Rules read only the widget's own data and the clock: a holiday pickup delay tomorrow, an event tonight, a meeting today, a weather alert, a new council video, gas down this week.
+- **Its everyday usefulness** (`BASE`).
+- **A little extra** for widgets this browser opens often, and for an early place in the saved layout.
+
+**Chapters on each tab** (`STORIES`, one story per tab):
+
+| Tab | Chapters |
+|---|---|
+| Home | At Home · Shop & Eat Local · Getting Around · Out & About · City Hall · Safety · Community · Work & Money · About This Site |
+| City | City Services · Public Safety · City Hall · Downtown & Parks · Budget & Taxes · People & Growth · Community · About This Site |
+| Food & Drink | Coffee & Tea · Eat · Local Beer · From the Farm & Pantry |
+| Entertainment | Shows & Events · Games & Getting Out · Read, Watch & Listen |
+| Jobs | Built from the employer list (`jobsStory`): Public Service · Schools · Health Care · Colleges & Universities · Industry (with the KANDEX) · Retail & More |
+| Transportation | Driving · Buses & Shuttles · Trains & Planes |
+| Shopping | Downtown Kannapolis · Around the Area |
+
+- **City** carries every widget powered by City of Kannapolis data (per `sources.csv`), including City-run events, parks, the Gem and Swanee theaters, West Avenue Express and City jobs.
+- **About This Site** always comes last (`last`).
+- **Dated chapters:** `leads` puts a chapter first between two dates, and `during` changes it between two dates. Over the Black Friday weekend (Nov 26–29), Home's Shop & Eat Local leads as **Black Friday Weekend**, shops only, and the food and drink places move to Out & About.
+- **Fixed sizes:** a chapter's `big` list keeps a widget large whatever its score (City Council; Flights; Water and Stormwater on City; Provisions in Eat), and its `small` list keeps one in the smallest spot (Council Videos).
+
+**Tab-specific rules:**
+
+- **Shopping:** a shop scores for its dated event (70 on the day, 50 the day before), a holiday closing today (55), opening early, staying late or closing early today (35–40), and a small edge for being open now (12).
+- **Shopping and Food & Drink:** when nothing is timely, Right now suggests dinner instead of "Nothing out of the ordinary": an in-stock cut from Cook Cattle Farm's store, a different one each day (`quiet`), opening the farm's window.
+- **Jobs:** an employer's score is its number of openings, boosted by openings first seen in the last week. `build_jobs.py` records each opening's `first_seen` across weekly harvests; listings show a New tag, and the window has a New this week filter. The pinned School Bus Drivers widget keeps its top-right corner in the lead chapter.
+
+**Layout:**
+
+- The chapter holding the most timely widget leads; the rest keep their order. Each chapter has a heading and a one-line lede: its most timely reason, or what it covers.
+- Within a chapter, the best-scored widgets take the biggest slots, in golden-ratio proportions (about 1 large : 1.6 medium : 2.6 small), packed into 4×2 bands with no gaps. The large feature alternates left and right from band to band.
+- The lead chapter opens with two large tiles side by side. Only something like a weather alert takes the full width.
+- On a phone, each chapter opens with one or two full-width mediums, then pairs of smalls.
+- Blank spaces you add to Home in Edit become pauses at chapter ends, spread by the golden ratio.
+- A widget taken off Home only comes back for something timely.
+
+**Right now.** A line above the chapters lists the top reasons (each opens its widget), and timely tiles glow. The arrangement rechecks every 10 minutes.
+
+**Published vs. local.** On the published site every tab is always Smart, with no Edit button and no Smart | Mine switch. Both appear only on the local preview (`./serve.sh` on localhost or the LAN, the same rule that keeps Google Analytics off there). There, **Arranged: Smart | Mine** switches to the tab's saved layout, per tab and per browser, and Edit always works on Mine.
+
+**Adding a story** to another tab is one entry in `STORIES`.
 
 ## Testing on your phone
 
@@ -181,7 +227,7 @@ Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a
 | [Old Armor Beer Company: Contact (address, phone, hours, booking)](https://www.oldarmorbeer.net/contact) | Old Armor Beer Company | Web page | Hours, address, phone, email, good to know |
 | [Old Armor Beer Company: Pay It Forward Board](https://www.oldarmorbeer.net/pay-it-forward) | Old Armor Beer Company | Web page | Pay It Forward prices and how it works |
 | [Old Armor Beer Company: Weekly Schedule (events)](https://www.oldarmorbeer.net/events-1) | Old Armor Beer Company | Web page | Where the live music calendar is published |
-| [Old Armor Beer Company venue calendar (BeatGig / Dusk)](https://dusk.fm/embed/venue-calendar/oldarmorbeercompany) | BeatGig (Dusk), for Old Armor Beer Company | Web page | Upcoming live music: performer, date, start and end time, genre, free to attend (read daily) |
+| [Old Armor Beer Company venue calendar (BeatGig / Dusk)](https://dusk.fm/embed/venue-calendar/oldarmorbeercompany) | Old Armor Beer Company | Web page | Upcoming live music: performer, date, start and end time, genre, free to attend (read daily) |
 | [K-Town Connection YouTube channel feed](https://www.youtube.com/feeds/videos.xml?channel_id=UCjEpFdSMuKGpRPNHLaL-Xow) | K-Town Connection | RSS | Newest episodes: titles, dates, view counts, thumbnails, descriptions (read daily) |
 | [K-Town Connection on YouTube](https://www.youtube.com/@KTownConnection/videos) | K-Town Connection | Web page | Show description and hosts; watch and subscribe links |
 | [K-Town Connection podcast feed (Podbean)](https://feed.podbean.com/ktownconnection/feed.xml) | K-Town Connection | RSS | Episode audio, lengths and pages (read daily); podcast cover art, used as the logo |
@@ -219,7 +265,7 @@ Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a
 | [NC By Train logo](https://files.nc.gov/ncbytrain/NCByTrain_Logo.png) | N.C. Department of Transportation Rail Division | PNG | Logo |
 | [Kannapolis Station photo (NC By Train)](https://files.nc.gov/ncbytrain/styles/_inline_extra_large_/public/sp_migrate/media/ren-RAIL62_1.jpg) | N.C. Department of Transportation Rail Division | JPEG | Station photo |
 | [Amtrak: Track Your Train](https://www.amtrak.com/track-your-train.html) | Amtrak | Web page | Linked for live train status (not read by the dashboard) |
-| [kannapolis-jobs (job scrapers for the Kannapolis area)](https://github.com/bradspry/kannapolis-jobs) | Brad Spry | Python (GitHub) | Harvests each employer's openings weekly, filtered to the Kannapolis area; its --school-bus rules pick the school bus driving jobs |
+| [kannapolis-jobs (job scrapers for the Kannapolis area)](https://github.com/bradspry/kannapolis-jobs) | Brad Spry (GitHub) | Python (GitHub) | Harvests each employer's openings weekly, filtered to the Kannapolis area; its --school-bus rules pick the school bus driving jobs |
 | [City of Kannapolis careers site](https://www.governmentjobs.com/careers/kannapolis) | City of Kannapolis | Web page | Job openings (Kannapolis), read weekly |
 | [Kannapolis City Schools careers site](https://www.applitrack.com/kannapolis/onlineapp/default.aspx?all=1) | Kannapolis City Schools | Web page | Job openings (Kannapolis), read weekly |
 | [Cabarrus County Government careers site](https://www.governmentjobs.com/careers/Cabarruscounty) | Cabarrus County Government | Web page | Job openings (Cabarrus County), read weekly |
@@ -282,10 +328,10 @@ Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a
 | [Shoe Show logo](https://www.shoeshow.com/on/demandware.static/Sites-shoe-show-Site/-/default/dw3b767baf/images/favicons/shoeshow-favicon-196x196.png) | Shoe Show | PNG | Logo; widget color measured from it |
 | [Speedway Motorsports logo](https://www.speedwaymotorsports.com/images/speedwaymotorsports-llc.png) | Speedway Motorsports | PNG | Logo; widget color measured from it |
 | [REBEL logo](https://images7.bamboohr.com/733550/logos/cropped.jpg?v=30) | REBEL | JPEG | Logo; widget color measured from it |
-| [Rider Transit GTFS schedule feed (routes, stops, schedules, route shapes)](https://passio3.com/concordKat/passioTransit/gtfs/google_transit.zip) | Concord Kannapolis Area Transit (published by Passio) | GTFS | Routes, colors, stops, next departures, hours and frequency; route maps; the paratransit service area is drawn from these routes |
-| [Rider Transit GTFS-realtime feeds (vehicle positions, service alerts)](https://passio3.com/concordk/passioTransit/gtfs/realtime/vehiclePositions) | Concord Kannapolis Area Transit (published by Passio) | GTFS-realtime | Live bus positions every 30 seconds and service alerts (alerts: https://passio3.com/concordk/passioTransit/gtfs/realtime/serviceAlerts) |
+| [Rider Transit GTFS schedule feed, published by Passio (routes, stops, schedules, route shapes)](https://passio3.com/concordKat/passioTransit/gtfs/google_transit.zip) | Concord Kannapolis Area Transit | GTFS | Routes, colors, stops, next departures, hours and frequency; route maps; the paratransit service area is drawn from these routes |
+| [Rider Transit GTFS-realtime feeds, published by Passio (vehicle positions, service alerts)](https://passio3.com/concordk/passioTransit/gtfs/realtime/vehiclePositions) | Concord Kannapolis Area Transit | GTFS-realtime | Live bus positions every 30 seconds and service alerts (alerts: https://passio3.com/concordk/passioTransit/gtfs/realtime/serviceAlerts) |
 | [Rider Transit: Links (official GTFS and GTFS-realtime feed addresses)](https://ckrider.com/resources/links/) | Rider Transit | Web page | Where the feeds are published |
-| [Rider Transit live bus tracker (CK Rider)](https://trackingckrider.com/map) | Concord Kannapolis Area Transit (Syncromatics) | Web page | Linked when the public real-time feed reports no buses; Rider's current live map |
+| [Rider Transit live bus tracker (CK Rider, by Syncromatics)](https://trackingckrider.com/map) | Concord Kannapolis Area Transit | Web page | Linked when the public real-time feed reports no buses; Rider's current live map |
 | [Rider Transit: About (hours, holidays, Transit Center, buses)](https://ckrider.com/about/) | Rider Transit | Web page | Service hours, no-service holidays, Transit Center address and customer service hours, bike racks |
 | [Rider Transit: Accessibility and ADA Paratransit](https://ckrider.com/accessibility/) | Rider Transit | Web page | Paratransit eligibility, service area (3/4 mile), hours, fares ($2.00; bus fare $1.25), phones, booking rules, applications; bus accessibility |
 | [Rider Transit: Fares & Passes (Rider Pass, Umo app, smartcard)](https://ckrider.com/fares-and-passes/) | Rider Transit | Web page | Ways to pay, free transfers, smartcard cost |
@@ -296,9 +342,9 @@ Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a
 | [Downtown Parking map (shows the West Avenue Express stops)](https://www.kannapolisnc.gov/Portals/0/Kannapolis/Departments/Parking/FINAL%20-%20Parking%20%20(8).png) | City of Kannapolis | PNG | Positions of the four shuttle stops |
 | [OpenStreetMap: downtown Kannapolis streets (Overpass API) and place search (Nominatim)](https://www.openstreetmap.org/#map=17/35.4993/-80.6245) | OpenStreetMap contributors | GeoJSON (Overpass) | Shuttle street path and nearby streets; First Baptist Church location; Rider Transit Center location; Christmas Parade route and staging lines |
 | [kannapolis-travel: fetch_routes.py (--flights-only)](https://github.com/bradspry/kannapolis-travel) | Brad Spry (GitHub) | Python (GitHub) | Gathers every nonstop route from Concord-Padgett, with airport names and coordinates |
-| [Concord-Padgett Regional Airport: Airlines](https://concordairportnc.com/Airline-Information/Airlines) | City of Concord (Concord-Padgett Regional Airport) | Web page | Nonstop routes by airline (current and new), airline phones and sites, terminal address, Sun Country / Caesars Rewards Air charters, area names for destinations |
-| [Concord-Padgett Regional Airport: Airline Parking](https://concordairportnc.com/Airline-Information/Parking) | City of Concord (Concord-Padgett Regional Airport) | Web page | Parking rate, free first hour, payment, overflow lot, arrive two hours early |
-| [Concord-Padgett Regional Airport: Directions](https://concordairportnc.com/Airline-Information/Directions) | City of Concord (Concord-Padgett Regional Airport) | Web page | Terminal address and the warning that navigation apps may use the wrong one |
+| [Concord-Padgett Regional Airport: Airlines](https://concordairportnc.com/Airline-Information/Airlines) | City of Concord | Web page | Nonstop routes by airline (current and new), airline phones and sites, terminal address, Sun Country / Caesars Rewards Air charters, area names for destinations |
+| [Concord-Padgett Regional Airport: Airline Parking](https://concordairportnc.com/Airline-Information/Parking) | City of Concord | Web page | Parking rate, free first hour, payment, overflow lot, arrive two hours early |
+| [Concord-Padgett Regional Airport: Directions](https://concordairportnc.com/Airline-Information/Directions) | City of Concord | Web page | Terminal address and the warning that navigation apps may use the wrong one |
 | [OurAirports: airports.csv](https://davidmegginson.github.io/ourairports-data/airports.csv) | OurAirports (public domain) | CSV | Airport names, cities and coordinates for each destination |
 | [world-atlas land-50m (Natural Earth 1:50m land)](https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/land-50m.json) | Natural Earth (public domain), packaged by world-atlas | TopoJSON | Coastline outline on the Flights route map |
 | [us-atlas states-10m (U.S. Census Bureau cartographic boundaries)](https://cdn.jsdelivr.net/npm/us-atlas@3.0.1/states-10m.json) | U.S. Census Bureau, packaged by us-atlas | TopoJSON | State lines on the Flights route map |
@@ -336,7 +382,7 @@ Every machine-parsed number in `data/manual/*.csv` has a `source` citation and a
 | [NC Homeless Education Program](https://hepnc.uncg.edu/) | NC Homeless Education Program (UNC Greensboro) | Web page | Where families can get help in North Carolina |
 | [Kannapolis City Schools: Homeless Support Services](https://www.kcs.k12.nc.us/departments/student-services/homeless-support-services) | Kannapolis City Schools | Web page | Kannapolis City's McKinney-Vento liaison and phone |
 | [Cabarrus County Schools: McKinney-Vento](https://cabarrus.k12.nc.us/7011_3) | Cabarrus County Schools | Web page | Cabarrus County's McKinney-Vento liaison, phone and email |
-| [Rowan-Salisbury Schools: McKinney-Vento Resources and Information](https://rssed.org/mckinney-vento-resources-and-info) | Rowan-Salisbury School System | Web page | Rowan-Salisbury's homeless & foster care liaison and phone |
+| [Rowan-Salisbury Schools: McKinney-Vento Resources and Information](https://rssed.org/mckinney-vento-resources-and-info) | Rowan-Salisbury Schools | Web page | Rowan-Salisbury's homeless & foster care liaison and phone |
 | [NCHEP Homeless Liaison Contact List](https://hepnc.uncg.edu/homeless-liaisons/) | NC Homeless Education Program (UNC Greensboro) | Spreadsheet | Liaison emails; confirms each district's liaison |
 | [kannapolis-city-roads: kannapolis_city_roads.py](https://github.com/bradspry/kannapolis-city-roads) | Brad Spry (GitHub) | Python (GitHub) | Which road types count as state-maintained; the boundary layer |
 | [NCDOT municipal boundaries (Powell Bill Program), NCDOT_CityBdy_Poly](https://www.arcgis.com/home/item.html?id=ee098aeaf28d44138d63446fbdaac1ee) | NC Department of Transportation | ArcGIS REST | Kannapolis city limits as filed for Powell Bill street aid |
