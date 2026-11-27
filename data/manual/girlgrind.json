@@ -202,5 +202,7 @@
     "alt": "The Girl Grind drive-thru and its vendor market, with drinks in hand"
   },
   "allergen": "Not a certified allergen-free facility: it handles eggs, wheat, peanuts, tree nuts, soy, milk and coconut.",
-  "source": "Machine-parsed from the Girl Grind Beverage Co. website (home, about and menu pages, menu boards and the November specials), November 26, 2026"
+  "source": "Machine-parsed from the Girl Grind Beverage Co. website (home, about and menu pages, menu boards and the November specials), November 26, 2026",
+  "owner": "Makayla",
+  "owner_photo": "photos/local/girlgrind-owner.jpg"
 }

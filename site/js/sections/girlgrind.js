@@ -28,8 +28,19 @@ const buttons = (g, { compact = false } = {}) => h("div", { class: "el-btns" },
   h("a", { class: `btn-primary el-call${compact ? " compact" : ""}`, href: tel(g.phone) }, "📞 Call"),
   ext(g.map, "Directions ↗", `pill-btn el-shop-2${compact ? " compact" : ""}`));
 
+/** The owner at the right of the header (medium and up), like the other shops. */
+function headWithOwner(g, size, head) {
+  const hd = head("cup", g.color, "Girl Grind");
+  if (g.owner_photo && size !== "s") {
+    hd.classList.add("tile-head-chief");
+    hd.append(h("div", { class: "tile-chief" }, h("div", { class: "tile-chief-text" }, h("b", {}, g.owner), h("span", {}, "Owner")),
+      h("img", { src: g.owner_photo, alt: `${g.owner}, owner`, loading: "lazy" })));
+  }
+  return hd;
+}
+
 export function girlGrindTile(g, size, head) {
-  const top = h("div", { class: "lib-tile-head" }, head("cup", g.color, "Girl Grind"), logo(g, size));
+  const top = h("div", { class: "lib-tile-head" }, headWithOwner(g, size, head), logo(g, size));
   const info = h("div", { class: "el-info" }, h("div", { class: "bb-next-label" }, "Drive-thru drinks"),
     h("p", { class: "tile-meta el-where" }, "📍 ", g.address_short, " · ", h("a", { href: tel(g.phone) }, "call for hours")));
   if (size === "s") return h("div", { class: "tile-body" }, top, info);
@@ -67,6 +78,8 @@ export function renderGirlGrind(g) {
         g.menu.map((m) => h("div", { class: "gg-menu-sec" }, h("h4", {}, m.section, m.sizes ? h("small", {}, ` · ${m.sizes}`) : null),
           h("p", {}, m.items.join(" · ")), m.note ? h("p", { class: "tile-meta" }, m.note) : null)))),
     h("section", { class: "card" }, h("h3", {}, "About Girl Grind"),
+      g.owner_photo ? h("div", { class: "el-owner-card" }, h("img", { src: g.owner_photo, alt: `${g.owner}, owner of Girl Grind`, loading: "lazy" }),
+        h("div", {}, h("b", {}, g.owner), h("span", {}, "Owner, Girl Grind Beverage Co."))) : null,
       h("figure", { class: "el-family" }, h("img", { src: g.market_photo.src, alt: g.market_photo.alt, loading: "lazy" })),
       h("p", {}, g.about), h("p", { class: "tile-meta" }, `Allergens: ${g.allergen}`),
       h("p", { class: "el-links" }, g.links.flatMap((l, i) => [i ? " · " : null, ext(l.url, `${l.label} ↗`)])),
