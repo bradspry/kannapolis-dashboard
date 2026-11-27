@@ -145,24 +145,24 @@ def share_pages() -> None:
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>{e(p['title'])} | Kannapolis Civic Dashboard</title>
+<title>{e(p['title'])} | Kannapolis Talk</title>
 <meta name="description" content="{e(p['description'])}" />
 <meta property="og:type" content="website" />
-<meta property="og:site_name" content="Kannapolis Civic Dashboard" />
+<meta property="og:site_name" content="Kannapolis Talk" />
 <meta property="og:title" content="{e(p['title'])}" />
 <meta property="og:description" content="{e(p['description'])}" />
 <meta property="og:url" content="{url}" />
 <meta property="og:image" content="{img}" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="{e(p.get('alt') or f"The {p['title']} tab of the Kannapolis Civic Dashboard")}" />
+<meta property="og:image:alt" content="{e(p.get('alt') or f"The {p['title']} tab of Kannapolis Talk's civic dashboard")}" />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="canonical" href="{url}" />
 <meta http-equiv="refresh" content="0; url={target}" />
 <script>location.replace({json.dumps(target)} + (location.hash && !{json.dumps(target)}.includes("#") ? location.hash : ""));</script>
 <style>body{{background:#141414;color:#eee;font:16px system-ui,sans-serif;padding:24px}}a{{color:#6aa7ff}}</style>
 </head>
-<body><p>Opening <a href="{target}">{e(p['title'])} on the Kannapolis Civic Dashboard</a>…</p></body>
+<body><p>Opening <a href="{target}">{e(p['title'])} on Kannapolis Talk</a>…</p></body>
 </html>
 """
         (DIST / slug).mkdir(parents=True, exist_ok=True)

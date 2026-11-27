@@ -181,7 +181,7 @@ function main() {
   document.getElementById("feedback-btn")?.addEventListener("click", (e) => {
     const open = location.hash.slice(1), title = open && document.getElementById(`${open}-h`)?.textContent.trim();
     const body = `${title ? `Widget: ${title}\n` : ""}Page: ${location.href}\n\nMy feedback:\n`;
-    e.currentTarget.href = `mailto:bradspry@gmail.com?subject=${encodeURIComponent("Kannapolis Civic Dashboard feedback")}&body=${encodeURIComponent(body)}`;
+    e.currentTarget.href = `mailto:bradspry@gmail.com?subject=${encodeURIComponent("Kannapolis Talk dashboard feedback")}&body=${encodeURIComponent(body)}`;
   });
   defineTiles(() => tileDefs(D, colors())); // before initOS: a tab's starting widgets come from the tile list
   STORIES.jobs = jobsStory(D.jobs); // Jobs' chapters come from the employer list

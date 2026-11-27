@@ -452,7 +452,8 @@ html.win-open { overflow: hidden; }
 }
 .topbar-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 12px; padding-bottom: 12px; }
 .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
-.brand h1 { font-size: clamp(18px, 3.4vw, 24px); font-weight: 650; letter-spacing: -.01em; }
+.brand h1 { font-size: clamp(18px, 3.4vw, 24px); font-weight: 650; letter-spacing: -.01em; line-height: 1.1; }
+.brand-sub { margin: 2px 0 0; font-size: clamp(10px, 1.6vw, 12px); font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
 /* title icon: a drop spindle spinning yarn fed from a ball (a nod to Kannapolis's mill-town roots) */
 .brand-mark { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: var(--accent); flex: none;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25), 0 4px 12px -4px var(--accent); }

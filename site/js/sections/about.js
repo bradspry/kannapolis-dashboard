@@ -168,6 +168,6 @@ export function renderAbout(D) {
     h("div", { class: "card about-cta" },
       h("div", {}, h("b", {}, "Spot a problem?"),
         h("p", {}, "Every chart has a “Show data” table, and budget figures link to the exact PDF page they came from. If something looks wrong, email ", h("a", { href: `mailto:${CONTACT}` }, CONTACT), ".")),
-      h("a", { class: "btn-primary", href: `mailto:${CONTACT}?subject=${encodeURIComponent("Kannapolis Civic Dashboard: data problem")}&body=${encodeURIComponent("What looks wrong (widget, number, and where you saw it):\n\n")}` }, "Email a correction")),
+      h("a", { class: "btn-primary", href: `mailto:${CONTACT}?subject=${encodeURIComponent("Kannapolis Talk dashboard: data problem")}&body=${encodeURIComponent("What looks wrong (widget, number, and where you saw it):\n\n")}` }, "Email a correction")),
   );
 }
