@@ -258,12 +258,18 @@ export const BASE = {
  *  slot (a full-width tile first on a phone), whatever their score; its `xl` widgets take the full width. A
  *  `last` chapter always stays at the bottom, even when something in it is timely. Employer widgets (job-*) join a "work"
  *  chapter if the story has one; anything unlisted goes at the end. */
+/** Home's holiday shopping weekend (Thanksgiving through Sunday). */
+const BLACK_FRIDAY = { from: "2026-11-26", to: "2026-11-29" };
+
 export const STORIES = {
   home: [
     { id: "home", name: "At Home", blurb: "Weather, trash, water and bills", ids: ["weather", "waste", "utility", "drought", "water", "stormwater"], noSmall: true },
-    { id: "local", name: "Shop & Eat Local", blurb: "Local shops, a market and a farm, and where to eat and drink", leads: { from: "2026-11-26", to: "2026-11-29" }, ids: ["ellestique", "cardiacs", "spicetea", "provisions", "bktea", "girlgrind", "sweetest", "cookcattle", "editions", "made", "whataburger"], noSmall: true },
+    // Black Friday weekend: this chapter leads Home as "Black Friday Weekend", shops only; the places to eat and drink
+    // join Out & About until it's over (`during`, below).
+    { id: "local", name: "Shop & Eat Local", blurb: "Local shops, a market and a farm, and where to eat and drink", leads: BLACK_FRIDAY, ids: ["ellestique", "cardiacs", "spicetea", "provisions", "bktea", "girlgrind", "sweetest", "cookcattle", "editions", "made", "whataburger"], noSmall: true,
+      during: { ...BLACK_FRIDAY, name: "Black Friday Weekend", blurb: "Local shops, a market and a farm: holiday hours, sales and new arrivals", ids: ["ellestique", "cardiacs", "spicetea", "provisions", "sweetest", "cookcattle", "editions"] } },
     { id: "around", name: "Getting Around", blurb: "Traffic, trains, buses, gas and roads", ids: ["incidents", "train", "gas", "rider", "paratransit", "shuttle", "flights", "roads"] },
-    { id: "out", name: "Out & About", blurb: "Things to do", ids: ["events", "parade", "gem", "swanee", "baseball", "putthaus", "parks", "library"], noSmall: true },
+    { id: "out", name: "Out & About", blurb: "Things to do", ids: ["events", "parade", "gem", "swanee", "baseball", "putthaus", "parks", "library"], noSmall: true, during: { ...BLACK_FRIDAY, blurb: "Things to do, and places to eat and drink", ids: ["events", "parade", "gem", "swanee", "baseball", "putthaus", "parks", "library", "bktea", "girlgrind", "made", "whataburger"] } },
     { id: "hall", name: "City Hall", blurb: "News, meetings and decisions", ids: ["news", "meetings", "council", "videos", "org", "people", "budget",
       "debt-service", "growth", "land", "g-tax-rate", "g-debt-policy", "g-debt-limit", "g-owners"], big: ["council"], small: ["videos"] },
     { id: "safety", name: "Safety", blurb: "Police and fire", ids: ["police", "fire"] },
@@ -283,12 +289,18 @@ export const STORIES = {
     { id: "community", name: "Community", blurb: "Neighbors in need", ids: ["homeless"], xl: ["homeless"] },
     { id: "site", name: "About This Site", blurb: "Where every number comes from", ids: ["about"], last: true, xl: ["about"] },
   ],
-  // Entertainment: a night or a weekend out, from what's on to where to eat after.
+  // Entertainment: a night or a weekend out (where to eat and drink: Food & Drink).
   fun: [
     { id: "shows", name: "Shows & Events", blurb: "Movies, live shows and what's on around town", ids: ["events", "parade", "gem", "swanee"] },
     { id: "outside", name: "Games & Getting Out", blurb: "Parks, Cannon Ballers games and indoor mini golf", ids: ["parks", "baseball", "putthaus"] },
-    { id: "eat", name: "Eat & Drink", blurb: "Burgers, deli sandwiches, coffee and local beer", ids: ["whataburger", "provisions", "bktea", "girlgrind", "editions", "made"], noSmall: true },
-    { id: "read", name: "Read, Watch & Listen", blurb: "The library and a local podcast", ids: ["library", "ktown"] },
+    { id: "read", name: "Read, Watch & Listen", blurb: "The library, a bookstore and a local podcast", ids: ["library", "editions", "ktown"] },
+  ],
+  // Food & Drink: where to get coffee or tea, a meal, a beer, and food to cook at home.
+  food: [
+    { id: "coffee", name: "Coffee & Tea", blurb: "Bubble tea, coffee and fizzy drinks, and a bookstore coffee bar", ids: ["bktea", "girlgrind", "editions"], noSmall: true },
+    { id: "eat", name: "Eat", blurb: "A hometown drive-in and a deli market", ids: ["whataburger", "provisions"], big: ["provisions"], noSmall: true },
+    { id: "drink", name: "Local Beer", blurb: "Brewed in Kannapolis, with live music", ids: ["made"] },
+    { id: "pantry", name: "From the Farm & Pantry", blurb: "Farm-raised beef and eggs, spices and teas to cook with", ids: ["cookcattle", "spicetea"], noSmall: true },
   ],
   // Shopping: local shops, downtown first, then around the area.
   shopping: [
@@ -319,10 +331,10 @@ export function jobsStory(jobs) {
 }
 
 /** What "Right now" says on a quiet moment, for a tab that has something better than "Nothing out of the ordinary":
- *  on Shopping, a dinner idea from Cook Cattle Farm's store (an in-stock meat from its featured list, a new one
+ *  on Shopping and Food & Drink, a dinner idea from Cook Cattle Farm's store (an in-stock meat from its featured list, a new one
  *  each day). { text, opens } or null. */
 export function quiet(D, tab, now = new Date()) {
-  if (tab !== "shopping") return null;
+  if (tab !== "shopping" && tab !== "food") return null;
   const farm = D.cookcattle;
   const dinner = (farm?.arrivals || []).filter((a) => !a.sold_out && /beef|steak|roast|brisket|rib|chicken|pork|bacon|lamb|chop|sausage|chorizo|stew|kabob/i.test(a.name)
     && !/heart|liver|tongue|tallow|marrow|bone broth|jerky|sticks/i.test(a.name)).slice(0, 12);

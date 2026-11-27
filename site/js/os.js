@@ -332,7 +332,9 @@ function bandsNoSmall(n) {
  *  become pauses at chapter ends, spread by the golden ratio (k·φ mod 1). Phones: a full-width medium or two
  *  per chapter, then pairs of smalls. Each item gets .size and .chapter. */
 function story(list, blanks = []) {
-  const chapters = STORIES[tab];
+  // A chapter's `during` ({ from, to, ...changes }) swaps in another name, blurb or widget list for those dates.
+  const day = new Date().toLocaleDateString("en-CA");
+  const chapters = STORIES[tab].map((c) => (c.during && day >= c.during.from && day <= c.during.to ? { ...c, ...c.during } : c));
   const chOf = new Map(chapters.flatMap((c) => c.ids.map((id) => [id, c])));
   const more = { id: "more", name: "More", blurb: "Everything else", ids: [] }, work = chapters.find((c) => c.id === "work") || more;
   const groups = new Map();

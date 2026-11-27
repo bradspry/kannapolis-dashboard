@@ -164,15 +164,10 @@
         "baseball",
         "putthaus",
         "parks",
-        "made",
-        "provisions",
-        "bktea",
-        "girlgrind",
         "library",
         "editions",
         "events",
-        "parade",
-        "whataburger"
+        "parade"
       ],
       "hidden": [],
       "sizes": {
@@ -180,13 +175,9 @@
         "swanee": "m",
         "parks": "l",
         "editions": "l",
-        "made": "l",
         "library": "l",
         "ktown": "l",
-        "provisions": "l",
-        "bktea": "l",
-        "putthaus": "l",
-        "girlgrind": "l"
+        "putthaus": "l"
       },
       "spacers": []
     },

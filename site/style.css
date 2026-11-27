@@ -2026,12 +2026,14 @@ body::before {
 .ear-jobs { --c: var(--series-6); }
 .ear-transportation { --c: var(--series-7); }
 .ear-shopping { --c: var(--series-5); }
+.ear-food { --c: var(--series-4); }
 .folder-home { --c: var(--tab-home); --folder-bg: color-mix(in oklab, var(--manila) 55%, var(--page)); }
 .folder-city { --c: var(--series-1); }
 .folder-fun { --c: var(--series-2); }
 .folder-jobs { --c: var(--series-6); }
 .folder-transportation { --c: var(--series-7); }
 .folder-shopping { --c: var(--series-5); }
+.folder-food { --c: var(--series-4); }
 .folder { --folder-bg: color-mix(in oklab, var(--c) 7%, var(--page));
   position: relative; background: var(--folder-bg); border: 1px solid color-mix(in oklab, var(--c) 50%, var(--border));
   border-radius: 0 20px 20px 20px; padding: 16px; box-shadow: 0 1px 0 color-mix(in oklab, var(--c) 30%, transparent), 0 18px 40px -28px rgba(0, 0, 0, .5); }

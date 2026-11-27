@@ -3,6 +3,7 @@
 export const TABS = [
   { id: "home", name: "Home" },
   { id: "city", name: "City" },
+  { id: "food", name: "Food & Drink", short: "Food" },
   { id: "fun", name: "Entertainment", short: "Fun" },
   { id: "jobs", name: "Jobs" },
   { id: "transportation", name: "Transportation", short: "Transit" },
@@ -17,7 +18,8 @@ export const DEFAULT_MEMBERS = {
     "people", "homeless", "budget", "debt-service", "growth", "g-tax-rate", "g-debt-policy", "g-debt-limit", "land", "g-owners", "about", "roads",
     // Also City-run (City of Kannapolis publishes their data): its events, parks, theaters, shuttle and jobs.
     "events", "parade", "parks", "gem", "swanee", "shuttle", "job-city"],
-  fun: ["weather", "gem", "swanee", "baseball", "parks", "events", "parade", "ktown", "editions", "made", "whataburger", "library", "provisions", "bktea", "girlgrind", "putthaus"],
+  food: ["bktea", "girlgrind", "whataburger", "provisions", "made", "editions", "cookcattle", "spicetea"],
+  fun: ["weather", "gem", "swanee", "baseball", "parks", "events", "parade", "ktown", "editions", "library", "putthaus"],
   jobs: ["school-bus", "stocks"], // plus every employer widget (job-*): see defaultMembers
   shopping: ["ellestique", "sweetest", "cardiacs", "cookcattle", "spicetea", "editions", "provisions", "bktea", "girlgrind"],
   transportation: ["weather", "incidents", "rider", "train", "flights", "paratransit", "shuttle", "gas", "roads"],
@@ -34,7 +36,8 @@ export function defaultMembers(tab, ids) {
 export function categoryOf(id) {
   if (id === "weather") return "home";
   if (id.startsWith("job-")) return "jobs";
-  for (const tab of ["fun", "transportation", "jobs", "shopping", "city"]) if (DEFAULT_MEMBERS[tab].includes(id)) return tab;
+  if (id === "cookcattle" || id === "spicetea") return "shopping"; // shops first, also on Food & Drink
+  for (const tab of ["fun", "transportation", "jobs", "food", "shopping", "city"]) if (DEFAULT_MEMBERS[tab].includes(id)) return tab;
   return "home";
 }
 
