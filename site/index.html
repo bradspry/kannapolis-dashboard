@@ -535,10 +535,15 @@
           <h2 class="win-title" id="win-title"></h2>
           <p class="win-sub"></p>
         </div>
+        <button class="win-share-btn pill-btn" type="button" aria-expanded="false" aria-controls="win-share" title="Share this widget on Facebook or copy its link">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>
+          <span>Share</span>
+        </button>
         <button class="win-close" type="button" aria-label="Close window">
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
         </button>
       </div>
+      <div class="win-share" id="win-share" hidden></div>
       <div class="win-body"></div>
     </div>
   </dialog>

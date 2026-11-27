@@ -730,6 +730,12 @@ body.editing .tile-w:nth-child(2n) { animation-delay: -.14s; }
   border: 1px solid var(--border); background: var(--surface-1); color: var(--text-secondary);
 }
 .win-close:hover { color: var(--text-primary); background: var(--page); }
+.win-share-btn { flex: none; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font: inherit; font-size: 14px; }
+.win-share-btn[aria-expanded="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.win-share { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding: 10px 16px; flex: none;
+  background: color-mix(in oklab, var(--accent) 8%, var(--surface-1)); border-bottom: 1px solid var(--border); }
+.win-share[hidden] { display: none; }
+@media (max-width: 520px) { .win-share-btn span { display: none; } .win-share-btn { padding: 8px 10px; } }
 .win-body { flex: 1; overflow: auto; padding: 20px; overscroll-behavior: contain; overflow-anchor: none; } /* late images and maps don't move the view */
 .win-body > section { margin: 0; }
 .win-body .section-head { display: none; }
@@ -3121,3 +3127,14 @@ body.editing .tile-w :is(.el-logo, .kt-logo-badge, .tr-logo, .ic-logo, .bb-logo)
   .sw-two { grid-template-columns: minmax(0, 1fr); }
   .sw-live { height: 320px; }
 }
+
+/* Share cards (os.js cardMode, rendered at 1200×630 by etl/build_site.py): the site's name and address over one widget. */
+body.card-mode { overflow: hidden; }
+body.card-mode > :not(.card-frame):not(dialog) { display: none !important; }
+.card-frame { width: 1200px; height: 630px; box-sizing: border-box; padding: 26px 32px 32px; display: flex; flex-direction: column; gap: 22px; overflow: hidden; }
+.card-top { display: flex; align-items: center; justify-content: space-between; }
+.card-top .brand-mark * { animation: none !important; }
+.card-domain { font-size: 20px; font-weight: 700; padding: 10px 20px; pointer-events: none; }
+.card-grid { transform: scale(1.25); transform-origin: 0 0; width: 909px; grid-auto-rows: 182px; }
+.card-grid .tile-w { animation: none !important; }
+.card-grid .tile-top, .card-grid .tile-pin, .card-grid .tile-grip, .card-grid .size-picker, .card-grid .tile-remove { display: none !important; }

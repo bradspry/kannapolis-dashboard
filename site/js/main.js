@@ -3,7 +3,7 @@
 // dashboard is a single file that works offline-from-disk, on any web host, or over Wi-Fi.
 import { initTheme, onThemeChange, tokens } from "./theme.js";
 import { h } from "./ui.js";
-import { initOS, defineWindow, defineTiles, definePulse, refreshNow, renderHome, invalidate, openFromHash, refreshWindow, setSources } from "./os.js";
+import { initOS, defineWindow, defineTiles, definePulse, refreshNow, renderHome, invalidate, openFromHash, refreshWindow, setSources, cardMode } from "./os.js";
 import { pulses, quiet, STORIES, jobsStory } from "./pulse.js";
 import { startWeather, onWeather, weather } from "./weather.js";
 import { renderWeather } from "./sections/weather.js";
@@ -188,6 +188,7 @@ function main() {
   definePulse(() => pulses(D), (tab) => quiet(D, tab)); // Smart tabs: what's timely right now, and what to say when nothing is
   setInterval(refreshNow, 10 * 60e3); // the picks follow the clock (morning weather, tonight's event)
   initOS({ defaultLayout: load("home_layout.json", { optional: true }) });
+  if (cardMode()) return; // a share-card picture for the build (os.js cardMode), not the dashboard
   renderHome();
   openFromHash();
 

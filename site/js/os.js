@@ -6,6 +6,7 @@
 // only the widgets put on them.
 import { fitSoon } from "./fit.js";
 import { h } from "./ui.js";
+import { shareBar } from "./share.js";
 import { icon } from "./icons.js";
 import { enableDrag, moveBy } from "./drag.js";
 import { TABS, defaultMembers, categoryOf, tabById, DEFAULT_PINNED } from "./tabs.js";
@@ -138,6 +139,7 @@ export function defineTiles(defs) { tileDefs = defs; }
 
 // ---------- home screen ----------
 export function renderHome() {
+  if (document.body.classList.contains("card-mode")) return; // a share-card picture: only the one widget (cardMode)
   const home = document.getElementById("home");
   const tray = document.getElementById("hidden-tray");
   const tiles = [];
@@ -571,6 +573,8 @@ export function openWindow(id, fromTile, { push = true } = {}) {
   openerTile = fromTile || null;
   countOpen(id);
   winTitle.textContent = w.title;
+  dialog.querySelector(".win-share").hidden = true;
+  dialog.querySelector(".win-share-btn").setAttribute("aria-expanded", "false");
   winSub.textContent = w.sub || "";
   const ic = chip(w.icon, w.color);
   if (w.ink) ic.style.color = w.ink; // icon color on a light chip (e.g. a yellow brand color)
@@ -689,6 +693,15 @@ export function initOS({ defaultLayout = null } = {}) {
   winSub = dialog.querySelector(".win-sub");
   winIcon = dialog.querySelector(".win-icon");
   dialog.querySelector(".win-close").addEventListener("click", () => closeWindow());
+  // Share: every widget has a page with its own Facebook preview, kannapolistalk.com/<id>/ (etl/build_site.py).
+  const shareBtn = dialog.querySelector(".win-share-btn"), sharePane = dialog.querySelector(".win-share");
+  shareBtn.addEventListener("click", () => {
+    const show = sharePane.hidden;
+    sharePane.hidden = !show;
+    shareBtn.setAttribute("aria-expanded", String(show));
+    if (show) sharePane.replaceChildren(h("span", { class: "share-label" }, `Share ${windows.get(openId)?.title || "this widget"}`),
+      shareBar(openId, { title: `${windows.get(openId)?.title} | Kannapolis Talk`, text: windows.get(openId)?.title }));
+  });
   dialog.addEventListener("cancel", (e) => { e.preventDefault(); closeWindow(); });
   // Click on the backdrop (outside the panel) closes.
   dialog.addEventListener("click", (e) => { if (e.target === dialog) closeWindow(); });
@@ -730,4 +743,33 @@ export function openFromHash() {
     history.replaceState(null, "", location.pathname + location.search);
     openWindow(id, null);
   }
+}
+
+/** Share cards (etl/build_site.py renders these with headless Chrome for each widget's share page):
+ *  ?cards writes the list of windows (id, title, today's reason) into the page as JSON for the build to read;
+ *  ?card=<window id> draws a 1200×630 picture: the site's name and address over the widget's tile at XL.
+ *  Returns true when the page is in either mode, so main.js stops there. */
+export function cardMode() {
+  const q = new URLSearchParams(location.search);
+  if (!q.has("cards") && !q.has("card")) return false;
+  const defs = typeof tileDefs === "function" ? tileDefs() : tileDefs;
+  let timely = {};
+  try { timely = pulseFn?.() || {}; } catch { /* no reasons */ }
+  const tileFor = (id) => defs.find((d) => d.id === id) || defs.find((d) => d.opens === id && !d.spacer);
+  if (q.has("cards")) {
+    const list = [...windows].map(([id, w]) => {
+      const t = tileFor(id), p = t && timely[t.id];
+      return { id, title: w.title, tile: t?.id || null, reason: p?.score >= 30 ? p.reason : null };
+    }).filter((x) => x.tile);
+    document.body.append(h("script", { type: "application/json", id: "cards-meta" }, JSON.stringify(list)));
+    return true;
+  }
+  const id = q.get("card"), t = tileFor(id);
+  document.body.classList.add("card-mode");
+  const tile = t && makeTile(t, "xl");
+  const brand = document.querySelector(".topbar .brand")?.cloneNode(true);
+  document.body.append(h("div", { class: "card-frame" },
+    h("div", { class: "card-top" }, brand, h("span", { class: "pill-btn primary card-domain" }, "kannapolistalk.com")),
+    h("div", { class: "home-grid card-grid" }, tile || h("p", { class: "error" }, `No widget called ${id}.`))));
+  return true;
 }

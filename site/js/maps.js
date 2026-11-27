@@ -18,6 +18,12 @@ export function makeMap(container, { bounds, interactive = true, attribution = t
     return new Promise(() => {});
   }
   live.set(id, map);
+  // Maps still drawing, for the share-card pictures (etl/share_shots.mjs waits for 0).
+  window.__mapsPending = (window.__mapsPending || 0) + 1;
+  let done = false;
+  const settle = () => { if (!done) { done = true; window.__mapsPending--; } };
+  map.once("idle", settle);
+  map.once("remove", settle);
   return new Promise((resolve) => map.on("load", () => resolve(map)));
 }
 

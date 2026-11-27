@@ -138,3 +138,59 @@ def gas_share(g: dict, dist: Path, today: dt.date | None = None) -> dict | None:
     log(f"share cards: gas {'drew ' + name if ok else 'no card'}")
     return {"title": f"Gas in Kannapolis: ${c['price']:.2f} regular at {c['name']}", "description": text,
             "image": name if ok else "share/home.jpg", "alt": f"Today's cheapest gas in Kannapolis: ${c['price']:.2f} regular at {c['name']}"}
+
+
+# ---- Every widget: a share page with a picture of the widget itself -----------------------------------------
+# The page has a card view (os.js cardMode): ?cards lists the windows with today's reason for each, and
+# ?card=<id> draws the site's name over that widget's tile, 1200x630. etl/share_shots.mjs (Node) drives headless
+# Chrome through them, waiting for each widget's maps to draw, from the built page served on a local port so
+# its maps and files load as they do online. Takes a few minutes, so it runs on GitHub (the deploy) or when
+# KDASH_CARDS=1; the local preview skips it.
+SKIP_WIDGETS = {"gas"}  # has its own card (gas_share)
+
+
+def widget_shares(dist: Path, today: dt.date | None = None) -> dict:
+    """{window id: {title, window, description, image, alt}} for every widget with a tile; pictures in dist/share/w/."""
+    if not (os.environ.get("GITHUB_ACTIONS") or os.environ.get("KDASH_CARDS")):
+        return {}
+    exe, node = chrome(), shutil.which("node")
+    if not exe or not node:
+        log(f"share cards: no {'Chrome' if not exe else 'Node'} found; no widget share pages")
+        return {}
+    if today is None:
+        from zoneinfo import ZoneInfo
+        today = dt.datetime.now(ZoneInfo("America/New_York")).date()
+    import functools
+    import http.server
+    import json
+    import threading
+
+    class Quiet(http.server.SimpleHTTPRequestHandler):
+        def log_message(self, *a):
+            pass
+
+    out_dir = dist / "share" / "w"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    srv = http.server.ThreadingHTTPServer(("127.0.0.1", 0), functools.partial(Quiet, directory=str(dist)))
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    try:
+        r = subprocess.run([node, str(Path(__file__).with_name("share_shots.mjs")), exe, f"http://127.0.0.1:{srv.server_address[1]}/index.html",
+                            str(out_dir), today.isoformat(), ",".join(sorted(SKIP_WIDGETS))], capture_output=True, text=True, timeout=1200)
+    finally:
+        srv.shutdown()
+    try:
+        res = json.loads(r.stdout)
+    except ValueError:
+        log(f"share cards: the picture script failed ({(r.stderr or '').strip()[-300:]}); no widget share pages")
+        return {}
+    pages = {}
+    for w in res["widgets"]:
+        if w["id"] in SKIP_WIDGETS:
+            continue
+        img = res["shots"].get(w["id"])
+        lead = f"{w['reason'].rstrip('.')}. " if w.get("reason") else ""
+        pages[w["id"]] = {"title": w["title"], "window": w["id"], "image": img or "share/home.jpg",
+                          "description": f"{lead}{w['title']} on Kannapolis Talk, the civic dashboard for Kannapolis, NC, from official sources and updated daily.",
+                          "alt": f"The {w['title']} widget on Kannapolis Talk" if img else None}
+    log(f"share cards: {len(res['shots'])} of {len(pages)} widget pictures")
+    return pages

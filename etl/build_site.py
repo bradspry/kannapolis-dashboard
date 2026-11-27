@@ -120,6 +120,9 @@ SHARE_PAGES = {
 }
 
 
+RESERVED = {"share", "thumbs", "geo", "photos", "index.html"}  # folders the site already uses
+
+
 def share_pages() -> None:
     import html as H
     import shutil
@@ -129,7 +132,12 @@ def share_pages() -> None:
     jobs_file = OUT / "jobs.json"
     n_emp = len(json.loads(jobs_file.read_text())["employers"]) if jobs_file.exists() else 0
     pages = {slug: {**p, "description": p["description"].replace("{employers}", str(n_emp or "dozens of"))} for slug, p in SHARE_PAGES.items()}
-    # Widget share pages with a card drawn from today's data (etl/share_cards.py): /gas/ opens the Gas Prices window.
+    # Every widget: /<window id>/ opens its window, with a picture of the widget (share_cards.widget_shares).
+    from share_cards import widget_shares
+    for slug, p in widget_shares(DIST).items():
+        if slug not in pages and slug not in RESERVED:
+            pages[slug] = p
+    # Gas Prices has its own card drawn from today's data (etl/share_cards.py): /gas/ opens the Gas Prices window.
     gas_file = OUT / "gas.json"
     if gas_file.exists():
         from share_cards import gas_share
@@ -155,7 +163,7 @@ def share_pages() -> None:
 <meta property="og:image" content="{img}" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="{e(p.get('alt') or f"The {p['title']} tab of Kannapolis Talk's civic dashboard")}" />
+<meta property="og:image:alt" content="{e(p.get('alt') or f"Kannapolis Talk's civic dashboard: {p['title']}")}" />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="canonical" href="{url}" />
 <meta http-equiv="refresh" content="0; url={target}" />
@@ -171,7 +179,6 @@ def share_pages() -> None:
 
 
 def main() -> None:
-    share_pages()
     html = build()
     DIST.mkdir(parents=True, exist_ok=True)
     # Published beside the page, loaded only when needed: small copies of hotlinked images (common.Thumbs) and
@@ -183,6 +190,7 @@ def main() -> None:
     out = DIST / "index.html"
     out.write_text(html)
     log(f"site: wrote {out.relative_to(DIST.parent)} ({len(html.encode()) / 1024 / 1024:.1f} MB)")
+    share_pages()  # after the page is written: the widget pictures are taken from it
     import readme_sources  # keep the README's sources table in step with data/manual/sources.csv
     readme_sources.main()
 
