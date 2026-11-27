@@ -1836,8 +1836,10 @@ body::before {
 
 /* Dashboard Feedback button (header) */
 #feedback-btn { text-decoration: none; }
-#feedback-btn .fb-short { display: none; }
-@media (max-width: 720px) { #feedback-btn .fb-long { display: none; } #feedback-btn .fb-short { display: inline; } #feedback-btn { padding: 6px 11px; } }
+#feedback-btn .fb-short, #group-btn .fb-short { display: none; }
+#group-btn { display: inline-flex; align-items: center; gap: 7px; text-decoration: none; }
+#group-btn .group-icon { color: #1877f2; flex: none; }
+@media (max-width: 720px) { #feedback-btn .fb-long, #group-btn .fb-long { display: none; } #feedback-btn .fb-short, #group-btn .fb-short { display: inline; } #feedback-btn, #group-btn { padding: 6px 11px; } }
 
 /* City Debt: total owed */
 .ds-owed-tile .value { color: var(--text-primary); }
@@ -2416,6 +2418,9 @@ body::before {
 .mm-box.mini .mm-svg { max-height: 100%; }
 .mm-dot { stroke: var(--surface-1); stroke-width: 4; }
 .mm-line { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.mm-road { fill: none; stroke-linecap: round; stroke-linejoin: round; stroke: color-mix(in oklab, var(--text-primary) 30%, transparent); stroke-width: 2.5; }
+.mm-road.primary { stroke: color-mix(in oklab, var(--text-primary) 42%, transparent); stroke-width: 4.5; }
+.mm-road.motorway { stroke: color-mix(in oklab, #e8a33d 70%, var(--text-primary)); stroke-opacity: .75; stroke-width: 8; }
 .mm-label { font-size: 30px; font-weight: 600; fill: var(--text-primary); paint-order: stroke; stroke: var(--surface-1); stroke-width: 8px; stroke-linejoin: round; }
 
 /* ---------- Gas Prices ---------- */

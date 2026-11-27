@@ -1078,11 +1078,11 @@ export function tileDefs(data, COLORS) {
           h("div", {}, h("div", { class: "mini-head bb-mh" }, "Next cheapest"), gsList(reg, 3, { from: 1 }), dieselLine)));
         if (size === "l") return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top gs-m" },
           h("div", {}, gsBig(reg[0], { compact: true }), tax(), trend ? h("p", { class: "tile-meta" }, trend) : null, gsArea(g)),
-          gsMap(g, boundaries, { cls: "mini" })),
+          gsMap(g, boundaries, { cls: "mini", roads })),
           h("div", { class: "tile-split top gs-l" }, h("div", {}, h("div", { class: "mini-head" }, "Regular"), gsList(reg, 5, { from: 1 })),
             h("div", {}, h("div", { class: "mini-head" }, "Diesel"), gsList(dsl, 2, { numbered: false }), h("div", { class: "mini-head" }, "Aviation"), gsAv(g, 2))));
         return h("div", { class: "tile-body" }, top, h("div", { class: "tile-split top gs-xl" },
-          h("div", {}, gsBig(reg[0], { compact: true }), tax(), trend ? h("p", { class: "tile-meta" }, trend) : null, gsArea(g), gsMap(g, boundaries, { cls: "mini" })),
+          h("div", {}, gsBig(reg[0], { compact: true }), tax(), trend ? h("p", { class: "tile-meta" }, trend) : null, gsArea(g), gsMap(g, boundaries, { cls: "mini", roads })),
           h("div", {}, h("div", { class: "mini-head bb-mh" }, "Regular"), gsList(reg, 7, { from: 1 })),
           h("div", {}, h("div", { class: "mini-head bb-mh" }, "Diesel"), gsList(dsl, 4, { numbered: false }), h("div", { class: "mini-head" }, "Aviation"), gsAv(g, 4))));
       },

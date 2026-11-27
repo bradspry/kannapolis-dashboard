@@ -3,7 +3,7 @@
 // (like gas_prices.py --no-rewards), and aviation fuel at Concord-Padgett and Mid-Carolina Regional (AirNav).
 import { shareBar } from "../share.js";
 import { h, fill } from "../ui.js";
-import { miniMap } from "../minimap.js";
+import { miniMap, majorRoads } from "../minimap.js";
 
 const ext = (href, label, cls) => h("a", { href, target: "_blank", rel: "noopener", class: cls }, label);
 export const usd = (v) => `$${v.toFixed(2)}`;
@@ -55,12 +55,12 @@ export function areaLine(g) {
 }
 
 /** Map of the ranked regular stations, numbered, with the city limits. */
-export function stationMap(g, boundaries, { cls = "", grade = "regular", n = 10, aspect = 0.8 } = {}) {
+export function stationMap(g, boundaries, { cls = "", grade = "regular", n = 10, aspect = 0.8, roads = null } = {}) {
   const st = g.grades[grade].stations.slice(0, n).filter((s) => s.lat != null);
   // Framed on the stations (with a margin), not the whole city: they sit close together along I-85.
   const lons = st.map((s) => s.lon), lats = st.map((s) => s.lat), m = 0.012;
   const fit = [[Math.min(...lons) - m, Math.min(...lats) - m], [Math.max(...lons) + m, Math.max(...lats) + m]];
-  return miniMap({ boundaries, fit, aspect, pad: 0.04, cls: `gs-map ${cls}`, label: `Map of the ${st.length} cheapest ${grade} stations near Kannapolis, numbered by price`,
+  return miniMap({ boundaries, fit, aspect, pad: 0.04, cls: `gs-map ${cls}`, roads: majorRoads(roads), label: `Map of the ${st.length} cheapest ${grade} stations near Kannapolis, numbered by price`,
     points: st.map((s, i) => ({ lon: s.lon, lat: s.lat, r: i ? 30 : 38, num: i + 1, fill: i ? "var(--gs-dot)" : GAS_COLOR, cls: i ? "" : "best",
       title: `${i + 1}. ${s.name}, ${s.address}: ${usd(s.price)}` })).reverse() });
 }
@@ -88,7 +88,7 @@ export function noticeLine(g, { compact = false } = {}) {
   return n ? h("p", { class: `gs-notice${compact ? " compact" : ""}` }, h("b", {}, "⚠ ", n.short), h("span", {}, ` · ${n.left}`)) : null;
 }
 
-export function renderGas(g, boundaries) {
+export function renderGas(g, boundaries, roads) {
   const root = document.getElementById("gas-body");
   const reg = g.grades.regular, dsl = g.grades.diesel;
   const stale = Object.values(g.grades).find((x) => x.stale);
@@ -106,7 +106,7 @@ export function renderGas(g, boundaries) {
           h("div", { class: "gs-price" }, h("b", {}, usd(g.aviation[0].price)), h("small", {}, "/gal")),
           h("div", { class: "gs-where" }, h("b", {}, g.aviation[0].fuel), " · ", g.aviation[0].airport_name || g.aviation[0].airport),
           h("div", { class: "tile-meta" }, g.aviation[0].service)) : null)),
-    h("section", { class: "card" }, h("h3", {}, `Regular · the ${reg.stations.length} cheapest`), h("div", { class: "gs-two" }, stationMap(g, boundaries), table(reg.stations, "Regular"))),
+    h("section", { class: "card" }, h("h3", {}, `Regular · the ${reg.stations.length} cheapest`), h("div", { class: "gs-two" }, stationMap(g, boundaries, { roads }), table(reg.stations, "Regular"))),
     dsl?.stations.length ? h("section", { class: "card" }, h("h3", {}, "Diesel"), table(dsl.stations, "Diesel")) : null,
     g.aviation.length ? h("section", { class: "card" }, h("h3", {}, "Aviation fuel"),
       h("div", { class: "table-wrap" }, h("table", { class: "gs-table" },
@@ -115,5 +115,5 @@ export function renderGas(g, boundaries) {
           h("td", {}, ext(a.url, `${a.airport_name || a.airport} (${a.code})`))))))),
       h("p", { class: "tile-meta" }, "Posted by each airport's fuel business (FBO) on AirNav.")) : null,
     h("p", { class: "note" }, g.note, " Rules and stations from Brad Spry's ", ext(g.repo, "kannapolis-gas"),
-      ` (gas_prices.py): ZIP ${g.zips.join(", ")}, read daily. Sources: GasBuddy, Dash In's own site, AirNav.`));
+      ` (gas_prices.py): ZIP ${g.zips.join(", ")}, read daily. Sources: GasBuddy, Dash In's own site, AirNav. Map roads © OpenStreetMap contributors.`));
 }

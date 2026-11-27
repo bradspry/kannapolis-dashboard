@@ -19,18 +19,27 @@ export function projection(pts, { pad = 0.06, W = 1000, aspect = null } = {}) {
 
 export const pathOf = (pt, line) => `M${line.map((p) => pt(p).map((v) => v.toFixed(1)).join(",")).join("L")}`;
 
+/** The big roads around the city (roads.json "major", from build_roads) as road groups for miniMap, widest on top. */
+export function majorRoads(r) {
+  if (!r?.major) return [];
+  const [x0, y0] = r.origin, dec = (f) => { const out = []; for (let i = 0; i < f.length; i += 2) out.push([x0 + f[i] / r.scale, y0 + f[i + 1] / r.scale]); return out; };
+  return ["secondary", "primary", "motorway"].map((k) => ({ cls: k, lines: (r.major[k] || []).map(dec) }));
+}
+
 /** The current city limits (boundaries.geojson's "current" feature) as rings of [lon, lat]. */
 export const cityRings = (boundaries) => boundaries?.features?.find((f) => f.properties.year === "current")?.geometry.coordinates.flat() || [];
 
 /**
  * points: [{ lon, lat, r, fill, cls, label, title }]; lines: [{ coords: [[lon,lat],…], stroke, width, cls, dash }].
  * fit: extra [lon,lat] to include in the frame (defaults to points + the city).
+ * roads: [{ lines: [[[lon,lat],…],…], cls }], drawn first as a backdrop, one path per group.
  */
-export function miniMap({ boundaries, points = [], lines = [], fit = null, aspect = null, cls = "", label = "Map", pad = 0.07, labels = true }) {
+export function miniMap({ boundaries, points = [], lines = [], roads = [], fit = null, aspect = null, cls = "", label = "Map", pad = 0.07, labels = true }) {
   const city = cityRings(boundaries);
   const frame = fit || [...points.map((p) => [p.lon, p.lat]), ...city.flat()];
   const P = projection(frame, { aspect, pad });
   const svg = svgEl("svg", { viewBox: `0 0 ${P.W} ${P.H}`, class: `mm-svg ${cls}`, role: "img", "aria-label": label, preserveAspectRatio: "xMidYMid meet" });
+  for (const g of roads) if (g.lines.length) svg.append(svgEl("path", { class: `mm-road ${g.cls || ""}`, d: g.lines.map((l) => pathOf(P.pt, l)).join("") }));
   if (city.length) svg.append(svgEl("path", { class: "tr-city", d: city.map((r) => pathOf(P.pt, r) + "Z").join("") }));
   for (const l of lines) svg.append(svgEl("path", { class: `mm-line ${l.cls || ""}`, d: pathOf(P.pt, l.coords), stroke: l.stroke, "stroke-width": l.width ?? 6, "stroke-dasharray": l.dash }));
   const lab = svgEl("g", { class: "mm-labels" });

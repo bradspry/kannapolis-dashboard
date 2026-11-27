@@ -18,7 +18,7 @@ import time
 import urllib.parse
 import urllib.request
 
-from common import MANUAL, USER_AGENT, log, repo_constants, write_json
+from common import MANUAL, OUT, USER_AGENT, log, repo_constants, write_json
 
 REPO = "kannapolis-city-roads"
 OVERPASS = "https://overpass-api.de/api/interpreter"
@@ -93,6 +93,36 @@ def simplify(pts, tol):
     return simplify(pts[: idx + 1], tol)[:-1] + simplify(pts[idx:], tol)
 
 
+MAJOR = {"motorway": "motorway|motorway_link|trunk|trunk_link", "primary": "primary|primary_link", "secondary": "secondary"}
+MAJOR_PAD = 0.03  # degrees around the city's box: gas stations and the like sit just outside the limits
+
+
+def major_roads(bbox, origin) -> dict:
+    """The big roads (I-85, US and NC routes, main streets) in and around the city, not clipped to the limits, for
+    widget maps such as Gas Prices. Same coordinates as the city's lines. If Overpass doesn't answer, the last
+    good set stays."""
+    s, w, n, e = bbox[0] - MAJOR_PAD, bbox[1] - MAJOR_PAD, bbox[2] + MAJOR_PAD, bbox[3] + MAJOR_PAD
+    kinds = "|".join(MAJOR.values())
+    query = f'[out:json][timeout:120];way["highway"~"^({kinds})$"]({s},{w},{n},{e});out geom tags;'
+    try:
+        ways = json.loads(get(OVERPASS, urllib.parse.urlencode({"data": query}).encode()))["elements"]
+    except Exception as ex:  # noqa: BLE001
+        log(f"roads: couldn't read the major roads ({ex}); keeping the last set")
+        try:
+            return json.loads((OUT / "roads.json").read_text()).get("major") or {}
+        except Exception:  # noqa: BLE001
+            return {}
+    out: dict[str, list] = {k: [] for k in MAJOR}
+    for wy in ways:
+        hw = wy["tags"].get("highway", "")
+        kind = next((k for k, v in MAJOR.items() if hw in v.split("|")), None)
+        pts = [(g["lon"], g["lat"]) for g in wy.get("geometry", [])]
+        if kind and len(pts) >= 2:
+            out[kind].append([v for p in simplify(pts, 1e-4) for v in (round((p[0] - origin[0]) * Q), round((p[1] - origin[1]) * Q))])
+    log(f"roads: major roads around the city {', '.join(f'{k} {len(v)}' for k, v in out.items())}")
+    return out
+
+
 def main() -> None:
     cfg = repo_constants(REPO, "kannapolis_city_roads.py", {"BOUNDARY_URL", "BOUNDARY_NAME", "STATE_TYPES", "SKIP_TYPES", "LABEL_TYPES"})
     polys = boundary(cfg)
@@ -146,11 +176,12 @@ def main() -> None:
     total = mi["city"] + mi["state"]
     log(f"roads: {mi['city']:.0f} city-maintained miles, {mi['state']:.0f} state ({100 * mi['city'] / total:.0f}% city); "
         f"{len(out['city'])} + {len(out['state'])} lines")
+    major = major_roads((s, w, n, e), (w, s))
     dept = json.loads((MANUAL / "streets.json").read_text())  # the Streets Department: report a problem, projects, forms
     write_json("roads.json", {"dept": dept, "title": "City Roads", "origin": [w, s], "scale": Q, "boundary": rings,
                               "miles": {k: round(v, 1) for k, v in mi.items()}, "by_type": {k: round(v, 1) for k, v in sorted(by_type.items(), key=lambda kv: -kv[1])},
                               "top_city": [{**x, "miles": round(x["miles"], 1)} for x in top], "top_state": [{**x, "miles": round(x["miles"], 1)} for x in top_state],
-                              "lines": out, "state_types": sorted(state_types), "repo": "https://github.com/bradspry/kannapolis-city-roads",
+                              "lines": out, "major": major, "state_types": sorted(state_types), "repo": "https://github.com/bradspry/kannapolis-city-roads",
                               "links": {"powell_bill": "https://connect.ncdot.gov/municipalities/State-Street-Aid/Pages/default.aspx",
                                         "boundary": "https://www.arcgis.com/home/item.html?id=ee098aeaf28d44138d63446fbdaac1ee",
                                         "osm": "https://www.openstreetmap.org/copyright"}})

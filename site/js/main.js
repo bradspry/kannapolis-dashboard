@@ -145,7 +145,7 @@ function main() {
   }
   if (D.ktown?.episodes?.length) win("ktown", { title: "K-Town Connection", icon: "mic", color: D.ktown.color, render: () => renderKtown(D.ktown) });
   if (D.stocks?.companies?.length) win("stocks", { title: "KANDEX", icon: "growth", color: "var(--icon-3)", render: () => renderStocks(D.stocks) });
-  if (D.gas?.grades?.regular) win("gas", { title: "Gas Prices", icon: "fuel", color: GAS_COLOR, render: () => renderGas(D.gas, D.boundaries) });
+  if (D.gas?.grades?.regular) win("gas", { title: "Gas Prices", icon: "fuel", color: GAS_COLOR, render: () => renderGas(D.gas, D.boundaries, D.roads) });
   if (D.girlgrind) win("girlgrind", { title: "Girl Grind Beverage Co.", icon: "cup", color: D.girlgrind.color, render: () => renderGirlGrind(D.girlgrind) });
   if (D.putthaus) win("putthaus", { title: "Putthaus", icon: "flag", color: D.putthaus.color, render: () => renderPutthaus(D.putthaus) });
   if (D.bktea) win("bktea", { title: "B&K Tea Cafe", icon: "cup", color: D.bktea.color, render: () => renderBk(D.bktea) });
