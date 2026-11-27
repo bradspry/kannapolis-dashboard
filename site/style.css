@@ -3129,7 +3129,7 @@ body.editing .tile-w :is(.el-logo, .kt-logo-badge, .tr-logo, .ic-logo, .bb-logo)
 }
 
 /* Share cards (os.js cardMode, rendered at 1200×630 by etl/build_site.py): the site's name and address over one widget. */
-body.card-mode { overflow: hidden; }
+body.card-mode { overflow: hidden; font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; } /* the deploy (Linux) has Inter installed; elsewhere the system font */
 body.card-mode > :not(.card-frame):not(dialog) { display: none !important; }
 .card-frame { width: 1200px; height: 630px; box-sizing: border-box; padding: 26px 32px 32px; display: flex; flex-direction: column; gap: 22px; overflow: hidden; }
 .card-top { display: flex; align-items: center; justify-content: space-between; }

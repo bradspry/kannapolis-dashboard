@@ -30,6 +30,8 @@ jobs:
       - uses: actions/setup-node@v4  # share-card pictures for every widget (etl/share_shots.mjs needs Node 22's WebSocket)
         with:
           node-version: "22"
+      - name: Font for the share-card pictures (Inter, close to the system font on Apple devices)
+        run: sudo apt-get install -y --no-install-recommends fonts-inter
       - name: Fetch NCDOT incidents (DriveNC) and build the single-file dashboard
         env:
           DRIVENC_API_KEY: ${{ secrets.DRIVENC_API_KEY }}
