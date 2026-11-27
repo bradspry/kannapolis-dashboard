@@ -526,7 +526,7 @@ export function tileDefs(data, COLORS) {
       id: "editions", opens: "editions", size: "m", label: "Editions",
       build: (size) => {
         const ed = editions;
-        const top = [head("book", COLORS.editions, "Editions")];
+        const top = [size === "s" ? head("book", COLORS.editions, "Editions") : headWithChief("book", COLORS.editions, "Editions", { name: ed.owner, photo: ed.owner_photo }, "Owner")];
         const evs = edUpcoming(ed);
         const status = h("div", { class: "ed-tile-status" }, h("div", { class: "gem-tile-title" }, "Coffee, books & yarn · S Main St"), edStatus(ed, "store", { compact: true }), edStatus(ed, "drive", { compact: true }));
         const covers = (n) => h("div", { class: "ed-covers" }, ed.books.slice(0, n).map((b) => edCover(b, "sm")));

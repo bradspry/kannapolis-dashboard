@@ -130,7 +130,9 @@ export function renderEditions(ed) {
   draw();
 
   const next = evs.find((e) => e.date && !e.closed);
-  fill(root, 
+  fill(root,
+    ed.owner_photo ? h("div", { class: "el-owner-card ed-owner" }, h("img", { src: ed.owner_photo, alt: `${ed.owner}, owner of Editions`, loading: "lazy" }),
+      h("div", {}, h("b", {}, ed.owner), h("span", {}, "Owner, Editions Coffee Shop & Bookstore"))) : null,
     h("section", { class: "card ed-hero" },
       h("div", {}, h("div", { class: "bb-next-label" }, "Books · coffee · yarn"), h("h3", {}, ed.name), h("p", { class: "gem-p" }, ed.tagline, ". ", ed.address, "."),
         h("div", { class: "gem-actions" }, orderButton(ed), ext(ed.map, "Directions ↗"), h("a", { href: tel(ed.phone) }, `☎ ${ed.phone}`))),
