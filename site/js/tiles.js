@@ -549,7 +549,13 @@ export function tileDefs(data, COLORS) {
         if (size === "s") return h("div", { class: "tile-body" }, ...top, who);
         if (size === "m") return h("div", { class: "tile-body" }, ...top,
           h("div", { class: "tile-split top" }, who, h("div", {}, h("div", { class: "mini-head bb-mh" }, "Local favorites"), favs(3), wabOrder(wab, { compact: true }))));
-        if (size === "l") return h("div", { class: "tile-body" }, ...top, who, h("div", { class: "mini-head" }, "Local favorites"), favs(5), wabOrder(wab, { compact: true }));
+        if (size === "l") return h("div", { class: "tile-body" }, ...top,
+          h("div", { class: "tile-split top" },
+            h("div", {}, who, h("div", { class: "mini-head" }, "Local favorites"), favs(5), wabOrder(wab, { compact: true })),
+            h("div", {}, wab.coupon ? h("div", { class: "wab-coupon" }, h("span", { class: "bb-next-label" }, "First online order"), h("b", {}, wab.coupon.text.replace(/ your first online order$/, "")),
+              h("span", {}, "Code ", h("code", {}, wab.coupon.code))) : null,
+              wab.reviews?.length ? h("div", { class: "mini-head" }, "What locals say") : null,
+              ...(wab.reviews || []).slice(0, 2).map((r) => h("figure", { class: "wab-tile-quote" }, h("blockquote", {}, `“${r.text}”`), h("figcaption", {}, `— ${r.who}`))))));
         return h("div", { class: "tile-body" }, ...top,
           h("div", { class: "tile-split top" }, h("div", {}, who, wabOrder(wab, { compact: true })),
             h("div", {}, h("div", { class: "mini-head bb-mh" }, "Local favorites"), favs(6))));
