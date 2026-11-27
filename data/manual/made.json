@@ -19,10 +19,37 @@
       "events_feed": "https://dusk.fm/embed/venue-calendar/oldarmorbeercompany",
       "events_note": "Live music on the Old Armor Stage, from the calendar on Old Armor's Weekly Schedule page (booked through BeatGig/Dusk).",
       "hours": [
-        { "days": [1, 2, 3], "open": "15:00", "close": "22:00" },
-        { "days": [4], "open": "15:00", "close": "23:00" },
-        { "days": [5, 6], "open": "12:00", "close": "24:00" },
-        { "days": [0], "open": "12:00", "close": "21:00" }
+        {
+          "days": [
+            1,
+            2,
+            3
+          ],
+          "open": "15:00",
+          "close": "22:00"
+        },
+        {
+          "days": [
+            4
+          ],
+          "open": "15:00",
+          "close": "23:00"
+        },
+        {
+          "days": [
+            5,
+            6
+          ],
+          "open": "12:00",
+          "close": "24:00"
+        },
+        {
+          "days": [
+            0
+          ],
+          "open": "12:00",
+          "close": "21:00"
+        }
       ],
       "beers": [
         {
@@ -57,7 +84,19 @@
         "instagram": "https://www.instagram.com/oldarmorbeer/",
         "facebook": "https://www.facebook.com/oldarmor",
         "tiktok": "https://www.tiktok.com/@oldarmorbeer"
-      }
+      },
+      "owner": "Kyle & Stefan",
+      "owner_role": "Owners",
+      "owners": [
+        {
+          "name": "Kyle",
+          "photo": "photos/local/made-owner-kyle.jpg"
+        },
+        {
+          "name": "Stefan",
+          "photo": "photos/local/made-owner-stefan.jpg"
+        }
+      ]
     }
   ]
 }

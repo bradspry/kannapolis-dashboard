@@ -571,7 +571,9 @@ export function tileDefs(data, COLORS) {
       id: "made", opens: "made", size: "m", label: "Made in Kannapolis",
       build: (size) => {
         const m = featuredMaker(made);
-        const top = [head("mug", COLORS.made, "Made in Kannapolis")];
+        const ownersBadge = m.owners?.length ? h("div", { class: "tile-chief tile-owners" }, h("div", { class: "tile-chief-text" }, h("b", {}, m.owner), h("span", {}, m.owner_role || "Owners")),
+          h("span", { class: "owner-faces" }, m.owners.map((o) => h("img", { src: o.photo, alt: `${o.name}, owner`, loading: "lazy" })))) : null;
+        const top = [size !== "s" && ownersBadge ? h("div", { class: "tile-head tile-head-chief" }, chip("mug", COLORS.made), h("span", { class: "tile-title" }, "Made in Kannapolis"), ownersBadge) : head("mug", COLORS.made, "Made in Kannapolis")];
         const today = hoursText(hoursFor(m, new Date().getDay()));
         const who = h("div", { class: "gem-tile-now mk-tile-now" }, makerImage(m, size === "s" ? "sm" : "md"),
           h("div", {}, h("div", { class: "bb-next-label" }, `${m.kind.split(" &")[0]} · Est. ${m.est}`), h("div", { class: "gem-tile-title" }, m.name),

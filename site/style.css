@@ -2945,3 +2945,9 @@ body.editing .tile-w :is(.el-logo, .kt-logo-badge, .tr-logo, .ic-logo, .bb-logo)
 .gg-menu-sec h4 { margin: 10px 0 2px; } .gg-menu-sec h4:first-child { margin-top: 0; } .gg-menu-sec p { margin: 0 0 4px; }
 @media (max-width: 720px) { .gg-best { grid-template-columns: repeat(3, minmax(0, 1fr)); } .gg-xl { grid-template-columns: minmax(0, 1fr); } .tile-w.size-l .gg-best.compact { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .el-m .gg-best.compact img { aspect-ratio: auto; height: 92px; }
+/* Two or more owners: their circles side by side, like the council's */
+.tile-owners .owner-faces { display: flex; gap: 0; flex: none; }
+.tile-owners .owner-faces img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--surface-1); }
+.tile-owners .owner-faces img + img { margin-left: -8px; }
+@media (max-width: 720px) { .tile-owners .owner-faces img { width: 34px; height: 34px; } }
+.owner-cards { display: flex; flex-wrap: wrap; gap: 8px 28px; }

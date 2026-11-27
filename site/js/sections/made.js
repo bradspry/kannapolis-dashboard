@@ -149,8 +149,10 @@ function makerSection(m) {
 export function renderMade(made) {
   const root = document.getElementById("made-body");
   const m = featuredMaker(made);
-  fill(root, 
+  fill(root,
     h("p", { class: "gem-p" }, made.intro),
+    m.owners?.length ? h("div", { class: "owner-cards" }, m.owners.map((o) => h("div", { class: "el-owner-card" }, h("img", { src: o.photo, alt: `${o.name}, owner of ${m.name}`, loading: "lazy" }),
+      h("div", {}, h("b", {}, o.name), h("span", {}, `Owner, ${m.name}`))))) : null,
     ...makerSection(m),
     h("p", { class: "note" }, "From the maker's own website; live music from the calendar on its Weekly Schedule page, read daily. Open/closed is worked out on your device from posted hours; holidays and private events can change them, so check before you go. Please enjoy responsibly; 21+ to drink."));
 }
