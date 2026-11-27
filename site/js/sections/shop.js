@@ -94,8 +94,33 @@ export const owner = (s, cls = "tile-meta el-owner") => (s.owner ? h("p", { clas
 
 export const where = (s) => h("p", { class: "tile-meta el-where" }, "📍 ", s.address_short || s.address.split(",")[0], s.area ? ` · ${s.area}` : "");
 
+/** Animals wandering along the bottom of a shop's tile (Cook Cattle Farm: a cow and a bull). Decorative:
+ *  hidden from screen readers, no taps, and still for anyone who prefers reduced motion. */
+const GRASS = [["🌱", 8], ["🌿", 27], ["🌾", 46]]; // emoji, % along the edge: left of center only, clear of the prices
+// One shared observer pauses the walkers while their widget is off screen (no work for nobody to see).
+let walkerIO = null;
+const watch = (el) => {
+  if (typeof IntersectionObserver !== "function") return el;
+  walkerIO ||= new IntersectionObserver((entries) => entries.forEach((e) => e.target.classList.toggle("paused", !e.isIntersecting)));
+  el.classList.add("paused"); // until the observer says it's on screen
+  walkerIO.observe(el);
+  return el;
+};
+const walkers = (s) => (s.walkers?.length ? watch(h("div", { class: "walkers", "aria-hidden": "true" },
+  GRASS.map(([e, at], i) => { const g = h("span", { class: "grass" }, e); g.style.left = `${at}%`; g.style.setProperty("--g", i % 3); return g; }),
+  // two walkers from opposite ends: they meet face to face in the middle, a heart pops up, then they head home
+  s.walkers.slice(0, 2).map((e, i) => h("span", { class: `walker walker-${i ? "b" : "a"}` }, h("span", { class: "walker-face" }, e))),
+  h("span", { class: "walker-heart" }, "❤️"))) : null);
+
 /** The tile for one shop, at any size. */
 export function shopTile(s, size, head) {
+  const tile = shopTileBody(s, size, head);
+  const w = walkers(s);
+  if (w) tile.prepend(w);
+  return tile;
+}
+
+function shopTileBody(s, size, head) {
   // An owner with a photo sits at the right of the header, like the police and fire chiefs; otherwise a line under the kind.
   const hd = head("bag", s.color, s.short || s.name);
   if (s.owner_photo) {

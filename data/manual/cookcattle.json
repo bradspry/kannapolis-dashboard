@@ -111,5 +111,9 @@
     "src": "photos/local/cookcattle-family.jpg",
     "alt": "The Cook family, three generations, in a harvested cornfield beside their Gleaner F2 combine",
     "caption": "The family behind Cook Cattle Farm, with their Gleaner F2 combine"
-  }
+  },
+  "walkers": [
+    "🐄",
+    "🐂"
+  ]
 }

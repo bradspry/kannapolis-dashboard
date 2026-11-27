@@ -2951,3 +2951,36 @@ body.editing .tile-w :is(.el-logo, .kt-logo-badge, .tr-logo, .ic-logo, .bb-logo)
 .tile-owners .owner-faces img + img { margin-left: -8px; }
 @media (max-width: 720px) { .tile-owners .owner-faces img { width: 34px; height: 34px; } }
 .owner-cards { display: flex; flex-wrap: wrap; gap: 8px 28px; }
+/* Walkers: emoji animals strolling along a tile's bottom edge (Cook Cattle Farm) */
+.walkers { position: absolute; left: 14px; right: 14px; bottom: 0; height: 26px; pointer-events: none; z-index: 0; overflow: hidden; }
+/* Two walkers, one 23s loop: 10s from opposite ends to the middle, 3s face to face with a heart, 10s back home.
+   (43.48% = 10/23, 56.52% = 13/23.) The first (the cow) starts at the left, the second (the bull) at the right. */
+/* Moved with transform (compositor only, no layout or paint per frame); cqw = the strip's width (container units). */
+.walkers { container-type: inline-size; }
+.walker { position: absolute; bottom: 1px; left: 0; font-size: 19px; line-height: 1; animation: 23s linear infinite; will-change: transform; }
+.walker-a { animation-name: walk-a; }
+.walker-b { animation-name: walk-b; }
+.walker-face { display: inline-block; animation: 23s linear infinite, walk-bob .7s ease-in-out infinite alternate; }
+.walker-a .walker-face { animation-name: face-a, walk-bob; }
+.walker-b .walker-face { animation-name: face-b, walk-bob; }
+@keyframes walk-a { 0% { transform: translateX(0); } 43.48%, 56.52% { transform: translateX(calc(50cqw - 30px)); } 100% { transform: translateX(0); } }
+@keyframes walk-b { 0% { transform: translateX(calc(100cqw - 24px)); } 43.48%, 56.52% { transform: translateX(calc(50cqw + 6px)); } 100% { transform: translateX(calc(100cqw - 24px)); } }
+/* the emoji face left: the cow walks in facing right, the bull facing left; at 56.52% each turns for home */
+@keyframes face-a { 0%, 56.51% { transform: scaleX(-1); } 56.52%, 100% { transform: scaleX(1); } }
+@keyframes face-b { 0%, 56.51% { transform: scaleX(1); } 56.52%, 100% { transform: scaleX(-1); } }
+@keyframes walk-bob { from { translate: 0 0; } to { translate: 0 -2px; } }
+.walker-heart { position: absolute; left: 50%; bottom: 13px; translate: -50% 0; font-size: 12px; line-height: 1; opacity: 0; z-index: 2;
+  animation: heart 23s ease-out infinite; }
+@keyframes heart { 0%, 43.5% { opacity: 0; transform: scale(.3) translateY(4px); } 46% { opacity: 1; transform: scale(1.25) translateY(0); }
+  48% { transform: scale(1); } 54% { opacity: 1; transform: scale(1) translateY(-3px); } 56.52%, 100% { opacity: 0; transform: scale(.8) translateY(-6px); } }
+/* Off screen (shop.js IntersectionObserver): everything holds still */
+.walkers.paused .walker, .walkers.paused .walker-face, .walkers.paused .walker-heart { animation-play-state: paused; }
+/* Reduced motion: no walking, just the two of them face to face with the heart */
+@media (prefers-reduced-motion: reduce) {
+  .walker, .walker-face, .walker-heart { animation: none; }
+  .walker-a { transform: translateX(calc(50cqw - 30px)); } .walker-a .walker-face { transform: scaleX(-1); }
+  .walker-b { transform: translateX(calc(50cqw + 6px)); }
+  .walker-heart { opacity: 1; }
+}
+.grass { position: absolute; bottom: 0; translate: -50% 0; font-size: calc(13px + var(--g) * 2px); line-height: 1; opacity: .85; z-index: 0; }
+.walker { z-index: 1; }
