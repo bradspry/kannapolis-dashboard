@@ -731,7 +731,8 @@ body.editing .tile-w:nth-child(2n) { animation-delay: -.14s; }
 }
 .win-close:hover { color: var(--text-primary); background: var(--page); }
 .win-share-btn { flex: none; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font: inherit; font-size: 14px; }
-.win-share-btn[aria-expanded="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.win-share-btn[aria-expanded="true"] { box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 35%, transparent); }
+.win-share-btn .share-fb-icon { flex: none; }
 .win-share { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding: 10px 16px; flex: none;
   background: color-mix(in oklab, var(--accent) 8%, var(--surface-1)); border-bottom: 1px solid var(--border); }
 .win-share[hidden] { display: none; }
