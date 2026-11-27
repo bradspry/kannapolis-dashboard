@@ -27,6 +27,7 @@ export function datasets(D) {
     ["Provisions on Main events & menu", "provisions", D.provisions, DAILY, 2],
     ["B&K Tea Cafe menu", "bktea", D.bktea, "Machine-parsed", null],
     ["Putthaus rates & hours", "putthaus", D.putthaus, "Machine-parsed", null],
+    ["Girl Grind menu & monthly drinks", "girlgrind", D.girlgrind, "Machine-parsed", null],
     ["K-Town Connection episodes", "ktown", D.ktown, DAILY, 2],
     ["Library events", "library", D.library, DAILY, 2],
     ["NC By Train schedule", "train", D.train, DAILY, 2],

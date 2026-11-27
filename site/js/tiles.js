@@ -38,6 +38,7 @@ import { SHOPS, shopTile } from "./sections/shop.js";
 import { provisionsTile } from "./sections/provisions.js";
 import { bkTile } from "./sections/bktea.js";
 import { putthausTile } from "./sections/putthaus.js";
+import { girlGrindTile } from "./sections/girlgrind.js";
 import { prepGames, nextHome, homeStands, standLabel, nextGameCard, fmtDay as bbDay, fmtTime as bbTime } from "./sections/baseball.js";
 
 const NS = "http://www.w3.org/2000/svg";
@@ -522,12 +523,12 @@ export function tileDefs(data, COLORS) {
       },
     },
     editions && {
-      id: "editions", opens: "editions", size: "m", label: "Kannapolis Reads and Yarns",
+      id: "editions", opens: "editions", size: "m", label: "Editions",
       build: (size) => {
         const ed = editions;
-        const top = [head("book", COLORS.editions, "Kannapolis Reads and Yarns")];
+        const top = [head("book", COLORS.editions, "Editions")];
         const evs = edUpcoming(ed);
-        const status = h("div", { class: "ed-tile-status" }, h("div", { class: "gem-tile-title" }, "Editions · S Main St"), edStatus(ed, "store", { compact: true }), edStatus(ed, "drive", { compact: true }));
+        const status = h("div", { class: "ed-tile-status" }, h("div", { class: "gem-tile-title" }, "Coffee, books & yarn · S Main St"), edStatus(ed, "store", { compact: true }), edStatus(ed, "drive", { compact: true }));
         const covers = (n) => h("div", { class: "ed-covers" }, ed.books.slice(0, n).map((b) => edCover(b, "sm")));
         const events = (n) => h("ul", { class: "ub-mini ed-mini" }, evs.slice(0, n).map((e) => h("li", {}, h("b", {}, edWhen(e).split(" · ")[0]), h("span", {}, e.title))));
         if (size === "s") return h("div", { class: "tile-body" }, ...top, status);
@@ -562,6 +563,7 @@ export function tileDefs(data, COLORS) {
     },
     // Shopping: one widget per local shop (shop.js), in SHOPS order.
     ...SHOPS.filter((id) => data[id]).map((id) => ({ id, opens: id, size: "m", label: data[id].short || data[id].name, build: (size) => shopTile(data[id], size, head) })),
+    data.girlgrind && { id: "girlgrind", opens: "girlgrind", size: "l", label: "Girl Grind", build: (size) => girlGrindTile(data.girlgrind, size, head) },
     data.putthaus && { id: "putthaus", opens: "putthaus", size: "l", label: "Putthaus", build: (size) => putthausTile(data.putthaus, size, head) },
     data.bktea && { id: "bktea", opens: "bktea", size: "l", label: "B&K Tea Cafe", build: (size) => bkTile(data.bktea, size, head) },
     data.provisions && { id: "provisions", opens: "provisions", size: "l", label: "Provisions on Main", build: (size) => provisionsTile(data.provisions, size, head) },

@@ -1494,7 +1494,7 @@ body.editing .tile-w:first-child .tile-top { opacity: .4; }
 .mk-site.compact { padding: 6px 13px; font-size: 13px; margin-top: 6px; }
 @media (max-width: 720px) { .mk-hero { flex-direction: column; align-items: flex-start; } .mk-img.lg { width: 96px; height: 264px; } .size-s .mk-tile-now .mk-img { display: none; } }
 
-/* ---------- Kannapolis Reads and Yarns (Editions) ---------- */
+/* ---------- Editions Coffee Shop & Bookstore ---------- */
 .ed-hero { display: flex; gap: 20px; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
 .ed-hero h3 { margin: 2px 0 4px; font-size: 22px; }
 .ed-hero-side { display: grid; gap: 8px; min-width: 240px; }
@@ -2923,3 +2923,25 @@ body.editing .tile-w :is(.el-logo, .kt-logo-badge, .tr-logo, .ic-logo, .bb-logo)
 @media (max-width: 720px) { .ph-l, .ph-xl, .ph-photos, .ph-rate-cols { grid-template-columns: minmax(0, 1fr); } .ph-photo.l, .ph-photo.xl { height: 150px; } .ph-photos img:not(:first-child) { display: none; } }
 .ph-kind { padding-right: 60px; }
 @media (max-width: 720px) { .tile-w.size-m .ph-rate ~ * .el-shop-2, .tile-w.size-m .el-m .el-btns .el-shop-2 { display: none; } }
+
+/* ---------- Girl Grind Beverage Co. ---------- */
+.gg-logo { padding: 2px; }
+.gg-best { list-style: none; margin: 6px 0 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+.gg-best.compact { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.tile-w.size-l .gg-best.compact { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.gg-best li { display: grid; gap: 2px; min-width: 0; text-align: center; }
+.gg-best img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 12px; background: #f4f0fa; }
+.gg-best.compact img { aspect-ratio: 1; }
+.tile-w.size-l .gg-best.compact img { aspect-ratio: auto; height: 96px; }
+.gg-best b { font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .gg-best span { font-size: 11.5px; color: var(--text-muted); }
+.gg-specials { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 7px; }
+.gg-specials li > div { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+.gg-specials b { font-size: 13.5px; color: #c58af0; } .gg-specials small { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
+.gg-specials p { margin: 1px 0 0; font-size: 12.5px; color: var(--text-secondary); line-height: 1.35; }
+.gg-xl { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 20px; }
+.gg-hero { border-top: 4px solid #9b59d0; }
+.gg-groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-top: 8px; }
+.gg-groups h4 { margin: 0 0 6px; } .gg-groups h4 small { font-weight: 500; color: var(--text-muted); }
+.gg-menu-sec h4 { margin: 10px 0 2px; } .gg-menu-sec h4:first-child { margin-top: 0; } .gg-menu-sec p { margin: 0 0 4px; }
+@media (max-width: 720px) { .gg-best { grid-template-columns: repeat(3, minmax(0, 1fr)); } .gg-xl { grid-template-columns: minmax(0, 1fr); } .tile-w.size-l .gg-best.compact { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.el-m .gg-best.compact img { aspect-ratio: auto; height: 92px; }

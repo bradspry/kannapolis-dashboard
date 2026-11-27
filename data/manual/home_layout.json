@@ -16,6 +16,7 @@
         "spicetea",
         "provisions",
         "bktea",
+        "girlgrind",
         "sweetest",
         "cookcattle",
         "police",
@@ -103,7 +104,8 @@
         "water": "xl",
         "flights": "xl",
         "bktea": "m",
-        "putthaus": "m"
+        "putthaus": "m",
+        "girlgrind": "m"
       },
       "spacers": []
     },
@@ -160,6 +162,7 @@
         "made",
         "provisions",
         "bktea",
+        "girlgrind",
         "library",
         "editions",
         "events",
@@ -177,7 +180,8 @@
         "ktown": "l",
         "provisions": "l",
         "bktea": "l",
-        "putthaus": "l"
+        "putthaus": "l",
+        "girlgrind": "l"
       },
       "spacers": []
     },
@@ -250,6 +254,7 @@
         "bktea",
         "editions",
         "provisions",
+        "girlgrind",
         "sweetest",
         "cookcattle"
       ],
@@ -262,7 +267,8 @@
         "spicetea": "m",
         "editions": "m",
         "provisions": "l",
-        "bktea": "l"
+        "bktea": "l",
+        "girlgrind": "l"
       },
       "spacers": []
     }

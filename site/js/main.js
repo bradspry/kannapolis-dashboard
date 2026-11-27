@@ -20,6 +20,7 @@ import { renderShop, SHOPS } from "./sections/shop.js";
 import { renderProvisions } from "./sections/provisions.js";
 import { renderBk } from "./sections/bktea.js";
 import { renderPutthaus } from "./sections/putthaus.js";
+import { renderGirlGrind } from "./sections/girlgrind.js";
 import { renderMade } from "./sections/made.js";
 import { renderEditions } from "./sections/editions.js";
 import { renderWhatABurger } from "./sections/whataburger.js";
@@ -79,7 +80,7 @@ function main() {
     police: load("police.json", { optional: true }), fire: load("fire.json", { optional: true }),
     baseball: load("baseball.json", { optional: true }), utility: load("utility.json", { optional: true }),
     parks: load("parks.json", { optional: true }), gem: load("gem.json", { optional: true }),
-    swanee: load("swanee.json", { optional: true }), parade: load("parade.json", { optional: true }), incidents: load("incidents.json", { optional: true }), ellestique: load("ellestique.json", { optional: true }), sweetest: load("sweetest.json", { optional: true }), cardiacs: load("cardiacs.json", { optional: true }), cookcattle: load("cookcattle.json", { optional: true }), spicetea: load("spicetea.json", { optional: true }), provisions: load("provisions.json", { optional: true }), bktea: load("bktea.json", { optional: true }), putthaus: load("putthaus.json", { optional: true }), made: load("made.json", { optional: true }),
+    swanee: load("swanee.json", { optional: true }), parade: load("parade.json", { optional: true }), incidents: load("incidents.json", { optional: true }), ellestique: load("ellestique.json", { optional: true }), sweetest: load("sweetest.json", { optional: true }), cardiacs: load("cardiacs.json", { optional: true }), cookcattle: load("cookcattle.json", { optional: true }), spicetea: load("spicetea.json", { optional: true }), provisions: load("provisions.json", { optional: true }), bktea: load("bktea.json", { optional: true }), putthaus: load("putthaus.json", { optional: true }), girlgrind: load("girlgrind.json", { optional: true }), made: load("made.json", { optional: true }),
     editions: load("editions.json", { optional: true }), whataburger: load("whataburger.json", { optional: true }),
     videos: load("videos.json", { optional: true }), waste: load("waste.json", { optional: true }),
     drought: load("drought.json", { optional: true }), library: load("library.json", { optional: true }),
@@ -103,7 +104,7 @@ function main() {
   if (D.swanee) win("swanee", { title: "The Swanee Theatre", icon: "mic", color: "var(--icon-7)", render: () => renderSwanee(D.swanee) });
   if (D.made) win("made", { title: "Made in Kannapolis", icon: "mug", color: "var(--icon-2)", render: () => renderMade(D.made) });
   if (D.editions) D.editions.books = (D.editions.books || []).filter((b) => b.cover); // new books always show a cover: skip any without one
-  if (D.editions) win("editions", { title: "Kannapolis Reads and Yarns", icon: "book", color: "var(--icon-4)", render: () => renderEditions(D.editions) });
+  if (D.editions) win("editions", { title: "Editions Coffee Shop & Bookstore", icon: "book", color: "var(--icon-4)", render: () => renderEditions(D.editions) });
   if (D.whataburger) win("whataburger", { title: "What-A-Burger #1", icon: "burger", color: "var(--icon-8)", render: () => renderWhatABurger(D.whataburger) });
   if (D.videos) win("videos", { title: "City Council Meeting Videos", icon: "video", color: "var(--icon-5)", render: () => renderVideos(D.videos) });
   if (D.waste) win("waste", { title: "Waste Collection", icon: "trash", color: "var(--icon-3)", render: () => renderWaste(D.waste) });
@@ -133,6 +134,7 @@ function main() {
   if (D.ktown?.episodes?.length) win("ktown", { title: "K-Town Connection", icon: "mic", color: D.ktown.color, render: () => renderKtown(D.ktown) });
   if (D.stocks?.companies?.length) win("stocks", { title: "KANDEX", icon: "growth", color: "var(--icon-3)", render: () => renderStocks(D.stocks) });
   if (D.gas?.grades?.regular) win("gas", { title: "Gas Prices", icon: "fuel", color: GAS_COLOR, render: () => renderGas(D.gas, D.boundaries) });
+  if (D.girlgrind) win("girlgrind", { title: "Girl Grind Beverage Co.", icon: "cup", color: D.girlgrind.color, render: () => renderGirlGrind(D.girlgrind) });
   if (D.putthaus) win("putthaus", { title: "Putthaus", icon: "flag", color: D.putthaus.color, render: () => renderPutthaus(D.putthaus) });
   if (D.bktea) win("bktea", { title: "B&K Tea Cafe", icon: "cup", color: D.bktea.color, render: () => renderBk(D.bktea) });
   if (D.provisions) win("provisions", { title: "Provisions on Main Market & Deli", icon: "basket", color: D.provisions.color, render: () => renderProvisions(D.provisions) });

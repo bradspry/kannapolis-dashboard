@@ -1,4 +1,4 @@
-// Kannapolis Reads and Yarns: Editions Coffee Shop & Bookstore. New arrivals and events are read
+// Editions Coffee Shop & Bookstore. New arrivals and events are read
 // daily from the store's website; coffee, yarn and hours are machine-parsed snapshots. Open/closed is worked
 // out on the device from the posted hours (and any closure on the store's events list).
 import { h, contactButtons, fill } from "../ui.js";
