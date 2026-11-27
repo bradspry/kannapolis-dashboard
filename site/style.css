@@ -1844,7 +1844,7 @@ body::before {
 #feedback-btn { text-decoration: none; }
 #group-btn .fb-short { display: none; }
 #group-btn { display: inline-flex; align-items: center; gap: 7px; text-decoration: none; }
-#group-btn .group-icon { color: #1877f2; flex: none; }
+#group-btn .group-icon { flex: none; }
 @media (max-width: 720px) { #group-btn .fb-long { display: none; } #group-btn .fb-short { display: inline; } #feedback-btn, #group-btn { padding: 6px 11px; } }
 
 /* City Debt: total owed */
