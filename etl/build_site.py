@@ -110,7 +110,7 @@ def build() -> str:
     return html
 
 
-BASE_URL = "https://bradspry.github.io/kannapolis-dashboard/"
+BASE_URL = "https://kannapolistalk.com/"
 # Shareable tab links with their own link previews (Open Graph tags; Facebook doesn't run the app's JavaScript,
 # so ?tab=jobs alone would preview as the home page). Each is a tiny page that forwards to the tab.
 SHARE_PAGES = {

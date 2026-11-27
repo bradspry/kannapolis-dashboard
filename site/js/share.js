@@ -3,7 +3,7 @@
 // copy-link button and Facebook's share dialog (pick "Share to a group" there). No Facebook script is loaded.
 import { h } from "./ui.js";
 
-export const SITE_URL = "https://bradspry.github.io/kannapolis-dashboard/";
+export const SITE_URL = "https://kannapolistalk.com/";
 
 export function shareBar(slug, { title, text } = {}) {
   const url = `${SITE_URL}${slug}/`;

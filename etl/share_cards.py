@@ -111,7 +111,7 @@ body{{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helv
  <div><div class="h">Diesel {pill(trend("diesel"))}</div>{"".join(row(i, s, 40) for i, s in enumerate(dsl[:3]))}{avl}</div>
 </div>
 {tax}
-<div class="foot"><b>Kannapolis Civic Dashboard</b><span>bradspry.github.io/kannapolis-dashboard</span></div>
+<div class="foot"><b>Kannapolis Civic Dashboard</b><span>kannapolistalk.com</span></div>
 </div>"""
 
 
