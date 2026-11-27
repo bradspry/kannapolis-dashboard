@@ -18,7 +18,7 @@ import re
 import time
 import urllib.request
 
-from common import MANUAL, USER_AGENT, log, write_json
+from common import MANUAL, USER_AGENT, Thumbs, log, write_json
 
 BASE = "https://gem-theatre.com"
 PAGES = {"tickets": f"{BASE}/Tickets", "now": f"{BASE}/Movies/Now-Playing", "soon": f"{BASE}/Movies/Coming-Soon"}
@@ -122,6 +122,10 @@ def main() -> None:
     if not films:
         raise RuntimeError("No films found on gem-theatre.com; the site layout may have changed.")
     log(f"gem: {len(films)} listings from {used}: " + "; ".join(f"{f['title']} ({f['dates']})" for f in films))
+    th = Thumbs("gem", width=360)  # posters come as 2000-4000 px images (one was a 10 MB PNG); shown at most 180 px wide
+    for f in films:
+        f["poster"] = th.get(f.get("poster"))
+    th.prune()
     write_json("gem.json", {**info, "films": films, "listing_source": used})
 
 

@@ -31,6 +31,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Install Pillow (shrinks hotlinked images to thumbnails; etl/common.py Thumbs)
+        run: pip install "pillow==11.3.0"
       - name: Run ETL
         env:
           CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}

@@ -92,3 +92,60 @@ def repo_constants(repo: str, path: str, names: set[str], branch: str = "main") 
     if missing:
         raise RuntimeError(f"{repo}/{path} no longer defines {', '.join(sorted(missing))}")
     return found
+
+
+class Thumbs:
+    """Small copies of hotlinked images that are far bigger than the page shows them (a 4000-pixel farm photo
+    drawn 124 px wide, a 10 MB movie poster): saved to data/generated/thumbs/ and published with the site
+    (build_site copies them to dist/thumbs/), so phones download and decode a few KB instead of megabytes.
+
+        th = Thumbs("gem", width=360)        # one set per step; the width is about twice the largest display size
+        film["poster"] = th.get(url)         # -> "thumbs/gem-<hash>.jpg"
+        th.prune()                           # delete this step's thumbnails nothing uses any more
+
+    Each image is fetched once (the file name comes from the URL). Needs Pillow, the one non-standard-library
+    package here; without it, or if a download fails, get() returns the original URL so the page still works."""
+
+    def __init__(self, prefix: str, width: int):
+        self.prefix, self.width, self.used = prefix, width, set()
+        self.dir = OUT / "thumbs"
+
+    def get(self, url):
+        if not url or not str(url).startswith(("http://", "https://")):
+            if url and str(url).startswith(f"thumbs/{self.prefix}-"):
+                self.used.add(str(url).split("/", 1)[1])  # kept from an earlier run (e.g. yesterday's products)
+            return url
+        import hashlib
+        import io
+        import urllib.request
+
+        name = f"{self.prefix}-{hashlib.sha1(url.encode()).hexdigest()[:16]}.jpg"
+        path = self.dir / name
+        if not path.exists():
+            try:
+                from PIL import Image
+
+                with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": USER_AGENT}), timeout=60) as r:
+                    im = Image.open(io.BytesIO(r.read()))
+                    im.load()
+                if im.mode in ("RGBA", "LA", "P"):  # transparent PNGs: flatten onto white
+                    im = im.convert("RGBA")
+                    bg = Image.new("RGB", im.size, "white")
+                    bg.paste(im, mask=im.getchannel("A"))
+                    im = bg
+                im = im.convert("RGB")
+                if im.width > self.width:
+                    im = im.resize((self.width, round(im.height * self.width / im.width)), Image.LANCZOS)
+                self.dir.mkdir(parents=True, exist_ok=True)
+                im.save(path, "JPEG", quality=82, optimize=True, progressive=True)
+            except Exception as e:  # no Pillow, or the image can't be read: keep the original link
+                log(f"thumbs: kept the original for {url[:80]} ({type(e).__name__}: {e})")
+                return url
+        self.used.add(name)
+        return f"thumbs/{name}"
+
+    def prune(self) -> None:
+        gone = [p for p in self.dir.glob(f"{self.prefix}-*.jpg") if p.name not in self.used]
+        for p in gone:
+            p.unlink()
+        log(f"thumbs: {self.prefix}: {len(self.used)} in use" + (f", removed {len(gone)} old" if gone else ""))

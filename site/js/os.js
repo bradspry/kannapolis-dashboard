@@ -203,6 +203,16 @@ export function renderHome() {
         onclick: () => restore(t.id, nameOf(t)) }, icon("plus", 14), nameOf(t))))));
 }
 
+/** Widgets off screen get .offscreen, which pauses their animations (style.css): no frames spent on what nobody sees.
+ *  Their images also load lazily and decode off the main thread. */
+const offscreenIO = typeof IntersectionObserver === "function"
+  ? new IntersectionObserver((es) => es.forEach((e) => e.target.classList.toggle("offscreen", !e.isIntersecting)), { rootMargin: "120px 0px" }) : null;
+function watchOffscreen(tile) {
+  offscreenIO?.observe(tile);
+  tile.querySelectorAll("img").forEach((img) => { if (!img.hasAttribute("decoding")) img.decoding = "async"; });
+  return tile;
+}
+
 /** One tile: the widget's content plus its open button and Edit-mode controls. Null if it has nothing to show. */
 function makeTile(t, size, note = null) {
   let content;
@@ -247,7 +257,7 @@ function makeTile(t, size, note = null) {
     h("button", { class: "tile-remove", type: "button", "aria-label": t.spacer ? "Delete this blank space" : `Remove the ${name} widget from ${tabById(tab).name}`,
       onclick: () => (t.spacer ? removeSpacer(t.id) : removeTile(t.id, name)) }, icon("minus", 14)));
   for (const [k, v] of Object.entries(t.vars || {})) tile.style.setProperty(k, v); // e.g. an employer's --brand color
-  return tile;
+  return watchOffscreen(tile);
 }
 
 /** Home's widgets ranked for this moment. Score = timely (pulse.js rules) + everyday usefulness (BASE) + a

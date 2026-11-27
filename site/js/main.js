@@ -67,8 +67,18 @@ function colors() {
   return { people: v(1), growth: v(3), land: v(6), budget: v(7), debt: v(2), news: v(5), meetings: v(4), events: v(8), parade: v(2), weather: v(1), police: v(1), fire: v(2), baseball: v(6), utility: v(3), parks: v(6), gem: v(5), swanee: v(7), made: v(2), editions: v(4), whataburger: v(8), videos: v(5), waste: v(3), drought: v(1), library: v(6), train: v(1), council: v(1), org: v(3), about: "var(--muted-fill)", gauge: "var(--accent)" };
 }
 
+/** The spinning-yarn logo animates SVG parts, which browsers run on the main thread: hold it still while the page
+ *  scrolls (so scrolling gets every frame) and let it spin again a moment after. */
+function stillLogoWhileScrolling() {
+  const mark = document.querySelector(".brand-mark");
+  if (!mark) return;
+  let t;
+  addEventListener("scroll", () => { mark.classList.add("still"); clearTimeout(t); t = setTimeout(() => mark.classList.remove("still"), 200); }, { passive: true });
+}
+
 function main() {
   initTheme();
+  stillLogoWhileScrolling();
   const D = {
     census: load("census.json"), budget: load("budget.json"),
     property: load("property.json", { optional: true }), boundaries: load("boundaries.geojson", { optional: true }),

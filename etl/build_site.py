@@ -11,6 +11,7 @@ import csv
 import json
 import posixpath
 import re
+import shutil
 import sys
 
 from common import DIST, MANUAL, OUT, SITE, log
@@ -173,6 +174,9 @@ def main() -> None:
     share_pages()
     html = build()
     DIST.mkdir(parents=True, exist_ok=True)
+    if (OUT / "thumbs").is_dir():  # small copies of hotlinked images (common.Thumbs), loaded lazily by the page
+        shutil.rmtree(DIST / "thumbs", ignore_errors=True)
+        shutil.copytree(OUT / "thumbs", DIST / "thumbs")
     out = DIST / "index.html"
     out.write_text(html)
     log(f"site: wrote {out.relative_to(DIST.parent)} ({len(html.encode()) / 1024 / 1024:.1f} MB)")

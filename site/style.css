@@ -471,6 +471,7 @@ html.win-open { overflow: hidden; }
 .bm-whorl-shine { animation: bm-sweep .45s linear infinite; }
 .bm-ball { transform-box: view-box; transform-origin: 6.6px 16.4px; animation: bm-roll 7s linear infinite; }
 .bm-thread { animation: bm-feed .6s linear infinite; }
+.brand-mark.still * { animation-play-state: paused; } /* while the page scrolls (main.js) */
 @keyframes bm-spin { to { transform: translateY(-2px); } }
 @keyframes bm-sweep { from { transform: translateX(-3px); } to { transform: translateX(5px); } }
 @keyframes bm-roll { to { transform: rotate(-360deg); } }
@@ -508,9 +509,12 @@ html.win-open { overflow: hidden; }
 .now-bar { display: flex; align-items: center; gap: 10px 14px; flex-wrap: wrap; padding: 10px 14px; border: 1px solid var(--border); border-radius: 18px;
   background: color-mix(in oklab, var(--surface-1) 85%, var(--accent) 15%); }
 .now-title { margin: 0; font-size: 15px; font-weight: 650; white-space: nowrap; }
-.now-title::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-right: 8px; vertical-align: 1px;
-  animation: now-pulse 2.4s ease-out infinite; }
-@keyframes now-pulse { 0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--accent) 55%, transparent); } 70%, 100% { box-shadow: 0 0 0 8px transparent; } }
+.now-title { position: relative; }
+.now-title::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-right: 8px; vertical-align: 1px; }
+/* the pulse: a ring over the dot that grows and fades (transform + opacity: compositor only, no repaint per frame) */
+.now-title::after { content: ""; position: absolute; left: 0; top: 50%; width: 8px; height: 8px; margin-top: -3.5px; border-radius: 50%; background: var(--accent);
+  pointer-events: none; animation: now-pulse 2.4s ease-out infinite; }
+@keyframes now-pulse { 0% { transform: scale(1); opacity: .55; } 70%, 100% { transform: scale(3); opacity: 0; } }
 .now-items { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; flex: 1 1 320px; min-width: 0; }
 .now-item { display: inline-flex; align-items: center; gap: 7px; max-width: 100%; border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary);
   font: inherit; font-size: 13px; font-weight: 550; padding: 5px 11px; border-radius: 999px; cursor: pointer; text-align: left; }
@@ -525,7 +529,7 @@ html.win-open { overflow: hidden; }
 .now-seg[aria-pressed="true"] { background: var(--accent); color: #fff; }
 .tile-w.timely { border-color: color-mix(in oklab, var(--accent) 55%, var(--border)); box-shadow: 0 0 0 1px color-mix(in oklab, var(--accent) 35%, transparent),
   0 12px 32px -16px rgba(0, 0, 0, .45), 0 0 28px -8px color-mix(in oklab, var(--accent) 45%, transparent); }
-@media (prefers-reduced-motion: reduce) { .now-title::before { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .now-title::after { animation: none; opacity: 0; } }
 @media (max-width: 720px) { .now-bar { padding: 10px 12px; } .now-mode { margin-left: 0; } }
 body.editing .now { display: none; }
 /* Smart Home: chapters (os.js story) */
@@ -1588,16 +1592,25 @@ body.editing .tile-w:first-child .tile-top { opacity: .4; }
 .pk-snow i {
   position: absolute; top: -10px; display: block; border-radius: 50%;
   background: #fff; box-shadow: 0 0 4px rgba(255, 255, 255, .7);
-  animation-name: pk-fall, pk-sway; animation-timing-function: linear, ease-in-out;
+  animation-name: pk-fall, pk-sway-2; animation-timing-function: linear, ease-in-out;
   animation-iteration-count: infinite, infinite; animation-direction: normal, alternate;
-  will-change: transform;
+  will-change: transform, translate;
 }
 .pk-snow.big i { top: -30px; width: auto; height: auto; border-radius: 0; background: none; box-shadow: none; line-height: 1; font-style: normal;
   color: #fff; text-shadow: 0 0 6px rgba(255, 255, 255, .8), 0 0 2px rgba(150, 190, 255, .6); font-family: "Segoe UI Symbol", "Apple Symbols", system-ui, sans-serif; }
 :root[data-theme="light"] .pk-snow.big i { background: none; box-shadow: none; color: #eef5ff; text-shadow: 0 0 1px #6f8db5, 0 0 1px #6f8db5, 0 0 4px rgba(90, 120, 170, .6); }
 @media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .pk-snow.big i { background: none; box-shadow: none; color: #eef5ff; text-shadow: 0 0 1px #6f8db5, 0 0 1px #6f8db5, 0 0 4px rgba(90, 120, 170, .6); } }
 @keyframes pk-fall { from { translate: 0 -10px; } to { translate: 0 calc(100cqh + 40px); } }
-@keyframes pk-sway { from { margin-left: calc(var(--drift) * -1); } to { margin-left: var(--drift); } }
+/* Sway with transform, not margin, and with fixed distances, not a CSS variable: both keep the work off the main thread
+   (pk-fall uses the separate translate property). Three widths per flake (parks.js s1–s3); big flakes sway farther. */
+.pk-snow i.s1 { animation-name: pk-fall, pk-sway-1; } .pk-snow i.s2 { animation-name: pk-fall, pk-sway-2; } .pk-snow i.s3 { animation-name: pk-fall, pk-sway-3; }
+.pk-snow.big i.s1 { animation-name: pk-fall, pk-sway-b1; } .pk-snow.big i.s2 { animation-name: pk-fall, pk-sway-b2; } .pk-snow.big i.s3 { animation-name: pk-fall, pk-sway-b3; }
+@keyframes pk-sway-1 { from { transform: translateX(-4px); } to { transform: translateX(4px); } }
+@keyframes pk-sway-2 { from { transform: translateX(-8px); } to { transform: translateX(8px); } }
+@keyframes pk-sway-3 { from { transform: translateX(-12px); } to { transform: translateX(12px); } }
+@keyframes pk-sway-b1 { from { transform: translateX(-6px); } to { transform: translateX(6px); } }
+@keyframes pk-sway-b2 { from { transform: translateX(-12px); } to { transform: translateX(12px); } }
+@keyframes pk-sway-b3 { from { transform: translateX(-18px); } to { transform: translateX(18px); } }
 /* Light theme: white flakes vanish on a pale tile, so give them a soft blue-gray edge. */
 :root[data-theme="light"] .pk-snow i { background: #f4f8ff; box-shadow: 0 0 0 1px rgba(120, 140, 170, .35), 0 0 3px rgba(120, 140, 170, .4); }
 @media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .pk-snow i { background: #f4f8ff; box-shadow: 0 0 0 1px rgba(120, 140, 170, .35), 0 0 3px rgba(120, 140, 170, .4); } }
@@ -2973,8 +2986,6 @@ body.editing .tile-w :is(.el-logo, .kt-logo-badge, .tr-logo, .ic-logo, .bb-logo)
   animation: heart 23s ease-out infinite; }
 @keyframes heart { 0%, 43.5% { opacity: 0; transform: scale(.3) translateY(4px); } 46% { opacity: 1; transform: scale(1.25) translateY(0); }
   48% { transform: scale(1); } 54% { opacity: 1; transform: scale(1) translateY(-3px); } 56.52%, 100% { opacity: 0; transform: scale(.8) translateY(-6px); } }
-/* Off screen (shop.js IntersectionObserver): everything holds still */
-.walkers.paused .walker, .walkers.paused .walker-face, .walkers.paused .walker-heart { animation-play-state: paused; }
 /* Reduced motion: no walking, just the two of them face to face with the heart */
 @media (prefers-reduced-motion: reduce) {
   .walker, .walker-face, .walker-heart { animation: none; }
@@ -2984,3 +2995,5 @@ body.editing .tile-w :is(.el-logo, .kt-logo-badge, .tr-logo, .ic-logo, .bb-logo)
 }
 .grass { position: absolute; bottom: 0; translate: -50% 0; font-size: calc(13px + var(--g) * 2px); line-height: 1; opacity: .85; z-index: 0; }
 .walker { z-index: 1; }
+/* A widget scrolled off screen (os.js watchOffscreen): its animations hold still until it's back (snow, walkers, gauges). */
+.tile-w.offscreen, .tile-w.offscreen *, .tile-w.offscreen *::before, .tile-w.offscreen *::after { animation-play-state: paused !important; }

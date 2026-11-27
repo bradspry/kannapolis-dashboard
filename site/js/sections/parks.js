@@ -109,14 +109,13 @@ export function snowfall(count = 26, { big = false } = {}) {
     // Small round flakes (Parks), or big six-pointed ones that turn slowly as they fall (Christmas Parade).
     const size = big ? 11 + Math.random() * 13 : 2 + Math.random() * 4; // 11–24 px, or 2–6 px
     const dur = (big ? 9 : 7) + Math.random() * 7;      // seconds to fall
-    const flake = h("i", { style: {
+    const flake = h("i", { class: `s${1 + Math.floor(Math.random() * 3)}`, style: { // s1–s3: how far it sways (style.css)
       left: `${((i + Math.random()) / count) * 100}%`,
       ...(big ? { fontSize: `${size.toFixed(0)}px`, rotate: `${Math.round(Math.random() * 60)}deg` } : { width: `${size}px`, height: `${size}px` }),
       opacity: (0.45 + Math.random() * 0.5).toFixed(2),
       animationDuration: `${dur.toFixed(1)}s, ${(2.5 + Math.random() * 2.5).toFixed(1)}s`,
       animationDelay: `${(-Math.random() * dur).toFixed(1)}s, ${(-Math.random() * 4).toFixed(1)}s`, // negative: already falling on load
     } });
-    flake.style.setProperty("--drift", `${(Math.random() * (big ? 36 : 24) - (big ? 18 : 12)).toFixed(0)}px`); // custom properties need setProperty
     if (big) flake.textContent = "❄❅❆"[i % 3];
     return flake;
   });

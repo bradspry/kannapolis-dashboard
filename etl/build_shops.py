@@ -21,7 +21,7 @@ import json
 import re
 import urllib.request
 
-from common import MANUAL, OUT, USER_AGENT, log, write_json
+from common import MANUAL, OUT, USER_AGENT, Thumbs, log, write_json
 
 
 def text(s: str) -> str:
@@ -295,6 +295,10 @@ def main() -> None:
             dates = {x["date"] for x in special}
             info["special"] = sorted([x for x in info.get("special", []) if x["date"] not in dates] + special, key=lambda x: x["date"])
         notes = list(dict.fromkeys([*info.get("notes_static", []), *notes]))  # the snapshot's standing notes, then the page's
+        # Product photos: small copies (Cook Cattle Farm's are 3000-5000 px phone photos, about 2 MB each)
+        th = Thumbs(sid, width=480)
+        items = [{**a, "image": th.get(a.get("image"))} for a in items]
+        th.prune()
         write_json(f"{sid}.json", {**info, "arrivals": items, "notes": notes, "ktown": ktown_for(info)})
     for sid in STATIC_SNAPSHOTS:
         write_json(f"{sid}.json", json.loads((MANUAL / f"{sid}.json").read_text()))
